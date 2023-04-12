@@ -1,0 +1,11 @@
+@import '../global/library.scss';
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: $dark-blue;
+
+    h1 {
+        @include header-large-bold;
+    }
+}

@@ -1,10 +1,11 @@
 import React from "react";
 import Navbar from '../components/Navbar.tsx';
+import '../assets/styles/views/home.scss';
 
 
 export default function Home() {
     return (
-        <div>
+        <div id="homepage_wrapper">
             <Navbar />
             <h1>This Will be the homepage. </h1>
         </div>
