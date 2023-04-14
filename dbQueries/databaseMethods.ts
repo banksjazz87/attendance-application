@@ -3,11 +3,13 @@ import mysql from "mysql";
 export class DBMethods {
   hostName: any;
   userName: any;
+  userDb: any;
   userPassword: any;
 
-  constructor(hostName: any, userName: any, userPassword: any) {
+  constructor(hostName: any, userName: any, userDb: any, userPassword: any) {
     this.hostName = hostName;
     this.userName = userName;
+    this.userDb = userDb;
     this.userPassword = userPassword;
   }
 
@@ -15,6 +17,7 @@ export class DBMethods {
     let connection = mysql.createConnection({
       host: this.hostName,
       user: this.userName,
+      database: this.userDb,
       password: this.userPassword,
     });
     return connection;

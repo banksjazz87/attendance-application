@@ -6,15 +6,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBMethods = void 0;
 const mysql_1 = __importDefault(require("mysql"));
 class DBMethods {
-    constructor(hostName, userName, userPassword) {
+    constructor(hostName, userName, userDb, userPassword) {
         this.hostName = hostName;
         this.userName = userName;
+        this.userDb = userDb;
         this.userPassword = userPassword;
     }
     db() {
         let connection = mysql_1.default.createConnection({
             host: this.hostName,
             user: this.userName,
+            database: this.userDb,
             password: this.userPassword,
         });
         return connection;
