@@ -6,10 +6,13 @@ export default function Navbar() {
         <nav>
             <ul>
                 <li>
-                    <Link to={`/`}>Home</Link>
+                    <Link to={`/`}>Login</Link>
                 </li>
                 <li>
-                    <Link to={`/login`}>Login</Link>
+                    <Link to={`/dashboard`}>Dashboard</Link>
+                </li>
+                <li>
+                    <Link to={`/new-attendance`}>New Attendance</Link>
                 </li>
                 <li>
                     <Link to={`/attendance`}>Attendance</Link>
