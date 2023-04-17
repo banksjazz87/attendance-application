@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../components/Navbar.tsx";
+import Navbar from "../components/global/Navbar.tsx";
 
 
 export default function Search() {
