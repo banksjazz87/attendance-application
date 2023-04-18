@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import LoginForm from "../components/login/LoginForm.tsx";
-import GroupDropDown from "../components/login/GroupDropDown.tsx";
 
 
 export default function Login() {
@@ -17,7 +16,6 @@ export default function Login() {
           showForm={loggedIn ? false : true}
           logIn={logInSuccess}
          />
-        <GroupDropDown />
     </div>
   );
 }

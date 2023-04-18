@@ -5,6 +5,8 @@ interface Group {
 }
 
 export default function GroupDropDown() {
+
+//This array is just for developing.
   const groups: string[] = [
     "Sunday Service",
     "Sunday School",
@@ -14,6 +16,15 @@ export default function GroupDropDown() {
   ];
 
   const [group, setGroup] = useState<Group>({name: ''});
+
+  const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+    setGroup({...group, name: e.target.value})
+  };
+
+  const submitHandler = (e: React.FormEvent): void => {
+    e.preventDefault();
+    console.log(group);
+  }
 
 
   const dropDownItems: JSX.Element[] = groups.map((x: string, y: number) => {
@@ -27,12 +38,9 @@ export default function GroupDropDown() {
   return (
     <div id="group_dropdown_wrapper">
       <p>Select a group</p>
-      <form onSubmit={(e: React.FormEvent): void => {
-        e.preventDefault();
-        console.log(group);
-      }}>
+      <form onSubmit={submitHandler}>
         <select id="group_dropdown"
-        onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => setGroup({...group, name: e.target.value})}>
+        onChange={changeHandler}>
           <option id="placeholder">Please select an option</option>
           {dropDownItems}
         </select>
