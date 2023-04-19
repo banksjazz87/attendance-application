@@ -2,9 +2,8 @@ import React, {useState} from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx"
+import {Str, Bool} from "../../src/types/types.ts";
 
-type Bool = true | false;
-type Str = string
 
 export default function Attendance() {
     const [displayDropDown, setdisplayDropDown] = useState<Bool>(true);
@@ -20,8 +19,6 @@ export default function Attendance() {
     const setTitle = (value: string): void => {
         setAttendanceTitle(value);
     }
-
-
 
     return (
         <div>

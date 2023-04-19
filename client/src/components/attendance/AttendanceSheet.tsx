@@ -1,49 +1,11 @@
 import React, { useState, useEffect } from "react";
+import {Attendee, AttendanceProps} from "../../types/interfaces.tsx";
+import {attendantData} from "../../variables/dummyAttendant.ts";
 
-interface Attendee {
-  firstName: string;
-  lastName: string;
-  adult: number;
-  child: number;
-  teen: number;
-  present: number;
-}
-
-interface AttendanceProps {
-    show: boolean;
-    title: string;
-}
 
 
 export default function AttendanceSheet({show, title}: AttendanceProps) {
-  //Dummy Data
-  const attendantData: Attendee[] = [
-    {
-      firstName: "Chuck",
-      lastName: "Barley",
-      adult: 0,
-      child: 0,
-      teen: 1,
-      present: 0,
-    },
-    {
-      firstName: "Chuck",
-      lastName: "Berry",
-      adult: 1,
-      child: 0,
-      teen: 0,
-      present: 0,
-    },
-    {
-      firstName: "Chuck",
-      lastName: "Larry",
-      adult: 1,
-      child: 0,
-      teen: 0,
-      present: 0,
-    },
-  ];
-
+  
   const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
 
   const clickHandler = (

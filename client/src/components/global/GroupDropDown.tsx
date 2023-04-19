@@ -1,13 +1,5 @@
 import React, { useState, useEffect } from "react";
-
-interface Group {
-  name: string;
-}
-
-interface GroupProps {
-  clickHandler?: Function;
-  groupHandler?: Function;
-}
+import {Group, GroupProps} from "../../types/interfaces.ts";
 
 export default function GroupDropDown({ clickHandler, groupHandler}: GroupProps) {
   //This array is just for developing.

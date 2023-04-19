@@ -1,15 +1,7 @@
 import React, { useState } from "react";
 import postData from "../../functions/api/post.ts";
+import {User, UserProps} from "../../types/interfaces.ts";
 
-interface User {
-  name: string;
-  password: string;
-}
-
-interface UserProps {
-  showForm: boolean;
-  logIn: any;
-}
 
 export default function LoginForm({showForm, logIn}: UserProps) {
   const [login, setLogin] = useState<User>({ name: "", password: "" });
