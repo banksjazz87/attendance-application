@@ -9,7 +9,13 @@ interface Attendee {
   present: number;
 }
 
-export default function AttendanceSheet() {
+interface AttendanceProps {
+    show: boolean;
+    title: string;
+}
+
+
+export default function AttendanceSheet({show, title}: AttendanceProps) {
   //Dummy Data
   const attendantData: Attendee[] = [
     {
@@ -72,6 +78,8 @@ export default function AttendanceSheet() {
   });
 
   return (
+    <div className="attendance_table_wrapper" style={show ? {display: ""} : {display: "none"}}>
+        <h2>{title}</h2>
     <table>
       <tbody>
         <tr>
@@ -82,5 +90,6 @@ export default function AttendanceSheet() {
         {dataPoints}
       </tbody>
     </table>
+    </div>
   );
 }
