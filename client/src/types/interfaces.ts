@@ -19,6 +19,8 @@ export interface Attendee {
   export interface GroupProps {
     clickHandler?: Function;
     groupHandler?: Function;
+    name?: string;
+    groupSelected?: Function;
   }
 
   export interface User {

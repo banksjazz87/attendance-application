@@ -1,7 +1,6 @@
 import React from "react";
 import Navbar from "../components/global/Navbar.tsx";
-import GroupDropDown from "../components/global/GroupDropDown.tsx";
-import AttendanceTitle from "../components/newAttendance/AttendanceTitle.tsx";
+import Form from "../components/newAttendance/Form.tsx";
 
 
 export default function NewAttendance() {
@@ -9,8 +8,7 @@ export default function NewAttendance() {
         <div>
             <Navbar />
             <h1>This Will be the  new attendance page. </h1>
-            <GroupDropDown />
-            <AttendanceTitle />
+            <Form />
         </div>
     );
 }

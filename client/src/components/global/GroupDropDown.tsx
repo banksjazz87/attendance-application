@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {Group, GroupProps} from "../../types/interfaces.ts";
+import React from "react";
+import {GroupProps} from "../../types/interfaces";
 
-export default function GroupDropDown({ clickHandler, groupHandler}: GroupProps) {
+export default function GroupDropDown({groupSelected}: GroupProps) {
   //This array is just for developing.
   const groups: string[] = [
     "Sunday Service",
@@ -11,20 +11,11 @@ export default function GroupDropDown({ clickHandler, groupHandler}: GroupProps)
     "Ignite Youth",
   ];
 
-  const [group, setGroup] = useState<Group>({ name: "" });
-
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    setGroup({ ...group, name: e.target.value });
-  };
-
-  const submitHandler = (e: React.FormEvent): void => {
-    e.preventDefault();
-    console.log(group);
-    if (clickHandler && groupHandler) {
-      clickHandler();
-      groupHandler(group.name);
+    if (groupSelected) {
+        groupSelected(e.target.value);
     }
-  };
+  }
 
   const dropDownItems: JSX.Element[] = groups.map((x: string, y: number) => {
     return (
@@ -34,16 +25,12 @@ export default function GroupDropDown({ clickHandler, groupHandler}: GroupProps)
     );
   });
 
+ 
   return (
-    <div id="group_dropdown_wrapper">
-      <p>Select a group</p>
-      <form onSubmit={submitHandler}>
-        <select id="group_dropdown" onChange={changeHandler}>
-          <option id="placeholder">Please select an option</option>
-          {dropDownItems}
-        </select>
-        <input type="submit" value="Submit" />
-      </form>
-    </div>
+    <select id="group_dropdown" 
+        onChange={changeHandler}>
+      <option id="placeholder">Please select an option</option>
+      {dropDownItems}
+    </select>
   );
 }

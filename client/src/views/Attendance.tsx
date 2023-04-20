@@ -1,14 +1,14 @@
 import React, {useState} from "react";
 import Navbar from "../components/global/Navbar.tsx";
-import GroupDropDown from "../components/global/GroupDropDown.tsx";
+import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx"
 import {Str, Bool} from "../../src/types/types.ts";
 
 
 export default function Attendance() {
-    const [displayDropDown, setdisplayDropDown] = useState<Bool>(true);
     const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
     const [attendanceTitle, setAttendanceTitle] = useState<Str>('');
+    const [selectedGroup, setSelectedGroup] = useState<Str>('');
 
     const showAttendanceHandler = (): void => {
         if (!displayAttendance) {
@@ -20,13 +20,19 @@ export default function Attendance() {
         setAttendanceTitle(value);
     }
 
+    const selectGroup = (value: string): void => {
+        setSelectedGroup(value);
+    }
+
     return (
         <div>
             <Navbar />
             <h1>This Will be the attendance page. </h1>
-            <GroupDropDown 
+            <DropDownForm
                 clickHandler={showAttendanceHandler}
                 groupHandler={setTitle}
+                name={selectedGroup}
+                groupSelected={selectGroup}
             />
             <AttendanceSheet 
                 show={displayAttendance}
