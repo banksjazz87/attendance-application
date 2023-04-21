@@ -1,4 +1,5 @@
 import mysql from "mysql";
+import express, { Express, Request, Response} from "express";
 
 export class DBMethods {
   hostName: any;
@@ -36,4 +37,30 @@ export class DBMethods {
       err ? console.log("error, disconnecting") : console.log("disconnected")
     );
   }
+
+  endDb() {
+    const database = this.db();
+    database.end((err: any): void => {
+      err ? console.log('error, disconnecting') : console.log('disconnected');
+    });
+  }
+
+
+  insertGroup = 
+  (table: string, columns: string, values: string[]): Promise<string[]> => {
+     return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
+      database.query(sql, [values], (err: string[], results: string[]) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(results);
+        }
+      });
+
+      this.endDb();
+    });
+  }
+ 
 }

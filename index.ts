@@ -15,6 +15,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
+const port = process.env.PORT || 3500;
+
+app.listen(port, (): void => {
+  console.log(`Server is running on port ${port}`);
+});
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
@@ -36,9 +41,10 @@ app.post("/login", (req: Request, res: Response): any => {
     Db.connect();
     
     res.cookie('account', 'test');
-    res.cookie('user', process.env.TEST_USER, {httpOnly: true, sameSite: 'lax'});
+    res.cookie('user', process.env.MYSQL_USER, {httpOnly: true, sameSite: 'lax'});
+    res.cookie('host', process.env.MYSQL_HOST, {httpOnly: true, sameSite: 'lax'});
     res.cookie('database', process.env.TEST_DB, {httpOnly: true, sameSite: 'lax'});
-    res.cookie('password', process.env.TEST_PASSWORD, {httpOnly: true, sameSite: 'lax'});
+    res.cookie('password', process.env.MYSQL_PASSWORD, {httpOnly: true, sameSite: 'lax'});
     res.cookie('loggedIn', true);
     res.send({ message: "valid" });
 
@@ -47,8 +53,22 @@ app.post("/login", (req: Request, res: Response): any => {
   }
 });
 
-const port = process.env.PORT || 3500;
+app.post('/new-group', (req: Request, res: Response) => {
+    const dbValues = [req.body.name];
+    const dbColumns = 'name';
 
-app.listen(port, (): void => {
-  console.log(`Server is running on port ${port}`);
+    const Db = new DBMethods(
+      req.cookies.host,
+      req.cookies.user,
+      req.cookies.database,
+      req.cookies.password
+    );
+    
+   Db.insertGroup('group_names', dbColumns, dbValues).then((data) => {
+      console.log(data)
+      res.send({'data': data});
+    }).catch((err) => {
+      console.log('err', err);
+      res.send({'error': err});
+    });
 });

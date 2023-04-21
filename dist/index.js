@@ -17,6 +17,10 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
+const port = process.env.PORT || 3500;
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
 app.get("/*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
@@ -27,9 +31,10 @@ app.post("/login", (req, res) => {
         const Db = new databaseMethods_1.DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
         Db.connect();
         res.cookie('account', 'test');
-        res.cookie('user', process.env.TEST_USER, { httpOnly: true, sameSite: 'lax' });
+        res.cookie('user', process.env.MYSQL_USER, { httpOnly: true, sameSite: 'lax' });
+        res.cookie('host', process.env.MYSQL_HOST, { httpOnly: true, sameSite: 'lax' });
         res.cookie('database', process.env.TEST_DB, { httpOnly: true, sameSite: 'lax' });
-        res.cookie('password', process.env.TEST_PASSWORD, { httpOnly: true, sameSite: 'lax' });
+        res.cookie('password', process.env.MYSQL_PASSWORD, { httpOnly: true, sameSite: 'lax' });
         res.cookie('loggedIn', true);
         res.send({ message: "valid" });
     }
@@ -37,7 +42,28 @@ app.post("/login", (req, res) => {
         res.send({ message: "invalid" });
     }
 });
-const port = process.env.PORT || 3500;
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+app.post('/new-group', (req, res) => {
+    const dbValues = [req.body.name];
+    const dbColumns = 'name';
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    /*let insertGroup = new Promise((resolve, reject): any => {
+      let database = Db.db();
+      let sql = `INSERT INTO group_names (name) VALUES ("${dbValues}");`
+
+      database.query(sql, (err: string[], results: string[]) => {
+        if (err) {
+          return reject(err);
+        } else {
+          return resolve(results);
+        }
+      });
+      Db.endDb();
+    });*/
+    Db.insertGroup('group_names', dbColumns, dbValues).then((data) => {
+        console.log(data);
+        res.send({ 'data': data });
+    }).catch((err) => {
+        console.log('err', err);
+        res.send({ 'error': err });
+    });
 });
