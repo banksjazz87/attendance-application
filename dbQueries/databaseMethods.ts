@@ -1,5 +1,6 @@
 import mysql from "mysql";
-import express, { Express, Request, Response} from "express";
+import express, { Express, Request, Response } from "express";
+import { SQLResponse } from "../interfaces/interfaces.ts";
 
 export class DBMethods {
   hostName: any;
@@ -12,6 +13,11 @@ export class DBMethods {
     this.userName = userName;
     this.userDb = userDb;
     this.userPassword = userPassword;
+  }
+
+  getSqlError(obj: SQLResponse): string {
+    const message = `The following error has occurred: ${obj.code} with sqlMessage: ${obj.sqlMessage}`;
+    return message;
   }
 
   db(): any {
@@ -41,16 +47,15 @@ export class DBMethods {
   endDb() {
     const database = this.db();
     database.end((err: any): void => {
-      err ? console.log('error, disconnecting') : console.log('disconnected');
+      err ? console.log("error, disconnecting") : console.log("disconnected");
     });
   }
 
-
-  insertGroup = 
-  (table: string, columns: string, values: string[]): Promise<string[]> => {
-     return new Promise<string[]>((resolve, reject) => {
+  insert(table: string, columns: string, values: string[]): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
+
       database.query(sql, [values], (err: string[], results: string[]) => {
         if (err) {
           reject(err);
@@ -58,9 +63,31 @@ export class DBMethods {
           resolve(results);
         }
       });
-
       this.endDb();
     });
   }
- 
+
+  searchByValue(table: string,column: string,value: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      let sql = `SELECT * FROM ${table} WHERE ${column} = "${value}";`;
+
+      database.query(sql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  getTable(table: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      let sql = `SELECT * FROM ${table};`;
+
+      database.query(sql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
 }

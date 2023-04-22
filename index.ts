@@ -5,6 +5,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
+import { SQLResponse } from "./interfaces/interfaces.ts";
 
 dotenv.config();
 
@@ -22,6 +23,8 @@ app.listen(port, (): void => {
 });
 
 app.use(express.static(path.join(__dirname, "../client/build")));
+
+const neededCookies = 'req.cookies.host, req.cookies.user,req.cookies.database,req.cookies.password';
 
 app.get("/*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
@@ -63,12 +66,13 @@ app.post('/new-group', (req: Request, res: Response) => {
       req.cookies.database,
       req.cookies.password
     );
-    
-   Db.insertGroup('group_names', dbColumns, dbValues).then((data) => {
-      console.log(data)
-      res.send({'data': data});
-    }).catch((err) => {
-      console.log('err', err);
-      res.send({'error': err});
+
+   Db.insert('group_names', dbColumns, dbValues).then((data: string[]): void => {
+      res.send({'message': 'success', data: data});
+    }).catch((err: SQLResponse): void => {
+      console.log(Db.getSqlError(err));
+      res.send({'message': 'failure', 'error': Db.getSqlError(err)});
     });
 });
+
+

@@ -22,6 +22,7 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
+const neededCookies = 'req.cookies.host, req.cookies.user,req.cookies.database,req.cookies.password';
 app.get("/*", (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
 });
@@ -46,24 +47,10 @@ app.post('/new-group', (req, res) => {
     const dbValues = [req.body.name];
     const dbColumns = 'name';
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    /*let insertGroup = new Promise((resolve, reject): any => {
-      let database = Db.db();
-      let sql = `INSERT INTO group_names (name) VALUES ("${dbValues}");`
-
-      database.query(sql, (err: string[], results: string[]) => {
-        if (err) {
-          return reject(err);
-        } else {
-          return resolve(results);
-        }
-      });
-      Db.endDb();
-    });*/
-    Db.insertGroup('group_names', dbColumns, dbValues).then((data) => {
-        console.log(data);
-        res.send({ 'data': data });
+    Db.insert('group_names', dbColumns, dbValues).then((data) => {
+        res.send({ 'message': 'success', data: data });
     }).catch((err) => {
         console.log('err', err);
-        res.send({ 'error': err });
+        res.send({ 'message': 'failure', 'error': Db.getSqlError(err) });
     });
 });
