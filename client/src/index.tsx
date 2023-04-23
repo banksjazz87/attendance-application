@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
-import Routes from './Routes.tsx';
+import AllRoutes from './AllRoutes.tsx';
 import '../src/assets/styles/global/public.scss';
 
 const root = ReactDOM.createRoot(
@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <Routes />
+    <AllRoutes/>
   </React.StrictMode>
 );
 

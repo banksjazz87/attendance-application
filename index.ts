@@ -26,9 +26,9 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 
 const neededCookies = 'req.cookies.host, req.cookies.user,req.cookies.database,req.cookies.password';
 
-app.get("/*", (req: Request, res: Response) => {
+/*app.get("/*", (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-});
+});*/
 
 app.post("/login", (req: Request, res: Response): any => {
   if (
@@ -75,4 +75,24 @@ app.post('/new-group', (req: Request, res: Response) => {
     });
 });
 
+app.get('/groups', (req: Request, res: Response) => {
+  const Db = new DBMethods(
+      req.cookies.host,
+      req.cookies.user,
+      req.cookies.database,
+      req.cookies.password
+  );
 
+  Db.getTable('group_names', 'ASC', 'name')
+    .then((data: string[]): void => {
+      console.log(data);
+      res.send({"message": "success", "data": data})
+    })
+    .catch((err: SQLResponse): void => {
+      res.send({"message": "failure", "data": Db.getSqlError(err)})
+    });
+});
+
+app.get('/test', (req: Request, res: Response) => {
+  res.send('testing');
+})

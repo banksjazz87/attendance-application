@@ -1,5 +1,4 @@
 import mysql from "mysql";
-import express, { Express, Request, Response } from "express";
 import { SQLResponse } from "../interfaces/interfaces.ts";
 
 export class DBMethods {
@@ -79,10 +78,10 @@ export class DBMethods {
     });
   }
 
-  getTable(table: string): Promise<string[]> {
+  getTable(table: string, order: string, column: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      let sql = `SELECT * FROM ${table};`;
+      let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
 
       database.query(sql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);

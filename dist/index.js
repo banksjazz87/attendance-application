@@ -23,9 +23,9 @@ app.listen(port, () => {
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
 const neededCookies = 'req.cookies.host, req.cookies.user,req.cookies.database,req.cookies.password';
-app.get("/*", (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
-});
+/*app.get("/*", (req: Request, res: Response) => {
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});*/
 app.post("/login", (req, res) => {
     if (req.body.name === process.env.TEST_USER &&
         req.body.password === process.env.TEST_PASSWORD) {
@@ -50,7 +50,21 @@ app.post('/new-group', (req, res) => {
     Db.insert('group_names', dbColumns, dbValues).then((data) => {
         res.send({ 'message': 'success', data: data });
     }).catch((err) => {
-        console.log('err', err);
+        console.log(Db.getSqlError(err));
         res.send({ 'message': 'failure', 'error': Db.getSqlError(err) });
     });
+});
+app.get('/groups', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.getTable('group_names', 'ASC', 'name')
+        .then((data) => {
+        console.log(data);
+        res.send({ "message": "success", "data": data });
+    })
+        .catch((err) => {
+        res.send({ "message": "failure", "data": Db.getSqlError(err) });
+    });
+});
+app.get('/test', (req, res) => {
+    res.send('testing');
 });

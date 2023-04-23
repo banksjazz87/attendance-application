@@ -58,10 +58,20 @@ class DBMethods {
             this.endDb();
         });
     }
-    searchByName(table, column, value) {
+    searchByValue(table, column, value) {
         return new Promise((resolve, reject) => {
             const database = this.db();
             let sql = `SELECT * FROM ${table} WHERE ${column} = "${value}";`;
+            database.query(sql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    getTable(table, order, column) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

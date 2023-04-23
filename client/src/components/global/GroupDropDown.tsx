@@ -1,36 +1,52 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {GroupProps} from "../../types/interfaces";
 
-export default function GroupDropDown({groupSelected}: GroupProps) {
-  //This array is just for developing.
-  const groups: string[] = [
-    "Sunday Service",
-    "Sunday School",
-    "Hilltop Kids (Sunday)",
-    "Hilltop Kids (Midweek)",
-    "Ignite Youth",
-  ];
+
+interface Group {
+  id: number;
+  name: string;
+}
+
+export default function GroupDropDown({groupSelected}: GroupProps): JSX.Element {
+
+const [groups, setGroups] = useState<Group[]>([]);
+
+useEffect((): void => {
+  fetch('/groups')
+    .then((data: Response): any => { return data.json()})
+    .then((final: any): void => {
+      const newArr = final.data;
+      setGroups(newArr);
+    });
+}, []);
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (groupSelected) {
         groupSelected(e.target.value);
     }
+    
   }
 
-  const dropDownItems: JSX.Element[] = groups.map((x: string, y: number) => {
+  const dropDownItems = (): JSX.Element[] | undefined => {
+  const options = groups.map((x: Group, y: number): JSX.Element => {
     return (
-      <option key={`group_${y}`} id={`group_${y}`} value={x}>
-        {x}
+      <option key={`group_${x.id}`} id={`group_${y}`} value={x.name}>
+        {x.name}
       </option>
     );
   });
 
- 
+  if (groups.length > 0) {
+    return options;
+  }
+}
+
+
   return (
     <select id="group_dropdown" 
         onChange={changeHandler}>
       <option id="placeholder">Please select an option</option>
-      {dropDownItems}
+      {dropDownItems()}
     </select>
   );
 }
