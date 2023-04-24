@@ -1,28 +1,19 @@
-import React, { useState } from "react";
-import postData from "../../functions/api/post.ts";
-import { Group } from "../../types/interfaces.ts";
+import React from "react";
+import { GroupProps } from "../../types/interfaces.ts";
 
-export default function NewGroupForm() {
-  const [groupName, setGroupName] = useState<Group>({ name: "" });
-
+export default function NewGroupForm({groupSelected}: GroupProps): JSX.Element {
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setGroupName({ ...groupName, name: e.target.value });
-  };
-
-  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    postData("/new-group", groupName).then((data: object) => console.log(data));
+    if (groupSelected) {
+      groupSelected(e.target.value);
+    }
   };
 
   return (
     <div id="new_group_wrapper">
-      <form method="post" onSubmit={submitHandler}>
-        <label id="new_group" htmlFor="new_group">
-          Group Name
-        </label>
-        <input type="text" id="new_group" onChange={changeHandler} />
-        <input type="submit" value="Submit" />
-      </form>
+      <label id="new_group" htmlFor="new_group">
+        Group Name
+      </label>
+      <input type="text" id="new_group" onChange={changeHandler} />
     </div>
   );
 }

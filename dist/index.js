@@ -65,6 +65,3 @@ app.get('/groups', (req, res) => {
         res.send({ "message": "failure", "data": Db.getSqlError(err) });
     });
 });
-app.get('/test', (req, res) => {
-    res.send('testing');
-});

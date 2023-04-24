@@ -13,6 +13,7 @@ export interface Attendee {
   }
 
   export interface Group {
+    id?: number;
     name: string;
   }
   
@@ -21,6 +22,9 @@ export interface Attendee {
     groupHandler?: Function;
     name?: string;
     groupSelected?: Function;
+    titleHandler?: Function;
+    attendanceTitle?: string;
+    getGroups?: Function;
   }
 
   export interface User {
@@ -31,4 +35,10 @@ export interface Attendee {
   export interface UserProps {
     showForm: boolean;
     logIn: any;
+  }
+
+  export interface JSDate {
+    getMonth: Function;
+    getDate: Function;
+    getFullYear: Function;
   }

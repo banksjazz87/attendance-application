@@ -93,6 +93,4 @@ app.get('/groups', (req: Request, res: Response) => {
     });
 });
 
-app.get('/test', (req: Request, res: Response) => {
-  res.send('testing');
-})
+
