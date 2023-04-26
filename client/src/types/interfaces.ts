@@ -15,6 +15,7 @@ export interface Attendee {
   export interface Group {
     id?: number;
     name: string;
+    age_group: string;
   }
   
   export interface GroupProps {
@@ -25,6 +26,8 @@ export interface Attendee {
     titleHandler?: Function;
     attendanceTitle?: string;
     getGroups?: Function;
+    currentGroups?: Group[];
+    ageHandler?: Function;
   }
 
   export interface User {

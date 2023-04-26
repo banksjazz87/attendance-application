@@ -65,3 +65,19 @@ app.get('/groups', (req, res) => {
         res.send({ "message": "failure", "data": Db.getSqlError(err) });
     });
 });
+app.post('/new-attendance/create', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const tableName = () => {
+        let underscore = req.body.name.replaceAll(' ', '_');
+        let toLower = underscore.toLowerCase();
+        return toLower;
+    };
+    const columnNames = "title, group_age";
+    const values = [req.body.title, req.body.ageGroup];
+    Db.insert(tableName(), columnNames, values)
+        .then((data) => {
+        res.send({ "message": "success", "data": data });
+    }).catch((err) => {
+        res.send({ "message": "failure", "data": Db.getSqlError(err) });
+    });
+});

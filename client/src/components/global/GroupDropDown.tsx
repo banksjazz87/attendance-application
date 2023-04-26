@@ -5,6 +5,7 @@ import { Group } from "../../types/interfaces";
 export default function GroupDropDown({
   groupSelected,
   getGroups,
+  currentGroups
 }: GroupProps): JSX.Element {
   const [groups, setGroups] = useState<Group[]>([]);
 
@@ -25,7 +26,7 @@ export default function GroupDropDown({
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (groupSelected) {
-      groupSelected(e.target.value);
+      groupSelected(currentGroups, e.target.value);
     }
   };
 

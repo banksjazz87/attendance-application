@@ -83,10 +83,22 @@ export class DBMethods {
       const database = this.db();
       let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
 
-      database.query(sql, (err: string[], results: string[]) => {
+      database.query(sql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
       });
       this.endDb();
     });
   }
+
+  createGroupTable(tableName: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      let sql = `CREATE TABLE ${tableName} (id int NOT NUll AUTO_INCREMENT, title varchar(50) DEFAULT NULL, dateCreated datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id));`;
+
+      database.query(sql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results)
+      });
+      this.endDb();
+    });
+    }
 }
