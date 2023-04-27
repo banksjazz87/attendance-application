@@ -16,6 +16,7 @@ export interface Attendee {
     id?: number;
     name: string;
     age_group: string;
+    displayName: string;
   }
   
   export interface GroupProps {

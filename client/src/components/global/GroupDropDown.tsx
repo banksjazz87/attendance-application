@@ -33,7 +33,7 @@ export default function GroupDropDown({
   const dropDownItems = (): JSX.Element[] | undefined => {
     const options = groups.map((x: Group, y: number): JSX.Element => {
       return (
-        <option key={`group_${x.id}`} id={`group_${y}`} value={x.name}>
+        <option key={`group_${x.id}`} id={`group_${y}`} value={x.displayName}>
           {x.name}
         </option>
       );

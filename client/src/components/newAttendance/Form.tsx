@@ -10,10 +10,16 @@ interface NewAttendance {
     title: string;
     group: string;
     ageGroup: string;
+    groupDisplayName: string;
+}
+
+interface ApiResponse {
+    message: string;
+    data: [] | string;
 }
 
 export default function Form(): JSX.Element {
-    const [form, setForm] = useState<NewAttendance>({title: currentDate, group: '', ageGroup: ''});
+    const [form, setForm] = useState<NewAttendance>({title: currentDate, group: '', ageGroup: '', groupDisplayName: ""});
 
     //Using this to get all of the group names to compare against to determine if a new table needs to be created.
     const [allGroups, setAllGroups] = useState<Group[]>([]);
@@ -32,7 +38,8 @@ export default function Form(): JSX.Element {
             }
         }
         setForm({...form, 
-            group: value,
+            groupDisplayName: value,
+            group: arr[index]['displayName'],
             ageGroup: arr[index]['age_group']
         });
     }
@@ -57,6 +64,13 @@ export default function Form(): JSX.Element {
             });
     }
 
+    const setNewGroupName = (value: string): void => {
+        setForm({...form, 
+            groupDisplayName: value, 
+            group: value
+        })
+    }
+
     return (
         <form 
             id="new_attendance_form"
@@ -72,12 +86,27 @@ export default function Form(): JSX.Element {
                         console.log(data);
                     });
                 } else {
-                    alert('This group does not exist');
+                    console.log('here here', form);
+                    postData('/new-group', form)
+                    .then((data: ApiResponse): void => {
+                        if (data.message === "success") {
+                            postData('/new-group/create', form)
+                            .then((data: ApiResponse): void => {
+                                if (data.message === "success") {
+                                    alert('Success');
+                                } else {
+                                    alert(`Failure with new-group/create ${data.data}`);
+                                }
+                            })
+                        } else {
+                            alert(`Failure with new-group ${data.data}`);
+                        }
+                    })
                 }
             }}>
 
             <GroupDropDown currentGroups={allGroups} groupSelected={groupChange} getGroups={setGroups} />
-            <NewGroupForm groupSelected={groupChange} ageHandler={setGroupAge}/>
+            <NewGroupForm groupSelected={setNewGroupName} ageHandler={setGroupAge}/>
             <AttendanceTitle titleHandler={titleChange} attendanceTitle={form.title}/>
             <input type="submit" value="submit"/>
         </form>

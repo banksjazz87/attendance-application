@@ -101,4 +101,11 @@ export class DBMethods {
       this.endDb();
     });
     }
+
+    createTableName(table: string): string {
+      let result: string = table.replace(/[.-/?! ]/g, '_');
+      let resultNoSpaces: string = result.replace(/ /g, '_');
+
+      return resultNoSpaces;
+    }
 }

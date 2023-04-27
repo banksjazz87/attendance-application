@@ -78,5 +78,20 @@ class DBMethods {
             this.endDb();
         });
     }
+    createGroupTable(tableName) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            let sql = `CREATE TABLE ${tableName} (id int NOT NUll AUTO_INCREMENT, title varchar(50) DEFAULT NULL, dateCreated datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id));`;
+            database.query(sql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    createTableName(table) {
+        let result = table.replace(/[.-/?! ]/g, '_');
+        let resultNoSpaces = result.replace(/ /g, '_');
+        return resultNoSpaces;
+    }
 }
 exports.DBMethods = DBMethods;
