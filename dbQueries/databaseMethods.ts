@@ -66,7 +66,11 @@ export class DBMethods {
     });
   }
 
-  searchByValue(table: string,column: string,value: string): Promise<string[]> {
+  searchByValue(
+    table: string,
+    column: string,
+    value: string
+  ): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       let sql = `SELECT * FROM ${table} WHERE ${column} = "${value}";`;
@@ -93,19 +97,51 @@ export class DBMethods {
   createGroupTable(tableName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      let sql = `CREATE TABLE ${tableName} (id int NOT NUll AUTO_INCREMENT, title varchar(50) DEFAULT NULL, dateCreated datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id));`;
+      let sql = `CREATE TABLE ${tableName} (id int NOT NUll AUTO_INCREMENT, title varchar(50) DEFAULT NULL, displayTitle varchar(50) DEFAULT NULL, dateCreated datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id));`;
 
       database.query(sql, (err: string[], results: string[]): void => {
-        err ? reject(err) : resolve(results)
+        err ? reject(err) : resolve(results);
       });
       this.endDb();
     });
-    }
+  }
 
-    createTableName(table: string): string {
-      let result: string = table.replace(/[.-/?! ]/g, '_');
-      let resultNoSpaces: string = result.replace(/ /g, '_');
+  createTableName(table: string): string {
+    let result: string = table.replace(/[.-/?! ]/g, "_");
+    let resultNoSpaces: string = result.replace(/ /g, "_");
+    return resultNoSpaces;
+  }
 
-      return resultNoSpaces;
-    }
+  //This will be used to create a new attendance table.
+  createNewAttendance(tableName: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
+        lastName varchar(40) DEFAULT NULL, child tinyint DEFAULT 0, youth tinyint DEFAULT 0, adult tinyint DEFAULT 0, member tinyint DEFAULT 0, visitor tinyint DEFAULT 0, present tinyint DEFAULT 0, PRIMARY KEY (id));`;
+
+      database.query(sql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  //This will be used to insert all of the people of a certain age group into an attendance table.
+  insertAgeGroup(tableName: string, group: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = (): string => {
+        if (group === "all") {
+          return `INSERT INTO ${tableName} (id, firstName, lastName, child, youth, adult, member, visitor) SELECT * FROM People;`;
+        } else {
+          return `INSERT INTO ${tableName} (id, firstName, lastName, child, youth, adult, member, visitor) SELECT * FROM People WHERE ${group} = 1;`;
+        }
+      };
+      let sql = neededSql();
+      database.query(sql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
 }
