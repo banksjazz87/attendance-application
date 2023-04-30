@@ -50,11 +50,17 @@ export interface Attendee {
     getFullYear: Function;
   }
 
-  export interface AttendanceLayout {
+  export interface AttendanceInputs {
     placeholder: string,
     type: string,
     name: string,
     id: string,
     value: string,
     label: string
+  }
+
+  export interface AttendanceLayout {
+    name: AttendanceInputs[], 
+    ageGroup: AttendanceInputs[], 
+    memberStatus: AttendanceInputs[]
   }

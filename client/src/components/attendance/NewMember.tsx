@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Attendee } from "../../types/interfaces.ts";
+import {AttendantFormLayout} from "../../variables/newAttendantForm.ts";
+import {AttendanceInputs} from "../../types/interfaces.ts";
 
 export default function NewMember(): JSX.Element {
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([
@@ -24,14 +26,14 @@ export default function NewMember(): JSX.Element {
     visitor: 0,
   });
 
-  useEffect((): void => {
+  /*useEffect((): void => {
     fetch("/all-attendants")
       .then((data) => data.json())
       .then((final) => {
         setFirstLast(final.data);
         console.log(allAttendants);
       });
-  }, []);
+  }, []);*/
 
   const nameHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewAttendant({ ...newAttendant, [e.target.id]: e.target.value });
@@ -60,6 +62,35 @@ export default function NewMember(): JSX.Element {
 
     return addFirstLast;
 }
+
+const nameFields: JSX.Element[] = AttendantFormLayout.name.map((x: AttendanceInputs, y: number): JSX.Element => {
+  return (
+    <div className="input_wrapper" key={`name_field_${y}`}>
+      <label htmlFor={x.id}>{x.label}</label>
+      <input placeholder={x.placeholder} type={x.type} id={x.id} name={x.name} onChange={nameHandler} />
+    </div>
+  )
+});
+
+const ageFields: JSX.Element[] = AttendantFormLayout.ageGroup.map((x: AttendanceInputs, y: number): JSX.Element => {
+  return (
+    <div className="input_wrapper" key={`name_field_${y}`}>
+      <label htmlFor={x.id}>{x.label}</label>
+      <input placeholder={x.placeholder} type={x.type} id={x.id} name={x.name} onChange={radioAgeChange} />
+    </div>
+  )
+});
+
+const memberFields: JSX.Element[] = AttendantFormLayout.memberStatus.map((x: AttendanceInputs, y: number): JSX.Element => {
+  return (
+    <div className="input_wrapper" key={`name_field_${y}`}>
+      <label htmlFor={x.id}>{x.label}</label>
+      <input placeholder={x.placeholder} type={x.type} id={x.id} name={x.name} onChange={radioMemberChange} />
+    </div>
+  )
+});
+
+
   
   return (
     <form
@@ -70,69 +101,16 @@ export default function NewMember(): JSX.Element {
         console.log(allAttendants);
       }}
     >
-      <div className="input_wrapper">
-        <label htmlFor="firstName">First Name</label>
-        <input
-          placeholder="First Name"
-          type="text"
-          id="firstName"
-          name="firstName"
-          onChange={nameHandler}
-        />
+      <div className="name_fields_wrapper fields_wrapper">
+        {nameFields}
       </div>
-      <div className="input_wrapper">
-        <label htmlFor="lastName">Last Name</label>
-        <input
-          placeholder="Last Name"
-          type="text"
-          id="lastName"
-          name="lastNname"
-          onChange={nameHandler}
-        />
+
+      <div className="age_fields_wrapper fields_wrapper">
+        {ageFields}
       </div>
-      <div className="input_wrapper button_group">
-        <label htmlFor="child">Child</label>
-        <input
-          id="child"
-          type="radio"
-          name="age_group"
-          value="child"
-          onChange={radioAgeChange}
-        />
-        <label htmlFor="youth">Youth</label>
-        <input
-          id="youth"
-          type="radio"
-          name="age_group"
-          value="youth"
-          onChange={radioAgeChange}
-        />
-        <label htmlFor="adult">Adult</label>
-        <input
-          id="adult"
-          type="radio"
-          name="age_group"
-          value="adult"
-          onChange={radioAgeChange}
-        />
-      </div>
-      <div className="input_wrapper button_group">
-        <label htmlFor="member">Member</label>
-        <input
-          type="radio"
-          id="member"
-          name="member_status"
-          value="member"
-          onChange={radioMemberChange}
-        />
-        <label htmlFor="visitor">Visitor</label>
-        <input
-          id="visitor"
-          type="radio"
-          name="member_status"
-          value="visitor"
-          onChange={radioMemberChange}
-        />
+
+      <div className="member_fields_wrapper fields_wrapper">
+        {memberFields}
       </div>
 
       <input type="submit" value="Submit" />
