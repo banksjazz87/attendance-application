@@ -7,6 +7,7 @@ export interface Attendee {
     member: number;
     visitor: number;
     present?: number;
+    firstLast?: string;
   }
   
   export interface AttendanceProps {
@@ -47,4 +48,13 @@ export interface Attendee {
     getMonth: Function;
     getDate: Function;
     getFullYear: Function;
+  }
+
+  export interface AttendanceLayout {
+    placeholder: string,
+    type: string,
+    name: string,
+    id: string,
+    value: string,
+    label: string
   }
