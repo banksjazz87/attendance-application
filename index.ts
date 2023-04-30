@@ -162,4 +162,23 @@ app.post('/new-group/new-attendance/create', (req: Request, res: Response) => {
     });
 });
 
+app.get('/all-attendants', (req: Request, res: Response) => {
+  const Db = new DBMethods(
+    req.cookies.host,
+    req.cookies.user, 
+    req.cookies.database,
+    req.cookies.password
+  );
+
+  Db.getTable('Attendants', 'ASC', 'lastName')
+    .then((data: string[]): void => {
+      console.log(data);
+      res.send({"message": "Success", "data": data})
+    })
+    .catch((err: [SQLResponse]): void => {
+      console.log(err);
+      res.send({"message": "failure", data: Db.getSqlError});
+    });
+})
+
 

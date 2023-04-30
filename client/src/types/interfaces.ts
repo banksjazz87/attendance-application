@@ -3,8 +3,10 @@ export interface Attendee {
     lastName: string;
     adult: number;
     child: number;
-    teen: number;
-    present: number;
+    youth: number;
+    member: number;
+    visitor: number;
+    present?: number;
   }
   
   export interface AttendanceProps {

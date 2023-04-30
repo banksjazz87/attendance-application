@@ -107,3 +107,15 @@ app.post('/new-group/new-attendance/create', (req, res) => {
         });
     });
 });
+app.get('/all-attendants', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.getTable('Attendants', 'ASC', 'lastName')
+        .then((data) => {
+        console.log(data);
+        res.send({ "message": "Success", "data": data });
+    })
+        .catch((err) => {
+        console.log(err);
+        res.send({ "message": "failure", data: Db.getSqlError });
+    });
+});

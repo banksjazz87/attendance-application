@@ -6,7 +6,9 @@ export const attendantData: Attendee[] = [
       lastName: "Barley",
       adult: 0,
       child: 0,
-      teen: 1,
+      youth: 1,
+      member: 0,
+      visitor: 1,
       present: 0,
     },
     {
@@ -14,7 +16,9 @@ export const attendantData: Attendee[] = [
       lastName: "Berry",
       adult: 1,
       child: 0,
-      teen: 0,
+      youth: 0,
+      member: 0,
+      visitor: 1,
       present: 0,
     },
     {
@@ -22,7 +26,9 @@ export const attendantData: Attendee[] = [
       lastName: "Larry",
       adult: 1,
       child: 0,
-      teen: 0,
+      youth: 0,
+      member: 0,
+      visitor: 1,
       present: 0,
     },
   ];
