@@ -22,9 +22,10 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
-/*app.get("/*", (req: Request, res: Response) => {
-  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-});*/
+const paths = ['/dashboard', '/new-attendance', '/attendance', 'search'];
+app.get(paths, (req, res) => {
+    res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
+});
 app.post("/login", (req, res) => {
     if (req.body.name === process.env.TEST_USER &&
         req.body.password === process.env.TEST_PASSWORD) {
@@ -116,6 +117,20 @@ app.get('/all-attendants', (req, res) => {
     })
         .catch((err) => {
         console.log(err);
-        res.send({ "message": "failure", data: Db.getSqlError });
+        res.send({ "message": "failure", "data": Db.getSqlError(err) });
+    });
+});
+app.post('/new-attendant', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    console.log(req.body);
+    const neededValues = Object.values(req.body);
+    const neededColumns = Object.keys(req.body).toString();
+    Db.insert('Attendants', neededColumns, neededValues)
+        .then((data) => {
+        res.send({ "message": "Success", "data": data });
+    })
+        .catch((err) => {
+        console.log("Error", err);
+        res.send({ "message": "failure", "data": Db.getSqlError(err) });
     });
 });

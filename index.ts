@@ -24,10 +24,11 @@ app.listen(port, (): void => {
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
+const paths = ['/dashboard', '/new-attendance', '/attendance', 'search'];
 
-/*app.get("/*", (req: Request, res: Response) => {
+app.get(paths, (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
-});*/
+});
 
 app.post("/login", (req: Request, res: Response): any => {
   if (
@@ -175,10 +176,32 @@ app.get('/all-attendants', (req: Request, res: Response) => {
       console.log(data);
       res.send({"message": "Success", "data": data})
     })
-    .catch((err: [SQLResponse]): void => {
+    .catch((err: SQLResponse): void => {
       console.log(err);
-      res.send({"message": "failure", data: Db.getSqlError});
+      res.send({"message": "failure", "data": Db.getSqlError(err)});
     });
-})
+});
 
+
+app.post('/new-attendant', (req: Request, res: Response) => {
+  const Db = new DBMethods(
+    req.cookies.host,
+    req.cookies.user, 
+    req.cookies.database,
+    req.cookies.password
+  );
+
+  console.log(req.body);
+  const neededValues: string[] = Object.values(req.body);
+  const neededColumns: string = Object.keys(req.body).toString();
+
+  Db.insert('Attendants', neededColumns, neededValues)
+    .then((data: string[]): void => {
+      res.send({"message": "Success", "data": data});
+    })
+    .catch((err: SQLResponse): void => {
+      console.log("Error", err);
+      res.send({"message": "failure", "data": Db.getSqlError(err)});
+    });
+});
 

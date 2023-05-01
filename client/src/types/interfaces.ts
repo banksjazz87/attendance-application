@@ -64,3 +64,8 @@ export interface Attendee {
     ageGroup: AttendanceInputs[], 
     memberStatus: AttendanceInputs[]
   }
+
+  export interface APIResponse {
+    message: string;
+    data: string[] | string;
+  }
