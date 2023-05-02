@@ -115,13 +115,9 @@ export default function NewMember(): JSX.Element {
     }
   );
 
-  return (
-    <form
-      method="post"
-      action="/new-attendant"
-      id="new_member_form"
-      onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
         if (nameMatches.length > 0) {
           alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
         } else {
@@ -136,14 +132,19 @@ export default function NewMember(): JSX.Element {
             }
             });
         }
-      }}
+  }
+
+
+  return (
+    <form
+      method="post"
+      action="/new-attendant"
+      id="new_member_form"
+      onSubmit={submitHandler}
     >
       <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
-
       <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
-
       <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
-
       <input type="submit" value="Submit" />
     </form>
   );
