@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
-import NewMember from "../components/attendance/NewMember.tsx";
+import NewMember from "../components/people/NewMember.tsx";
 import {Str, Bool} from "../../src/types/types.ts";
 
 

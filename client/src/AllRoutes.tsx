@@ -8,6 +8,7 @@ import Attendance from "./views/Attendance.tsx";
 import Search from "./views/Search.tsx";
 import NewAttendance from "./views/NewAttendance.tsx";
 import Dashboard from "./views/Dashboard.tsx";
+import People from "./views/People.tsx";
   
 export default function AllRoutes(): JSX.Element {
     return (
@@ -18,6 +19,7 @@ export default function AllRoutes(): JSX.Element {
                 <Route path="/new-attendance" element={<NewAttendance />} />
                 <Route path="/attendance" element={<Attendance />} />
                 <Route path="/search" element={<Search />} />
+                <Route path="/people" element={<People />} />
             </Routes>
         </BrowserRouter>
     )

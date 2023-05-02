@@ -115,7 +115,7 @@ export default function NewMember(): JSX.Element {
     }
   );
 
-
+ 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
         if (nameMatches.length > 0) {
@@ -133,7 +133,6 @@ export default function NewMember(): JSX.Element {
             });
         }
   }
-
 
   return (
     <form

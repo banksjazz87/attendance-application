@@ -20,6 +20,9 @@ export default function Navbar() {
                 <li>
                     <Link to={`/search`}>Search</Link>
                 </li>
+                <li>
+                    <Link to={`/people`}>People</Link>
+                </li>
             </ul>
         </nav>
     );
