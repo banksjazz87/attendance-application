@@ -71,7 +71,7 @@ app.post('/new-group', (req: Request, res: Response) => {
       res.send({'message': 'success', data: data});
     }).catch((err: SQLResponse): void => {
       console.log(Db.getSqlError(err));
-      res.send({'message': 'failure', 'data': Db.getSqlError(err)});
+      res.send({'message': 'failure', 'error': Db.getSqlError(err)});
     });
 });
 
@@ -90,7 +90,7 @@ app.get('/groups', (req: Request, res: Response): void => {
       res.send({"message": "success", "data": data})
     })
     .catch((err: SQLResponse): void => {
-      res.send({"message": "failure", "data": Db.getSqlError(err)})
+      res.send({"message": "failure", "error": Db.getSqlError(err)})
     });
 });
 
@@ -112,7 +112,7 @@ app.post('/new-attendance/create', (req: Request, res: Response): void => {
     .then((data: string[]): void => {
       res.send({"message": "success", "data": data});
     }).catch((err: SQLResponse): void => {
-      res.send({"message": "failure", "data": Db.getSqlError(err)});
+      res.send({"message": "failure", "error": Db.getSqlError(err)});
     });
 });
 
@@ -133,7 +133,7 @@ app.post('/new-group/create', (req: Request, res: Response) => {
     })
     .catch((err: SQLResponse): void => {
       console.log('err', err);
-      res.send({"message": "failure", "data": Db.getSqlError(err)});
+      res.send({"message": "failure", "error": Db.getSqlError(err)});
     });
 });
 
@@ -156,7 +156,7 @@ app.post('/new-group/new-attendance/create', (req: Request, res: Response) => {
       res.send({"message": "success", "data": data});
     }).catch((err: [SQLResponse, SQLResponse]): void => {
       console.log('err', err);
-      res.send({"message": "failure", "data": () => { 
+      res.send({"message": "failure", "error": () => { 
         Db.getSqlError(err[0]), 
         Db.getSqlError(err[1])}
       });
@@ -178,7 +178,7 @@ app.get('/all-attendants', (req: Request, res: Response) => {
     })
     .catch((err: SQLResponse): void => {
       console.log(err);
-      res.send({"message": "failure", "data": Db.getSqlError(err)});
+      res.send({"message": "failure", "error": Db.getSqlError(err)});
     });
 });
 
@@ -201,7 +201,7 @@ app.post('/new-attendant', (req: Request, res: Response) => {
     })
     .catch((err: SQLResponse): void => {
       console.log("Error", err);
-      res.send({"message": "failure", "data": Db.getSqlError(err)});
+      res.send({"message": "failure", "error": Db.getSqlError(err)});
     });
 });
 

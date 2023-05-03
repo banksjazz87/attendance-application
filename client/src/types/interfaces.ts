@@ -67,5 +67,12 @@ export interface Attendee {
 
   export interface APIResponse {
     message: string;
-    data: string[] | string;
+    data: string[];
+    error: string;
+  }
+
+  export interface APIPeople {
+    message: string;
+    data: Attendee[];
+    error: string;
   }
