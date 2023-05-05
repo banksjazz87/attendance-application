@@ -8,6 +8,7 @@ export interface Attendee {
     visitor: number;
     present?: number;
     firstLast?: string;
+    id?: number;
   }
   
   export interface AttendanceProps {
@@ -76,3 +77,9 @@ export interface Attendee {
     data: Attendee[];
     error: string;
   }
+
+  export interface AllPeopleProps {
+    allPeople: Attendee[];
+    deletePersonHandler: Function;
+  }
+

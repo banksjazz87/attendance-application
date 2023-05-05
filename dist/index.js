@@ -22,7 +22,7 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
-const paths = ['/dashboard', '/new-attendance', '/attendance', 'search'];
+const paths = ['/dashboard', '/new-attendance', '/attendance', 'search', '/people'];
 app.get(paths, (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
 });
@@ -122,7 +122,6 @@ app.get('/all-attendants', (req, res) => {
 });
 app.post('/new-attendant', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    console.log(req.body);
     const neededValues = Object.values(req.body);
     const neededColumns = Object.keys(req.body).toString();
     Db.insert('Attendants', neededColumns, neededValues)
@@ -131,6 +130,19 @@ app.post('/new-attendant', (req, res) => {
     })
         .catch((err) => {
         console.log("Error", err);
+        res.send({ "message": "failure", "error": Db.getSqlError(err) });
+    });
+});
+app.delete('/remove-person/:firstName/:lastName/:id', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    let numOfId = parseInt(req.params.id);
+    console.log(`${req.params.firstName}, ${req.params.lastName}, ${req.params.id}`);
+    Db.removePerson('Attendants', req.params.firstName, req.params.lastName, numOfId)
+        .then((data) => {
+        res.send({ "message": `Success, ${req.params.firstName} ${req.params.lastName} has been deleted` });
+    })
+        .catch((err) => {
+        console.log('ERRRRORRRR', err);
         res.send({ "message": "failure", "error": Db.getSqlError(err) });
     });
 });

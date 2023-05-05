@@ -1,23 +1,12 @@
 import React, {useEffect, useState} from "react";
+import {AllPeopleProps} from "../../types/interfaces.ts";
 import {Attendee} from "../../types/interfaces.ts";
-import {APIPeople} from "../../types/interfaces.ts";
 
-export default function AllPeople(): JSX.Element {
-    const [people, setPeople] = useState<Attendee[]>();
 
-    useEffect((): void => {
-        fetch('/all-attendants')
-            .then((data: Response): Promise<APIPeople> => {
-                return data.json();
-            })
-            .then((final: APIPeople): void => {
-                if (final.message === "Success") {
-                    setPeople(final.data)
-                }
-            });
-    }, []);
-
-    const tableHeaders = ["Last Name", "First Name", "Age Group", "Member Status", "Edit"];
+export default function AllPeople({allPeople, deletePersonHandler}: AllPeopleProps): JSX.Element {
+    
+    const tableHeaders = ["Last Name", "First Name", "Age Group", "Member Status", "Delete"];
+    
     const returnHeaders = tableHeaders.map((x: string, y: number): JSX.Element => {
         return (
                 <th key={`header_${y}`}>{x}</th>
@@ -54,28 +43,31 @@ export default function AllPeople(): JSX.Element {
         return status;
     }
 
-
-    const returnPeople = people?.map((x: Attendee, y: number): JSX.Element => {
+    const returnallPeople = allPeople?.map((x: Attendee, y: number): JSX.Element => {
         return (
             <tr key={`row_${y}`}>
                 <td>{x.lastName}</td>
                 <td>{x.firstName}</td>
                 <td>{filterForAge(x)}</td>
                 <td>{filterForMember(x)}</td>
+                <td><button type="button" onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+                    deletePersonHandler(allPeople[y]);
+                }
+                }>X</button></td>
             </tr>
         );
     });
 
     
-    if (people) {
-        filterForAge(people[0]);
+    if (allPeople) {
+        filterForAge(allPeople[0]);
         return (
         <table>
             <tbody>
                 <tr>
                     {returnHeaders}
                 </tr>
-                {returnPeople}
+                {returnallPeople}
             </tbody>
         </table>
     );

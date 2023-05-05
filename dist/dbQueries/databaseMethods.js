@@ -124,5 +124,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    removePerson(tableName, firstName, lastName, id) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `DELETE FROM ${tableName} WHERE firstName = "${firstName}" AND lastName = "${lastName}" AND id = ${id};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
 }
 exports.DBMethods = DBMethods;
