@@ -3,14 +3,15 @@ import { AllPeopleProps, Attendee } from "../../types/interfaces.ts";
 
 export default function AllPeople({ allPeople, deletePersonHandler }: AllPeopleProps): JSX.Element {
 
-  const tableHeaders = [
+  const tableHeaders: string[] = [
     "Last Name",
     "First Name",
     "Age Group",
     "Member Status",
+    "Edit",
     "Delete",
   ];
-  
+
   const returnHeaders = tableHeaders.map(
     (x: string, y: number): JSX.Element => {
       return <th key={`header_${y}`}>{x}</th>;
@@ -55,6 +56,16 @@ export default function AllPeople({ allPeople, deletePersonHandler }: AllPeopleP
           <td>{x.firstName}</td>
           <td>{filterForAge(x)}</td>
           <td>{filterForMember(x)}</td>
+          <td>
+            <button
+              type="button"
+              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+                alert(`You want to edit ${allPeople[y].firstName} ${allPeople[y].lastName} from the table :(`);
+              }}
+            >
+              Edit
+            </button>
+          </td>
           <td>
             <button
               type="button"

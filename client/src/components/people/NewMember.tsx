@@ -6,8 +6,8 @@ import postData from "../../functions/api/post.ts";
 import {APIResponse} from "../../types/interfaces.ts";
 
 export default function NewMember(): JSX.Element {
-  const [allAttendants, setAllAttendants] = useState<Attendee[]>([
-    {
+
+  const initAttendants: Attendee = {
       firstName: "",
       lastName: "",
       adult: 0,
@@ -15,18 +15,10 @@ export default function NewMember(): JSX.Element {
       youth: 0,
       member: 0,
       visitor: 0,
-    },
-  ]);
-
-  const [newAttendant, setNewAttendant] = useState<Attendee>({
-    firstName: "",
-    lastName: "",
-    adult: 0,
-    child: 0,
-    youth: 0,
-    member: 0,
-    visitor: 0,
-  });
+  }
+  
+  const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
+  const [newAttendant, setNewAttendant] = useState<Attendee>(initAttendants);
 
   useEffect((): void => {
     fetch("/all-attendants")
