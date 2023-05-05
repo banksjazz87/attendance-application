@@ -83,3 +83,15 @@ export interface Attendee {
     deletePersonHandler: Function;
   }
 
+  export interface DeleteProps {
+    message: string;
+    url: string;
+    show: boolean;
+    deleteUser: Attendee;
+    hideHandler: Function;
+  }
+  
+  export interface DeleteResponse {
+      message: string;
+      error: string;
+  }
