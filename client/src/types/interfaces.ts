@@ -60,6 +60,7 @@ export interface Attendee {
     label: string
   }
 
+
   export interface AttendanceLayout {
     name: AttendanceInputs[], 
     ageGroup: AttendanceInputs[], 
@@ -81,6 +82,7 @@ export interface Attendee {
   export interface AllPeopleProps {
     allPeople: Attendee[];
     deletePersonHandler: Function;
+    editPersonHandler: Function;
   }
 
   export interface DeleteProps {

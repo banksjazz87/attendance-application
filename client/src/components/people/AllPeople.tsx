@@ -1,7 +1,7 @@
 import React from "react";
 import { AllPeopleProps, Attendee } from "../../types/interfaces.ts";
 
-export default function AllPeople({ allPeople, deletePersonHandler }: AllPeopleProps): JSX.Element {
+export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler }: AllPeopleProps): JSX.Element {
 
   const tableHeaders: string[] = [
     "Last Name",
@@ -60,7 +60,7 @@ export default function AllPeople({ allPeople, deletePersonHandler }: AllPeopleP
             <button
               type="button"
               onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-                alert(`You want to edit ${allPeople[y].firstName} ${allPeople[y].lastName} from the table :(`);
+                editPersonHandler(allPeople[y]);
               }}
             >
               Edit
