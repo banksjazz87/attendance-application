@@ -1,6 +1,7 @@
 import React from "react";
 import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
-import { AttendanceInputs, Attendee } from "../../types/interfaces.ts";
+import { AttendanceInputs, Attendee, APIResponse } from "../../types/interfaces.ts";
+import putData from "../../functions/api/put.ts";
 
 interface EditMemberProps {
   show: boolean;
@@ -112,7 +113,15 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
       style={show ? { display: "" } : { display: "none" }}
       onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
-        hideHandler();
+        putData('/update-attendant', editUser)
+            .then((data: APIResponse): void => {
+                if (data.message === "Success") {
+                    hideHandler();
+                    window.location.reload();
+                } else {
+                    alert(data.error)
+                }
+            })
       }}
     >
       {returnNameFields}

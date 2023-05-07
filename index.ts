@@ -224,6 +224,22 @@ app.delete('/remove-person/:firstName/:lastName/:id', (req: Request, res: Respon
         console.log('ERRRRORRRR', err);
         res.send({"message": "failure", "error": Db.getSqlError(err)})
       });
+});
 
+app.put('/update-attendant', (req: Request, res: Response): void => {
+  const Db = new DBMethods (
+      req.cookies.host,
+      req.cookies.user,
+      req.cookies.database,
+      req.cookies.password
+  );
+
+  Db.updatePerson('Attendants', req.body)
+    .then((data: string[]): void => {
+      res.send({"message": "Success", "data": data});
+    })
+    .catch((err: SQLResponse): void => {
+      res.send({"message": "failure", "error": Db.getSqlError(err)});
+    });
 });
 

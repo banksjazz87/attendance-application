@@ -1,5 +1,6 @@
 import mysql from "mysql";
 import { SQLResponse } from "../interfaces/interfaces.ts";
+import {DBAttendee} from "../../attendanceApplication/interfaces/interfaces.ts";
 
 export class DBMethods {
   hostName: any;
@@ -155,5 +156,17 @@ export class DBMethods {
       });
       this.endDb();
     });
+  }
+
+  updatePerson(tableName: string, obj: DBAttendee): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", child = "${obj.child}", youth = "${obj.youth}", adult = "${obj.adult}", member = "${obj.member}", visitor = "${obj.visitor}" WHERE id = ${obj.id};`;
+
+      database.query(neededSql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    })
   }
 }
