@@ -19,6 +19,7 @@ export default function People() {
     id: 0,
   };
 
+  
   const [people, setPeople] = useState<Attendee[]>([initAttendant]);
   const [userToDelete, setUserToDelete] = useState<Attendee>(initAttendant);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
@@ -47,14 +48,14 @@ export default function People() {
     setUserToEdit({ ...userToEdit, [field]: value });
   };
 
-  const updateEditAge = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const updateEditAge = (elementId: string): void => {
     setUserToEdit({ ...userToEdit, child: 0, youth: 0, adult: 0 });
-    setUserToEdit({ ...userToEdit, [e.target.id]: 1 });
+    setUserToEdit({ ...userToEdit, [elementId]: 1 });
   };
 
-  const updateEditMember = (e: React.ChangeEvent<HTMLInputElement>): void => {
+  const updateEditMember = (elementId: string): void => {
     setUserToEdit({ ...userToEdit, member: 0, visitor: 0 });
-    setUserToEdit({ ...userToEdit, [e.target.id]: 1 });
+    setUserToEdit({ ...userToEdit, [elementId]: 1 });
   };
 
   useEffect((): void => {

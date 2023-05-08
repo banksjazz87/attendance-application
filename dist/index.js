@@ -146,3 +146,13 @@ app.delete('/remove-person/:firstName/:lastName/:id', (req, res) => {
         res.send({ "message": "failure", "error": Db.getSqlError(err) });
     });
 });
+app.put('/update-attendant', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.updatePerson('Attendants', req.body)
+        .then((data) => {
+        res.send({ "message": "Success", "data": data });
+    })
+        .catch((err) => {
+        res.send({ "message": "failure", "error": Db.getSqlError(err) });
+    });
+});

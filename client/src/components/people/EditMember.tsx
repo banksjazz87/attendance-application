@@ -14,6 +14,27 @@ interface EditMemberProps {
 
 export default function EditMember({show, editUser, hideHandler, updateName, updateAge, updateMember}: EditMemberProps): JSX.Element {
 
+  const updateAgeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    updateAge(e.target.id);
+  }
+
+  const updateMemberHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    updateMember(e.target.id);
+  }
+
+  const updateSubmitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    putData('/update-attendant', editUser)
+        .then((data: APIResponse): void => {
+            if (data.message === "Success") {
+                hideHandler();
+                window.location.reload();
+            } else {
+                alert(data.error)
+            }
+        });
+  }
+
   const returnNameFields: JSX.Element[] = AttendantFormLayout.name.map(
     (x: AttendanceInputs, y: number): JSX.Element => {
         const key = x.id as string;
@@ -49,7 +70,7 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
               type={x.type}
               id={x.id}
               name={x.name}
-              onChange={() => updateAge()}
+              onChange={updateAgeHandler}
               checked
             />
           </div>
@@ -63,7 +84,7 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
               type={x.type}
               id={x.id}
               name={x.name}
-              onChange={() => updateAge()}
+              onChange={updateAgeHandler}
             />
           </div>
         );
@@ -84,7 +105,7 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
               type={x.type}
               id={x.id}
               name={x.name}
-              onChange={() => updateMember()}
+              onChange={updateMemberHandler}
               checked
             />
           </div>
@@ -98,7 +119,7 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
               type={x.type}
               id={x.id}
               name={x.name}
-              onChange={() => updateMember()}
+              onChange={updateMemberHandler}
             />
           </div>
         );
@@ -111,18 +132,7 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
       method="post"
       action="/update-attendant"
       style={show ? { display: "" } : { display: "none" }}
-      onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-        putData('/update-attendant', editUser)
-            .then((data: APIResponse): void => {
-                if (data.message === "Success") {
-                    hideHandler();
-                    window.location.reload();
-                } else {
-                    alert(data.error)
-                }
-            })
-      }}
+      onSubmit={updateSubmitHandler}
     >
       {returnNameFields}
       {returnAgeFields}

@@ -134,5 +134,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    updatePerson(tableName, obj) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", child = "${obj.child}", youth = "${obj.youth}", adult = "${obj.adult}", member = "${obj.member}", visitor = "${obj.visitor}" WHERE id = ${obj.id};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
 }
 exports.DBMethods = DBMethods;
