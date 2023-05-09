@@ -148,6 +148,7 @@ app.delete('/remove-person/:firstName/:lastName/:id', (req, res) => {
 });
 app.put('/update-attendant', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    console.log('age =' + req.body.age + 'memberType = ' + req.body.memberType);
     Db.updatePerson('Attendants', req.body)
         .then((data) => {
         res.send({ "message": "Success", "data": data });

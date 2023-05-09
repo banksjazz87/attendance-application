@@ -6,10 +6,7 @@ export interface SQLResponse {
 export interface DBAttendee {
     firstName: string;
     lastName: string;
-    adult: number;
-    child: number;
-    youth: number;
-    member: number;
-    visitor: number;
+    age: string;
+    memberType: string;
     id: number;
 }

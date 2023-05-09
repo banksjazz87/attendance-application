@@ -18,44 +18,15 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
     }
   );
 
-  const filterForAge = (obj: Attendee): string[] => {
-    const keys = Object.keys(obj);
-    const age = keys.filter((x: string | any, y: number): string => {
-      if (x === "adult" && obj["adult"] > 0) {
-        return "Adult";
-      } else if (x === "child" && obj["child"] > 0) {
-        return "Child";
-      } else if (x === "youth" && obj["youth"] > 0) {
-        return "Youth";
-      } else {
-        return "";
-      }
-    });
-    return age;
-  };
-
-  const filterForMember = (obj: Attendee): string[] => {
-    const keys = Object.keys(obj);
-    const status = keys.filter((x: string | any, y: number): string => {
-      if (x === "member" && obj["member"] > 0) {
-        return "Member";
-      } else if (x === "visitor" && obj["visitor"] > 0) {
-        return "Visitor";
-      } else {
-        return "";
-      }
-    });
-    return status;
-  };
-
+  
   const returnallPeople = allPeople?.map(
     (x: Attendee, y: number): JSX.Element => {
       return (
         <tr key={`row_${y}`}>
           <td>{x.lastName}</td>
           <td>{x.firstName}</td>
-          <td>{filterForAge(x)}</td>
-          <td>{filterForMember(x)}</td>
+          <td>{x.age}</td>
+          <td>{x.memberType}</td>
           <td>
             <button
               type="button"
@@ -82,7 +53,6 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
   );
 
   if (allPeople) {
-    filterForAge(allPeople[0]);
     return (
       <table>
         <tbody>

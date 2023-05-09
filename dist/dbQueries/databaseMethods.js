@@ -98,7 +98,7 @@ class DBMethods {
         return new Promise((resolve, reject) => {
             const database = this.db();
             let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
-        lastName varchar(40) DEFAULT NULL, child tinyint DEFAULT 0, youth tinyint DEFAULT 0, adult tinyint DEFAULT 0, member tinyint DEFAULT 0, visitor tinyint DEFAULT 0, present tinyint DEFAULT 0, PRIMARY KEY (id));`;
+        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), present tinyint DEFAULT 0, PRIMARY KEY (id));`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
@@ -111,10 +111,10 @@ class DBMethods {
             const database = this.db();
             const neededSql = () => {
                 if (group === "all") {
-                    return `INSERT INTO ${tableName} (id, firstName, lastName, child, youth, adult, member, visitor) SELECT * FROM People;`;
+                    return `INSERT INTO ${tableName} (id, firstName, lastName, age, memberType) SELECT * FROM People;`;
                 }
                 else {
-                    return `INSERT INTO ${tableName} (id, firstName, lastName, child, youth, adult, member, visitor) SELECT * FROM People WHERE ${group} = 1;`;
+                    return `INSERT INTO ${tableName} (id, firstName, lastName, age, memberType) SELECT * FROM People WHERE memberType = ${group};`;
                 }
             };
             let sql = neededSql();
@@ -137,7 +137,7 @@ class DBMethods {
     updatePerson(tableName, obj) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", child = "${obj.child}", youth = "${obj.youth}", adult = "${obj.adult}", member = "${obj.member}", visitor = "${obj.visitor}" WHERE id = ${obj.id};`;
+            const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

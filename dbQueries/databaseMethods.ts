@@ -118,7 +118,7 @@ export class DBMethods {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
-        lastName varchar(40) DEFAULT NULL, child tinyint DEFAULT 0, youth tinyint DEFAULT 0, adult tinyint DEFAULT 0, member tinyint DEFAULT 0, visitor tinyint DEFAULT 0, present tinyint DEFAULT 0, PRIMARY KEY (id));`;
+        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), present tinyint DEFAULT 0, PRIMARY KEY (id));`;
 
       database.query(sql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -133,9 +133,9 @@ export class DBMethods {
       const database = this.db();
       const neededSql = (): string => {
         if (group === "all") {
-          return `INSERT INTO ${tableName} (id, firstName, lastName, child, youth, adult, member, visitor) SELECT * FROM People;`;
+          return `INSERT INTO ${tableName} (id, firstName, lastName, age, memberType) SELECT * FROM People;`;
         } else {
-          return `INSERT INTO ${tableName} (id, firstName, lastName, child, youth, adult, member, visitor) SELECT * FROM People WHERE ${group} = 1;`;
+          return `INSERT INTO ${tableName} (id, firstName, lastName, age, memberType) SELECT * FROM People WHERE memberType = ${group};`;
         }
       };
       let sql = neededSql();
@@ -161,7 +161,7 @@ export class DBMethods {
   updatePerson(tableName: string, obj: DBAttendee): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", child = "${obj.child}", youth = "${obj.youth}", adult = "${obj.adult}", member = "${obj.member}", visitor = "${obj.visitor}" WHERE id = ${obj.id};`;
+      const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
