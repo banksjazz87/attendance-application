@@ -15,11 +15,11 @@ interface EditMemberProps {
 export default function EditMember({show, editUser, hideHandler, updateName, updateAge, updateMember}: EditMemberProps): JSX.Element {
 
   const updateAgeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    updateAge(e.target.id);
+    updateAge(e.target.value);
   }
 
   const updateMemberHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    updateMember(e.target.id);
+    updateMember(e.target.value);
   }
 
   const updateSubmitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -45,8 +45,8 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
           <input
             placeholder={x.placeholder}
             type={x.type}
-            id={x.id}
-            name={x.name}
+            id={`edit_${x.id}`}
+            name={`edit_${x.name}`}
             onChange={(e: React.ChangeEvent<HTMLInputElement>): void => {
               updateName(e.target.value, x.id);
             }}
@@ -59,17 +59,15 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
 
   const returnAgeFields: JSX.Element[] = AttendantFormLayout.ageGroup.map(
     (x: AttendanceInputs, y: number): JSX.Element => {
-      const key = x.id as string;
-
-      if (editUser[key as keyof Attendee] === 1) {
+      if (editUser.age === x.value) {
         return (
           <div className="input_wrapper" key={`name_field_${y}`}>
             <label htmlFor={x.id}>{x.label}</label>
             <input
               placeholder={x.placeholder}
               type={x.type}
-              id={x.id}
-              name={x.name}
+              id={`edit_${x.id}`}
+              name={`edit_${x.name}`}
               onChange={updateAgeHandler}
               checked
             />
@@ -82,8 +80,8 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
             <input
               placeholder={x.placeholder}
               type={x.type}
-              id={x.id}
-              name={x.name}
+              id={`edit_${x.id}`}
+              name={`edit_${x.name}`}
               onChange={updateAgeHandler}
             />
           </div>
@@ -94,17 +92,16 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
 
   const returnMemberFields: JSX.Element[] =
     AttendantFormLayout.memberStatus.map((x: AttendanceInputs, y: number) => {
-      const key = x.id as string;
 
-      if (editUser[key as keyof Attendee] === 1) {
+      if (editUser.memberType === x.value) {
         return (
           <div className="input_wrapper" key={`name_field_${y}`}>
             <label htmlFor={x.id}>{x.label}</label>
             <input
               placeholder={x.placeholder}
               type={x.type}
-              id={x.id}
-              name={x.name}
+              id={`edit_${x.id}`}
+              name={`edit_${x.name}`}
               onChange={updateMemberHandler}
               checked
             />
@@ -117,8 +114,8 @@ export default function EditMember({show, editUser, hideHandler, updateName, upd
             <input
               placeholder={x.placeholder}
               type={x.type}
-              id={x.id}
-              name={x.name}
+              id={`edit_${x.id}`}
+              name={`edit_${x.name}`}
               onChange={updateMemberHandler}
             />
           </div>

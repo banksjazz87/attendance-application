@@ -10,13 +10,10 @@ export default function NewMember(): JSX.Element {
   const initAttendants: Attendee = {
       firstName: "",
       lastName: "",
-      adult: 0,
-      child: 0,
-      youth: 0,
-      member: 0,
-      visitor: 0,
+      age: "",
+      memberType: "",
   }
-  
+
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
   const [newAttendant, setNewAttendant] = useState<Attendee>(initAttendants);
 
@@ -34,13 +31,12 @@ export default function NewMember(): JSX.Element {
   };
 
   const radioAgeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setNewAttendant({ ...newAttendant, adult: 0, child: 0, youth: 0 });
-    setNewAttendant({ ...newAttendant, [e.target.id]: 1 });
+    setNewAttendant({ ...newAttendant, age: e.target.value });
   };
 
   const radioMemberChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    setNewAttendant({ ...newAttendant, member: 0, visitor: 0 });
-    setNewAttendant({ ...newAttendant, [e.target.id]: 1 });
+      setNewAttendant({...newAttendant, memberType: e.target.value})
+    
   };
 
   const nameMatches = allAttendants.filter(

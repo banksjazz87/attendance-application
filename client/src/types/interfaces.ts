@@ -1,13 +1,9 @@
 export interface Attendee {
     firstName: string;
     lastName: string;
-    adult: number;
-    child: number;
-    youth: number;
-    member: number;
-    visitor: number;
+    age: string;
+    memberType: string;
     present?: number;
-    firstLast?: string;
     id?: number;
   }
   

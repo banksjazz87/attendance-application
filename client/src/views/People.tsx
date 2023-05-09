@@ -10,11 +10,8 @@ export default function People() {
   const initAttendant: Attendee = {
     firstName: "",
     lastName: "",
-    adult: 0,
-    child: 0,
-    youth: 0,
-    member: 0,
-    visitor: 0,
+    age: "",
+    memberType: "",
     present: 0,
     id: 0,
   };
@@ -48,14 +45,12 @@ export default function People() {
     setUserToEdit({ ...userToEdit, [field]: value });
   };
 
-  const updateEditAge = (elementId: string): void => {
-    setUserToEdit({ ...userToEdit, child: 0, youth: 0, adult: 0 });
-    setUserToEdit({ ...userToEdit, [elementId]: 1 });
+  const updateEditAge = (elementValue: string): void => {
+    setUserToEdit({...userToEdit, age: elementValue});
   };
 
-  const updateEditMember = (elementId: string): void => {
-    setUserToEdit({ ...userToEdit, member: 0, visitor: 0 });
-    setUserToEdit({ ...userToEdit, [elementId]: 1 });
+  const updateEditMember = (elementValue: string): void => {
+      setUserToEdit({...userToEdit, memberType: elementValue})
   };
 
   useEffect((): void => {
