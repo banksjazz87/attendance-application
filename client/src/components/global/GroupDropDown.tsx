@@ -27,6 +27,7 @@ export default function GroupDropDown({
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (groupSelected) {
       groupSelected(currentGroups, e.target.value);
+      console.log('New value here ', e.target.value)
     }
   };
 
@@ -34,7 +35,7 @@ export default function GroupDropDown({
     const options = groups.map((x: Group, y: number): JSX.Element => {
       return (
         <option key={`group_${x.id}`} id={`group_${y}`} value={x.displayName}>
-          {x.name}
+          {x.displayName}
         </option>
       );
     });

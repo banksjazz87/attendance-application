@@ -33,13 +33,17 @@ export default function Form(): JSX.Element {
     const groupChange = (arr: Group[], value: string): void => {
         let index: number = 0;
         for (let i = 0; i < arr.length; i++) {
-            if (arr[i].name === value) {
+            if (arr[i].displayName === value) {
                 index = i;
+
+                console.log('Index is', i);
             }
         }
+
+        console.log(allGroups);
         setForm({...form, 
             groupDisplayName: value,
-            group: arr[index]['displayName'],
+            group: arr[index]['name'],
             ageGroup: arr[index]['age_group']
         });
     }
@@ -51,7 +55,7 @@ export default function Form(): JSX.Element {
     const searchForGroup = (value: string, arr: Group[]): boolean => {
         let final = false;
         for (let i = 0; i < arr.length; i++) {
-            if (arr[i].name === value) {
+            if (arr[i].displayName === value) {
                 final = true;
             }
         }
@@ -75,12 +79,12 @@ export default function Form(): JSX.Element {
         <form 
             id="new_attendance_form"
             method="post"
-            action="/new-attendance/create"
+            action="/new-group/create"
             onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
                 e.preventDefault();
                 console.log('this is the form',form);
 
-                if (searchForGroup(form.group, allGroups)) {
+                if (searchForGroup(form.groupDisplayName, allGroups)) {
                     postData('/new-attendance/create', form)
                     .then((data: object): void => {
                         console.log(data);

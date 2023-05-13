@@ -58,8 +58,10 @@ export class DBMethods {
 
       database.query(sql, [values], (err: string[], results: string[]) => {
         if (err) {
+          console.log('query = ', sql);
           reject(err);
         } else {
+          console.log('query = ', sql);
           resolve(results);
         }
       });

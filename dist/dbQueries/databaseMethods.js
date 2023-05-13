@@ -49,9 +49,11 @@ class DBMethods {
             let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
             database.query(sql, [values], (err, results) => {
                 if (err) {
+                    console.log('query = ', sql);
                     reject(err);
                 }
                 else {
+                    console.log('query = ', sql);
                     resolve(results);
                 }
             });

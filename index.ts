@@ -16,10 +16,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser());
-const port = process.env.PORT || 3500;
+const port = process.env.PORT || 3900;
 
 app.listen(port, (): void => {
   console.log(`Server is running on port ${port}`);
+  console.log('testing heree');
 });
 
 app.use(express.static(path.join(__dirname, "../client/build")));
@@ -103,13 +104,15 @@ app.post('/new-attendance/create', (req: Request, res: Response): void => {
     req.cookies.password
   );
   
- 
-  let tableName = Db.createTableName(req.body.name);
-  const columnNames = "title, group_age";
-  const values = [req.body.title, req.body.ageGroup];
+  let groupPlusDate = req.body.group + req.body.title; 
+  let tableName = Db.createTableName(groupPlusDate);
+  console.log('group = ', req.body.group, tableName, req.body.title);
+  const columnNames = "title, displayTitle";
+  const fieldValues = [tableName, req.body.title];
 
-  Db.insert(tableName, columnNames, values)
+  Db.insert(req.body.group, columnNames, fieldValues)
     .then((data: string[]): void => {
+      console.log(data);
       res.send({"message": "success", "data": data});
     }).catch((err: SQLResponse): void => {
       res.send({"message": "failure", "error": Db.getSqlError(err)});

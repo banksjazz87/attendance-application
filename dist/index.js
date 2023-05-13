@@ -17,9 +17,10 @@ app.use(body_parser_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use((0, cookie_parser_1.default)());
-const port = process.env.PORT || 3500;
+const port = process.env.PORT || 3900;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
+    console.log('testing heree');
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
 const paths = ['/dashboard', '/new-attendance', '/attendance', 'search', '/people'];
@@ -67,11 +68,14 @@ app.get('/groups', (req, res) => {
 });
 app.post('/new-attendance/create', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    let tableName = Db.createTableName(req.body.name);
-    const columnNames = "title, group_age";
-    const values = [req.body.title, req.body.ageGroup];
-    Db.insert(tableName, columnNames, values)
+    let groupPlusDate = req.body.group + req.body.title;
+    let tableName = Db.createTableName(groupPlusDate);
+    console.log('group = ', req.body.group, tableName, req.body.title);
+    const columnNames = "title, displayTitle";
+    const fieldValues = [tableName, req.body.title];
+    Db.insert(req.body.group, columnNames, fieldValues)
         .then((data) => {
+        console.log(data);
         res.send({ "message": "success", "data": data });
     }).catch((err) => {
         res.send({ "message": "failure", "error": Db.getSqlError(err) });
