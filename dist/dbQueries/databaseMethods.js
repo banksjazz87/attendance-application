@@ -48,14 +48,7 @@ class DBMethods {
             const database = this.db();
             let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
             database.query(sql, [values], (err, results) => {
-                if (err) {
-                    console.log('query = ', sql);
-                    reject(err);
-                }
-                else {
-                    console.log('query = ', sql);
-                    resolve(results);
-                }
+                err ? reject(err) : resolve(results);
             });
             this.endDb();
         });
@@ -141,6 +134,28 @@ class DBMethods {
             const database = this.db();
             const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
             database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    addAllApplicants(table) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
+            database.query(neededSql, (err, results) => {
+                console.log('sql query = ', neededSql);
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    addSelectApplicants(table, neededAge) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
+            database.query(neededSql, (err, results) => {
+                console.log('sql query = ', neededSql);
                 err ? reject(err) : resolve(results);
             });
             this.endDb();

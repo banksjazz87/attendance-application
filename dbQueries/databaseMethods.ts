@@ -57,13 +57,7 @@ export class DBMethods {
       let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
 
       database.query(sql, [values], (err: string[], results: string[]) => {
-        if (err) {
-          console.log('query = ', sql);
-          reject(err);
-        } else {
-          console.log('query = ', sql);
-          resolve(results);
-        }
+        err ? reject(err) : resolve(results);
       });
       this.endDb();
     });
@@ -172,21 +166,30 @@ export class DBMethods {
     })
   }
 
-  addApplicants(table: string, neededAge: string): Promise<string[]> {
+  addAllApplicants(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      const neededSql: string = '';
-      
-      if (neededAge === "all") {
-        `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
-      } else {
-        `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
-      }
-
+      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`
+  
       database.query(neededSql, (err: string[], results: string[]) => {
+        console.log('sql query = ', neededSql);
         err ? reject(err) : resolve(results);
       });
       this.endDb();
-    })
+    });
+  }
+
+
+  addSelectApplicants(table: string, neededAge: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`
+  
+      database.query(neededSql, (err: string[], results: string[]) => {
+        console.log('sql query = ', neededSql);
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
   }
 }

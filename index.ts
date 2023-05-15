@@ -127,14 +127,15 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 
   let groupPlusDate = req.body.group + " " + req.body.title;
   let tableName = Db.createTableName(groupPlusDate);
-  console.log("group = ", req.body.group, tableName, req.body.title);
+  const ageGroup = req.body.ageGroup.toLowerCase();
   const columnNames = "title, displayTitle";
   const fieldValues = [tableName, req.body.title];
 
+  if (req.body.ageAgroup === "all") {
   Promise.all([
     Db.insert(req.body.group, columnNames, fieldValues),
     Db.createNewAttendance(tableName),
-    Db.addApplicants(tableName, req.body.ageGroup)
+    Db.addAllApplicants(tableName)
   ])
     .then((data: [string[], string[], string[]]): void => {
       res.send({ message: "success", data: data });
@@ -149,6 +150,27 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
         },
       });
     });
+
+  } else {
+    Promise.all([
+      Db.insert(req.body.group, columnNames, fieldValues),
+      Db.createNewAttendance(tableName),
+      Db.addSelectApplicants(tableName, ageGroup)
+    ])
+      .then((data: [string[], string[], string[]]): void => {
+        res.send({ message: "success", data: data });
+      })
+      .catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
+        res.send({
+          message: "failure",
+          error: () => {
+            Db.getSqlError(err[0]); 
+            Db.getSqlError(err[1]);
+            Db.getSqlError(err[2]);
+          },
+        });
+      });
+  }
 });
 
 app.post("/new-group/create", (req: Request, res: Response) => {

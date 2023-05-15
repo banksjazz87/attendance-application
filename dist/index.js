@@ -92,26 +92,51 @@ app.get("/groups", (req, res) => {
 });
 app.post("/new-attendance/create", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    let groupPlusDate = req.body.group + req.body.title;
+    let groupPlusDate = req.body.group + " " + req.body.title;
     let tableName = Db.createTableName(groupPlusDate);
-    console.log("group = ", req.body.group, tableName, req.body.title);
+    const ageGroup = req.body.ageGroup.toLowerCase();
     const columnNames = "title, displayTitle";
     const fieldValues = [tableName, req.body.title];
-    Promise.all([
-        Db.insert(req.body.group, columnNames, fieldValues),
-        Db.createNewAttendance(tableName),
-    ])
-        .then((data) => {
-        res.send({ message: "success", data: data });
-    })
-        .catch((err) => {
-        res.send({
-            message: "failure",
-            error: () => {
-                Db.getSqlError(err[0]), Db.getSqlError(err[1]);
-            },
+    if (req.body.ageAgroup === "all") {
+        Promise.all([
+            Db.insert(req.body.group, columnNames, fieldValues),
+            Db.createNewAttendance(tableName),
+            Db.addAllApplicants(tableName)
+        ])
+            .then((data) => {
+            res.send({ message: "success", data: data });
+        })
+            .catch((err) => {
+            res.send({
+                message: "failure",
+                error: () => {
+                    Db.getSqlError(err[0]);
+                    Db.getSqlError(err[1]);
+                    Db.getSqlError(err[2]);
+                },
+            });
         });
-    });
+    }
+    else {
+        Promise.all([
+            Db.insert(req.body.group, columnNames, fieldValues),
+            Db.createNewAttendance(tableName),
+            Db.addSelectApplicants(tableName, ageGroup)
+        ])
+            .then((data) => {
+            res.send({ message: "success", data: data });
+        })
+            .catch((err) => {
+            res.send({
+                message: "failure",
+                error: () => {
+                    Db.getSqlError(err[0]);
+                    Db.getSqlError(err[1]);
+                    Db.getSqlError(err[2]);
+                },
+            });
+        });
+    }
 });
 app.post("/new-group/create", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);

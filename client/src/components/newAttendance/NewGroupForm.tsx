@@ -5,7 +5,7 @@ export default function NewGroupForm({
   groupSelected,
   ageHandler
 }: GroupProps): JSX.Element {
-  const groupAge = ["All", "Adults", "Youth", "Children"];
+  const groupAge = ["All", "Adult", "Youth", "Child"];
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (groupSelected) {
