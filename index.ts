@@ -125,7 +125,7 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
     req.cookies.password
   );
 
-  let groupPlusDate = req.body.group + req.body.title;
+  let groupPlusDate = req.body.group + " " + req.body.title;
   let tableName = Db.createTableName(groupPlusDate);
   console.log("group = ", req.body.group, tableName, req.body.title);
   const columnNames = "title, displayTitle";
@@ -134,15 +134,18 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   Promise.all([
     Db.insert(req.body.group, columnNames, fieldValues),
     Db.createNewAttendance(tableName),
+    Db.addApplicants(tableName, req.body.ageGroup)
   ])
-    .then((data: [string[], string[]]): void => {
+    .then((data: [string[], string[], string[]]): void => {
       res.send({ message: "success", data: data });
     })
-    .catch((err: [SQLResponse, SQLResponse]): void => {
+    .catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
       res.send({
         message: "failure",
         error: () => {
-          Db.getSqlError(err[0]), Db.getSqlError(err[1]);
+          Db.getSqlError(err[0]); 
+          Db.getSqlError(err[1]);
+          Db.getSqlError(err[2]);
         },
       });
     });

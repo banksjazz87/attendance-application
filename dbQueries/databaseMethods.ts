@@ -171,4 +171,22 @@ export class DBMethods {
       this.endDb();
     })
   }
+
+  addApplicants(table: string, neededAge: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql: string = '';
+      
+      if (neededAge === "all") {
+        `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
+      } else {
+        `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
+      }
+
+      database.query(neededSql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    })
+  }
 }
