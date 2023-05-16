@@ -5,7 +5,7 @@ import NewGroupForm from "../../components/newAttendance/NewGroupForm.tsx";
 import { Group } from "../../types/interfaces.ts";
 import { currentDate } from "../../variables/date.ts";
 import postData from "../../functions/api/post.ts";
-import { APIResponse } from "../../types/interfaces.ts";
+import { APIResponse, FormProps } from "../../types/interfaces.ts";
 
 interface NewAttendance {
   title: string;
@@ -19,7 +19,7 @@ interface ApiResponse {
   data: [] | string;
 }
 
-export default function Form(): JSX.Element {
+export default function Form({ show, formToShow }: FormProps): JSX.Element {
   const [form, setForm] = useState<NewAttendance>({
     title: currentDate,
     group: "",
@@ -90,24 +90,23 @@ export default function Form(): JSX.Element {
             postData("/new-attendance/create/all-attendants", form).then(
               (data: APIResponse): void => {
                 if (data.message === "success") {
-                    alert("Success");
+                  alert("Success");
                 } else {
-                    alert(`Failure, ${data.error}`);
+                  alert(`Failure, ${data.error}`);
                 }
-              });
-              
-          } else {
-          postData("/new-attendance/create/select-attendants", form).then(
-            (data: APIResponse): void => {
-              if (data.message === "success")  {
-                alert ("Success");
-              } else {
-                alert (`Failure ${data.error}`);
               }
-            }
-          );
-        }
-
+            );
+          } else {
+            postData("/new-attendance/create/select-attendants", form).then(
+              (data: APIResponse): void => {
+                if (data.message === "success") {
+                  alert("Success");
+                } else {
+                  alert(`Failure ${data.error}`);
+                }
+              }
+            );
+          }
         } else {
           console.log("here here", form);
           postData("/new-group", form).then((data: ApiResponse): void => {
@@ -128,16 +127,23 @@ export default function Form(): JSX.Element {
         }
       }}
     >
-      <GroupDropDown
-        currentGroups={allGroups}
-        groupSelected={groupChange}
-        getGroups={setGroups}
-      />
-      <NewGroupForm groupSelected={setNewGroupName} ageHandler={setGroupAge} />
-      <AttendanceTitle
-        titleHandler={titleChange}
-        attendanceTitle={form.title}
-      />
+      <div id="form_group_dropdown_wrapper">
+        <GroupDropDown
+          currentGroups={allGroups}
+          groupSelected={groupChange}
+          getGroups={setGroups}
+        />
+      </div>
+      <div id="form_new_group_form_wrapper">
+        <NewGroupForm
+          groupSelected={setNewGroupName}
+          ageHandler={setGroupAge}
+        />
+        <AttendanceTitle
+          titleHandler={titleChange}
+          attendanceTitle={form.title}
+        />
+      </div>
       <input type="submit" value="submit" />
     </form>
   );

@@ -93,3 +93,8 @@ export interface Attendee {
       message: string;
       error: string;
   }
+
+  export interface FormProps {
+    show: boolean;
+    formToShow: "New" | "Existing";
+  }
