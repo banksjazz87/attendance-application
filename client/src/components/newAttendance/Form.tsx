@@ -82,6 +82,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
       id="new_attendance_form"
       method="post"
       action="/new-group/create"
+      style={show ? {display: ""} : {display: "none"}}
       onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
 
@@ -127,23 +128,31 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
         }
       }}
     >
-      <div id="form_group_dropdown_wrapper">
+      <div
+        id="form_group_dropdown_wrapper"
+        style={
+          formToShow === "Existing" ? { display: "" } : { display: "none" }
+        }
+      >
         <GroupDropDown
           currentGroups={allGroups}
           groupSelected={groupChange}
           getGroups={setGroups}
         />
       </div>
-      <div id="form_new_group_form_wrapper">
+      <div
+        id="form_new_group_form_wrapper"
+        style={formToShow === "New" ? { display: "" } : { display: "none" }}
+      >
         <NewGroupForm
           groupSelected={setNewGroupName}
           ageHandler={setGroupAge}
         />
-        <AttendanceTitle
-          titleHandler={titleChange}
-          attendanceTitle={form.title}
-        />
       </div>
+      <AttendanceTitle
+        titleHandler={titleChange}
+        attendanceTitle={form.title}
+      />
       <input type="submit" value="submit" />
     </form>
   );

@@ -27,7 +27,6 @@ export default function GroupDropDown({
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (groupSelected) {
       groupSelected(currentGroups, e.target.value);
-      console.log('New value here ', e.target.value)
     }
   };
 

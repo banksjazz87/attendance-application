@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {GroupProps} from "../../types/interfaces.ts";
 import GroupDropDown from "../../components/global/GroupDropDown.tsx";
 
@@ -12,6 +12,7 @@ export default function DropDownForm({ clickHandler, groupHandler, name}: GroupP
       groupHandler(name);
     }
   };
+
   return (
     <div id="group_dropdown_wrapper">
       <p>Select a group</p>
@@ -22,3 +23,4 @@ export default function DropDownForm({ clickHandler, groupHandler, name}: GroupP
     </div>
   );
 }
+  

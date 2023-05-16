@@ -26,7 +26,10 @@ export default function NewAttendance() {
         <div>
             <Navbar />
             <h1>This Will be the  new attendance page. </h1>
-            <NewOrExisting />
+            <NewOrExisting 
+				newHandler={showNew}
+				existingHandler={showExisting}
+			/>
             <Form
                 show={showForm}
                 formToShow={formOption.formNeeded}
