@@ -206,7 +206,7 @@ app.post("/new-group/create", (req: Request, res: Response) => {
   Db.createGroupTable(tableName)
     .then((data: string[]): void => {
       console.log(data);
-      res.send({ message: "success", data: data, newGroupName: tableName });
+      res.send({ message: "success", data: data });
     })
     .catch((err: SQLResponse): void => {
       console.log("err", err);

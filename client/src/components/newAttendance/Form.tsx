@@ -8,7 +8,6 @@ import postData from "../../functions/api/post.ts";
 import {
   APIResponse,
   FormProps,
-  APICreateTable,
 } from "../../types/interfaces.ts";
 
 interface NewAttendance {
@@ -81,79 +80,71 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
     setForm({ ...form, groupDisplayName: value, group: value });
   };
 
+  /**
+   * 
+   * @param obj with a a type of APIResponse
+   * @returns Void
+   * @description This function is used to throw an alert if a success message was retrieved by an API endpoint.
+   */
+  const checkForSuccess = (obj: APIResponse): void => {
+    if (obj.message === "success") {
+      alert("Success");
+    } else {
+      alert(`Failure, ${obj.error}`);
+    }
+  }
+
+  /**
+   * 
+   * @param obj takes on the type of NewAttendance 
+   * @return void
+   * @description this is used to check if the value is "All" for the property ageGroup, a post request is then sent to the needed endpoint.
+   * 
+   */
+  const checkForAll = (obj: NewAttendance): void => {
+    if (obj.ageGroup === "All") {
+      postData("/new-attendance/create/all-attendants", form).then(
+        (data: APIResponse): void => {
+          checkForSuccess(data);
+        })
+    } else {
+      postData("/new-attendance/create/select-attendants", form).then(
+        (data: APIResponse): void => {
+         checkForSuccess(data);
+        });
+    }
+  }
+
+  /**
+   * 
+   * @param e takes on the parameter of an event.
+   * @description final submithandler for the form, runs a number of different functions to create a new attendance sheet.
+   */
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    if (searchForGroup(form.groupDisplayName, allGroups)) {
+      checkForAll(form);
+    } else {
+      postData("/new-group", form).then((data: ApiResponse): void => {
+        if (data.message === "success") {
+          postData("/new-group/create", form).then(
+            (data: APIResponse): void => {
+             checkForSuccess(data);
+            });
+        } else {
+          alert(`Failure with new-group ${data.data}`);
+        }
+      });
+    }
+  }
+
   return (
     <form
       id="new_attendance_form"
       method="post"
       action="/new-group/create"
       style={show ? { display: "" } : { display: "none" }}
-      onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-        e.preventDefault();
-
-        if (searchForGroup(form.groupDisplayName, allGroups)) {
-          if (form.ageGroup === "All") {
-            postData("/new-attendance/create/all-attendants", form).then(
-              (data: APIResponse): void => {
-                if (data.message === "success") {
-                  alert("Success");
-                } else {
-                  alert(`Failure, ${data.error}`);
-                }
-              }
-            );
-          } else {
-            postData("/new-attendance/create/select-attendants", form).then(
-              (data: APIResponse): void => {
-                if (data.message === "success") {
-                  alert("Success");
-                } else {
-                  alert(`Failure ${data.error}`);
-                }
-              }
-            );
-          }
-        } else {
-          console.log("here here", form);
-          postData("/new-group", form).then((data: ApiResponse): void => {
-            if (data.message === "success") {
-              postData("/new-group/create", form).then(
-                (data: APICreateTable): void => {
-                  if (data.message === "success") {
-                    console.log(data.newGroupName);
-                    if (form.ageGroup === "All") {
-                      postData(
-                        "/new-attendance/create/all-attendants",
-                        form
-                      ).then((data: APIResponse): void => {
-                        if (data.message === "success") {
-                          alert("Success");
-                        } else {
-                          alert(`Failure, ${data.error}`);
-                        }
-                      });
-                    } else {
-                      postData(
-                        "/new-attendance/create/select-attendants",
-                        form
-                      ).then((data: APIResponse): void => {
-                        if (data.message === "success") {
-                          alert("Success");
-                        } else {
-                          alert(`Failure ${data.error}`);
-                        }
-                      });
-                    }
-                  } else {
-                    alert(`Failure with new-group/create ${data.data}`);
-                  }
-                }
-              );
-            } else {
-              alert(`Failure with new-group ${data.data}`);
-            }
-          });
-        }
-      }}
+      onSubmit={submitHandler}
     >
       <div
         id="form_group_dropdown_wrapper"
