@@ -102,9 +102,11 @@ app.post("/new-attendance/create/all-attendants", (req, res) => {
         Db.addAllApplicants(tableName)
     ])
         .then((data) => {
+        console.log('Success All', data);
         res.send({ message: "success", data: data });
     })
         .catch((err) => {
+        console.log('Failure Alllll', err);
         res.send({
             message: "failure",
             error: () => {
@@ -122,15 +124,18 @@ app.post('/new-attendance/create/select-attendants', (req, res) => {
     const ageGroup = req.body.ageGroup.toLowerCase();
     const columnNames = "title, displayTitle";
     const fieldValues = [tableName, req.body.title];
+    const parentGroup = Db.createTableName(req.body.group);
     Promise.all([
-        Db.insert(req.body.group, columnNames, fieldValues),
+        Db.insert(parentGroup, columnNames, fieldValues),
         Db.createNewAttendance(tableName),
         Db.addSelectApplicants(tableName, ageGroup)
     ])
         .then((data) => {
         res.send({ message: "success", data: data });
+        console.log('Successsss', data);
     })
         .catch((err) => {
+        console.log('failureeeeee', err);
         res.send({
             message: "failure",
             error: () => {
@@ -147,7 +152,7 @@ app.post("/new-group/create", (req, res) => {
     Db.createGroupTable(tableName)
         .then((data) => {
         console.log(data);
-        res.send({ message: "success", data: data });
+        res.send({ message: "success", data: data, newGroupName: tableName });
     })
         .catch((err) => {
         console.log("err", err);

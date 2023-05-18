@@ -75,6 +75,10 @@ export interface Attendee {
     error: string;
   }
 
+  export interface APICreateTable extends APIResponse {
+    newGroupName: string;
+  }
+
   export interface AllPeopleProps {
     allPeople: Attendee[];
     deletePersonHandler: Function;

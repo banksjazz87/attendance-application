@@ -5,7 +5,11 @@ import NewGroupForm from "../../components/newAttendance/NewGroupForm.tsx";
 import { Group } from "../../types/interfaces.ts";
 import { currentDate } from "../../variables/date.ts";
 import postData from "../../functions/api/post.ts";
-import { APIResponse, FormProps } from "../../types/interfaces.ts";
+import {
+  APIResponse,
+  FormProps,
+  APICreateTable,
+} from "../../types/interfaces.ts";
 
 interface NewAttendance {
   title: string;
@@ -82,7 +86,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
       id="new_attendance_form"
       method="post"
       action="/new-group/create"
-      style={show ? {display: ""} : {display: "none"}}
+      style={show ? { display: "" } : { display: "none" }}
       onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
         e.preventDefault();
 
@@ -113,9 +117,32 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
           postData("/new-group", form).then((data: ApiResponse): void => {
             if (data.message === "success") {
               postData("/new-group/create", form).then(
-                (data: ApiResponse): void => {
+                (data: APICreateTable): void => {
                   if (data.message === "success") {
-                    alert("Success");
+                    console.log(data.newGroupName);
+                    if (form.ageGroup === "All") {
+                      postData(
+                        "/new-attendance/create/all-attendants",
+                        form
+                      ).then((data: APIResponse): void => {
+                        if (data.message === "success") {
+                          alert("Success");
+                        } else {
+                          alert(`Failure, ${data.error}`);
+                        }
+                      });
+                    } else {
+                      postData(
+                        "/new-attendance/create/select-attendants",
+                        form
+                      ).then((data: APIResponse): void => {
+                        if (data.message === "success") {
+                          alert("Success");
+                        } else {
+                          alert(`Failure ${data.error}`);
+                        }
+                      });
+                    }
                   } else {
                     alert(`Failure with new-group/create ${data.data}`);
                   }
