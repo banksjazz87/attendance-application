@@ -5,7 +5,7 @@ export default function NewGroupForm({
   groupSelected,
   ageHandler
 }: GroupProps): JSX.Element {
-  const groupAge = ["All", "Adult", "Youth", "Child"];
+  const groupAge = ["Select One", "All", "Adult", "Youth", "Child"];
 
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (groupSelected) {
@@ -21,7 +21,7 @@ export default function NewGroupForm({
 
   const groupOptions = groupAge.map((x: string, y: number): JSX.Element => {
     return (
-      <option key={`groupNames_${y}`} value={x}>
+      <option key={`groupNames_${y}`} value={x === "Select One" ? "" : x}>
         {x}
       </option>
     );

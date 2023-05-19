@@ -90,20 +90,20 @@ app.get("/groups", (req, res) => {
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
-app.post("/new-attendance/create/all-attendants", (req, res) => {
+app.post("/new-attendance/create", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     let groupPlusDate = req.body.group + " " + req.body.title;
     let tableName = Db.createTableName(groupPlusDate);
     const columnNames = "title, displayTitle";
     const fieldValues = [tableName, req.body.title];
+    const parentGroup = Db.createTableName(req.body.group);
     Promise.all([
-        Db.insert(req.body.group, columnNames, fieldValues),
+        Db.insert(parentGroup, columnNames, fieldValues),
         Db.createNewAttendance(tableName),
-        Db.addAllApplicants(tableName)
     ])
         .then((data) => {
         console.log('Success All', data);
-        res.send({ message: "success", data: data });
+        res.send({ message: "success", data: data, newTable: tableName });
     })
         .catch((err) => {
         console.log('Failure Alllll', err);
@@ -117,33 +117,30 @@ app.post("/new-attendance/create/all-attendants", (req, res) => {
         });
     });
 });
-app.post('/new-attendance/create/select-attendants', (req, res) => {
+app.post('/new-attendance/insert/all', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    let groupPlusDate = req.body.group + " " + req.body.title;
-    let tableName = Db.createTableName(groupPlusDate);
-    const ageGroup = req.body.ageGroup.toLowerCase();
-    const columnNames = "title, displayTitle";
-    const fieldValues = [tableName, req.body.title];
-    const parentGroup = Db.createTableName(req.body.group);
-    Promise.all([
-        Db.insert(parentGroup, columnNames, fieldValues),
-        Db.createNewAttendance(tableName),
-        Db.addSelectApplicants(tableName, ageGroup)
-    ])
+    Db.addAllApplicants(req.body.createdTableName)
         .then((data) => {
-        res.send({ message: "success", data: data });
-        console.log('Successsss', data);
+        console.log('success', data);
+        res.send({ message: "success" });
     })
         .catch((err) => {
-        console.log('failureeeeee', err);
-        res.send({
-            message: "failure",
-            error: () => {
-                Db.getSqlError(err[0]);
-                Db.getSqlError(err[1]);
-                Db.getSqlError(err[2]);
-            },
-        });
+        console.log('failure', err);
+        res.send({ message: "failure", error: err });
+    });
+});
+app.post('/new-attendance/insert/select-attendants', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const tableName = req.body.createdTableName;
+    const neededAge = req.body.allForm.ageGroup;
+    Db.addSelectApplicants(tableName, neededAge)
+        .then((data) => {
+        console.log('success', data);
+        res.send({ message: "success" });
+    })
+        .catch((err) => {
+        console.log('failure', err);
+        res.send({ message: "failure", error: err });
     });
 });
 app.post("/new-group/create", (req, res) => {
@@ -152,7 +149,7 @@ app.post("/new-group/create", (req, res) => {
     Db.createGroupTable(tableName)
         .then((data) => {
         console.log(data);
-        res.send({ message: "success", data: data, newGroupName: tableName });
+        res.send({ message: "success", data: data });
     })
         .catch((err) => {
         console.log("err", err);

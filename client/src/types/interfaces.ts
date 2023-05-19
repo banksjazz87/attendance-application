@@ -69,6 +69,10 @@ export interface Attendee {
     error: string;
   }
 
+  export interface APINewTable extends APIResponse {
+    newTable: string;
+  }
+
   export interface APIPeople {
     message: string;
     data: Attendee[];

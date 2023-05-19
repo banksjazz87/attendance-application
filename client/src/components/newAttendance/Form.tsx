@@ -8,6 +8,7 @@ import postData from "../../functions/api/post.ts";
 import {
   APIResponse,
   FormProps,
+  APINewTable
 } from "../../types/interfaces.ts";
 
 interface NewAttendance {
@@ -103,15 +104,36 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
    */
   const checkForAll = (obj: NewAttendance): void => {
     if (obj.ageGroup === "All") {
-      postData("/new-attendance/create/all-attendants", form).then(
+      postData("/new-attendance/insert/all", form).then(
         (data: APIResponse): void => {
           checkForSuccess(data);
+          console.log('/new-attendance/create/all-attendants fired');
         })
     } else {
       postData("/new-attendance/create/select-attendants", form).then(
         (data: APIResponse): void => {
          checkForSuccess(data);
+          console.log('/new-attendance/create/select-attendants fired');
         });
+    }
+  }
+
+  const neededAttendants = (obj: APINewTable): void => {
+    let NeededInfo = {
+      createdTableName: obj.newTable,
+      allForm: form
+    }
+
+    if (form.ageGroup === 'All') {
+      postData('/new-attendance/insert/all', NeededInfo)
+      .then((data: APIResponse): void => {
+        checkForSuccess(data);
+      });
+    } else {
+      postData('/new-attendance/insert/select-attendants', NeededInfo)
+      .then((data: APIResponse): void => {
+        checkForSuccess(data);
+      });
     }
   }
 
@@ -123,13 +145,26 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (searchForGroup(form.groupDisplayName, allGroups)) {
-      checkForAll(form);
+      postData('/new-attendance/create', form)
+        .then((data: APINewTable): void => {
+          neededAttendants(data);
+        });
     } else {
       postData("/new-group", form).then((data: ApiResponse): void => {
         if (data.message === "success") {
           postData("/new-group/create", form).then(
             (data: APIResponse): void => {
-             checkForSuccess(data);
+              if (data.message === "success") {
+                postData('/new-attendance/create', form).then((data: APINewTable): void => {
+                  if (data.message === "success") {
+                    neededAttendants(data);
+                  } else {
+                    alert('Error with the /new-attendance/create');
+                  }
+                });
+              } else {
+                alert('Failure with the /new-group/create');
+              }
             });
         } else {
           alert(`Failure with new-group ${data.data}`);
