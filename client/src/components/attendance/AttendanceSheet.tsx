@@ -5,18 +5,6 @@ import { attendantData } from "../../variables/dummyAttendant.ts";
 export default function AttendanceSheet({ show, title }: AttendanceProps) {
   const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
 
-  const clickHandler = (e: React.MouseEvent<HTMLButtonElement>, index: number): void => {
-    const copy = memberData.slice();
-
-    if (copy[index].present === 0) {
-      copy[index].present = 1;
-      setMemberData(copy);
-    } else {
-      copy[index].present = 0;
-      setMemberData(copy);
-    }
-  };
-
   const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
     const copy = memberData.slice();
 
@@ -58,15 +46,7 @@ export default function AttendanceSheet({ show, title }: AttendanceProps) {
       >
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
-        <td>
-          <button
-            type="button"
-            onClick={(e) => clickHandler(e, y)}
-          >
-            {x.present === 0 ? "Not Present" : "Present"}
-          </button>
-          {checkedOrNot(x.present, y)}
-        </td>
+        <td>{checkedOrNot(x.present, y)}</td>
       </tr>
     );
   });
