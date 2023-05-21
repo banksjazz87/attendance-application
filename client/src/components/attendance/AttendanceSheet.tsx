@@ -7,7 +7,6 @@ export default function AttendanceSheet({ show, title }: AttendanceProps) {
 
   const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
     const copy = memberData.slice();
-
     if (copy[index].present === 0) {
       copy[index].present = 1;
       setMemberData(copy);

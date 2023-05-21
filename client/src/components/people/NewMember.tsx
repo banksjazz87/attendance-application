@@ -13,9 +13,7 @@ export default function NewMember(): JSX.Element {
     memberType: "",
   };
 
-  const [allAttendants, setAllAttendants] = useState<Attendee[]>([
-    initAttendants,
-  ]);
+  const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
   const [newAttendant, setNewAttendant] = useState<Attendee>(initAttendants);
 
   useEffect((): void => {
@@ -39,87 +37,79 @@ export default function NewMember(): JSX.Element {
     setNewAttendant({ ...newAttendant, memberType: e.target.value });
   };
 
-  const nameMatches = allAttendants.filter(
-    (x: Attendee, y: number): Attendee | null => {
-      if (
-        x.firstName.toLowerCase() === newAttendant.firstName.toLowerCase() &&
-        x.lastName.toLowerCase() === newAttendant.lastName.toLowerCase()
-      ) {
-        return x;
-      } else {
-        return null;
-      }
+  const nameMatches = allAttendants.filter((x: Attendee, y: number): Attendee | null => {
+    if (x.firstName.toLowerCase() === newAttendant.firstName.toLowerCase() && x.lastName.toLowerCase() === newAttendant.lastName.toLowerCase()) {
+      return x;
+    } else {
+      return null;
     }
-  );
+  });
 
-  const nameFields: JSX.Element[] = AttendantFormLayout.name.map(
-    (x: AttendanceInputs, y: number): JSX.Element => {
-      return (
-        <div className="input_wrapper" key={`name_field_${y}`}>
-          <label htmlFor={x.id}>{x.label}</label>
-          <input
-            placeholder={x.placeholder}
-            type={x.type}
-            id={x.id}
-            name={x.name}
-            onChange={nameHandler}
-          />
-        </div>
-      );
-    }
-  );
+  const nameFields: JSX.Element[] = AttendantFormLayout.name.map((x: AttendanceInputs, y: number): JSX.Element => {
+    return (
+      <div
+        className="input_wrapper"
+        key={`name_field_${y}`}
+      >
+        <label htmlFor={x.id}>{x.label}</label>
+        <input
+          placeholder={x.placeholder}
+          type={x.type}
+          id={x.id}
+          name={x.name}
+          onChange={nameHandler}
+        />
+      </div>
+    );
+  });
 
-  const ageFields: JSX.Element[] = AttendantFormLayout.ageGroup.map(
-    (x: AttendanceInputs, y: number): JSX.Element => {
-      return (
-        <div className="input_wrapper" key={`name_field_${y}`}>
-          <label htmlFor={x.id}>{x.label}</label>
-          <input
-            placeholder={x.placeholder}
-            type={x.type}
-            id={x.id}
-            name={x.name}
-            value={x.value}
-            onChange={radioAgeChange}
-          />
-        </div>
-      );
-    }
-  );
+  const ageFields: JSX.Element[] = AttendantFormLayout.ageGroup.map((x: AttendanceInputs, y: number): JSX.Element => {
+    return (
+      <div
+        className="input_wrapper"
+        key={`name_field_${y}`}
+      >
+        <label htmlFor={x.id}>{x.label}</label>
+        <input
+          placeholder={x.placeholder}
+          type={x.type}
+          id={x.id}
+          name={x.name}
+          value={x.value}
+          onChange={radioAgeChange}
+        />
+      </div>
+    );
+  });
 
-  const memberFields: JSX.Element[] = AttendantFormLayout.memberStatus.map(
-    (x: AttendanceInputs, y: number): JSX.Element => {
-      return (
-        <div className="input_wrapper" key={`name_field_${y}`}>
-          <label htmlFor={x.id}>{x.label}</label>
-          <input
-            placeholder={x.placeholder}
-            type={x.type}
-            id={x.id}
-            name={x.name}
-            value={x.value}
-            onChange={radioMemberChange}
-          />
-        </div>
-      );
-    }
-  );
+  const memberFields: JSX.Element[] = AttendantFormLayout.memberStatus.map((x: AttendanceInputs, y: number): JSX.Element => {
+    return (
+      <div
+        className="input_wrapper"
+        key={`name_field_${y}`}
+      >
+        <label htmlFor={x.id}>{x.label}</label>
+        <input
+          placeholder={x.placeholder}
+          type={x.type}
+          id={x.id}
+          name={x.name}
+          value={x.value}
+          onChange={radioMemberChange}
+        />
+      </div>
+    );
+  });
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (nameMatches.length > 0) {
-      alert(
-        `${newAttendant.firstName} ${newAttendant.lastName} is already in the database`
-      );
+      alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
         if (data.message === "Success") {
-          alert(
-            `${newAttendant.firstName} ${newAttendant.lastName} has been added`
-          );
-          (
-            document.getElementById("new_member_form") as HTMLFormElement
-          ).reset();
+          alert(`${newAttendant.firstName} ${newAttendant.lastName} has been added`);
+          (document.getElementById("new_member_form") as HTMLFormElement).reset();
           window.location.reload();
         } else {
           alert(`The following error has occurred ${data.data}`);
@@ -135,23 +125,19 @@ export default function NewMember(): JSX.Element {
       id="new_member_form"
       onSubmit={submitHandler}
     >
-
       <h2>Attendant's Name</h2>
-      <div className="name_fields_wrapper fields_wrapper">
-        {nameFields}
-      </div>
+      <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
 
       <h2>Attendant's Age Group</h2>
-      <div className="age_fields_wrapper fields_wrapper">
-        {ageFields}
-      </div>
+      <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
 
       <h2>Attendant's Member Status</h2>
-      <div className="member_fields_wrapper fields_wrapper">
-        {memberFields}
-      </div>
+      <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
 
-      <input type="submit" value="Submit" />
+      <input
+        type="submit"
+        value="Submit"
+      />
     </form>
   );
 }
