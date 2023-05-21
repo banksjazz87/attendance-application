@@ -1,6 +1,6 @@
 import mysql from "mysql";
 import { SQLResponse } from "../interfaces/interfaces.ts";
-import {DBAttendee} from "../../attendanceApplication/interfaces/interfaces.ts";
+import { DBAttendee } from "../../attendanceApplication/interfaces/interfaces.ts";
 
 export class DBMethods {
   hostName: any;
@@ -39,9 +39,7 @@ export class DBMethods {
         console.log("you are connected");
       }
     });
-    database.end((err: any): void =>
-      err ? console.log("error, disconnecting") : console.log("disconnected")
-    );
+    database.end((err: any): void => (err ? console.log("error, disconnecting") : console.log("disconnected")));
   }
 
   endDb() {
@@ -63,11 +61,7 @@ export class DBMethods {
     });
   }
 
-  searchByValue(
-    table: string,
-    column: string,
-    value: string
-  ): Promise<string[]> {
+  searchByValue(table: string, column: string, value: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       let sql = `SELECT * FROM ${table} WHERE ${column} = "${value}";`;
@@ -163,30 +157,29 @@ export class DBMethods {
         err ? reject(err) : resolve(results);
       });
       this.endDb();
-    })
+    });
   }
 
   addAllApplicants(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`
-  
+      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
+
       database.query(neededSql, (err: string[], results: string[]) => {
-        console.log('sql query = ', neededSql);
+        console.log("sql query = ", neededSql);
         err ? reject(err) : resolve(results);
       });
       this.endDb();
     });
   }
 
-
   addSelectApplicants(table: string, neededAge: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`
-  
+      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
+
       database.query(neededSql, (err: string[], results: string[]) => {
-        console.log('sql query = ', neededSql);
+        console.log("sql query = ", neededSql);
         err ? reject(err) : resolve(results);
       });
       this.endDb();

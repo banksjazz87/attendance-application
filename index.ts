@@ -25,29 +25,15 @@ app.listen(port, (): void => {
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
-const paths = [
-  "/dashboard",
-  "/new-attendance",
-  "/attendance",
-  "search",
-  "/people",
-];
+const paths = ["/dashboard", "/new-attendance", "/attendance", "search", "/people"];
 
 app.get(paths, (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
 app.post("/login", (req: Request, res: Response): any => {
-  if (
-    req.body.name === process.env.TEST_USER &&
-    req.body.password === process.env.TEST_PASSWORD
-  ) {
-    const Db = new DBMethods(
-      process.env.MYSQL_HOST,
-      process.env.MYSQL_USER,
-      process.env.TEST_DB,
-      process.env.MYSQL_PASSWORD
-    );
+  if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
+    const Db = new DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
     Db.connect();
 
     res.cookie("account", "test");
@@ -75,18 +61,9 @@ app.post("/login", (req: Request, res: Response): any => {
 });
 
 app.post("/new-group", (req: Request, res: Response) => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  const dbValues = [
-    Db.createTableName(req.body.groupDisplayName),
-    req.body.ageGroup,
-    req.body.group,
-  ];
+  const dbValues = [Db.createTableName(req.body.groupDisplayName), req.body.ageGroup, req.body.group];
   const dbColumns = "name, age_group, displayName";
 
   Db.insert("group_names", dbColumns, dbValues)
@@ -100,12 +77,7 @@ app.post("/new-group", (req: Request, res: Response) => {
 });
 
 app.get("/groups", (req: Request, res: Response): void => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   Db.getTable("group_names", "ASC", "name")
     .then((data: string[]): void => {
@@ -117,14 +89,8 @@ app.get("/groups", (req: Request, res: Response): void => {
     });
 });
 
-
 app.post("/new-attendance/create", (req: Request, res: Response): void => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   let groupPlusDate = req.body.group + " " + req.body.title;
   let tableName = Db.createTableName(groupPlusDate);
@@ -132,20 +98,17 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   const fieldValues = [tableName, req.body.title];
   const parentGroup = Db.createTableName(req.body.group);
 
-  Promise.all([
-    Db.insert(parentGroup, columnNames, fieldValues),
-    Db.createNewAttendance(tableName),
-  ])
+  Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.createNewAttendance(tableName)])
     .then((data: [string[], string[]]): void => {
-      console.log('Success All', data);
+      console.log("Success All", data);
       res.send({ message: "success", data: data, newTable: tableName });
     })
     .catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
-      console.log('Failure Alllll', err);
+      console.log("Failure Alllll", err);
       res.send({
         message: "failure",
         error: () => {
-          Db.getSqlError(err[0]); 
+          Db.getSqlError(err[0]);
           Db.getSqlError(err[1]);
           Db.getSqlError(err[2]);
         },
@@ -153,55 +116,39 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
     });
 });
 
-app.post('/new-attendance/insert/all', (req: Request, res: Response): void => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   Db.addAllApplicants(req.body.createdTableName)
     .then((data: string[]): void => {
-      console.log('success', data)
-      res.send({message: "success"});
+      console.log("success", data);
+      res.send({ message: "success" });
     })
     .catch((err: SQLResponse): void => {
-      console.log('failure', err);
-      res.send({message: "failure", error: err});
+      console.log("failure", err);
+      res.send({ message: "failure", error: err });
     });
 });
 
-app.post('/new-attendance/insert/select-attendants', (req: Request, res: Response): void => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+app.post("/new-attendance/insert/select-attendants", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   const tableName = req.body.createdTableName;
   const neededAge = req.body.allForm.ageGroup;
 
   Db.addSelectApplicants(tableName, neededAge)
     .then((data: string[]): void => {
-      console.log('success', data);
-      res.send({message: "success"});
+      console.log("success", data);
+      res.send({ message: "success" });
     })
     .catch((err: SQLResponse): void => {
-      console.log('failure', err);
-      res.send({message: "failure", error: err});
+      console.log("failure", err);
+      res.send({ message: "failure", error: err });
     });
 });
 
-
 app.post("/new-group/create", (req: Request, res: Response) => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   let tableName = Db.createTableName(req.body.group);
   Db.createGroupTable(tableName)
@@ -216,21 +163,13 @@ app.post("/new-group/create", (req: Request, res: Response) => {
 });
 
 app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   let group = Db.createTableName(req.body.name);
   const columnNames = "title, group_age";
   const values = [req.body.title, req.body.ageGroup];
 
-  Promise.all([
-    Db.createGroupTable(req.body.group),
-    Db.insert(group, columnNames, values),
-  ])
+  Promise.all([Db.createGroupTable(req.body.group), Db.insert(group, columnNames, values)])
     .then((data: [string[], string[]]): void => {
       console.log(data);
       res.send({ message: "success", data: data });
@@ -246,14 +185,8 @@ app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
     });
 });
 
-
 app.get("/all-attendants", (req: Request, res: Response) => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   Db.getTable("Attendants", "ASC", "lastName")
     .then((data: string[]): void => {
@@ -267,12 +200,7 @@ app.get("/all-attendants", (req: Request, res: Response) => {
 });
 
 app.post("/new-attendant", (req: Request, res: Response) => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   const neededValues: string[] = Object.values(req.body);
   const neededColumns: string = Object.keys(req.body).toString();
@@ -287,46 +215,26 @@ app.post("/new-attendant", (req: Request, res: Response) => {
     });
 });
 
-app.delete(
-  "/remove-person/:firstName/:lastName/:id",
-  (req: Request, res: Response) => {
-    const Db = new DBMethods(
-      req.cookies.host,
-      req.cookies.user,
-      req.cookies.database,
-      req.cookies.password
-    );
+app.delete("/remove-person/:firstName/:lastName/:id", (req: Request, res: Response) => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-    let numOfId = parseInt(req.params.id);
-    console.log(
-      `${req.params.firstName}, ${req.params.lastName}, ${req.params.id}`
-    );
+  let numOfId = parseInt(req.params.id);
+  console.log(`${req.params.firstName}, ${req.params.lastName}, ${req.params.id}`);
 
-    Db.removePerson(
-      "Attendants",
-      req.params.firstName,
-      req.params.lastName,
-      numOfId
-    )
-      .then((data: string[]): void => {
-        res.send({
-          message: `Success, ${req.params.firstName} ${req.params.lastName} has been deleted`,
-        });
-      })
-      .catch((err: SQLResponse): void => {
-        console.log("ERRRRORRRR", err);
-        res.send({ message: "failure", error: Db.getSqlError(err) });
+  Db.removePerson("Attendants", req.params.firstName, req.params.lastName, numOfId)
+    .then((data: string[]): void => {
+      res.send({
+        message: `Success, ${req.params.firstName} ${req.params.lastName} has been deleted`,
       });
-  }
-);
+    })
+    .catch((err: SQLResponse): void => {
+      console.log("ERRRRORRRR", err);
+      res.send({ message: "failure", error: Db.getSqlError(err) });
+    });
+});
 
 app.put("/update-attendant", (req: Request, res: Response): void => {
-  const Db = new DBMethods(
-    req.cookies.host,
-    req.cookies.user,
-    req.cookies.database,
-    req.cookies.password
-  );
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
   console.log("age =" + req.body.age + "memberType = " + req.body.memberType);
   Db.updatePerson("Attendants", req.body)
     .then((data: string[]): void => {
@@ -334,5 +242,21 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
     })
     .catch((err: SQLResponse): void => {
       res.send({ message: "failure", error: Db.getSqlError(err) });
+    });
+});
+
+app.get("/group-lists/attendance/:listParent", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  console.log("Parent table = ", req.params.listParent);
+
+  Db.getTable(req.params.listParent, "DESC", "dateCreated")
+    .then((data: string[]): void => {
+      console.log(data);
+      res.send({ message: "success", data: data });
+    })
+    .catch((err: SQLResponse): void => {
+      console.log("Failure", err);
+      res.send({ message: "Failure", error: Db.getSqlError(err) });
     });
 });

@@ -22,8 +22,10 @@ export default function GroupDropDown({ groupSelected, getGroups, currentGroups,
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (groupSelected) {
+      console.log("This is not being fired", e.target.value);
       groupSelected(currentGroups, e.target.value);
     } else if (attendanceGroupSelected) {
+      console.log("This is being fired, " + e.target.value);
       attendanceGroupSelected(groups, e.target.value);
     }
   };

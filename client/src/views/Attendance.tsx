@@ -4,7 +4,7 @@ import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import { Str, Bool } from "../../src/types/types.ts";
-import { Group } from "../../src/types/interfaces.ts";
+import { Group, APIResponse } from "../../src/types/interfaces.ts";
 
 export default function Attendance(): JSX.Element {
   const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
@@ -22,7 +22,7 @@ export default function Attendance(): JSX.Element {
   const selectGroup = (groupArray: Group[], value: string): void => {
     let arrayCopy = groupArray.slice();
     let index = 0;
-    let copyOfCurrentSelected = selectedGroup;
+    let copyOfCurrentSelected = selectedGroup.slice();
 
     for (let i = 0; i < arrayCopy.length; i++) {
       if (arrayCopy[i].displayName === value) {
@@ -36,19 +36,32 @@ export default function Attendance(): JSX.Element {
     console.log(selectedGroup);
   };
 
+  const dropDownSubmit = (value: string): void => {
+    console.log(value);
+    fetch(`/group-lists/attendance/${value}`)
+      .then((data: Response): Promise<APIResponse> => {
+        return data.json();
+      })
+      .then((final: APIResponse) => {
+        console.log(final.data);
+      });
+  };
+
   return (
     <div>
       <Navbar />
       <h1>This Will be the attendance page. </h1>
       <DropDownForm
         clickHandler={showAttendanceHandler}
-        name={selectedGroup[0].displayName}
+        name={selectedGroup[0].name}
         groupSelectedHandler={selectGroup}
+        groupHandler={dropDownSubmit}
       />
       <AttendanceSheet
         show={displayAttendance}
         title={attendanceTitle}
       />
+      <p>{selectedGroup[0].name}</p>
       <NewMember />
     </div>
   );

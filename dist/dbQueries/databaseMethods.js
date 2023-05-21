@@ -35,7 +35,7 @@ class DBMethods {
                 console.log("you are connected");
             }
         });
-        database.end((err) => err ? console.log("error, disconnecting") : console.log("disconnected"));
+        database.end((err) => (err ? console.log("error, disconnecting") : console.log("disconnected")));
     }
     endDb() {
         const database = this.db();
@@ -144,7 +144,7 @@ class DBMethods {
             const database = this.db();
             const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
             database.query(neededSql, (err, results) => {
-                console.log('sql query = ', neededSql);
+                console.log("sql query = ", neededSql);
                 err ? reject(err) : resolve(results);
             });
             this.endDb();
@@ -155,7 +155,7 @@ class DBMethods {
             const database = this.db();
             const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
             database.query(neededSql, (err, results) => {
-                console.log('sql query = ', neededSql);
+                console.log("sql query = ", neededSql);
                 err ? reject(err) : resolve(results);
             });
             this.endDb();
