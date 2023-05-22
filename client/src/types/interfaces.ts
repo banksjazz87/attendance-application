@@ -10,6 +10,8 @@ export interface Attendee {
 export interface AttendanceProps {
   show: boolean;
   title: string;
+  attendanceData: Attendee[];
+  parentTitle: string;
 }
 
 export interface Group {
@@ -81,6 +83,25 @@ export interface APINewTable extends APIResponse {
 }
 
 export interface APIPeople {
+  message: string;
+  data: Attendee[];
+  error: string;
+}
+
+export interface DBAttendanceTitle {
+  id: number;
+  title: string;
+  displayTitle: string;
+  dateCreated: string;
+}
+
+export interface APIAttendanceTitles {
+  message: string;
+  data: DBAttendanceTitle[];
+  error: string;
+}
+
+export interface APIAttendanceSheet {
   message: string;
   data: Attendee[];
   error: string;

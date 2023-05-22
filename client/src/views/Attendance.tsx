@@ -3,20 +3,22 @@ import Navbar from "../components/global/Navbar.tsx";
 import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
-import { Str, Bool } from "../../src/types/types.ts";
-import { Group, APIResponse } from "../../src/types/interfaces.ts";
+import { Bool } from "../../src/types/types.ts";
+import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
 
 export default function Attendance(): JSX.Element {
   const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
-  const [attendanceTitle, setAttendanceTitle] = useState<Str>("");
   const [selectedGroup, setSelectedGroup] = useState<Group[]>([{ id: 0, name: "", age_group: "", displayName: "" }]);
+  const [selectedAttendance, setSelectedAttendance] = useState<DBAttendanceTitle>({
+    id: 0,
+    title: "",
+    displayTitle: "",
+    dateCreated: "",
+  });
+  const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
 
   const showAttendanceHandler = (): void => {
     setDisplayAttendance(true);
-  };
-
-  const setTitle = (value: string): void => {
-    setAttendanceTitle(value);
   };
 
   const selectGroup = (groupArray: Group[], value: string): void => {
@@ -32,18 +34,29 @@ export default function Attendance(): JSX.Element {
 
     copyOfCurrentSelected[0] = arrayCopy[index];
     setSelectedGroup(copyOfCurrentSelected);
-    console.log(value);
-    console.log(selectedGroup);
+  };
+
+  const selectAttendanceSheet = (arr: Attendee[]): void => {
+    setCurrentListData(arr);
+    setDisplayAttendance(true);
   };
 
   const dropDownSubmit = (value: string): void => {
     console.log(value);
     fetch(`/group-lists/attendance/${value}`)
-      .then((data: Response): Promise<APIResponse> => {
+      .then((data: Response): Promise<APIAttendanceTitles> => {
         return data.json();
       })
-      .then((final: APIResponse) => {
-        console.log(final.data);
+      .then((final: APIAttendanceTitles): void => {
+        setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].title, dateCreated: final.data[0].dateCreated });
+
+        fetch(`/attendance/get-list/${final.data[0].title}`)
+          .then((data: Response): Promise<APIAttendanceSheet> => {
+            return data.json();
+          })
+          .then((final: APIAttendanceSheet): void => {
+            selectAttendanceSheet(final.data);
+          });
       });
   };
 
@@ -59,9 +72,10 @@ export default function Attendance(): JSX.Element {
       />
       <AttendanceSheet
         show={displayAttendance}
-        title={attendanceTitle}
+        title={selectedAttendance.displayTitle}
+        attendanceData={currentListData}
+        parentTitle={selectedGroup[0].displayName}
       />
-      <p>{selectedGroup[0].name}</p>
       <NewMember />
     </div>
   );

@@ -215,7 +215,6 @@ app.put("/update-attendant", (req, res) => {
 });
 app.get("/group-lists/attendance/:listParent", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    console.log("Parent table = ", req.params.listParent);
     Db.getTable(req.params.listParent, "DESC", "dateCreated")
         .then((data) => {
         console.log(data);
@@ -224,5 +223,17 @@ app.get("/group-lists/attendance/:listParent", (req, res) => {
         .catch((err) => {
         console.log("Failure", err);
         res.send({ message: "Failure", error: Db.getSqlError(err) });
+    });
+});
+app.get("/attendance/get-list/:listName", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.getTable(req.params.listName, "ASC", "lastName")
+        .then((data) => {
+        console.log(data);
+        res.send({ message: "success", data: data });
+    })
+        .catch((err) => {
+        console.log("there was an error", err);
+        res.send({ message: "failure", data: err });
     });
 });

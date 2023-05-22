@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps } from "../../types/interfaces.tsx";
 import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title }: AttendanceProps) {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle }: AttendanceProps) {
   const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
 
   const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
@@ -37,7 +37,7 @@ export default function AttendanceSheet({ show, title }: AttendanceProps) {
     }
   };
 
-  const dataPoints = memberData.map((x: Attendee, y: number): JSX.Element => {
+  const dataPoints = attendanceData.map((x: Attendee, y: number): JSX.Element => {
     return (
       <tr
         key={`attendant_row_${y}`}
@@ -55,7 +55,8 @@ export default function AttendanceSheet({ show, title }: AttendanceProps) {
       className="attendance_table_wrapper"
       style={show ? { display: "" } : { display: "none" }}
     >
-      <h2>{title}</h2>
+      <h2>{parentTitle}</h2>
+      <h3>{title}</h3>
       <table>
         <tbody>
           <tr>
