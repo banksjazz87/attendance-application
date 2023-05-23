@@ -269,6 +269,25 @@ app.get("/attendance/get-list/:listName", (req: Request, res: Response): void =>
     })
     .catch((err: SQLResponse): void => {
       console.log("there was an error", err);
-      res.send({ message: "failure", data: err });
+      res.send({ message: "failure", data: Db.getSqlError(err) });
+    });
+});
+
+app.put("/attendance/update-table", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  const neededTable = req.body.table;
+  const neededId = req.body.attendantId;
+  const neededLastName = req.body.lastName;
+  const present = req.body.presentValue;
+
+  Db.updateAttendance(neededTable, neededId, neededLastName, present)
+    .then((data: string[]): void => {
+      console.log(data);
+      res.send({ message: "success", data: data });
+    })
+    .catch((err: SQLResponse): void => {
+      console.log("FAILURE", err);
+      res.send({ message: "Failure", data: Db.getSqlError(err) });
     });
 });

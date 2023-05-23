@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Attendee, AttendanceProps } from "../../types/interfaces.tsx";
+import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
+import putData from "../../functions/api/put.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle }: AttendanceProps) {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName }: AttendanceProps) {
   const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
   useEffect((): void => {
@@ -9,13 +10,30 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
   }, [attendanceData]);
 
   const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
-    const copy = memberData.slice();
+    const copy: Attendee[] = memberData.slice();
+
+    let currentObj: UpdateAttendant = {
+      firstName: copy[index].firstName,
+      lastName: copy[index].lastName,
+      attendantId: copy[index].id,
+      table: tableName,
+      presentValue: 0,
+    };
+
     if (copy[index].present === 0) {
       copy[index].present = 1;
       setMemberData(copy);
+      currentObj.presentValue = 1;
+      putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
+        console.log(data);
+      });
     } else {
       copy[index].present = 0;
       setMemberData(copy);
+      currentObj.presentValue = 0;
+      putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
+        console.log(data);
+      });
     }
   };
 

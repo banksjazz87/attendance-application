@@ -234,6 +234,22 @@ app.get("/attendance/get-list/:listName", (req, res) => {
     })
         .catch((err) => {
         console.log("there was an error", err);
-        res.send({ message: "failure", data: err });
+        res.send({ message: "failure", data: Db.getSqlError(err) });
+    });
+});
+app.put("/attendance/update-table", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const neededTable = req.body.table;
+    const neededId = req.body.attendantId;
+    const neededLastName = req.body.lastName;
+    const present = req.body.presentValue;
+    Db.updateAttendance(neededTable, neededId, neededLastName, present)
+        .then((data) => {
+        console.log(data);
+        res.send({ message: "success", data: data });
+    })
+        .catch((err) => {
+        console.log("FAILURE", err);
+        res.send({ message: "Failure", data: Db.getSqlError(err) });
     });
 });

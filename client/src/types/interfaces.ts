@@ -12,6 +12,7 @@ export interface AttendanceProps {
   title: string;
   attendanceData: Attendee[];
   parentTitle: string;
+  tableName: string;
 }
 
 export interface Group {
@@ -129,4 +130,12 @@ export interface DeleteResponse {
 export interface FormProps {
   show: boolean;
   formToShow: "New" | "Existing";
+}
+
+export interface UpdateAttendant {
+  firstName: string;
+  lastName: string;
+  attendantId: number | undefined;
+  table: string;
+  presentValue: number;
 }

@@ -74,6 +74,7 @@ export default function Attendance(): JSX.Element {
       <AttendanceSheet
         show={displayAttendance}
         title={selectedAttendance.displayTitle}
+        tableName={selectedAttendance.title}
         attendanceData={currentListData}
         parentTitle={selectedGroup[0].displayName}
       />
