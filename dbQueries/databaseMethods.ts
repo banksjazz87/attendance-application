@@ -166,7 +166,6 @@ export class DBMethods {
       const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
-        console.log("sql query = ", neededSql);
         err ? reject(err) : resolve(results);
       });
       this.endDb();
@@ -179,7 +178,18 @@ export class DBMethods {
       const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
-        console.log("sql query = ", neededSql);
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  updateAttendance(table: string, attendeeId: number, attendeeLastName: string, status: number): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `UPDATE ${table} SET present = ${status} WHERE id = ${attendeeId} AND lastName = "${attendeeLastName}";`;
+
+      database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
       });
       this.endDb();

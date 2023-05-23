@@ -34,6 +34,7 @@ export default function Attendance(): JSX.Element {
 
     copyOfCurrentSelected[0] = arrayCopy[index];
     setSelectedGroup(copyOfCurrentSelected);
+    setDisplayAttendance(false);
   };
 
   const selectAttendanceSheet = (arr: Attendee[]): void => {
@@ -48,7 +49,7 @@ export default function Attendance(): JSX.Element {
         return data.json();
       })
       .then((final: APIAttendanceTitles): void => {
-        setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].title, dateCreated: final.data[0].dateCreated });
+        setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
 
         fetch(`/attendance/get-list/${final.data[0].title}`)
           .then((data: Response): Promise<APIAttendanceSheet> => {

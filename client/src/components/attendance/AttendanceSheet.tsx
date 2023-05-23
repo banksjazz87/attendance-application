@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps } from "../../types/interfaces.tsx";
-import { attendantData } from "../../variables/dummyAttendant.ts";
 
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle }: AttendanceProps) {
-  const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
+  const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
+
+  useEffect((): void => {
+    setMemberData(attendanceData);
+  }, [attendanceData]);
 
   const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
     const copy = memberData.slice();
@@ -37,7 +40,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     }
   };
 
-  const dataPoints = attendanceData.map((x: Attendee, y: number): JSX.Element => {
+  const dataPoints = memberData.map((x: Attendee, y: number): JSX.Element => {
     return (
       <tr
         key={`attendant_row_${y}`}
