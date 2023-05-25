@@ -215,6 +215,27 @@ app.post("/new-attendant", (req: Request, res: Response) => {
     });
 });
 
+/**
+ * New endpoint
+ */
+app.post("/new-attendant/add-to-table/", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+});
+
+app.get("/get-attendant/:firstName/:lastName", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
+    .then((data: string[]): void => {
+      console.log(data);
+      res.send({ message: "succes", data: data });
+    })
+    .catch((err: SQLResponse): void => {
+      console.log("FAILURE", err);
+      res.send({ message: "failure", data: err });
+    });
+});
+
 app.delete("/remove-person/:firstName/:lastName/:id", (req: Request, res: Response) => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
@@ -290,4 +311,10 @@ app.put("/attendance/update-table", (req: Request, res: Response): void => {
       console.log("FAILURE", err);
       res.send({ message: "Failure", data: Db.getSqlError(err) });
     });
+});
+
+app.post("/attendance/insert/attendant", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  const neededTable = req.body.table;
 });

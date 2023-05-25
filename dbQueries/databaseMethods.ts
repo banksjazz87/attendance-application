@@ -148,6 +148,18 @@ export class DBMethods {
     });
   }
 
+  getPerson(tableName: string, first: string, last: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `SELECT * FROM ${tableName} WHERE firstName = "${first}" AND lastName = "${last}";`;
+
+      database.query(neededSql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
   updatePerson(tableName: string, obj: DBAttendee): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();

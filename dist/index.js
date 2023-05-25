@@ -187,6 +187,24 @@ app.post("/new-attendant", (req, res) => {
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
+/**
+ * New endpoint
+ */
+app.post("/new-attendant/add-to-table/", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+});
+app.get("/get-attendant/:firstName/:lastName", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
+        .then((data) => {
+        console.log(data);
+        res.send({ message: "succes", data: data });
+    })
+        .catch((err) => {
+        console.log("FAILURE", err);
+        res.send({ message: "failure", data: err });
+    });
+});
 app.delete("/remove-person/:firstName/:lastName/:id", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     let numOfId = parseInt(req.params.id);

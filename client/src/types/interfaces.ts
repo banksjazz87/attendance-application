@@ -139,3 +139,7 @@ export interface UpdateAttendant {
   table: string;
   presentValue: number;
 }
+
+export interface NewMemberProps {
+  currentTable?: string;
+}

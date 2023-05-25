@@ -78,7 +78,7 @@ export default function Attendance(): JSX.Element {
         attendanceData={currentListData}
         parentTitle={selectedGroup[0].displayName}
       />
-      <NewMember />
+      <NewMember currentTable={selectedAttendance.title} />
     </div>
   );
 }

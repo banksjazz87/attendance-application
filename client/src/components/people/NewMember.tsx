@@ -3,9 +3,9 @@ import { Attendee } from "../../types/interfaces.ts";
 import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
 import { AttendanceInputs } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
-import { APIResponse } from "../../types/interfaces.ts";
+import { APIResponse, UpdateAttendant, NewMemberProps } from "../../types/interfaces.ts";
 
-export default function NewMember(): JSX.Element {
+export default function NewMember({ currentTable }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -13,8 +13,17 @@ export default function NewMember(): JSX.Element {
     memberType: "",
   };
 
+  const initAddAttendant: UpdateAttendant = {
+    firstName: "",
+    lastName: "",
+    attendantId: -1,
+    table: "",
+    presentValue: 0,
+  };
+
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
   const [newAttendant, setNewAttendant] = useState<Attendee>(initAttendants);
+  const [addedAttendant, setAddedAttendant] = useState<UpdateAttendant>(initAddAttendant);
 
   useEffect((): void => {
     fetch("/all-attendants")
@@ -24,6 +33,12 @@ export default function NewMember(): JSX.Element {
         console.log(allAttendants);
       });
   }, []);
+
+  useEffect((): void => {
+    if (currentTable) {
+      setAddedAttendant({ ...addedAttendant, table: currentTable });
+    }
+  }, [currentTable, addedAttendant]);
 
   const nameHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewAttendant({ ...newAttendant, [e.target.id]: e.target.value });
@@ -108,9 +123,16 @@ export default function NewMember(): JSX.Element {
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
         if (data.message === "Success") {
-          alert(`${newAttendant.firstName} ${newAttendant.lastName} has been added`);
-          (document.getElementById("new_member_form") as HTMLFormElement).reset();
-          window.location.reload();
+          //get the new attendants information.
+          fetch(`/get-attendant/${newAttendant.firstName}/${newAttendant.lastName}`)
+            .then((data: Response): Promise<APIResponse> => {
+              return data.json();
+            })
+            .then((final: APIResponse): void => {
+              console.log(final);
+            });
+          /* (document.getElementById("new_member_form") as HTMLFormElement).reset();
+          window.location.reload();*/
         } else {
           alert(`The following error has occurred ${data.data}`);
         }

@@ -129,6 +129,16 @@ class DBMethods {
             this.endDb();
         });
     }
+    getPerson(tableName, first, last) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT * FROM ${tableName} WHERE firstName = "${first}" AND lastName = "${last}";`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
     updatePerson(tableName, obj) {
         return new Promise((resolve, reject) => {
             const database = this.db();
