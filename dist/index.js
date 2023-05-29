@@ -198,7 +198,7 @@ app.get("/get-attendant/:firstName/:lastName", (req, res) => {
     Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
         .then((data) => {
         console.log(data);
-        res.send({ message: "succes", data: data });
+        res.send({ message: "success", data: data });
     })
         .catch((err) => {
         console.log("FAILURE", err);
@@ -269,5 +269,20 @@ app.put("/attendance/update-table", (req, res) => {
         .catch((err) => {
         console.log("FAILURE", err);
         res.send({ message: "Failure", data: Db.getSqlError(err) });
+    });
+});
+app.post("/attendance/insert/attendant", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const neededTable = req.body.table;
+    const allColumns = "id, firstName, lastName, age, memberType, present";
+    const allData = [req.body.attendantId, req.body.firstName, req.body.lastName, req.body.age, req.body.memberType, req.body.presentValue];
+    Db.insert(req.body.table, allColumns, allData)
+        .then((data) => {
+        console.log("Success", data);
+        res.send({ message: "success", data: data });
+    })
+        .catch((err) => {
+        console.log("Errorr inserting attendant", err);
+        res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });

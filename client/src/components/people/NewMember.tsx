@@ -3,7 +3,7 @@ import { Attendee } from "../../types/interfaces.ts";
 import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
 import { AttendanceInputs } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
-import { APIResponse, UpdateAttendant, NewMemberProps } from "../../types/interfaces.ts";
+import { APIResponse, APIAttendanceSheet, UpdateAttendant, NewMemberProps } from "../../types/interfaces.ts";
 
 export default function NewMember({ currentTable }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
@@ -17,8 +17,10 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
     firstName: "",
     lastName: "",
     attendantId: -1,
+    age: "",
     table: "",
     presentValue: 0,
+    memberType: "",
   };
 
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
@@ -33,12 +35,6 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
         console.log(allAttendants);
       });
   }, []);
-
-  useEffect((): void => {
-    if (currentTable) {
-      setAddedAttendant({ ...addedAttendant, table: currentTable });
-    }
-  }, [currentTable, addedAttendant]);
 
   const nameHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewAttendant({ ...newAttendant, [e.target.id]: e.target.value });
@@ -125,14 +121,45 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
         if (data.message === "Success") {
           //get the new attendants information.
           fetch(`/get-attendant/${newAttendant.firstName}/${newAttendant.lastName}`)
-            .then((data: Response): Promise<APIResponse> => {
+            .then((data: Response): Promise<APIAttendanceSheet> => {
               return data.json();
             })
-            .then((final: APIResponse): void => {
-              console.log(final);
+            .then((final: APIAttendanceSheet): void => {
+              if (final.message === "success") {
+                const neededData: UpdateAttendant = {
+                  firstName: final.data[0].firstName,
+                  lastName: final.data[0].lastName,
+                  age: final.data[0].age,
+                  attendantId: final.data[0].id,
+                  memberType: final.data[0].memberType,
+                  table: currentTable,
+                  presentValue: 0,
+                };
+
+                setAddedAttendant({
+                  ...addedAttendant,
+                  firstName: neededData.firstName,
+                  lastName: neededData.lastName,
+                  age: neededData.age,
+                  attendantId: neededData.attendantId,
+                  table: currentTable,
+                  memberType: neededData.memberType,
+                  presentValue: 0,
+                });
+
+                postData("/attendance/insert/attendant", neededData).then((data: APIResponse): void => {
+                  if (data.message === "success") {
+                    alert(`${neededData.firstName} has been added.`);
+                    (document.getElementById("new_member_form") as HTMLFormElement).reset();
+                    window.location.reload();
+                  } else {
+                    alert(`${data.data}`);
+                  }
+                });
+              } else {
+                alert(final.data);
+              }
             });
-          /* (document.getElementById("new_member_form") as HTMLFormElement).reset();
-          window.location.reload();*/
         } else {
           alert(`The following error has occurred ${data.data}`);
         }
@@ -147,6 +174,7 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
       id="new_member_form"
       onSubmit={submitHandler}
     >
+      <h3>{`This is the table name ${currentTable}`}</h3>
       <h2>Attendant's Name</h2>
       <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
 

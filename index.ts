@@ -228,7 +228,7 @@ app.get("/get-attendant/:firstName/:lastName", (req: Request, res: Response): vo
   Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
     .then((data: string[]): void => {
       console.log(data);
-      res.send({ message: "succes", data: data });
+      res.send({ message: "success", data: data });
     })
     .catch((err: SQLResponse): void => {
       console.log("FAILURE", err);
@@ -316,5 +316,17 @@ app.put("/attendance/update-table", (req: Request, res: Response): void => {
 app.post("/attendance/insert/attendant", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  const neededTable = req.body.table;
+  const neededTable: string = req.body.table;
+  const allColumns: string = "id, firstName, lastName, age, memberType, present";
+  const allData: string[] = [req.body.attendantId, req.body.firstName, req.body.lastName, req.body.age, req.body.memberType, req.body.presentValue];
+
+  Db.insert(req.body.table, allColumns, allData)
+    .then((data: string[]): void => {
+      console.log("Success", data);
+      res.send({ message: "success", data: data });
+    })
+    .catch((err: SQLResponse): void => {
+      console.log("Errorr inserting attendant", err);
+      res.send({ message: "failure", data: Db.getSqlError(err) });
+    });
 });

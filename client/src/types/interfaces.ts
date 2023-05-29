@@ -5,6 +5,7 @@ export interface Attendee {
   memberType: string;
   present?: number;
   id?: number;
+  table?: string;
 }
 
 export interface AttendanceProps {
@@ -136,8 +137,10 @@ export interface UpdateAttendant {
   firstName: string;
   lastName: string;
   attendantId: number | undefined;
-  table: string;
+  table: string | undefined;
   presentValue: number;
+  age?: string;
+  memberType?: string;
 }
 
 export interface NewMemberProps {
