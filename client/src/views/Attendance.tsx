@@ -50,6 +50,7 @@ export default function Attendance(): JSX.Element {
       })
       .then((final: APIAttendanceTitles): void => {
         setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
+        sessionStorage.setItem("currentTable", final.data[0].title);
 
         fetch(`/attendance/get-list/${final.data[0].title}`)
           .then((data: Response): Promise<APIAttendanceSheet> => {

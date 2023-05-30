@@ -13,19 +13,8 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
     memberType: "",
   };
 
-  const initAddAttendant: UpdateAttendant = {
-    firstName: "",
-    lastName: "",
-    attendantId: -1,
-    age: "",
-    table: "",
-    presentValue: 0,
-    memberType: "",
-  };
-
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
   const [newAttendant, setNewAttendant] = useState<Attendee>(initAttendants);
-  const [addedAttendant, setAddedAttendant] = useState<UpdateAttendant>(initAddAttendant);
 
   useEffect((): void => {
     fetch("/all-attendants")
@@ -112,57 +101,53 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
     );
   });
 
+  const addNewAttendantToSheet = (obj: APIAttendanceSheet): void => {
+    if (obj.message === "success") {
+      const neededData: UpdateAttendant = {
+        firstName: obj.data[0].firstName,
+        lastName: obj.data[0].lastName,
+        age: obj.data[0].age,
+        attendantId: obj.data[0].id,
+        memberType: obj.data[0].memberType,
+        table: currentTable,
+        presentValue: 0,
+      };
+
+      postData("/attendance/insert/attendant", neededData).then((data: APIResponse): void => {
+        if (data.message === "success") {
+          alert(`${neededData.firstName} has been added.`);
+          (document.getElementById("new_member_form") as HTMLFormElement).reset();
+          window.location.reload();
+        } else {
+          alert(`${data.data}`);
+        }
+      });
+    } else {
+      alert(obj.data);
+    }
+  };
+
+  const getAttendantDataAndSet = (obj: APIResponse): Promise<APIAttendanceSheet> | void => {
+    if (obj.message === "Success") {
+      fetch(`/get-attendant/${newAttendant.firstName}/${newAttendant.lastName}`)
+        .then((data: Response): Promise<APIAttendanceSheet> => {
+          return data.json();
+        })
+        .then((final: APIAttendanceSheet): void => {
+          addNewAttendantToSheet(final);
+        });
+    } else {
+      alert(obj.data);
+    }
+  };
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (nameMatches.length > 0) {
       alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
-        if (data.message === "Success") {
-          //get the new attendants information.
-          fetch(`/get-attendant/${newAttendant.firstName}/${newAttendant.lastName}`)
-            .then((data: Response): Promise<APIAttendanceSheet> => {
-              return data.json();
-            })
-            .then((final: APIAttendanceSheet): void => {
-              if (final.message === "success") {
-                const neededData: UpdateAttendant = {
-                  firstName: final.data[0].firstName,
-                  lastName: final.data[0].lastName,
-                  age: final.data[0].age,
-                  attendantId: final.data[0].id,
-                  memberType: final.data[0].memberType,
-                  table: currentTable,
-                  presentValue: 0,
-                };
-
-                setAddedAttendant({
-                  ...addedAttendant,
-                  firstName: neededData.firstName,
-                  lastName: neededData.lastName,
-                  age: neededData.age,
-                  attendantId: neededData.attendantId,
-                  table: currentTable,
-                  memberType: neededData.memberType,
-                  presentValue: 0,
-                });
-
-                postData("/attendance/insert/attendant", neededData).then((data: APIResponse): void => {
-                  if (data.message === "success") {
-                    alert(`${neededData.firstName} has been added.`);
-                    (document.getElementById("new_member_form") as HTMLFormElement).reset();
-                    window.location.reload();
-                  } else {
-                    alert(`${data.data}`);
-                  }
-                });
-              } else {
-                alert(final.data);
-              }
-            });
-        } else {
-          alert(`The following error has occurred ${data.data}`);
-        }
+        getAttendantDataAndSet(data);
       });
     }
   };
