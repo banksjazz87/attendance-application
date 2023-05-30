@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
@@ -16,6 +16,18 @@ export default function Attendance(): JSX.Element {
     dateCreated: "",
   });
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
+
+  useEffect((): void => {
+    if (sessionStorage.currentTable) {
+      fetch(`/attendance/get-list/${sessionStorage.currentTable}`)
+        .then((data: Response): Promise<APIAttendanceSheet> => {
+          return data.json();
+        })
+        .then((final: APIAttendanceSheet): void => {
+          selectAttendanceSheet(final.data);
+        });
+    }
+  });
 
   const showAttendanceHandler = (): void => {
     setDisplayAttendance(true);

@@ -102,7 +102,7 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
   });
 
   const addNewAttendantToSheet = (obj: APIAttendanceSheet): void => {
-    if (obj.message === "success") {
+    if (obj && obj.message === "success") {
       const neededData: UpdateAttendant = {
         firstName: obj.data[0].firstName,
         lastName: obj.data[0].lastName,
@@ -127,7 +127,7 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
     }
   };
 
-  const getAttendantDataAndSet = (obj: APIResponse): Promise<APIAttendanceSheet> | void => {
+  const getAttendantDataAndSetIt = (obj: APIResponse): Promise<APIAttendanceSheet> | void => {
     if (obj.message === "Success") {
       fetch(`/get-attendant/${newAttendant.firstName}/${newAttendant.lastName}`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
@@ -147,7 +147,7 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
       alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
-        getAttendantDataAndSet(data);
+        getAttendantDataAndSetIt(data);
       });
     }
   };
