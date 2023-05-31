@@ -18,8 +18,18 @@ export default function Attendance(): JSX.Element {
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
 
   useEffect((): void => {
-    if (sessionStorage.currentTable) {
-      fetch(`/attendance/get-list/${sessionStorage.currentTable}`)
+    if (sessionStorage.selectedTable) {
+      let tableToDisplay = JSON.parse(sessionStorage.selectedTable);
+
+      setSelectedAttendance({
+        ...selectedAttendance,
+        id: tableToDisplay.id,
+        title: tableToDisplay.title,
+        displayTitle: tableToDisplay.displayTitle,
+        dateCreated: tableToDisplay.dateCreated,
+      });
+
+      fetch(`/attendance/get-list/${tableToDisplay.title}`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
           return data.json();
         })
@@ -27,7 +37,7 @@ export default function Attendance(): JSX.Element {
           selectAttendanceSheet(final.data);
         });
     }
-  });
+  }, []);
 
   const showAttendanceHandler = (): void => {
     setDisplayAttendance(true);
@@ -62,7 +72,16 @@ export default function Attendance(): JSX.Element {
       })
       .then((final: APIAttendanceTitles): void => {
         setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
-        sessionStorage.setItem("currentTable", final.data[0].title);
+
+        const displayedSheet = {
+          id: final.data[0].id,
+          title: final.data[0].title,
+          displayTitle: final.data[0].displayTitle,
+          dateCreated: final.data[0].dateCreated,
+        };
+
+        const displayedJSON = JSON.stringify(displayedSheet);
+        sessionStorage.setItem("selectedTable", displayedJSON);
 
         fetch(`/attendance/get-list/${final.data[0].title}`)
           .then((data: Response): Promise<APIAttendanceSheet> => {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
 import putData from "../../functions/api/put.ts";
+import deleteData from "../../functions/api/delete.ts";
 
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName }: AttendanceProps) {
   const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
@@ -24,17 +25,39 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
       copy[index].present = 1;
       setMemberData(copy);
       currentObj.presentValue = 1;
+
       putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
-        console.log(data);
+        if (data.message === "success") {
+          alert(`${currentObj.firstName} ${currentObj.lastName} has been marked present`);
+        } else {
+          alert(data.data);
+        }
       });
     } else {
       copy[index].present = 0;
       setMemberData(copy);
       currentObj.presentValue = 0;
+
       putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
-        console.log(data);
+        if (data.message === "success") {
+          alert(`${currentObj.firstName} ${currentObj.lastName} has been marked NOT present`);
+        } else {
+          alert(data.data);
+        }
       });
     }
+  };
+
+  const removeAttendee = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number): void => {
+    let selectedAtt = memberData[index];
+    deleteData(`/attendance-sheet/remove-person/${selectedAtt.firstName}/${selectedAtt.lastName}/${selectedAtt.id}/${tableName}`).then((data: APIResponse): void => {
+      if (data.message === "success") {
+        alert(`${selectedAtt.firstName} ${selectedAtt.lastName} has been deleted`);
+        window.location.reload();
+      } else {
+        alert(`${data.data}`);
+      }
+    });
   };
 
   const checkedOrNot = (value: number | undefined, index: number): JSX.Element => {
@@ -67,6 +90,16 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
         <td>{checkedOrNot(x.present, y)}</td>
+        <td>
+          <button
+            type="button"
+            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+              removeAttendee(event, y);
+            }}
+          >
+            X
+          </button>
+        </td>
       </tr>
     );
   });
@@ -84,6 +117,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
             <th>Last Name</th>
             <th>First Name</th>
             <th>Present</th>
+            <th>Delete</th>
           </tr>
           {dataPoints}
         </tbody>

@@ -286,3 +286,20 @@ app.post("/attendance/insert/attendant", (req, res) => {
         res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });
+app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:table", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const first = req.params.firstName;
+    const last = req.params.lastName;
+    const idNum = parseInt(req.params.id);
+    const table = req.params.table;
+    Db.removePerson(table, first, last, idNum)
+        .then((data) => {
+        res.send({ message: "success", data: data });
+        console.log(`${first} ${last} has been removed from ${table}`);
+        console.log(data);
+    })
+        .catch((err) => {
+        res.send({ message: "failure", data: Db.getSqlError(err) });
+        console.log(err);
+    });
+});
