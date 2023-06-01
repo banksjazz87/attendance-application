@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
-import { Group } from "../types/interfaces.ts";
+import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
+import { Group, APIAttendanceTitles, DBAttendanceTitle } from "../types/interfaces.ts";
 
 export default function Search() {
   const [groupTable, setGroupTable] = useState<Group>({
@@ -9,6 +10,8 @@ export default function Search() {
     age_group: "",
     displayName: "",
   });
+
+  const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
 
   const dropDownChangeHandler = (arr: Group[], value: string): void => {
     let index = 0;
@@ -34,16 +37,28 @@ export default function Search() {
       <h1>This Will be the search page. </h1>
       <form
         method="GET"
-        action="/all/attendance-sheets/parent/"
+        action="/group-lists/attendance/"
         onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
           e.preventDefault();
+          fetch(`/group-lists/attendance/${groupTable.name}`)
+            .then((data: Response): Promise<APIAttendanceTitles> => {
+              return data.json();
+            })
+            .then((final: APIAttendanceTitles): void => {
+              if (final.message === "success") {
+                setAttendanceTables(final.data);
+              } else {
+                alert(final.error);
+              }
+            });
         }}
       >
         <GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
         <input
           type="submit"
-          value="submit"
+          value="Submit"
         />
+        <AttendanceDropDown attendanceSheets={attendanceTables} />
       </form>
     </div>
   );
