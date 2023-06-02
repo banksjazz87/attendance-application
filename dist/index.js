@@ -245,6 +245,7 @@ app.get("/group-lists/attendance/:listParent", (req, res) => {
 });
 app.get("/attendance/get-list/:listName", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    console.log("this is the table name", req.params.listName);
     Db.getTable(req.params.listName, "ASC", "lastName")
         .then((data) => {
         console.log(data);

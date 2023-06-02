@@ -2,33 +2,83 @@ import React, { useState } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
-import { Group, APIAttendanceTitles, DBAttendanceTitle } from "../types/interfaces.ts";
+import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet } from "../types/interfaces.ts";
 
 export default function Search() {
-  const [groupTable, setGroupTable] = useState<Group>({
+  const initGroup = {
     name: "",
     age_group: "",
     displayName: "",
-  });
+  };
 
+  const initTable = {
+    id: -1,
+    title: "",
+    displayTitle: "",
+    dateCreated: "",
+  };
+
+  const [groupTable, setGroupTable] = useState<Group>(initGroup);
   const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
+  const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(false);
+  const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
+  const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
 
-  const dropDownChangeHandler = (arr: Group[], value: string): void => {
+  const returnIndexOfSelected = (arr: Group[], value: string): number | void => {
     let index = 0;
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].displayName === value) {
         index = i;
+        return index;
+      }
+    }
+  };
+
+  const dropDownChangeHandler = (arr: Group[], value: string): void => {
+    let index = returnIndexOfSelected(arr, value);
+    if (index) {
+      setGroupTable({
+        ...groupTable,
+        name: arr[index]["name"],
+        age_group: arr[index]["age_group"],
+        displayName: value,
+      });
+      setShowAttendanceDropDown(false);
+    }
+  };
+
+  const updateSelectedTable = (arr: DBAttendanceTitle[], value: string): void => {
+    let index = 0;
+
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i].displayTitle === value) {
+        index = i;
       }
     }
 
-    setGroupTable({
-      ...groupTable,
-      name: arr[index]["name"],
-      age_group: arr[index]["age_group"],
-      displayName: value,
+    setSelectedTable({
+      ...selectedTable,
+      id: arr[index].id,
+      title: arr[index].title,
+      displayTitle: arr[index].displayTitle,
+      dateCreated: arr[index].dateCreated,
     });
+  };
 
-    console.log(groupTable);
+  const attDropDownChangeHandler = (arr: DBAttendanceTitle[], value: string): void => {
+    fetch(`/attendance/get-list/${value}`)
+      .then((data: Response): Promise<APIAttendanceSheet> => {
+        return data.json();
+      })
+      .then((final: APIAttendanceSheet): void => {
+        console.log(final.data);
+        if (final.message === "success") {
+          updateSelectedTable(arr, value);
+          setSelectedAttendance(final.data);
+        } else {
+          alert(final.error);
+        }
+      });
   };
 
   return (
@@ -47,6 +97,7 @@ export default function Search() {
             .then((final: APIAttendanceTitles): void => {
               if (final.message === "success") {
                 setAttendanceTables(final.data);
+                setShowAttendanceDropDown(true);
               } else {
                 alert(final.error);
               }
@@ -58,8 +109,15 @@ export default function Search() {
           type="submit"
           value="Submit"
         />
-        <AttendanceDropDown attendanceSheets={attendanceTables} />
+        <AttendanceDropDown
+          attendanceSheets={attendanceTables}
+          show={showAttendanceDropDown}
+          changeHandler={attDropDownChangeHandler}
+          allTitles={attendanceTables}
+        />
       </form>
+
+      <h1>{`Current Form is ${selectedTable.displayTitle}`}</h1>
     </div>
   );
 }
