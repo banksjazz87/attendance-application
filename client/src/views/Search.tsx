@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
+import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet } from "../types/interfaces.ts";
 
 export default function Search() {
@@ -51,7 +52,7 @@ export default function Search() {
     let index = 0;
 
     for (let i = 0; i < arr.length; i++) {
-      if (arr[i].displayTitle === value) {
+      if (arr[i].title === value) {
         index = i;
       }
     }
@@ -71,10 +72,25 @@ export default function Search() {
         return data.json();
       })
       .then((final: APIAttendanceSheet): void => {
-        console.log(final.data);
         if (final.message === "success") {
           updateSelectedTable(arr, value);
           setSelectedAttendance(final.data);
+        } else {
+          alert(final.error);
+        }
+      });
+  };
+
+  const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    fetch(`/group-lists/attendance/${groupTable.name}`)
+      .then((data: Response): Promise<APIAttendanceTitles> => {
+        return data.json();
+      })
+      .then((final: APIAttendanceTitles): void => {
+        if (final.message === "success") {
+          setAttendanceTables(final.data);
+          setShowAttendanceDropDown(true);
         } else {
           alert(final.error);
         }
@@ -88,21 +104,7 @@ export default function Search() {
       <form
         method="GET"
         action="/group-lists/attendance/"
-        onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-          e.preventDefault();
-          fetch(`/group-lists/attendance/${groupTable.name}`)
-            .then((data: Response): Promise<APIAttendanceTitles> => {
-              return data.json();
-            })
-            .then((final: APIAttendanceTitles): void => {
-              if (final.message === "success") {
-                setAttendanceTables(final.data);
-                setShowAttendanceDropDown(true);
-              } else {
-                alert(final.error);
-              }
-            });
-        }}
+        onSubmit={submitHandler}
       >
         <GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
         <input
@@ -115,9 +117,12 @@ export default function Search() {
           changeHandler={attDropDownChangeHandler}
           allTitles={attendanceTables}
         />
-      </form>
 
-      <h1>{`Current Form is ${selectedTable.displayTitle}`}</h1>
+        <DisplayAttendance
+          sheetData={selectedAttendance}
+          sheetTitle={selectedTable.displayTitle}
+        />
+      </form>
     </div>
   );
 }
