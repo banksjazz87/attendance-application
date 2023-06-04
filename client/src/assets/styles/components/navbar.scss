@@ -1,0 +1,14 @@
+@import '../global/library.scss';
+#main_nav_wrapper {
+    width: 36px;
+    position: fixed;
+    left: 0;
+    ul {
+        display: flex;
+        flex-direction: column;
+        row-gap: 2rem;
+        li {
+            list-style: none;
+        }
+    }
+}

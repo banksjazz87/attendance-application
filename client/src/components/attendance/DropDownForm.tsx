@@ -5,7 +5,6 @@ import GroupDropDown from "../../components/global/GroupDropDown.tsx";
 export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler }: GroupProps) {
   const submitHandler = (e: React.FormEvent): void => {
     e.preventDefault();
-
     if (clickHandler && groupHandler) {
       clickHandler();
       groupHandler(name);
