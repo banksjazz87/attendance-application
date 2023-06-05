@@ -100,7 +100,9 @@ export default function Search() {
   return (
     <div>
       <Navbar />
-      <h1>This Will be the search page. </h1>
+      <div className="header_wrapper">
+        <h1>Search</h1>
+      </div>
       <form
         method="GET"
         action="/group-lists/attendance/"

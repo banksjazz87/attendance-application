@@ -2,8 +2,10 @@
 #main_nav_wrapper {
     position: fixed;
     left: 0;
+    top: 0;
     height: 100%;
     background-color: $dark-background;
+    z-index: 5;
     ul {
         display: flex;
         flex-direction: column;
@@ -14,6 +16,7 @@
             margin: auto;
             a {
                 color: white;
+                font-size: 20px;
                  :hover {
                     color: $orange;
                 }
@@ -27,17 +30,21 @@
         position: fixed;
         left: 0;
         bottom: 0;
+        top: unset;
         width: 100vw;
+        height: auto;
         display: flex;
-        height: 80px;
+        flex-direction: row;
         justify-content: center;
         align-items: center;
         ul {
             display: flex;
             flex-direction: row;
-            column-gap: 2rem;
+            column-gap: 2.5rem;
             padding-bottom: 2rem;
             justify-content: center;
+            padding-top: 6px;
+            padding-bottom: 6px;
         }
     }
 }

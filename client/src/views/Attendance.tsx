@@ -94,23 +94,27 @@ export default function Attendance(): JSX.Element {
   };
 
   return (
-    <div>
+    <div id="attendance_wrapper">
       <Navbar />
-      <h1>This Will be the attendance page. </h1>
-      <DropDownForm
-        clickHandler={showAttendanceHandler}
-        name={selectedGroup[0].name}
-        groupSelectedHandler={selectGroup}
-        groupHandler={dropDownSubmit}
-      />
-      <AttendanceSheet
-        show={displayAttendance}
-        title={selectedAttendance.displayTitle}
-        tableName={selectedAttendance.title}
-        attendanceData={currentListData}
-        parentTitle={selectedGroup[0].displayName}
-      />
-      <NewMember currentTable={selectedAttendance.title} />
+      <div className="header_wrapper">
+        <h1>Attendance</h1>
+      </div>
+      <div id="attendance_content_wrapper">
+        <DropDownForm
+          clickHandler={showAttendanceHandler}
+          name={selectedGroup[0].name}
+          groupSelectedHandler={selectGroup}
+          groupHandler={dropDownSubmit}
+        />
+        <AttendanceSheet
+          show={displayAttendance}
+          title={selectedAttendance.displayTitle}
+          tableName={selectedAttendance.title}
+          attendanceData={currentListData}
+          parentTitle={selectedGroup[0].displayName}
+        />
+        <NewMember currentTable={selectedAttendance.title} />
+      </div>
     </div>
   );
 }

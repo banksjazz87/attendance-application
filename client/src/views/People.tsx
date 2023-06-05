@@ -16,7 +16,6 @@ export default function People() {
     id: 0,
   };
 
-  
   const [people, setPeople] = useState<Attendee[]>([initAttendant]);
   const [userToDelete, setUserToDelete] = useState<Attendee>(initAttendant);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
@@ -46,11 +45,11 @@ export default function People() {
   };
 
   const updateEditAge = (elementValue: string): void => {
-    setUserToEdit({...userToEdit, age: elementValue});
+    setUserToEdit({ ...userToEdit, age: elementValue });
   };
 
   const updateEditMember = (elementValue: string): void => {
-      setUserToEdit({...userToEdit, memberType: elementValue})
+    setUserToEdit({ ...userToEdit, memberType: elementValue });
   };
 
   useEffect((): void => {
@@ -68,10 +67,9 @@ export default function People() {
   return (
     <div id="people_page_wrapper">
       <Navbar />
-      <h1>
-        This is where the user will be able to create, read, update and delete
-        People
-      </h1>
+      <div className="header_wrapper">
+        <h1>People</h1>
+      </div>
       <NewMember />
       <AllPeople
         allPeople={people}

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import postData from "../../functions/api/post.ts";
-import {User, UserProps} from "../../types/interfaces.ts";
+import { User, UserProps } from "../../types/interfaces.ts";
+import "../../assets/styles/components/login/loginForm.scss";
 
-
-export default function LoginForm({showForm, logIn}: UserProps) {
+export default function LoginForm({ showForm, logIn }: UserProps) {
   const [login, setLogin] = useState<User>({ name: "", password: "" });
 
   const inputChange = (input: string, field: string): void => {
@@ -12,14 +12,17 @@ export default function LoginForm({showForm, logIn}: UserProps) {
 
   return (
     <form
-      style={showForm ? {display: ""} : {display: 'none'}}
+      id="login_form"
+      method="POST"
+      action="/login"
+      style={showForm ? { display: "" } : { display: "none" }}
       onSubmit={(e: React.FormEvent): void => {
         e.preventDefault();
         postData("/login", login).then((data) => {
-          if (data.message === 'valid') {
+          if (data.message === "valid") {
             logIn();
           } else {
-            alert("Invalid User, please tyr again");
+            alert("Invalid User, please try again");
           }
         });
       }}
@@ -29,6 +32,7 @@ export default function LoginForm({showForm, logIn}: UserProps) {
         <input
           id="username"
           name="username"
+          placeholder="User Name"
           type="text"
           onChange={(e): void => inputChange(e.target.value, "name")}
         />
@@ -39,11 +43,16 @@ export default function LoginForm({showForm, logIn}: UserProps) {
           id="user_password"
           name="user_password"
           type="password"
+          placeholder="Password"
           onChange={(e): void => inputChange(e.target.value, "password")}
         />
       </div>
       <div className="input_pair">
-        <input type="submit" value="Submit" />
+        <input
+          type="submit"
+          value="Submit"
+          className="submit_btn"
+        />
       </div>
     </form>
   );

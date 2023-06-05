@@ -10,8 +10,10 @@ export default function Login() {
   return (
     <div id="login_wrapper">
       <Navbar />
+      <div className="header_wrapper">
+        <h1>Login </h1>
+      </div>
       <div id="login_content_wrapper">
-        <h1>This Will be the login page. </h1>
         <LoginForm
           showForm={loggedIn ? false : true}
           logIn={logInSuccess}
