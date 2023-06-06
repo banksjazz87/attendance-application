@@ -23,7 +23,11 @@ body {
     select {
         @include input-field;
     }
-    input[type="submit"] {
+    input[type="submit"],
+    button {
         @include blue-btn;
+    }
+    p {
+        @include body-text;
     }
 }

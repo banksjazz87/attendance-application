@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import Form from "../components/newAttendance/Form.tsx";
 import NewOrExisting from "../components/newAttendance/NewOrExisting.tsx";
+import "../assets/styles/views/newAttendance.scss";
 
 interface ShowFormOptions {
   formNeeded: "New" | "Existing";
@@ -22,19 +23,21 @@ export default function NewAttendance() {
   };
 
   return (
-    <div>
+    <div id="new_attendance_wrapper">
       <Navbar />
       <div className="header_wrapper">
         <h1>New Attendance</h1>
       </div>
-      <NewOrExisting
-        newHandler={showNew}
-        existingHandler={showExisting}
-      />
-      <Form
-        show={showForm}
-        formToShow={formOption.formNeeded}
-      />
+      <div id="new_attendance_content_wrapper">
+        <NewOrExisting
+          newHandler={showNew}
+          existingHandler={showExisting}
+        />
+        <Form
+          show={showForm}
+          formToShow={formOption.formNeeded}
+        />
+      </div>
     </div>
   );
 }

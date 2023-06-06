@@ -2,10 +2,6 @@
 #login_wrapper {
     height: 100vh;
     #login_content_wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        align-content: center;
-        height: 100%;
+        @include content-wrapper-md;
     }
 }

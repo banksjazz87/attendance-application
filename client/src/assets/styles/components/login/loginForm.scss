@@ -1,21 +1,8 @@
 @import "../../global/library.scss";
 #login_form {
-    box-shadow: 0 16px 32px rgba(0, 0, 0, .3);
-    border-radius: 16px;
-    padding: 6rem 8rem;
-    max-width: 500px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 2rem;
-    margin-top: 2rem;
+    @include shadow-form;
     .input_pair {
-        display: flex;
-        flex-direction: column;
-        width: 350px;
-        input[type="text"],
-        input[type="password"] {
-            @include input-field;
-        }
+        @include shadow-form-input-pair;
         label {
             display: none;
         }

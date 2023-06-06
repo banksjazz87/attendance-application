@@ -6,6 +6,7 @@ import { Group } from "../../types/interfaces.ts";
 import { currentDate } from "../../variables/date.ts";
 import postData from "../../functions/api/post.ts";
 import { APIResponse, FormProps, APINewTable } from "../../types/interfaces.ts";
+import "../../assets/styles/components/newAttendance/form.scss";
 
 interface NewAttendance {
   title: string;
@@ -99,17 +100,13 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
     };
 
     if (form.ageGroup === "All") {
-      postData("/new-attendance/insert/all", NeededInfo).then(
-        (data: APIResponse): void => {
-          checkForSuccess(data);
-        }
-      );
+      postData("/new-attendance/insert/all", NeededInfo).then((data: APIResponse): void => {
+        checkForSuccess(data);
+      });
     } else {
-      postData("/new-attendance/insert/select-attendants", NeededInfo).then(
-        (data: APIResponse): void => {
-          checkForSuccess(data);
-        }
-      );
+      postData("/new-attendance/insert/select-attendants", NeededInfo).then((data: APIResponse): void => {
+        checkForSuccess(data);
+      });
     }
   };
 
@@ -121,31 +118,25 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (searchForGroup(form.groupDisplayName, allGroups)) {
-      postData("/new-attendance/create", form).then(
-        (data: APINewTable): void => {
-          neededAttendants(data);
-        }
-      );
+      postData("/new-attendance/create", form).then((data: APINewTable): void => {
+        neededAttendants(data);
+      });
     } else {
       postData("/new-group", form).then((data: ApiResponse): void => {
         if (data.message === "success") {
-          postData("/new-group/create", form).then(
-            (data: APIResponse): void => {
-              if (data.message === "success") {
-                postData("/new-attendance/create", form).then(
-                  (data: APINewTable): void => {
-                    if (data.message === "success") {
-                      neededAttendants(data);
-                    } else {
-                      alert("Error with the /new-attendance/create");
-                    }
-                  }
-                );
-              } else {
-                alert("Failure with the /new-group/create");
-              }
+          postData("/new-group/create", form).then((data: APIResponse): void => {
+            if (data.message === "success") {
+              postData("/new-attendance/create", form).then((data: APINewTable): void => {
+                if (data.message === "success") {
+                  neededAttendants(data);
+                } else {
+                  alert("Error with the /new-attendance/create");
+                }
+              });
+            } else {
+              alert("Failure with the /new-group/create");
             }
-          );
+          });
         } else {
           alert(`Failure with new-group ${data.data}`);
         }
@@ -163,9 +154,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
     >
       <div
         id="form_group_dropdown_wrapper"
-        style={
-          formToShow === "Existing" ? { display: "" } : { display: "none" }
-        }
+        style={formToShow === "Existing" ? { display: "" } : { display: "none" }}
       >
         <GroupDropDown
           currentGroups={allGroups}
@@ -186,7 +175,10 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
         titleHandler={titleChange}
         attendanceTitle={form.title}
       />
-      <input type="submit" value="submit" />
+      <input
+        type="submit"
+        value="Submit"
+      />
     </form>
   );
 }

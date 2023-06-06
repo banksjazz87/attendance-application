@@ -1,0 +1,4 @@
+@import "../../global/library.scss";
+#new_attendance_form {
+    @include shadow-form;
+}
