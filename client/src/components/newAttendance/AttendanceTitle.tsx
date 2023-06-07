@@ -1,10 +1,8 @@
 import React from "react";
 import { GroupProps } from "../../types/interfaces.ts";
+import "../../assets/styles/components/newAttendance/attendanceTitle.scss";
 
-export default function AttendanceTitle({
-  titleHandler,
-  attendanceTitle,
-}: GroupProps) {
+export default function AttendanceTitle({ titleHandler, attendanceTitle }: GroupProps) {
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (titleHandler) {
       titleHandler(e.target.value);
@@ -13,13 +11,15 @@ export default function AttendanceTitle({
 
   return (
     <div id="attendance_title_wrapper">
-      <label htmlFor="attendance_title">Title</label>
-      <input
-        id="attendance_title"
-        type="text"
-        value={attendanceTitle}
-        onChange={changeHandler}
-      />
+      <div className="input_pair">
+        <label htmlFor="attendance_title">Title</label>
+        <input
+          id="attendance_title"
+          type="text"
+          value={attendanceTitle}
+          onChange={changeHandler}
+        />
+      </div>
     </div>
   );
 }

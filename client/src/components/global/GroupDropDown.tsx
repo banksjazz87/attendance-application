@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { GroupDropDownProps } from "../../types/interfaces";
 import { Group } from "../../types/interfaces";
+import "../../assets/styles/components/global/groupDropDown.scss";
 
 export default function GroupDropDown({ groupSelected, getGroups, currentGroups, attendanceGroupSelected }: GroupDropDownProps): JSX.Element {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -47,12 +48,16 @@ export default function GroupDropDown({ groupSelected, getGroups, currentGroups,
   };
 
   return (
-    <select
-      id="group_dropdown"
-      onChange={changeHandler}
-    >
-      <option id="placeholder">Please select an option</option>
-      {dropDownItems()}
-    </select>
+    <div className="input_wrapper">
+      <label htmlFor="group_dropdown">Select a Group</label>
+      <select
+        id="group_dropdown"
+        name="group_dropdown"
+        onChange={changeHandler}
+      >
+        <option id="placeholder">Please select an option</option>
+        {dropDownItems()}
+      </select>
+    </div>
   );
 }

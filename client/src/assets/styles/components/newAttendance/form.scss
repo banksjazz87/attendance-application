@@ -1,4 +1,15 @@
 @import "../../global/library.scss";
 #new_attendance_form {
     @include shadow-form;
+    #form_group_dropdown_wrapper {
+        width: 100%;
+    }
+    #form_new_group_form_wrapper {
+        width: 100%;
+    }
+    #form_group_dropdown_wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
 }

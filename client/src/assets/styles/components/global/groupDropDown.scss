@@ -1,0 +1,7 @@
+@import "../../global/library.scss";
+.input_wrapper {
+    @include shadow-form-input-pair;
+    label {
+        margin-bottom: .5rem;
+    }
+}

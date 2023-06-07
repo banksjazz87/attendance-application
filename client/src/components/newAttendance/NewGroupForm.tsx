@@ -44,7 +44,7 @@ export default function NewGroupForm({ groupSelected, ageHandler }: GroupProps):
         />
       </div>
       <div className="input_wrapper">
-        <label htmlFor="group_age_select">Select Age group.</label>
+        <label htmlFor="group_age_select">Select Age</label>
         <select
           id="group_age_select"
           onChange={selectAgeHandler}

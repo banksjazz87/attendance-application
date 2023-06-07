@@ -1,10 +1,7 @@
 @import "../../global/library.scss";
-#new_group_wrapper {
+#attendance_title_wrapper {
     @include inner-shadow-form-wrapper;
-    .input_wrapper {
+    .input_pair {
         @include shadow-form-input-pair;
-        label {
-            margin-bottom: .5rem;
-        }
     }
 }

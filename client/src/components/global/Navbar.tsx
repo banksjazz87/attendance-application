@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "../../assets/styles/components/navbar.scss";
+import "../../assets/styles/components/global/navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faChartLine, faFileCirclePlus, faFile, faSearch, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 
