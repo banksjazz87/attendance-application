@@ -1,0 +1,13 @@
+@import "../../global/library.scss";
+#new_group_wrapper {
+    display: flex;
+    flex-direction: column;
+    row-gap: 2rem;
+    .input_wrapper {
+        display: flex;
+        flex-direction: column;
+        label {
+            margin-bottom: .5rem;
+        }
+    }
+}
