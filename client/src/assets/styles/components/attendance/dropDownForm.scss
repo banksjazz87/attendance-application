@@ -1,0 +1,10 @@
+@import "../../global/library.scss";
+#group_dropdown_wrapper {
+    @include shadow-form;
+    .inner_form_wrapper {
+        @include inner-shadow-form-wrapper;
+    }
+    form {
+        @include inner-shadow-form-wrapper;
+    }
+}

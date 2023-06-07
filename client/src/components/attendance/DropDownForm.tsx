@@ -1,6 +1,7 @@
 import React from "react";
 import { GroupProps } from "../../types/interfaces.ts";
 import GroupDropDown from "../../components/global/GroupDropDown.tsx";
+import "../../assets/styles/components/attendance/dropDownForm.scss";
 
 export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler }: GroupProps) {
   const submitHandler = (e: React.FormEvent): void => {
@@ -13,14 +14,16 @@ export default function DropDownForm({ clickHandler, groupHandler, name, groupSe
 
   return (
     <div id="group_dropdown_wrapper">
-      <p>Select a group</p>
-      <form onSubmit={submitHandler}>
-        <GroupDropDown attendanceGroupSelected={groupSelectedHandler} />
-        <input
-          type="submit"
-          value="Submit"
-        />
-      </form>
+      <div className="inner_form_wrapper">
+        <p>Select a group</p>
+        <form onSubmit={submitHandler}>
+          <GroupDropDown attendanceGroupSelected={groupSelectedHandler} />
+          <input
+            type="submit"
+            value="Submit"
+          />
+        </form>
+      </div>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import { Bool } from "../../src/types/types.ts";
 import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
+import "../assets/styles/views/attendance.scss";
 
 export default function Attendance(): JSX.Element {
   const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
