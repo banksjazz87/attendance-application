@@ -2,13 +2,22 @@ import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
 import putData from "../../functions/api/put.ts";
 import deleteData from "../../functions/api/delete.ts";
+import "../../assets/styles/components/attendance/attendanceSheet.scss";
+
+//For Development
+import { attendantData } from "../../variables/dummyAttendant.ts";
 
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName }: AttendanceProps) {
-  const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
+  //The below is for production
+  //const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
-  useEffect((): void => {
-    setMemberData(attendanceData);
-  }, [attendanceData]);
+  //The below is for development
+  const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
+
+  //The below is for production
+  // useEffect((): void => {
+  //   setMemberData(attendanceData);
+  // }, [attendanceData]);
 
   const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
     const copy: Attendee[] = memberData.slice();
@@ -104,13 +113,14 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     );
   });
 
+  //FOR PRODUCTION change the below divs style={show ? { display: "" } : { display: "" }} for production. Remove conditionals from h2 and h3.
   return (
     <div
       className="attendance_table_wrapper"
-      style={show ? { display: "" } : { display: "none" }}
+      style={show ? { display: "" } : { display: "" }}
     >
-      <h2>{parentTitle}</h2>
-      <h3>{title}</h3>
+      <h2>{parentTitle.length > 0 ? parentTitle : "Parent Title"}</h2>
+      <h3>{title.length > 0 ? title : "Table Name"}</h3>
       <table>
         <tbody>
           <tr>

@@ -1,0 +1,4 @@
+@import "../../global/library.scss";
+.attendance_table_wrapper {
+    @include shadow-form;
+}

@@ -160,15 +160,15 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
       id="new_member_form"
       onSubmit={submitHandler}
     >
+      <h2>Add New Member</h2>
       <div className="form_inner_wrapper">
-        <h3>{`This is the table name ${currentTable}`}</h3>
-        <h2>Attendant's Name</h2>
+        <h3>Name</h3>
         <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
 
-        <h2>Attendant's Age Group</h2>
+        <h3>Age Group</h3>
         <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
 
-        <h2>Attendant's Member Status</h2>
+        <h3>Member Status</h3>
         <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
 
         <input
