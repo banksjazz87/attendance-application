@@ -4,6 +4,7 @@ import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
 import { AttendanceInputs } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
 import { APIResponse, APIAttendanceSheet, UpdateAttendant, NewMemberProps } from "../../types/interfaces.ts";
+import "../../assets/styles/components/people/newMember.scss";
 
 export default function NewMember({ currentTable }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
@@ -159,20 +160,22 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
       id="new_member_form"
       onSubmit={submitHandler}
     >
-      <h3>{`This is the table name ${currentTable}`}</h3>
-      <h2>Attendant's Name</h2>
-      <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
+      <div className="form_inner_wrapper">
+        <h3>{`This is the table name ${currentTable}`}</h3>
+        <h2>Attendant's Name</h2>
+        <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
 
-      <h2>Attendant's Age Group</h2>
-      <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
+        <h2>Attendant's Age Group</h2>
+        <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
 
-      <h2>Attendant's Member Status</h2>
-      <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
+        <h2>Attendant's Member Status</h2>
+        <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
 
-      <input
-        type="submit"
-        value="Submit"
-      />
+        <input
+          type="submit"
+          value="Submit"
+        />
+      </div>
     </form>
   );
 }
