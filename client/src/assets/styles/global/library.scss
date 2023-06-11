@@ -7,14 +7,21 @@ $primary-font: Overpass,
 sans-serif;
 @mixin header-large-bold {
     font-family: $primary-font;
-    font-weight: 500;
-    font-size: 24px;
     line-height: 52px;
     color: black;
     font-weight: 900;
     font-size: 48px;
     text-transform: capitalize;
     text-shadow: 2px 3px rgba(240, 240, 240, .7);
+}
+
+@mixin accent-bold {
+    font-family: $primary-font;
+    font-weight: 700;
+    letter-spacing: 1px;
+    line-height: 24px;
+    color: black;
+    text-transform: uppercase;
 }
 
 @mixin body-text {

@@ -3,6 +3,8 @@ import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../t
 import putData from "../../functions/api/put.ts";
 import deleteData from "../../functions/api/delete.ts";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 //For Development
 import { attendantData } from "../../variables/dummyAttendant.ts";
@@ -19,7 +21,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
   //   setMemberData(attendanceData);
   // }, [attendanceData]);
 
-  const checkedHandler = (e: React.ChangeEvent<HTMLInputElement>, index: number): void => {
+  const checkedHandler = (index: number): void => {
     const copy: Attendee[] = memberData.slice();
 
     let currentObj: UpdateAttendant = {
@@ -69,23 +71,59 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     });
   };
 
+  const checkForEven = (num: number): boolean => {
+    if (num === 0 || num % 2 === 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const checkedOrNot = (value: number | undefined, index: number): JSX.Element => {
     if (value === 0) {
       return (
-        <input
-          type="checkbox"
-          id="present_click"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => checkedHandler(e, index)}
-        />
+        // <input
+        //   type="checkbox"
+        //   className="present_click"
+        //   id="present_click"
+        //   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => checkedHandler(e, index)}
+        // />
+
+        <button
+          type="button"
+          className="present_click"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+            checkedHandler(index);
+          }}
+        >
+          <FontAwesomeIcon
+            className="circle"
+            icon={faCircle}
+          />
+        </button>
       );
     } else {
       return (
-        <input
-          type="checkbox"
-          id="present_click"
-          onChange={(e: React.ChangeEvent<HTMLInputElement>): void => checkedHandler(e, index)}
-          checked
-        />
+        // <input
+        //   type="checkbox"
+        //   className="present_click"
+        //   id="present_click"
+        //   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => checkedHandler(e, index)}
+        //   checked
+        // />
+
+        <button
+          type="button"
+          className="present_click"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+            checkedHandler(index);
+          }}
+        >
+          <FontAwesomeIcon
+            className="check"
+            icon={faCheck}
+          />
+        </button>
       );
     }
   };
@@ -95,6 +133,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
       <tr
         key={`attendant_row_${y}`}
         id={`attendant_row_${y}`}
+        className={checkForEven(y) ? "" : "dark_row"}
       >
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
@@ -102,11 +141,15 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         <td>
           <button
             type="button"
+            className="trash_btn"
             onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
               removeAttendee(event, y);
             }}
           >
-            X
+            <FontAwesomeIcon
+              className="trash_can"
+              icon={faTrashCan}
+            />
           </button>
         </td>
       </tr>
