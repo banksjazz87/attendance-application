@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
 import putData from "../../functions/api/put.ts";
 import deleteData from "../../functions/api/delete.ts";
+import MathMethods from "../../functions/math.ts";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -15,11 +16,24 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 
   //The below is for development
   const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
+  const [screenSize, setScreenSize] = useState<number>(0);
 
   //The below is for production
   // useEffect((): void => {
   //   setMemberData(attendanceData);
   // }, [attendanceData]);
+
+  useEffect((): void => {
+    document.addEventListener("DOMContentLoaded", (e: Event): void => {
+      setScreenSize(window.innerWidth);
+      console.log(screenSize);
+    });
+
+    window.addEventListener("resize", (e: UIEvent): void => {
+      setScreenSize(window.innerWidth);
+      console.log(screenSize);
+    });
+  }, [screenSize]);
 
   const checkedHandler = (index: number): void => {
     const copy: Attendee[] = memberData.slice();
@@ -71,14 +85,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     });
   };
 
-  const checkForEven = (num: number): boolean => {
-    if (num === 0 || num % 2 === 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
   const checkedOrNot = (value: number | undefined, index: number): JSX.Element => {
     if (value === 0) {
       return (
@@ -128,12 +134,12 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     }
   };
 
-  const dataPoints = memberData.map((x: Attendee, y: number): JSX.Element => {
+  const dataPointsLgScreen = memberData.map((x: Attendee, y: number): JSX.Element => {
     return (
       <tr
         key={`attendant_row_${y}`}
         id={`attendant_row_${y}`}
-        className={checkForEven(y) ? "" : "dark_row"}
+        className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
@@ -156,6 +162,43 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     );
   });
 
+  const dataPointsMobile = memberData.map((x: Attendee, y: number): JSX.Element => {
+    return (
+      <tr
+        key={`attendant_row_${y}`}
+        id={`attendant_row_${y}`}
+        className={MathMethods.checkForEven(y) ? "" : "dark_row"}
+      >
+        <td>{`${x.lastName}, ${x.firstName}`}</td>
+        <td>{checkedOrNot(x.present, y)}</td>
+        <td>
+          <button
+            type="button"
+            className="trash_btn"
+            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+              removeAttendee(event, y);
+            }}
+          >
+            <FontAwesomeIcon
+              className="trash_can"
+              icon={faTrashCan}
+            />
+          </button>
+        </td>
+      </tr>
+    );
+  });
+
+  const headersLgScreen = ["Last Name", "First Name", "Present", "Delete"];
+  const headersMobileScreen = ["Name", "Present", "Delete"];
+
+  const returnHeaders = (arr: string[]): JSX.Element[] => {
+    const displayHeaders = arr.map((x: string, y: number): JSX.Element => {
+      return <th key={`header_${y}`}>{x}</th>;
+    });
+    return displayHeaders;
+  };
+
   //FOR PRODUCTION change the below divs style={show ? { display: "" } : { display: "" }} for production. Remove conditionals from h2 and h3.
   return (
     <div
@@ -166,13 +209,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
       <h3>{title.length > 0 ? title : "Table Name"}</h3>
       <table>
         <tbody>
-          <tr>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Present</th>
-            <th>Delete</th>
-          </tr>
-          {dataPoints}
+          <tr>{screenSize > 767 ? returnHeaders(headersLgScreen) : returnHeaders(headersMobileScreen)}</tr>
+          {screenSize > 767 ? dataPointsLgScreen : dataPointsMobile}
         </tbody>
       </table>
     </div>

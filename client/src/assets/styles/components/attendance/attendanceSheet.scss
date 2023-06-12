@@ -17,9 +17,6 @@
             @include accent-bold;
             color: white;
         }
-        tr {
-            // border-bottom: 1px solid black;
-        }
         .dark_row {
             background-color: rgba(152, 193, 217, .2);
         }
@@ -53,9 +50,15 @@
                 padding: 0;
                 color: $orange;
                 font-size: 20px;
+                &:hover {
+                    color: $dark-orange;
+                }
             }
             .trash_btn {
                 background-color: transparent;
+                &:hover {
+                    box-shadow: none;
+                }
             }
         }
     }
