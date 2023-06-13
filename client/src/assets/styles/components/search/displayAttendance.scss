@@ -1,0 +1,23 @@
+@import "../../global/library.scss";
+
+#display_attendance_wrapper {
+    @include main-table-wrapper;
+
+    table {
+        @include full-width-table;
+
+        th {
+            @include table-headers;
+        }
+
+        td {
+            @include table-center-data;
+        }
+    }
+}
+
+@media (min-width: 1366px) {
+    #display_attendance_wrapper {
+        width: 1290px;
+    }
+}
