@@ -8,30 +8,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 
 //For Development
-import { attendantData } from "../../variables/dummyAttendant.ts";
+//import { attendantData } from "../../variables/dummyAttendant.ts";
 
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName }: AttendanceProps) {
   //The below is for production
-  //const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
+  const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
   //The below is for development
-  const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
+  //const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
   const [screenSize, setScreenSize] = useState<number>(0);
 
   //The below is for production
-  // useEffect((): void => {
-  //   setMemberData(attendanceData);
-  // }, [attendanceData]);
+  useEffect((): void => {
+    setMemberData(attendanceData);
+  }, [attendanceData]);
 
+  //Used to check the current screen size
   useEffect((): void => {
     document.addEventListener("DOMContentLoaded", (e: Event): void => {
       setScreenSize(window.innerWidth);
-      console.log(screenSize);
     });
 
     window.addEventListener("resize", (e: UIEvent): void => {
       setScreenSize(window.innerWidth);
-      console.log(screenSize);
     });
   }, [screenSize]);
 
@@ -88,13 +87,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
   const checkedOrNot = (value: number | undefined, index: number): JSX.Element => {
     if (value === 0) {
       return (
-        // <input
-        //   type="checkbox"
-        //   className="present_click"
-        //   id="present_click"
-        //   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => checkedHandler(e, index)}
-        // />
-
         <button
           type="button"
           className="present_click"
@@ -110,14 +102,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
       );
     } else {
       return (
-        // <input
-        //   type="checkbox"
-        //   className="present_click"
-        //   id="present_click"
-        //   onChange={(e: React.ChangeEvent<HTMLInputElement>): void => checkedHandler(e, index)}
-        //   checked
-        // />
-
         <button
           type="button"
           className="present_click"
@@ -141,6 +125,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         id={`attendant_row_${y}`}
         className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
+        <td className="number_id">{`${y + 1}.`}</td>
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
         <td>{checkedOrNot(x.present, y)}</td>
@@ -169,6 +154,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         id={`attendant_row_${y}`}
         className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
+        <td className="number_id">{`${y + 1}.`}</td>
         <td>{`${x.lastName}, ${x.firstName}`}</td>
         <td>{checkedOrNot(x.present, y)}</td>
         <td>
@@ -189,8 +175,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     );
   });
 
-  const headersLgScreen = ["Last Name", "First Name", "Present", "Delete"];
-  const headersMobileScreen = ["Name", "Present", "Delete"];
+  const headersLgScreen = ["", "Last Name", "First Name", "Present", "Delete"];
+  const headersMobileScreen = ["", "Name", "Present", "Delete"];
 
   const returnHeaders = (arr: string[]): JSX.Element[] => {
     const displayHeaders = arr.map((x: string, y: number): JSX.Element => {
@@ -203,10 +189,10 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
   return (
     <div
       className="attendance_table_wrapper"
-      style={show ? { display: "" } : { display: "" }}
+      style={show ? { display: "" } : { display: "none" }}
     >
-      <h2>{parentTitle.length > 0 ? parentTitle : "Parent Title"}</h2>
-      <h3>{title.length > 0 ? title : "Table Name"}</h3>
+      <h2>{parentTitle}</h2>
+      <h3>{title}</h3>
       <table>
         <tbody>
           <tr>{screenSize > 767 ? returnHeaders(headersLgScreen) : returnHeaders(headersMobileScreen)}</tr>

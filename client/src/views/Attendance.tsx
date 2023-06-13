@@ -16,10 +16,12 @@ export default function Attendance(): JSX.Element {
     displayTitle: "",
     dateCreated: "",
   });
+
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
 
+  //Used to pull data from the session storage.
   useEffect((): void => {
-    if (sessionStorage.selectedTable) {
+    if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
       let tableToDisplay = JSON.parse(sessionStorage.selectedTable);
 
       setSelectedAttendance({
@@ -29,6 +31,10 @@ export default function Attendance(): JSX.Element {
         displayTitle: tableToDisplay.displayTitle,
         dateCreated: tableToDisplay.dateCreated,
       });
+
+      let parent = JSON.parse(sessionStorage.selectedParent);
+
+      setSelectedGroup([parent]);
 
       fetch(`/attendance/get-list/${tableToDisplay.title}`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
@@ -74,6 +80,7 @@ export default function Attendance(): JSX.Element {
       .then((final: APIAttendanceTitles): void => {
         setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
 
+        //Used to set the session storage
         const displayedSheet = {
           id: final.data[0].id,
           title: final.data[0].title,
@@ -83,6 +90,16 @@ export default function Attendance(): JSX.Element {
 
         const displayedJSON = JSON.stringify(displayedSheet);
         sessionStorage.setItem("selectedTable", displayedJSON);
+
+        const selectedParent: Group = {
+          id: selectedGroup[0].id,
+          name: selectedGroup[0].name,
+          age_group: selectedGroup[0].age_group,
+          displayName: selectedGroup[0].displayName,
+        };
+
+        const jsonSelectedParent = JSON.stringify(selectedParent);
+        sessionStorage.setItem("selectedParent", jsonSelectedParent);
 
         fetch(`/attendance/get-list/${final.data[0].title}`)
           .then((data: Response): Promise<APIAttendanceSheet> => {

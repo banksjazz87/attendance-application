@@ -4,6 +4,7 @@ import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
 import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet } from "../types/interfaces.ts";
+import "../assets/styles/views/search.scss";
 
 export default function Search() {
   const initGroup = {
@@ -103,16 +104,18 @@ export default function Search() {
       <div className="header_wrapper">
         <h1>Search</h1>
       </div>
-      <form
-        method="GET"
-        action="/group-lists/attendance/"
-        onSubmit={submitHandler}
-      >
-        <GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
-        <input
-          type="submit"
-          value="Submit"
-        />
+      <div id="search_content_wrapper">
+        <form
+          method="GET"
+          action="/group-lists/attendance/"
+          onSubmit={submitHandler}
+        >
+          <GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
+          <input
+            type="submit"
+            value="Submit"
+          />
+        </form>
         <AttendanceDropDown
           attendanceSheets={attendanceTables}
           show={showAttendanceDropDown}
@@ -124,7 +127,7 @@ export default function Search() {
           sheetData={selectedAttendance}
           sheetTitle={selectedTable.displayTitle}
         />
-      </form>
+      </div>
     </div>
   );
 }
