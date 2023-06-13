@@ -1,0 +1,9 @@
+@import "../../global/library.scss";
+
+#attendance_drop_down_wrapper {
+    @include inner-shadow-form-wrapper;
+
+    .input_wrapper {
+        @include shadow-form-input-pair;
+    }
+}

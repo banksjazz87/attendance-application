@@ -15,7 +15,6 @@ export default function DropDownForm({ clickHandler, groupHandler, name, groupSe
   return (
     <div id="group_dropdown_wrapper">
       <div className="inner_form_wrapper">
-        <p>Select a group</p>
         <form onSubmit={submitHandler}>
           <GroupDropDown attendanceGroupSelected={groupSelectedHandler} />
           <input

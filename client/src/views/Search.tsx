@@ -22,7 +22,10 @@ export default function Search() {
 
   const [groupTable, setGroupTable] = useState<Group>(initGroup);
   const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
-  const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(false);
+
+  //set to true for development
+  const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(true);
+
   const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
   const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
 
@@ -115,13 +118,13 @@ export default function Search() {
             type="submit"
             value="Submit"
           />
+          <AttendanceDropDown
+            attendanceSheets={attendanceTables}
+            show={showAttendanceDropDown}
+            changeHandler={attDropDownChangeHandler}
+            allTitles={attendanceTables}
+          />
         </form>
-        <AttendanceDropDown
-          attendanceSheets={attendanceTables}
-          show={showAttendanceDropDown}
-          changeHandler={attDropDownChangeHandler}
-          allTitles={attendanceTables}
-        />
 
         <DisplayAttendance
           sheetData={selectedAttendance}
