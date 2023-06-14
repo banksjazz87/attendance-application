@@ -4,9 +4,16 @@
     @include content-wrapper-md;
     display: flex;
     flex-direction: column;
+    padding-bottom: 4rem;
 
     form {
         @include shadow-form;
         padding-top: 4rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    #search_content_wrapper {
+        padding-bottom: 6rem;
     }
 }

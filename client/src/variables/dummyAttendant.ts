@@ -6,7 +6,7 @@ export const attendantData: Attendee[] = [
     lastName: "Barley",
     age: "",
     memberType: "",
-    present: 0,
+    present: 1,
   },
   {
     firstName: "Chuck",
@@ -20,14 +20,14 @@ export const attendantData: Attendee[] = [
     lastName: "Larry",
     age: "",
     memberType: "",
-    present: 0,
+    present: 1,
   },
   {
     firstName: "Chuck",
     lastName: "Barley",
     age: "",
     memberType: "",
-    present: 0,
+    present: 1,
   },
   {
     firstName: "Chuck",

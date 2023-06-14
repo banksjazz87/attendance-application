@@ -9,15 +9,16 @@ interface DisplayAttendanceProps {
   sheetTitle: string;
 }
 
+interface ValuesAndClass {
+  value: string;
+  class: string;
+}
+
 export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAttendanceProps): JSX.Element {
-  const [screenSize, setScreenSize] = useState<number>(0);
+  let currentWidth = window.innerWidth;
+  const [screenSize, setScreenSize] = useState<number>(currentWidth);
 
   useEffect(() => {
-    window.addEventListener("DOMContentLoaded", () => {
-      let width = window.innerWidth;
-      setScreenSize(width);
-    });
-
     window.addEventListener("resize", (e): void => {
       let width = window.innerWidth;
       setScreenSize(width);
@@ -27,14 +28,14 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
     if (screenSize > 1024) {
       return (
         <tr key={`attendee_${y}`}>
-          <td>{`${y + 1}.`}</td>
+          <td className="id_data">{`${y + 1}.`}</td>
           <td>{`${x.firstName}`}</td>
           <td>{`${x.lastName}`}</td>
           <td>{`${x.age}`}</td>
           <td>{`${x.memberType}`}</td>
-          <td>
+          <td className="present_data">
             <FontAwesomeIcon
-              className="check"
+              className={x.present === 0 ? "circle" : "check"}
               icon={x.present === 0 ? faCircle : faCheck}
             />
           </td>
@@ -45,9 +46,9 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
         <tr key={`mobile_attendee_${y}`}>
           <td>{`${x.firstName}, ${x.lastName}`}</td>
           <td>{`${x.memberType}`}</td>
-          <td>
+          <td className="present_data">
             <FontAwesomeIcon
-              className="check"
+              className={x.present === 0 ? "circle" : "check"}
               icon={x.present === 0 ? faCircle : faCheck}
             />
           </td>
@@ -56,12 +57,31 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
     }
   });
 
-  const largeScreenHeaders: string[] = ["", "First Name", "Last Name", "Age", "Member", "Present"];
-  const mobileHeaders: string[] = ["Name", "Member", "Present"];
+  const largeScreenHeaders: ValuesAndClass[] = [
+    { value: "", class: "id_number" },
+    { value: "First Name", class: "first_name" },
+    { value: "Last Name", class: "last_name" },
+    { value: "Age", class: "age" },
+    { value: "Member", class: "member" },
+    { value: "Present", class: "present_header" },
+  ];
 
-  const returnHeaders = (arr: string[]): JSX.Element[] => {
-    const displayHeaders = arr.map((x: string, y: number): JSX.Element => {
-      return <th key={`header_${y}`}>{x}</th>;
+  const mobileHeaders: ValuesAndClass[] = [
+    { value: "Name", class: "name" },
+    { value: "Member", class: "member" },
+    { value: "Present", class: "present_header" },
+  ];
+
+  const returnHeaders = (arr: ValuesAndClass[]): JSX.Element[] => {
+    const displayHeaders = arr.map((x: ValuesAndClass, y: number): JSX.Element => {
+      return (
+        <th
+          key={`header_${y}`}
+          className={x.class}
+        >
+          {x.value}
+        </th>
+      );
     });
     return displayHeaders;
   };

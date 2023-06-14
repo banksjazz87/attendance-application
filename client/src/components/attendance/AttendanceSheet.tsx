@@ -16,7 +16,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 
   //The below is for development
   //const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
-  const [screenSize, setScreenSize] = useState<number>(0);
+  let initWidth: number = window.innerWidth;
+  const [screenSize, setScreenSize] = useState<number>(initWidth);
 
   //The below is for production
   useEffect((): void => {
