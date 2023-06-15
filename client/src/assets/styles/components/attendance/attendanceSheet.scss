@@ -1,85 +1,89 @@
-@import "../../global/library.scss";
+    @import "../../global/library.scss";
 
-.attendance_table_wrapper {
-    @include main-table-wrapper;
+    .attendance_table_wrapper {
+        @include main-table-wrapper;
 
-    table {
-        @include full-width-table;
+        table {
+            @include full-width-table;
 
-        th {
-            @include table-headers;
-        }
-
-        .first_name,
-        .last_name {
-            text-align: left;
-            padding-left: 1rem;
-        }
-
-        .dark_row {
-            background-color: rgba(152, 193, 217, .2);
-        }
-
-        td {
-            @include table-center-data;
-            text-align: left;
-            padding-left: 1rem;
-
-            button {
-                width: auto;
-                padding: 6px 12px;
-                border-radius: 50%;
+            th {
+                @include table-headers;
             }
 
-            .present_click {
-                background-color: transparent;
-                color: $dark-blue;
-                font-size: 20px;
-                padding: 0;
-
-                &:hover {
-                    box-shadow: none;
-                    color: $dark-background;
-                }
+            .first_name,
+            .last_name {
+                text-align: left;
+                padding-left: 1rem;
             }
 
-            .check {
-                font-size: 32px;
-                font-weight: 200;
+            .dark_row {
+                background-color: $blue-highlight;
             }
 
-            .circle {
-                font-size: 16px;
-            }
-
-            .trash_can {
-                padding: 0;
-                color: $orange;
-                font-size: 20px;
-
-                &:hover {
-                    color: $dark-orange;
-                }
-            }
-
-            .trash_btn {
-                background-color: transparent;
-
-                &:hover {
-                    box-shadow: none;
-                }
+            .number_id {
+                text-align: right;
             }
 
             .delete,
             .delete_button {
                 text-align: center;
             }
+
+            td {
+                @include table-center-data;
+                text-align: left;
+                padding-left: 1rem;
+
+                button {
+                    width: auto;
+                    padding: 6px 12px;
+                    border-radius: 50%;
+                }
+
+                .present_click {
+                    background-color: transparent;
+                    color: $dark-blue;
+                    font-size: 20px;
+                    padding: 0;
+
+                    &:hover {
+                        box-shadow: none;
+                        color: $dark-background;
+                    }
+                }
+
+                .check {
+                    font-size: 32px;
+                    font-weight: 200;
+                }
+
+                .circle {
+                    font-size: 16px;
+                }
+
+                .trash_can {
+                    padding: 0;
+                    color: $orange;
+                    font-size: 20px;
+
+                    &:hover {
+                        color: $dark-orange;
+                    }
+                }
+
+                .trash_btn {
+                    background-color: transparent;
+
+                    &:hover {
+                        box-shadow: none;
+                    }
+                }
+            }
         }
     }
-}
 
-@media (min-width: 1366px) {
-    .attendance_table_wrapper {
-        width: 1290px;
+    @media (min-width: 1366px) {
+        .attendance_table_wrapper {
+            width: 1290px;
+        }
     }
-}

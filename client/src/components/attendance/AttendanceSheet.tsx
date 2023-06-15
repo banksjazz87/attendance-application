@@ -156,7 +156,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         id={`attendant_row_${y}`}
         className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
-        <td className="number_id id_data">{`${y + 1}.`}</td>
         <td>{`${x.lastName}, ${x.firstName}`}</td>
         <td className="present_data">{checkedOrNot(x.present, y)}</td>
         <td className="delete_button">
@@ -185,7 +184,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     { value: "Delete", class: "delete" },
   ];
   const headersMobileScreen: ValuesAndClass[] = [
-    { value: "", class: "id_number" },
     { value: "Name", class: "name" },
     { value: "Present", class: "present_header" },
     { value: "Delete", class: "delete" },

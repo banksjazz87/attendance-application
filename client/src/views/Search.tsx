@@ -6,9 +6,6 @@ import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet } from "../types/interfaces.ts";
 import "../assets/styles/views/search.scss";
 
-//This is for development only
-import { attendantData } from "../variables/dummyAttendant.ts";
-
 export default function Search() {
   const initGroup = {
     name: "",
@@ -25,17 +22,9 @@ export default function Search() {
 
   const [groupTable, setGroupTable] = useState<Group>(initGroup);
   const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
-
-  //set to true for development
-  const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(true);
-
+  const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(false);
   const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
-
-  //For Production
-  // const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
-
-  //For Development
-  const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>(attendantData);
+  const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
 
   const returnIndexOfSelected = (arr: Group[], value: string): number | void => {
     let index = 0;

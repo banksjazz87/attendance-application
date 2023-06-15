@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Attendee } from "../../types/interfaces.ts";
 import "../../assets/styles/components/search/displayAttendance.scss";
+import MathMethods from "../../functions/math.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
@@ -20,10 +21,14 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
       setScreenSize(width);
     });
   });
+
   const returnFields: JSX.Element[] = sheetData?.map((x: Attendee, y: number): JSX.Element => {
     if (screenSize > 1024) {
       return (
-        <tr key={`attendee_${y}`}>
+        <tr
+          key={`attendee_${y}`}
+          className={MathMethods.checkForEven(y) ? "" : "dark_row"}
+        >
           <td className="id_data">{`${y + 1}.`}</td>
           <td>{`${x.firstName}`}</td>
           <td>{`${x.lastName}`}</td>
@@ -39,9 +44,11 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
       );
     } else {
       return (
-        <tr key={`mobile_attendee_${y}`}>
+        <tr
+          key={`mobile_attendee_${y}`}
+          className={MathMethods.checkForEven(y) ? "" : "dark_row"}
+        >
           <td>{`${x.firstName}, ${x.lastName}`}</td>
-          <td>{`${x.memberType}`}</td>
           <td className="present_data">
             <FontAwesomeIcon
               className={x.present === 0 ? "circle" : "check"}
@@ -64,7 +71,6 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
 
   const mobileHeaders: ValuesAndClass[] = [
     { value: "Name", class: "name" },
-    { value: "Member", class: "member" },
     { value: "Present", class: "present_header" },
   ];
 

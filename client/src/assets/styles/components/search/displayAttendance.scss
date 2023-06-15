@@ -2,7 +2,6 @@
 
 #display_attendance_wrapper {
     @include main-table-wrapper;
-    padding-bottom: 2rem;
 
     table {
         @include full-width-table;
@@ -28,6 +27,19 @@
         .circle {
             font-size: 16px;
             color: $dark-blue;
+        }
+
+        .present_data,
+        .present_header {
+            text-align: center;
+        }
+
+        .id_data {
+            text-align: right;
+        }
+
+        .dark_row {
+            background-color: $blue-highlight;
         }
     }
 }

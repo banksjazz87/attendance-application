@@ -6,6 +6,7 @@ $medium-blue: #98c1d9;
 $dark-blue: #3d5a80;
 $primary-font: Overpass,
     sans-serif;
+$blue-highlight: rgba(152, 193, 217, .2);
 
 @mixin header-large-bold {
     font-family: $primary-font;
