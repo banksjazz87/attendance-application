@@ -3,15 +3,11 @@ import { Attendee } from "../../types/interfaces.ts";
 import "../../assets/styles/components/search/displayAttendance.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { ValuesAndClass } from "../../types/interfaces.ts";
 
 interface DisplayAttendanceProps {
   sheetData: Attendee[];
   sheetTitle: string;
-}
-
-interface ValuesAndClass {
-  value: string;
-  class: string;
 }
 
 export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAttendanceProps): JSX.Element {

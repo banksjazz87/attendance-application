@@ -10,12 +10,20 @@
             @include table-headers;
         }
 
+        .first_name,
+        .last_name {
+            text-align: left;
+            padding-left: 1rem;
+        }
+
         .dark_row {
             background-color: rgba(152, 193, 217, .2);
         }
 
         td {
             @include table-center-data;
+            text-align: left;
+            padding-left: 1rem;
 
             button {
                 width: auto;
@@ -60,6 +68,11 @@
                 &:hover {
                     box-shadow: none;
                 }
+            }
+
+            .delete,
+            .delete_button {
+                text-align: center;
             }
         }
     }

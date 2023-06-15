@@ -146,3 +146,8 @@ export interface UpdateAttendant {
 export interface NewMemberProps {
   currentTable?: string;
 }
+
+export interface ValuesAndClass {
+  value: string;
+  class: string;
+}

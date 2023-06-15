@@ -1,13 +1,16 @@
 @import '../global/library.scss';
+
 body {
     margin: 0;
     padding: 0;
     background-color: white;
     font-family: $primary-font;
     overflow-x: hidden;
+
     h1 {
         @include header-large-bold;
     }
+
     .header_wrapper {
         width: 100vw;
         padding-top: 2rem;
@@ -18,16 +21,41 @@ body {
         z-index: 1;
         color: black;
     }
+
     input[type="text"],
     input[type="password"],
     select {
         @include input-field;
     }
+
     input[type="submit"],
     button {
         @include blue-btn;
     }
+
     p {
         @include body-text;
+    }
+
+    table {
+        .present_data {
+            text-align: center;
+        }
+
+        .present_header {
+            text-align: center;
+        }
+
+        .id_number {
+            text-align: right;
+        }
+
+        .id_data {
+            text-align: right;
+        }
+
+        .delete {
+            text-align: center;
+        }
     }
 }

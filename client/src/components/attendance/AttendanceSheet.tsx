@@ -6,6 +6,7 @@ import MathMethods from "../../functions/math.ts";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { ValuesAndClass } from "../../types/interfaces.ts";
 
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
@@ -126,11 +127,11 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         id={`attendant_row_${y}`}
         className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
-        <td className="number_id">{`${y + 1}.`}</td>
+        <td className="number_id id_data">{`${y + 1}.`}</td>
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
-        <td>{checkedOrNot(x.present, y)}</td>
-        <td>
+        <td className="present_data">{checkedOrNot(x.present, y)}</td>
+        <td className="delete_button">
           <button
             type="button"
             className="trash_btn"
@@ -155,10 +156,10 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         id={`attendant_row_${y}`}
         className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
-        <td className="number_id">{`${y + 1}.`}</td>
+        <td className="number_id id_data">{`${y + 1}.`}</td>
         <td>{`${x.lastName}, ${x.firstName}`}</td>
-        <td>{checkedOrNot(x.present, y)}</td>
-        <td>
+        <td className="present_data">{checkedOrNot(x.present, y)}</td>
+        <td className="delete_button">
           <button
             type="button"
             className="trash_btn"
@@ -176,12 +177,30 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     );
   });
 
-  const headersLgScreen = ["", "Last Name", "First Name", "Present", "Delete"];
-  const headersMobileScreen = ["", "Name", "Present", "Delete"];
+  const headersLgScreen: ValuesAndClass[] = [
+    { value: "", class: "id_number" },
+    { value: "Last Name", class: "last_name" },
+    { value: "First Name", class: "first_name" },
+    { value: "Present", class: "present_header" },
+    { value: "Delete", class: "delete" },
+  ];
+  const headersMobileScreen: ValuesAndClass[] = [
+    { value: "", class: "id_number" },
+    { value: "Name", class: "name" },
+    { value: "Present", class: "present_header" },
+    { value: "Delete", class: "delete" },
+  ];
 
-  const returnHeaders = (arr: string[]): JSX.Element[] => {
-    const displayHeaders = arr.map((x: string, y: number): JSX.Element => {
-      return <th key={`header_${y}`}>{x}</th>;
+  const returnHeaders = (arr: ValuesAndClass[]): JSX.Element[] => {
+    const displayHeaders = arr.map((x: ValuesAndClass, y: number): JSX.Element => {
+      return (
+        <th
+          key={`header_${y}`}
+          className={x.class}
+        >
+          {x.value}
+        </th>
+      );
     });
     return displayHeaders;
   };
