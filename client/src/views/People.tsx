@@ -8,21 +8,11 @@ import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
 
 export default function People() {
-  //Used for Production
-  // const initAttendant: Attendee = {
-  //   firstName: "",
-  //   lastName: "",
-  //   age: "",
-  //   memberType: "",
-  //   id: 0,
-  // };
-
-  //used for development
   const initAttendant: Attendee = {
-    firstName: "Bill",
-    lastName: "Burns",
-    age: "Adult",
-    memberType: "1",
+    firstName: "",
+    lastName: "",
+    age: "",
+    memberType: "",
     id: 0,
   };
 

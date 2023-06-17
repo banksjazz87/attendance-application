@@ -3,6 +3,7 @@
 #new_member_form {
     @include shadow-form;
     padding-top: 2rem;
+    padding-bottom: 4rem;
 
     .form_inner_wrapper {
         @include inner-shadow-form-wrapper;

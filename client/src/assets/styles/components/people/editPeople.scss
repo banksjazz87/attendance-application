@@ -1,0 +1,48 @@
+@import "../../global/library.scss";
+
+#edit_member_form_wrapper {
+    @include shadow-form;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    margin-bottom: 4rem;
+
+    form {
+        @include inner-shadow-form-wrapper;
+
+        .fields_wrapper {
+            @include inner-shadow-form-wrapper;
+        }
+
+        .input_wrapper {
+            @include shadow-form-input-pair;
+        }
+
+        .age_fields_wrapper,
+        .member_fields_wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            column-gap: 2rem;
+            width: 60%;
+            margin: auto;
+            min-width: 250px;
+            row-gap: 1rem;
+
+            .input_wrapper {
+                display: flex;
+                flex-direction: row;
+                width: auto;
+                min-width: unset;
+
+                label {
+                    margin-bottom: 0;
+                }
+
+                input {
+                    width: 20px;
+                }
+            }
+        }
+    }
+}

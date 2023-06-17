@@ -55,7 +55,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
         <td className="align_center">
           <FontAwesomeIcon
             className="user_check"
-            icon={parseInt(x.memberType) === 1 ? faUserCheck : faUserMinus}
+            icon={x.memberType === "member" ? faUserCheck : faUserMinus}
           />
         </td>
         <td className="align_center">
@@ -91,7 +91,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
         <td className="align_center">
           <FontAwesomeIcon
             className="user_check"
-            icon={parseInt(x.memberType) === 1 ? faUserCheck : faUserMinus}
+            icon={x.memberType === "member" ? faUserCheck : faUserMinus}
           />
         </td>
         <td className="align_center">
@@ -122,7 +122,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
   if (allPeople) {
     return (
       <div id="all_people_table_wrapper">
-        <h2>{`${allPeople[0].firstName} ${allPeople[0].lastName}`}</h2>
+        <h2>All Attendants</h2>
         <table id="all_people_table">
           <tbody>
             <tr>{currentWindowWidth > 1024 ? displayHeaders(lgScreenHeaders) : displayHeaders(mobileHeaders)}</tr>

@@ -16,6 +16,12 @@
             padding-right: 2rem;
         }
 
+        tr {
+            &:hover {
+                background-color: $blue-highlight;
+            }
+        }
+
         td {
             @include table-center-data;
             text-align: left;
