@@ -151,3 +151,13 @@ $blue-highlight: rgba(152, 193, 217, .2);
     padding-bottom: 14px;
     padding-top: 14px;
 }
+
+@mixin trash-icon {
+    padding: 0;
+    color: $orange;
+    font-size: 20px;
+
+    &:hover {
+        color: $dark-orange;
+    }
+}

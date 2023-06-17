@@ -1,0 +1,5 @@
+@import "../global/library.scss";
+
+#people_content_wrapper {
+    @include content-wrapper-md;
+}

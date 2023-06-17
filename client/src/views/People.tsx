@@ -5,14 +5,24 @@ import AllPeople from "../components/people/AllPeople.tsx";
 import { Attendee, APIPeople } from "../types/interfaces.ts";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import EditMember from "../components/people/EditMember.tsx";
+import "../assets/styles/views/people.scss";
 
 export default function People() {
+  //Used for Production
+  // const initAttendant: Attendee = {
+  //   firstName: "",
+  //   lastName: "",
+  //   age: "",
+  //   memberType: "",
+  //   id: 0,
+  // };
+
+  //used for development
   const initAttendant: Attendee = {
-    firstName: "",
-    lastName: "",
-    age: "",
-    memberType: "",
-    present: 0,
+    firstName: "Bill",
+    lastName: "Burns",
+    age: "Adult",
+    memberType: "1",
     id: 0,
   };
 
@@ -70,27 +80,29 @@ export default function People() {
       <div className="header_wrapper">
         <h1>People</h1>
       </div>
-      <NewMember />
-      <AllPeople
-        allPeople={people}
-        deletePersonHandler={deleteUserHandler}
-        editPersonHandler={editUserHandler}
-      />
-      <DeleteAlert
-        message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-        url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
-        show={showDeleteAlert}
-        deleteUser={userToDelete}
-        hideHandler={hideDeleteHandler}
-      />
-      <EditMember
-        show={showEditUser}
-        editUser={userToEdit}
-        hideHandler={hideEditUser}
-        updateName={updateEditName}
-        updateAge={updateEditAge}
-        updateMember={updateEditMember}
-      />
+      <div id="people_content_wrapper">
+        <NewMember />
+        <AllPeople
+          allPeople={people}
+          deletePersonHandler={deleteUserHandler}
+          editPersonHandler={editUserHandler}
+        />
+        <DeleteAlert
+          message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
+          url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
+          show={showDeleteAlert}
+          deleteUser={userToDelete}
+          hideHandler={hideDeleteHandler}
+        />
+        <EditMember
+          show={showEditUser}
+          editUser={userToEdit}
+          hideHandler={hideEditUser}
+          updateName={updateEditName}
+          updateAge={updateEditAge}
+          updateMember={updateEditMember}
+        />
+      </div>
     </div>
   );
 }

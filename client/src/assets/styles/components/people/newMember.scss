@@ -1,10 +1,13 @@
 @import "../../global/library.scss";
+
 #new_member_form {
     @include shadow-form;
     padding-top: 2rem;
+
     .form_inner_wrapper {
         @include inner-shadow-form-wrapper;
         row-gap: 3rem;
+
         h3 {
             display: flex;
             align-self: flex-start;
@@ -12,27 +15,37 @@
             margin: auto auto -2rem auto;
         }
     }
+
     .fields_wrapper {
         @include inner-shadow-form-wrapper;
     }
+
     .input_wrapper {
         @include shadow-form-input-pair;
     }
+
     .age_fields_wrapper,
     .member_fields_wrapper {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
+        flex-wrap: wrap;
         column-gap: 2rem;
         width: 60%;
         margin: auto;
+        min-width: 250px;
+        row-gap: 1rem;
+
         .input_wrapper {
             display: flex;
             flex-direction: row;
             width: auto;
+            min-width: unset;
+
             label {
                 margin-bottom: 0;
             }
+
             input {
                 width: 20px;
             }

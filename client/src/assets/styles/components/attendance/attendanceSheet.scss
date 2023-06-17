@@ -62,13 +62,7 @@
                 }
 
                 .trash_can {
-                    padding: 0;
-                    color: $orange;
-                    font-size: 20px;
-
-                    &:hover {
-                        color: $dark-orange;
-                    }
+                    @include trash-icon;
                 }
 
                 .trash_btn {
