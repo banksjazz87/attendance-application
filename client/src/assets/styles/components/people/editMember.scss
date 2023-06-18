@@ -15,6 +15,18 @@
 
         .input_wrapper {
             @include shadow-form-input-pair;
+            width: 100%;
+        }
+
+        .header_fields_wrapper {
+            display: flex;
+            flex-direction: column;
+            row-gap: 0;
+            width: 60%;
+
+            h2 {
+                text-align: center;
+            }
         }
 
         .age_fields_wrapper,
@@ -24,7 +36,7 @@
             justify-content: flex-start;
             flex-wrap: wrap;
             column-gap: 2rem;
-            width: 60%;
+            width: 100%;
             margin: auto;
             min-width: 250px;
             row-gap: 1rem;

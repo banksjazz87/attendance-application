@@ -2,7 +2,7 @@ import React from "react";
 import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
 import { AttendanceInputs, Attendee, APIResponse } from "../../types/interfaces.ts";
 import putData from "../../functions/api/put.ts";
-import "../../assets/styles/components/people/editPeople.scss";
+import "../../assets/styles/components/people/editMember.scss";
 
 interface EditMemberProps {
   show: boolean;
@@ -147,14 +147,21 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
         action="/update-attendant"
         onSubmit={updateSubmitHandler}
       >
-        <h2>{`Edit ${editUser.firstName} ${editUser.lastName}`}</h2>
-        <div className="name_fields_wrapper fields_wrapper">{returnNameFields}</div>
+        <div className="header_fields_wrapper">
+          <h2>{`Edit ${editUser.firstName} ${editUser.lastName}`}</h2>
+          <h3>Name</h3>
+          <div className="name_fields_wrapper fields_wrapper">{returnNameFields}</div>
+        </div>
 
-        <h2>Attendant's Age Group</h2>
-        <div className="age_fields_wrapper fields_wrapper">{returnAgeFields}</div>
+        <div className="header_fields_wrapper">
+          <h3>Age Group</h3>
+          <div className="age_fields_wrapper fields_wrapper">{returnAgeFields}</div>
+        </div>
 
-        <h2>Attendant's Member Status</h2>
-        <div className="member_fields_wrapper fields_wrapper">{returnMemberFields}</div>
+        <div className="header_fields_wrapper">
+          <h3>Member Status</h3>
+          <div className="member_fields_wrapper fields_wrapper">{returnMemberFields}</div>
+        </div>
 
         <input
           type="submit"

@@ -12,8 +12,8 @@
         th {
             @include table-headers;
             text-align: left;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            padding-left: 12px;
+            padding-right: 12px;
         }
 
         tr {
@@ -25,21 +25,12 @@
         td {
             @include table-center-data;
             text-align: left;
-            padding-left: 2rem;
-            padding-right: 2rem;
+            padding-left: 12px;
+            padding-right: 12px;
         }
 
         button {
-            width: auto;
-            background-color: transparent;
-            color: $dark-blue;
-            font-size: 20px;
-            padding: 0;
-
-            &:hover {
-                box-shadow: none;
-                color: $dark-background;
-            }
+            @include icon-button;
         }
 
         .user_check {
@@ -66,18 +57,5 @@
 @media (min-width: 1366px) {
     #all_people_table_wrapper {
         width: 1290px;
-    }
-}
-
-@media (max-width: 1024px) {
-    #all_people_table_wrapper {
-        table {
-
-            th,
-            td {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-        }
     }
 }

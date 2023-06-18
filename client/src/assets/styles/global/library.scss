@@ -156,8 +156,25 @@ $blue-highlight: rgba(152, 193, 217, .2);
     padding: 0;
     color: $orange;
     font-size: 20px;
+    transition: all .4s ease-in-out;
 
     &:hover {
         color: $dark-orange;
+        transform: scale(1.25);
+    }
+}
+
+@mixin icon-button {
+    width: auto;
+    background-color: transparent;
+    color: $dark-blue;
+    font-size: 20px;
+    padding: 0;
+    transition: all .4s ease-in-out;
+
+    &:hover {
+        box-shadow: none;
+        color: $dark-background;
+        transform: scale(1.25);
     }
 }

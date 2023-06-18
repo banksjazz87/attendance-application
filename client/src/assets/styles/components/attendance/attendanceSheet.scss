@@ -41,15 +41,7 @@
                 }
 
                 .present_click {
-                    background-color: transparent;
-                    color: $dark-blue;
-                    font-size: 20px;
-                    padding: 0;
-
-                    &:hover {
-                        box-shadow: none;
-                        color: $dark-background;
-                    }
+                    @include icon-button;
                 }
 
                 .check {
