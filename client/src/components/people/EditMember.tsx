@@ -3,6 +3,8 @@ import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
 import { AttendanceInputs, Attendee, APIResponse } from "../../types/interfaces.ts";
 import putData from "../../functions/api/put.ts";
 import "../../assets/styles/components/people/editMember.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 interface EditMemberProps {
   show: boolean;
@@ -138,36 +140,44 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
 
   return (
     <div
-      id="edit_member_form_wrapper"
+      className="full_height_popout"
       style={show ? { display: "" } : { display: "none" }}
     >
-      <form
-        id="edit_member_form"
-        method="post"
-        action="/update-attendant"
-        onSubmit={updateSubmitHandler}
-      >
-        <div className="header_fields_wrapper">
-          <h2>{`Edit ${editUser.firstName} ${editUser.lastName}`}</h2>
-          <h3>Name</h3>
-          <div className="name_fields_wrapper fields_wrapper">{returnNameFields}</div>
-        </div>
+      <div id="edit_member_form_wrapper">
+        <button
+          className="close_btn"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>): void => hideHandler()}
+        >
+          <FontAwesomeIcon icon={faClose} />
+        </button>
+        <form
+          id="edit_member_form"
+          method="post"
+          action="/update-attendant"
+          onSubmit={updateSubmitHandler}
+        >
+          <div className="header_fields_wrapper">
+            <h2>{`Edit ${editUser.firstName} ${editUser.lastName}`}</h2>
+            <h3>Name</h3>
+            <div className="name_fields_wrapper fields_wrapper">{returnNameFields}</div>
+          </div>
 
-        <div className="header_fields_wrapper">
-          <h3>Age Group</h3>
-          <div className="age_fields_wrapper fields_wrapper">{returnAgeFields}</div>
-        </div>
+          <div className="header_fields_wrapper">
+            <h3>Age Group</h3>
+            <div className="age_fields_wrapper fields_wrapper">{returnAgeFields}</div>
+          </div>
 
-        <div className="header_fields_wrapper">
-          <h3>Member Status</h3>
-          <div className="member_fields_wrapper fields_wrapper">{returnMemberFields}</div>
-        </div>
+          <div className="header_fields_wrapper">
+            <h3>Member Status</h3>
+            <div className="member_fields_wrapper fields_wrapper">{returnMemberFields}</div>
+          </div>
 
-        <input
-          type="submit"
-          value="Submit"
-        />
-      </form>
+          <input
+            type="submit"
+            value="Submit"
+          />
+        </form>
+      </div>
     </div>
   );
 }

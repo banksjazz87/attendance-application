@@ -7,7 +7,7 @@ $dark-blue: #3d5a80;
 $primary-font: Overpass,
     sans-serif;
 $blue-highlight: rgba(152, 193, 217, .2);
-$blue-gradient: linear-gradient(90deg, $dark-background, $dark-blue, $dark-background);
+$blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-background);
 
 @mixin header-large-bold {
     font-family: $primary-font;
@@ -178,4 +178,36 @@ $blue-gradient: linear-gradient(90deg, $dark-background, $dark-blue, $dark-backg
         color: $dark-background;
         transform: scale(1.25);
     }
+}
+
+@mixin icon-close-btn {
+    @include icon-button;
+    font-size: 36px;
+    position: absolute;
+    right: 2rem;
+    top: 12px;
+
+    &:hover {
+        transform: unset;
+    }
+}
+
+@mixin full-height-popout-background {
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    top: 0;
+    background-color: rgba(0, 0, 0, .8);
+}
+
+@mixin popout-content {
+    @include shadow-form;
+    position: relative;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    background-color: white;
+    width: 60%;
+    margin: auto;
+    margin-top: 4rem;
+    min-width: 350px;
 }

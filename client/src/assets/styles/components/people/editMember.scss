@@ -1,10 +1,15 @@
 @import "../../global/library.scss";
 
+.full_height_popout {
+    @include full-height-popout-background;
+}
+
 #edit_member_form_wrapper {
-    @include shadow-form;
-    padding-top: 2rem;
-    padding-bottom: 4rem;
-    margin-bottom: 4rem;
+    @include popout-content;
+
+    .close_btn {
+        @include icon-close-btn;
+    }
 
     form {
         @include inner-shadow-form-wrapper;
