@@ -5,8 +5,10 @@ import { AttendanceInputs } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
 import { APIResponse, APIAttendanceSheet, UpdateAttendant, NewMemberProps } from "../../types/interfaces.ts";
 import "../../assets/styles/components/people/newMember.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -154,28 +156,42 @@ export default function NewMember({ currentTable }: NewMemberProps): JSX.Element
   };
 
   return (
-    <form
-      method="post"
-      action="/new-attendant"
-      id="new_member_form"
-      onSubmit={submitHandler}
+    <div
+      className="full_height_popout"
+      style={show ? { display: "" } : { display: "none" }}
     >
-      <h2>Add New Member</h2>
-      <div className="form_inner_wrapper">
-        <h3>Name</h3>
-        <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
+      <div id="new_attendant_form_wrapper">
+        <button
+          className="close_btn"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>): void => showHandler()}
+        >
+          <FontAwesomeIcon icon={faClose} />
+        </button>
+        <form
+          method="post"
+          action="/new-attendant"
+          id="new_member_form"
+          onSubmit={submitHandler}
+          style={show ? { display: "" } : { display: "none" }}
+        >
+          <h2>Add New Member</h2>
+          <div className="form_inner_wrapper">
+            <h3>Name</h3>
+            <div className="name_fields_wrapper fields_wrapper">{nameFields}</div>
 
-        <h3>Age Group</h3>
-        <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
+            <h3>Age Group</h3>
+            <div className="age_fields_wrapper fields_wrapper">{ageFields}</div>
 
-        <h3>Member Status</h3>
-        <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
+            <h3>Member Status</h3>
+            <div className="member_fields_wrapper fields_wrapper">{memberFields}</div>
 
-        <input
-          type="submit"
-          value="Submit"
-        />
+            <input
+              type="submit"
+              value="Submit"
+            />
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
   );
 }

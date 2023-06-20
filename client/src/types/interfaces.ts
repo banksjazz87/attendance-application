@@ -145,6 +145,8 @@ export interface UpdateAttendant {
 
 export interface NewMemberProps {
   currentTable?: string;
+  show: boolean;
+  showHandler: Function;
 }
 
 export interface ValuesAndClass {

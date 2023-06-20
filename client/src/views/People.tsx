@@ -6,6 +6,8 @@ import { Attendee, APIPeople } from "../types/interfaces.ts";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function People() {
   const initAttendant: Attendee = {
@@ -21,6 +23,7 @@ export default function People() {
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [showEditUser, setShowEditUser] = useState<boolean>(false);
   const [userToEdit, setUserToEdit] = useState<Attendee>(initAttendant);
+  const [showAddMember, setShowAddMember] = useState<boolean>(false);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
@@ -52,6 +55,14 @@ export default function People() {
     setUserToEdit({ ...userToEdit, memberType: elementValue });
   };
 
+  const displayAddMember = (): void => {
+    if (showAddMember) {
+      setShowAddMember(false);
+    } else {
+      setShowAddMember(true);
+    }
+  };
+
   useEffect((): void => {
     fetch("/all-attendants")
       .then((data: Response): Promise<APIPeople> => {
@@ -71,7 +82,23 @@ export default function People() {
         <h1>People</h1>
       </div>
       <div id="people_content_wrapper">
-        <NewMember />
+        <button
+          type="button"
+          className="add_new_member_btn"
+          onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+            displayAddMember();
+          }}
+        >
+          Add New Member
+          <FontAwesomeIcon
+            className="add_member_icon"
+            icon={faUserPlus}
+          />
+        </button>
+        <NewMember
+          show={showAddMember}
+          showHandler={displayAddMember}
+        />
         <AllPeople
           allPeople={people}
           deletePersonHandler={deleteUserHandler}

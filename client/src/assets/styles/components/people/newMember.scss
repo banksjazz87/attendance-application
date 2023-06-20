@@ -1,54 +1,64 @@
 @import "../../global/library.scss";
 
-#new_member_form {
-    @include shadow-form;
-    padding-top: 2rem;
-    padding-bottom: 4rem;
+.full_height_popout {
+    @include full-height-popout-background;
+}
 
-    .form_inner_wrapper {
+#new_attendant_form_wrapper {
+    @include popout-content;
+
+    .close_btn {
+        @include icon-close-btn;
+    }
+
+    #new_member_form {
         @include inner-shadow-form-wrapper;
-        row-gap: 3rem;
 
-        h3 {
-            display: flex;
-            align-self: flex-start;
-            width: 60%;
-            margin: auto auto -2rem auto;
+        .form_inner_wrapper {
+            @include inner-shadow-form-wrapper;
+            row-gap: 3rem;
+
+            h3 {
+                display: flex;
+                align-self: flex-start;
+                width: 60%;
+                margin: auto auto -2rem auto;
+            }
         }
-    }
 
-    .fields_wrapper {
-        @include inner-shadow-form-wrapper;
-    }
-
-    .input_wrapper {
-        @include shadow-form-input-pair;
-    }
-
-    .age_fields_wrapper,
-    .member_fields_wrapper {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        flex-wrap: wrap;
-        column-gap: 2rem;
-        width: 60%;
-        margin: auto;
-        min-width: 250px;
-        row-gap: 1rem;
+        .fields_wrapper {
+            @include inner-shadow-form-wrapper;
+        }
 
         .input_wrapper {
+            @include shadow-form-input-pair;
+        }
+
+        .age_fields_wrapper,
+        .member_fields_wrapper {
             display: flex;
             flex-direction: row;
-            width: auto;
-            min-width: unset;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            column-gap: 2rem;
+            width: 60%;
+            margin: auto;
+            min-width: 250px;
+            row-gap: 1rem;
 
-            label {
-                margin-bottom: 0;
-            }
+            .input_wrapper {
+                display: flex;
+                flex-direction: row;
+                width: auto;
+                min-width: unset;
 
-            input {
-                width: 20px;
+                label {
+                    margin-bottom: 0;
+                }
+
+                input {
+                    width: 20px;
+                }
             }
         }
     }
