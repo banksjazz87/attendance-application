@@ -195,9 +195,11 @@ $blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-back
 @mixin full-height-popout-background {
     position: fixed;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
+    left: 0;
     top: 0;
     background-color: rgba(0, 0, 0, .8);
+    z-index: 10;
 }
 
 @mixin popout-content {

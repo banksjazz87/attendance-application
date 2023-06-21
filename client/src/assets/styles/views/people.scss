@@ -4,23 +4,11 @@
     @include content-wrapper-md;
     width: 100%;
     max-width: 100%;
+}
 
-    .add_new_member_btn {
-        margin: auto;
-        display: flex;
-        flex-direction: row;
-        column-gap: .75rem;
-        justify-content: center;
-        align-items: center;
-        align-content: bottom;
-        min-width: 250px;
-        height: 64px;
-        padding: 12px 36px;
-        @include accent-bold;
-        color: white;
-
-        .add_member_icon {
-            font-size: 22px;
-        }
+@media (max-width: 1024px) {
+    #people_content_wrapper {
+        padding-left: 0;
+        padding-right: 0;
     }
 }

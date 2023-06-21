@@ -55,8 +55,14 @@
     }
 }
 
-@media (min-width: 1366px) {
+@media (min-width: 1024px) {
     #all_people_table_wrapper {
-        width: 1290px;
+        width: 960px;
+    }
+}
+
+@media (max-width: 1024px) {
+    #all_people_table_wrapper {
+        width: 95%;
     }
 }
