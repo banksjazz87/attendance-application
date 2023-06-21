@@ -6,8 +6,7 @@ import { Attendee, APIPeople } from "../types/interfaces.ts";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import AddNewMemberButton from "../components/global/AddNewMemberButton.tsx";
 
 export default function People() {
   const initAttendant: Attendee = {
@@ -82,19 +81,10 @@ export default function People() {
         <h1>People</h1>
       </div>
       <div id="people_content_wrapper">
-        <button
-          type="button"
-          className="add_new_member_btn"
-          onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
-            displayAddMember();
-          }}
-        >
-          Add New Member
-          <FontAwesomeIcon
-            className="add_member_icon"
-            icon={faUserPlus}
-          />
-        </button>
+        <AddNewMemberButton
+          show={true}
+          clickHandler={() => displayAddMember()}
+        />
         <NewMember
           show={showAddMember}
           showHandler={displayAddMember}

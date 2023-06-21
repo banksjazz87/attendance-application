@@ -3,6 +3,7 @@ import Navbar from "../components/global/Navbar.tsx";
 import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
+import AddNewMemberButton from "../components/global/AddNewMemberButton.tsx";
 import { Bool } from "../../src/types/types.ts";
 import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
@@ -18,6 +19,8 @@ export default function Attendance(): JSX.Element {
   });
 
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
+  const [showAddNewMember, setShowAddNewMember] = useState<boolean>(false);
+  const [showNewMemberBtn, setShowNewMemberBtn] = useState<boolean>(false);
 
   //Used to pull data from the session storage.
   useEffect((): void => {
@@ -64,11 +67,16 @@ export default function Attendance(): JSX.Element {
     copyOfCurrentSelected[0] = arrayCopy[index];
     setSelectedGroup(copyOfCurrentSelected);
     setDisplayAttendance(false);
+    setShowNewMemberBtn(false);
   };
 
   const selectAttendanceSheet = (arr: Attendee[]): void => {
     setCurrentListData(arr);
     setDisplayAttendance(true);
+  };
+
+  const showNewMemberHandler = (): void => {
+    showAddNewMember ? setShowAddNewMember(false) : setShowAddNewMember(true);
   };
 
   const dropDownSubmit = (value: string): void => {
@@ -107,6 +115,7 @@ export default function Attendance(): JSX.Element {
           })
           .then((final: APIAttendanceSheet): void => {
             selectAttendanceSheet(final.data);
+            setShowNewMemberBtn(true);
           });
       });
   };
@@ -124,6 +133,10 @@ export default function Attendance(): JSX.Element {
           groupSelectedHandler={selectGroup}
           groupHandler={dropDownSubmit}
         />
+        <AddNewMemberButton
+          show={showNewMemberBtn}
+          clickHandler={() => setShowAddNewMember(true)}
+        />
         <AttendanceSheet
           show={displayAttendance}
           title={selectedAttendance.displayTitle}
@@ -131,7 +144,11 @@ export default function Attendance(): JSX.Element {
           attendanceData={currentListData}
           parentTitle={selectedGroup[0].displayName}
         />
-        <NewMember currentTable={selectedAttendance.title} />
+        <NewMember
+          currentTable={selectedAttendance.title}
+          show={showAddNewMember}
+          showHandler={showNewMemberHandler}
+        />
       </div>
     </div>
   );
