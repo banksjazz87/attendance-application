@@ -7,6 +7,7 @@ import AddNewMemberButton from "../components/global/AddNewMemberButton.tsx";
 import { Bool } from "../../src/types/types.ts";
 import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function Attendance(): JSX.Element {
   const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
@@ -20,7 +21,7 @@ export default function Attendance(): JSX.Element {
 
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
   const [showAddNewMember, setShowAddNewMember] = useState<boolean>(false);
-  const [showNewMemberBtn, setShowNewMemberBtn] = useState<boolean>(false);
+  const [showNewMemberBtn, setShowNewMemberBtn] = useState<boolean>(true);
 
   //Used to pull data from the session storage.
   useEffect((): void => {
@@ -135,6 +136,8 @@ export default function Attendance(): JSX.Element {
         />
         <AddNewMemberButton
           show={showNewMemberBtn}
+          text={"Add New Member"}
+          iconName={faUserPlus}
           clickHandler={() => setShowAddNewMember(true)}
         />
         <AttendanceSheet

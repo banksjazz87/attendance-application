@@ -1,7 +1,9 @@
 @import "../global/library.scss";
+
 #new_attendance_content_wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     @include content-wrapper-md;
+    padding-bottom: 8rem;
 }

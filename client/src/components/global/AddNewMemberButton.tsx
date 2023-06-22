@@ -1,13 +1,16 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/components/global/addNewMemberButton.scss";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 interface AddNewMemberButtonProps {
   show: boolean;
   clickHandler: Function;
+  text: string;
+  iconName: IconDefinition;
 }
-export default function AddNewMemberButton({ show, clickHandler }: AddNewMemberButtonProps) {
+
+export default function AddNewMemberButton({ show, clickHandler, text, iconName }: AddNewMemberButtonProps): JSX.Element {
   const btnClickHandler = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     clickHandler();
@@ -19,10 +22,10 @@ export default function AddNewMemberButton({ show, clickHandler }: AddNewMemberB
       onClick={btnClickHandler}
       className="add_new_member_btn"
     >
-      Add New Member
+      {text}
       <FontAwesomeIcon
         className="add_member_icon"
-        icon={faUserPlus}
+        icon={iconName}
       />
     </button>
   );

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import postData from "../../functions/api/post.ts";
 import { User, UserProps } from "../../types/interfaces.ts";
 import "../../assets/styles/components/login/loginForm.scss";
@@ -10,6 +11,7 @@ export default function LoginForm({ showForm, logIn }: UserProps) {
     setLogin({ ...login, [field]: input });
   };
 
+  const navigate = useNavigate();
   return (
     <form
       id="login_form"
@@ -21,6 +23,7 @@ export default function LoginForm({ showForm, logIn }: UserProps) {
         postData("/login", login).then((data) => {
           if (data.message === "valid") {
             logIn();
+            navigate("/new-attendance", { replace: true });
           } else {
             alert("Invalid User, please try again");
           }

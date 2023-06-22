@@ -1,7 +1,13 @@
 @import "../global/library.scss";
+
 #attendance_wrapper {
-    height: 100vh;
+    padding-bottom: 8rem;
+
     #attendance_content_wrapper {
         @include content-wrapper-md;
+
+        .input_wrapper {
+            padding-top: 4rem;
+        }
     }
 }

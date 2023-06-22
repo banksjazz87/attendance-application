@@ -7,6 +7,7 @@ import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
 import AddNewMemberButton from "../components/global/AddNewMemberButton.tsx";
+import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function People() {
   const initAttendant: Attendee = {
@@ -83,6 +84,8 @@ export default function People() {
       <div id="people_content_wrapper">
         <AddNewMemberButton
           show={true}
+          text="Add New Member"
+          iconName={faUserPlus}
           clickHandler={() => displayAddMember()}
         />
         <NewMember
