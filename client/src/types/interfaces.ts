@@ -34,6 +34,7 @@ export interface GroupProps {
   getGroups?: Function;
   currentGroups?: Group[];
   ageHandler?: Function;
+  show?: Boolean;
 }
 
 export interface GroupDropDownProps {

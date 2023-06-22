@@ -1,6 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import "../../assets/styles/components/global/addNewMemberButton.scss";
+import "../../assets/styles/components/global/textAndIconButton.scss";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 
 interface AddNewMemberButtonProps {
@@ -10,7 +10,7 @@ interface AddNewMemberButtonProps {
   iconName: IconDefinition;
 }
 
-export default function AddNewMemberButton({ show, clickHandler, text, iconName }: AddNewMemberButtonProps): JSX.Element {
+export default function TextAndIconButton({ show, clickHandler, text, iconName }: AddNewMemberButtonProps): JSX.Element {
   const btnClickHandler = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     clickHandler();

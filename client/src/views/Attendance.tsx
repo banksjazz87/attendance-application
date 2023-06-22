@@ -3,11 +3,11 @@ import Navbar from "../components/global/Navbar.tsx";
 import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
-import AddNewMemberButton from "../components/global/AddNewMemberButton.tsx";
+import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import { Bool } from "../../src/types/types.ts";
 import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
-import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
 export default function Attendance(): JSX.Element {
   const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
@@ -19,9 +19,10 @@ export default function Attendance(): JSX.Element {
     dateCreated: "",
   });
 
+  const [showDropDown, setShowDropDown] = useState<boolean>(true);
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
   const [showAddNewMember, setShowAddNewMember] = useState<boolean>(false);
-  const [showNewMemberBtn, setShowNewMemberBtn] = useState<boolean>(true);
+  const [showOptionButtons, setShowOptionButtons] = useState<boolean>(false);
 
   //Used to pull data from the session storage.
   useEffect((): void => {
@@ -68,7 +69,7 @@ export default function Attendance(): JSX.Element {
     copyOfCurrentSelected[0] = arrayCopy[index];
     setSelectedGroup(copyOfCurrentSelected);
     setDisplayAttendance(false);
-    setShowNewMemberBtn(false);
+    setShowOptionButtons(false);
   };
 
   const selectAttendanceSheet = (arr: Attendee[]): void => {
@@ -116,7 +117,8 @@ export default function Attendance(): JSX.Element {
           })
           .then((final: APIAttendanceSheet): void => {
             selectAttendanceSheet(final.data);
-            setShowNewMemberBtn(true);
+            setShowOptionButtons(true);
+            setShowDropDown(false);
           });
       });
   };
@@ -133,13 +135,25 @@ export default function Attendance(): JSX.Element {
           name={selectedGroup[0].name}
           groupSelectedHandler={selectGroup}
           groupHandler={dropDownSubmit}
+          show={showDropDown}
         />
-        <AddNewMemberButton
-          show={showNewMemberBtn}
-          text={"Add New Member"}
-          iconName={faUserPlus}
-          clickHandler={() => setShowAddNewMember(true)}
-        />
+        <div className="button_group">
+          <TextAndIconButton
+            show={showOptionButtons}
+            text={"Add New Member"}
+            iconName={faUserPlus}
+            clickHandler={() => setShowAddNewMember(true)}
+          />
+          <TextAndIconButton
+            show={showOptionButtons}
+            text={"Different Attendance"}
+            iconName={faFile}
+            clickHandler={() => {
+              setDisplayAttendance(false);
+              setShowDropDown(true);
+            }}
+          />
+        </div>
         <AttendanceSheet
           show={displayAttendance}
           title={selectedAttendance.displayTitle}

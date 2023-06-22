@@ -3,7 +3,7 @@ import { GroupProps } from "../../types/interfaces.ts";
 import GroupDropDown from "../../components/global/GroupDropDown.tsx";
 import "../../assets/styles/components/attendance/dropDownForm.scss";
 
-export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler }: GroupProps) {
+export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler, show }: GroupProps) {
   const submitHandler = (e: React.FormEvent): void => {
     e.preventDefault();
     if (clickHandler && groupHandler) {
@@ -13,7 +13,10 @@ export default function DropDownForm({ clickHandler, groupHandler, name, groupSe
   };
 
   return (
-    <div id="group_dropdown_wrapper">
+    <div
+      id="group_dropdown_wrapper"
+      style={show ? { display: "" } : { display: "none" }}
+    >
       <div className="inner_form_wrapper">
         <form onSubmit={submitHandler}>
           <GroupDropDown attendanceGroupSelected={groupSelectedHandler} />
