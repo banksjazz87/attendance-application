@@ -51,6 +51,17 @@ export default function Attendance(): JSX.Element {
     }
   }, []);
 
+  //Used to determine fif the dropdown and the show option buttons should be displayed.
+  useEffect((): void => {
+    if (displayAttendance) {
+      setShowDropDown(false);
+      setShowOptionButtons(true);
+    } else {
+      setShowDropDown(true);
+      setShowOptionButtons(false);
+    }
+  }, [displayAttendance]);
+
   const showAttendanceHandler = (): void => {
     setDisplayAttendance(true);
   };
