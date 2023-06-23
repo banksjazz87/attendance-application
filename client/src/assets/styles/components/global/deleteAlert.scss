@@ -1,0 +1,33 @@
+@import "../../global/library.scss";
+
+.delete_alert_wrapper {
+    @include full-height-popout-background;
+
+    .delete_alert {
+        @include popout-content;
+        margin-top: 20%;
+    }
+
+    .button_wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 2rem;
+    }
+
+    .close_btn {
+        @include icon-close-btn;
+    }
+}
+
+@media (max-width: 1024px) {
+    .delete_alert_wrapper {
+        .delete_alert {
+            width: 90%;
+            margin-right: auto;
+            margin-left: auto;
+            text-align: center;
+            padding-top: 4rem;
+        }
+    }
+}
