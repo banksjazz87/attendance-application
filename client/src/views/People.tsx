@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import NewMember from "../components/people/NewMember.tsx";
+import { InitAttendee } from "../variables/initAttendee.ts";
 import AllPeople from "../components/people/AllPeople.tsx";
 import { Attendee, APIPeople } from "../types/interfaces.ts";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
@@ -10,19 +11,11 @@ import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function People() {
-  const initAttendant: Attendee = {
-    firstName: "",
-    lastName: "",
-    age: "",
-    memberType: "",
-    id: 0,
-  };
-
-  const [people, setPeople] = useState<Attendee[]>([initAttendant]);
-  const [userToDelete, setUserToDelete] = useState<Attendee>(initAttendant);
+  const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
+  const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [showEditUser, setShowEditUser] = useState<boolean>(false);
-  const [userToEdit, setUserToEdit] = useState<Attendee>(initAttendant);
+  const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
 
   const deleteUserHandler = (obj: Attendee): void => {

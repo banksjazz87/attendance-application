@@ -27,10 +27,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 
   //Used to check the current screen size
   useEffect((): void => {
-    document.addEventListener("DOMContentLoaded", (e: Event): void => {
-      setScreenSize(window.innerWidth);
-    });
-
     window.addEventListener("resize", (e: UIEvent): void => {
       setScreenSize(window.innerWidth);
     });

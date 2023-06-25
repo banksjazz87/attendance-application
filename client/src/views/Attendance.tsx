@@ -4,6 +4,8 @@ import DropDownForm from "../components/attendance/DropDownForm.tsx";
 import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
+import DeleteAlert from "../components/global/DeleteAlert.tsx";
+import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
 import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
@@ -23,6 +25,8 @@ export default function Attendance(): JSX.Element {
   const [currentListData, setCurrentListData] = useState<Attendee[]>([]);
   const [showAddNewMember, setShowAddNewMember] = useState<boolean>(false);
   const [showOptionButtons, setShowOptionButtons] = useState<boolean>(false);
+  const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
+  const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 
   //Used to pull data from the session storage.
   useEffect((): void => {
@@ -177,6 +181,13 @@ export default function Attendance(): JSX.Element {
           show={showAddNewMember}
           showHandler={showNewMemberHandler}
         />
+        {/* <DeleteAlert
+          message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
+          url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
+          show={showDeleteAlert}
+          deleteUser={userToDelete}
+          hideHandler={hideDeleteHandler}
+        /> */}
       </div>
     </div>
   );
