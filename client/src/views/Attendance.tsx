@@ -138,6 +138,12 @@ export default function Attendance(): JSX.Element {
       });
   };
 
+  const updateDeleteMemberHandler = (arr: Attendee[], key: number): void => {
+    let selectedAtt = arr[key];
+    setUserToDelete(selectedAtt);
+    setShowDeleteAlert(true);
+  };
+
   return (
     <div id="attendance_wrapper">
       <Navbar />
@@ -175,19 +181,20 @@ export default function Attendance(): JSX.Element {
           tableName={selectedAttendance.title}
           attendanceData={currentListData}
           parentTitle={selectedGroup[0].displayName}
+          deleteMemberHandler={updateDeleteMemberHandler}
         />
         <NewMember
           currentTable={selectedAttendance.title}
           show={showAddNewMember}
           showHandler={showNewMemberHandler}
         />
-        {/* <DeleteAlert
+        <DeleteAlert
           message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-          url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
+          url={`/attendance-sheet/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}/${selectedAttendance.title}`}
           show={showDeleteAlert}
           deleteUser={userToDelete}
-          hideHandler={hideDeleteHandler}
-        /> */}
+          hideHandler={(): void => setShowDeleteAlert(false)}
+        />
       </div>
     </div>
   );

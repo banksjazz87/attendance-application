@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
 import putData from "../../functions/api/put.ts";
-import deleteData from "../../functions/api/delete.ts";
 import MathMethods from "../../functions/math.ts";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,14 +10,13 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName }: AttendanceProps) {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler }: AttendanceProps) {
   //The below is for production
   const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
   //The below is for development
   //const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
-  let initWidth: number = window.innerWidth;
-  const [screenSize, setScreenSize] = useState<number>(initWidth);
+  const [screenSize, setScreenSize] = useState<number>(window.innerWidth);
 
   //The below is for production
   useEffect((): void => {
@@ -68,18 +66,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         }
       });
     }
-  };
-
-  const removeAttendee = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number): void => {
-    let selectedAtt = memberData[index];
-    deleteData(`/attendance-sheet/remove-person/${selectedAtt.firstName}/${selectedAtt.lastName}/${selectedAtt.id}/${tableName}`).then((data: APIResponse): void => {
-      if (data.message === "success") {
-        alert(`${selectedAtt.firstName} ${selectedAtt.lastName} has been deleted`);
-        window.location.reload();
-      } else {
-        alert(`${data.data}`);
-      }
-    });
   };
 
   const checkedOrNot = (value: number | undefined, index: number): JSX.Element => {
@@ -132,7 +118,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
             type="button"
             className="trash_btn"
             onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-              removeAttendee(event, y);
+              deleteMemberHandler(memberData, y);
             }}
           >
             <FontAwesomeIcon
@@ -159,7 +145,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
             type="button"
             className="trash_btn"
             onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-              removeAttendee(event, y);
+              deleteMemberHandler(event, y);
             }}
           >
             <FontAwesomeIcon

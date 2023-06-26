@@ -14,6 +14,7 @@ export interface AttendanceProps {
   attendanceData: Attendee[];
   parentTitle: string;
   tableName: string;
+  deleteMemberHandler: Function;
 }
 
 export interface Group {
