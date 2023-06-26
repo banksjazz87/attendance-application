@@ -340,14 +340,23 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:table", (r
   const idNum = parseInt(req.params.id);
   const table = req.params.table;
 
-  Db.removePerson(table, first, last, idNum)
-    .then((data: string[]): void => {
-      res.send({ message: "success", data: data });
-      console.log(`${first} ${last} has been removed from ${table}`);
-      console.log(data);
+  Promise.all([Db.removePerson(table, first, last, idNum), Db.removePerson("Attendants", first, last, idNum)])
+    .then((data: [string[], string[]]): void => {
+      res.send({
+        message: "success",
+        data: () => {
+          return data[0], data[1];
+        },
+      });
+      console.log(data[0], data[1]);
     })
-    .catch((err: SQLResponse): void => {
-      res.send({ message: "failure", data: Db.getSqlError(err) });
-      console.log(err);
+    .catch((err: SQLResponse[]): void => {
+      res.send({
+        message: "failure",
+        data: () => {
+          Db.getSqlError(err[0]);
+          Db.getSqlError(err[1]);
+        },
+      });
     });
 });

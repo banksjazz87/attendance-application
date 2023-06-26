@@ -35,7 +35,7 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
         >
           <FontAwesomeIcon icon={faClose} />
         </button>
-        <p>{message}</p>
+        <p className="delete_message">{message}</p>
         <div className="button_wrapper">
           <button
             type="button"
