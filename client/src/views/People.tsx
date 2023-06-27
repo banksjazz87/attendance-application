@@ -3,7 +3,7 @@ import Navbar from "../components/global/Navbar.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import AllPeople from "../components/people/AllPeople.tsx";
-import { Attendee, APIPeople } from "../types/interfaces.ts";
+import { Attendee, APIPeople, APITotalRows } from "../types/interfaces.ts";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
@@ -57,13 +57,24 @@ export default function People() {
   };
 
   useEffect((): void => {
-    fetch("/all-attendants")
-      .then((data: Response): Promise<APIPeople> => {
+    // fetch("/all-attendants")
+    //   .then((data: Response): Promise<APIPeople> => {
+    //     return data.json();
+    //   })
+    //   .then((final: APIPeople): void => {
+    //     if (final.message === "Success") {
+    //       setPeople(final.data);
+    //     }
+    //   });
+
+    fetch(`/row-count/Attendants`)
+      .then((data: Response): Promise<APITotalRows> => {
         return data.json();
       })
-      .then((final: APIPeople): void => {
-        if (final.message === "Success") {
-          setPeople(final.data);
+      .then((final: APITotalRows): void => {
+        if (final.message === "success") {
+          //setPeople(final.data);
+          console.log(final.data.total);
         }
       });
   }, []);

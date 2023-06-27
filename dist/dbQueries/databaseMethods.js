@@ -179,5 +179,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    numberOfRows(table) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT COUNT(*) AS total FROM ${table};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
 }
 exports.DBMethods = DBMethods;

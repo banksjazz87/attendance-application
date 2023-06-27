@@ -360,3 +360,21 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:table", (r
       });
     });
 });
+
+app.get("/row-count/:tableName", (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  Db.numberOfRows(req.params.tableName)
+    .then((data: string[]): void => {
+      res.send({
+        message: "success",
+        data: data,
+      });
+    })
+    .catch((err: SQLResponse): void => {
+      res.send({
+        message: "failure",
+        data: Db.getSqlError(err),
+      });
+    });
+});

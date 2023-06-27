@@ -201,7 +201,19 @@ export class DBMethods {
       const database = this.db();
       const neededSql = `UPDATE ${table} SET present = ${status} WHERE id = ${attendeeId} AND lastName = "${attendeeLastName}";`;
 
-      database.query(neededSql, (err: string[], results: string[]) => {
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  numberOfRows(table: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `SELECT COUNT(*) AS total FROM ${table};`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
       });
       this.endDb();

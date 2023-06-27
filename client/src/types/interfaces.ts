@@ -92,6 +92,16 @@ export interface APIPeople {
   error: string;
 }
 
+export interface TotalRows {
+  total: Number;
+}
+
+export interface APITotalRows {
+  message: string;
+  data: TotalRows;
+  error: string;
+}
+
 export interface DBAttendanceTitle {
   id: number;
   title: string;
