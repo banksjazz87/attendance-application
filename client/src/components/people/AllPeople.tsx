@@ -4,8 +4,9 @@ import "../../assets/styles/components/people/allPeople.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrashCan, faUserCheck, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
+import PaginationButtons from "../global/PaginationButtons.tsx";
 
-export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler }: AllPeopleProps): JSX.Element {
+export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows }: AllPeopleProps): JSX.Element {
   const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect((): void => {
@@ -129,6 +130,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
             {currentWindowWidth > 1024 ? returnAllPeopleLgScreen : returnAllPeopleMobile}
           </tbody>
         </table>
+        <PaginationButtons totalRows={totalRows} />
       </div>
     );
   } else {

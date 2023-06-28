@@ -17,6 +17,8 @@ export default function People() {
   const [showEditUser, setShowEditUser] = useState<boolean>(false);
   const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
+  const [totalDbRows, setTotalDbRows] = useState<number>(0);
+  const [dbOffSetNumber, setDbOffsetNumber] = useState<number>(0);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
@@ -74,16 +76,18 @@ export default function People() {
       .then((final: APITotalRows): void => {
         if (final.message === "success") {
           //setPeople(final.data);
-          console.log(final.data.total);
+          console.log(final.data);
+          setTotalDbRows(final.data[0].total);
         }
       });
-  }, []);
+  }, [totalDbRows]);
 
   return (
     <div id="people_page_wrapper">
       <Navbar />
       <div className="header_wrapper">
         <h1>People</h1>
+        <p>{`Total rows in this table ${totalDbRows}`}</p>
       </div>
       <div id="people_content_wrapper">
         <TextAndIconButton
@@ -100,6 +104,7 @@ export default function People() {
           allPeople={people}
           deletePersonHandler={deleteUserHandler}
           editPersonHandler={editUserHandler}
+          totalRows={totalDbRows}
         />
         <DeleteAlert
           message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}

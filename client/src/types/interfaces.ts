@@ -93,12 +93,12 @@ export interface APIPeople {
 }
 
 export interface TotalRows {
-  total: Number;
+  total: number;
 }
 
 export interface APITotalRows {
   message: string;
-  data: TotalRows;
+  data: TotalRows[];
   error: string;
 }
 
@@ -125,6 +125,7 @@ export interface AllPeopleProps {
   allPeople: Attendee[];
   deletePersonHandler: Function;
   editPersonHandler: Function;
+  totalRows: number;
 }
 
 export interface DeleteProps {
