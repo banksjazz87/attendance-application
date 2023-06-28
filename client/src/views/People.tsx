@@ -19,6 +19,7 @@ export default function People() {
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
   const [dbOffSetNumber, setDbOffsetNumber] = useState<number>(0);
+  const [currentOffset, setCurrentOffset] = useState<number>(0);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
@@ -105,6 +106,8 @@ export default function People() {
           deletePersonHandler={deleteUserHandler}
           editPersonHandler={editUserHandler}
           totalRows={totalDbRows}
+          updateOffsetHandler={(num: number): void => setCurrentOffset(num)}
+          currentOffset={currentOffset}
         />
         <DeleteAlert
           message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}

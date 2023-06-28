@@ -126,6 +126,8 @@ export interface AllPeopleProps {
   deletePersonHandler: Function;
   editPersonHandler: Function;
   totalRows: number;
+  updateOffsetHandler: Function;
+  currentOffset: number;
 }
 
 export interface DeleteProps {
