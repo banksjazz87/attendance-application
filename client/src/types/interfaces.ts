@@ -128,6 +128,7 @@ export interface AllPeopleProps {
   totalRows: number;
   updateOffsetHandler: Function;
   currentOffset: number;
+  offSetIncrement: number;
 }
 
 export interface DeleteProps {
