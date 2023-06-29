@@ -5,10 +5,10 @@ import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
 interface PaginationButtonsProps {
   totalRows: number;
   updateOffset: Function;
-  currentOffset: number;
   offSetIncrement: number;
 }
-export default function PaginationButtons({ totalRows, updateOffset, currentOffset, offSetIncrement }: PaginationButtonsProps): JSX.Element {
+
+export default function PaginationButtons({ totalRows, updateOffset, offSetIncrement }: PaginationButtonsProps): JSX.Element {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pagesNeeded, setPagesNeeded] = useState<number>(1);
 
@@ -16,6 +16,10 @@ export default function PaginationButtons({ totalRows, updateOffset, currentOffs
     const pages = Math.ceil(totalRows / offSetIncrement);
     setPagesNeeded(pages);
   }, [totalRows, offSetIncrement]);
+
+  useEffect((): void => {
+    updateOffset(currentPage * offSetIncrement);
+  }, [currentPage, offSetIncrement, updateOffset]);
 
   const incrementHandler = (): void => {
     if (currentPage < pagesNeeded) {
@@ -38,7 +42,9 @@ export default function PaginationButtons({ totalRows, updateOffset, currentOffs
         >
           <FontAwesomeIcon icon={faAngleLeft} />
         </button>
+
         <p>{`Page ${currentPage} of ${pagesNeeded}`}</p>
+
         <button
           type="button"
           onClick={incrementHandler}

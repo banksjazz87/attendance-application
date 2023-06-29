@@ -6,7 +6,7 @@ import { faPencil, faTrashCan, faUserCheck, faUserMinus } from "@fortawesome/fre
 import { ValuesAndClass } from "../../types/interfaces.ts";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 
-export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, currentOffset, offSetIncrement }: AllPeopleProps): JSX.Element {
+export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement }: AllPeopleProps): JSX.Element {
   const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect((): void => {
@@ -133,7 +133,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
         <PaginationButtons
           totalRows={totalRows}
           updateOffset={updateOffsetHandler}
-          currentOffset={currentOffset}
+          // currentOffset={currentOffset}
           offSetIncrement={offSetIncrement}
         />
       </div>

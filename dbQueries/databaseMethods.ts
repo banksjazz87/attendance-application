@@ -208,10 +208,24 @@ export class DBMethods {
     });
   }
 
+  //Used to return the number of rows in a table.
   numberOfRows(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       const neededSql = `SELECT COUNT(*) AS total FROM ${table};`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  //Used to return a limited number of rows from a table.
+  limitNumberOfRowsReturned(table: string, limit: number, offset: number, fieldOrder: string, order: ["ASC", "DESC"]): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `SELECT * FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);

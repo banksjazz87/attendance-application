@@ -85,6 +85,18 @@ export default function People() {
       });
   }, [totalDbRows]);
 
+  useEffect((): void => {
+    fetch("/all-attendants")
+      .then((data: Response): Promise<APIPeople> => {
+        return data.json();
+      })
+      .then((final: APIPeople): void => {
+        if (final.message === "Success") {
+          setPeople(final.data);
+        }
+      });
+  });
+
   return (
     <div id="people_page_wrapper">
       <Navbar />
@@ -109,7 +121,6 @@ export default function People() {
           editPersonHandler={editUserHandler}
           totalRows={totalDbRows}
           updateOffsetHandler={(num: number): void => setCurrentOffset(num)}
-          currentOffset={currentOffset}
           offSetIncrement={offSetIncrement}
         />
         <DeleteAlert
