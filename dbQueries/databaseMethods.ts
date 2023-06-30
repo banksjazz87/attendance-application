@@ -222,7 +222,7 @@ export class DBMethods {
   }
 
   //Used to return a limited number of rows from a table.
-  limitNumberOfRowsReturned(table: string, limit: number, offset: number, fieldOrder: string, order: ["ASC", "DESC"]): Promise<string[]> {
+  limitNumberOfRowsReturned(table: string, limit: number, offset: number, fieldOrder: string, order: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       const neededSql = `SELECT * FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;

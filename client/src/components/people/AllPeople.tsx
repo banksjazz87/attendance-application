@@ -6,7 +6,7 @@ import { faPencil, faTrashCan, faUserCheck, faUserMinus } from "@fortawesome/fre
 import { ValuesAndClass } from "../../types/interfaces.ts";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 
-export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement }: AllPeopleProps): JSX.Element {
+export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement, dataRetrieved }: AllPeopleProps): JSX.Element {
   const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect((): void => {
@@ -47,93 +47,100 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
     return returnHeaders;
   };
 
-  const returnAllPeopleLgScreen = allPeople?.map((x: Attendee, y: number): JSX.Element => {
-    return (
-      <tr key={`row_${y}`}>
-        <td>{x.lastName}</td>
-        <td>{x.firstName}</td>
-        <td>{x.age}</td>
-        <td className="align_center">
-          <FontAwesomeIcon
-            className="user_check"
-            icon={x.memberType === "member" ? faUserCheck : faUserMinus}
-          />
-        </td>
-        <td className="align_center">
-          <button
-            type="button"
-            onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-              editPersonHandler(allPeople[y]);
-            }}
-          >
-            <FontAwesomeIcon icon={faPencil} />
-          </button>
-        </td>
-        <td className="align_center">
-          <button
-            type="button"
-            className="trash_can"
-            onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-              deletePersonHandler(allPeople[y]);
-            }}
-          >
-            <FontAwesomeIcon icon={faTrashCan} />
-          </button>
-        </td>
-      </tr>
-    );
-  });
+  const returnAllPeopleLgScreen = (arr: Attendee[]) => {
+    const returnRows = arr.map((x: Attendee, y: number): JSX.Element => {
+      return (
+        <tr key={`row_${y}`}>
+          <td>{x.lastName}</td>
+          <td>{x.firstName}</td>
+          <td>{x.age}</td>
+          <td className="align_center">
+            <FontAwesomeIcon
+              className="user_check"
+              icon={x.memberType === "member" ? faUserCheck : faUserMinus}
+            />
+          </td>
+          <td className="align_center">
+            <button
+              type="button"
+              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+                editPersonHandler(arr[y]);
+              }}
+            >
+              <FontAwesomeIcon icon={faPencil} />
+            </button>
+          </td>
+          <td className="align_center">
+            <button
+              type="button"
+              className="trash_can"
+              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+                deletePersonHandler(arr[y]);
+              }}
+            >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </button>
+          </td>
+        </tr>
+      );
+    });
 
-  const returnAllPeopleMobile = allPeople?.map((x: Attendee, y: number): JSX.Element => {
-    return (
-      <tr key={`row_${y}`}>
-        <td>{`${x.lastName}, ${x.firstName}`}</td>
-        <td>{x.age}</td>
-        <td className="align_center">
-          <FontAwesomeIcon
-            className="user_check"
-            icon={x.memberType === "member" ? faUserCheck : faUserMinus}
-          />
-        </td>
-        <td className="align_center">
-          <button
-            type="button"
-            onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-              editPersonHandler(allPeople[y]);
-            }}
-          >
-            <FontAwesomeIcon icon={faPencil} />
-          </button>
-        </td>
-        <td className="align_center">
-          <button
-            type="button"
-            className="trash_can"
-            onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-              deletePersonHandler(allPeople[y]);
-            }}
-          >
-            <FontAwesomeIcon icon={faTrashCan} />
-          </button>
-        </td>
-      </tr>
-    );
-  });
+    return returnRows;
+  };
 
-  if (allPeople) {
+  const returnAllPeopleMobile = (arr: Attendee[]) => {
+    const returnRows = arr.map((x: Attendee, y: number): JSX.Element => {
+      return (
+        <tr key={`row_${y}`}>
+          <td>{`${x.lastName}, ${x.firstName}`}</td>
+          <td>{x.age}</td>
+          <td className="align_center">
+            <FontAwesomeIcon
+              className="user_check"
+              icon={x.memberType === "member" ? faUserCheck : faUserMinus}
+            />
+          </td>
+          <td className="align_center">
+            <button
+              type="button"
+              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+                editPersonHandler(arr[y]);
+              }}
+            >
+              <FontAwesomeIcon icon={faPencil} />
+            </button>
+          </td>
+          <td className="align_center">
+            <button
+              type="button"
+              className="trash_can"
+              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+                deletePersonHandler(arr[y]);
+              }}
+            >
+              <FontAwesomeIcon icon={faTrashCan} />
+            </button>
+          </td>
+        </tr>
+      );
+    });
+
+    return returnRows;
+  };
+
+  if (dataRetrieved && allPeople) {
     return (
       <div id="all_people_table_wrapper">
         <h2>All Attendants</h2>
         <table id="all_people_table">
           <tbody>
             <tr>{currentWindowWidth > 1024 ? displayHeaders(lgScreenHeaders) : displayHeaders(mobileHeaders)}</tr>
-            {currentWindowWidth > 1024 ? returnAllPeopleLgScreen : returnAllPeopleMobile}
+            {currentWindowWidth > 1024 ? returnAllPeopleLgScreen(allPeople) : returnAllPeopleMobile(allPeople)}
           </tbody>
         </table>
         <PaginationButtons
           totalRows={totalRows}
           updateOffset={updateOffsetHandler}
-          // currentOffset={currentOffset}
           offSetIncrement={offSetIncrement}
         />
       </div>

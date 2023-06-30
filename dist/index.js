@@ -329,3 +329,28 @@ app.get("/row-count/:tableName", (req, res) => {
         });
     });
 });
+app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderValue", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    // let tble = req.params.tableName;
+    // let limit = parseInt(req.params.limitNum);
+    // let offset = parseInt(req.params.offsetNum);
+    // let fieldOrder = req.params.fieldOrder;
+    // let order = req.params.orderValue;
+    console.log("Limit = ", req.params.limitNum);
+    console.log("offset num = ", req.params.limitNum);
+    Db.limitNumberOfRowsReturned(req.params.tableName, parseInt(req.params.limitNum), parseInt(req.params.offsetNum), req.params.fieldOrder, req.params.orderValue)
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data,
+        });
+        console.log(data);
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            data: Db.getSqlError(err),
+        });
+        console.log(err);
+    });
+});

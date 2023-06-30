@@ -17,19 +17,21 @@ export default function PaginationButtons({ totalRows, updateOffset, offSetIncre
     setPagesNeeded(pages);
   }, [totalRows, offSetIncrement]);
 
-  useEffect((): void => {
-    updateOffset(currentPage * offSetIncrement);
-  }, [currentPage, offSetIncrement, updateOffset]);
+  //   useEffect((): void => {
+  //     updateOffset(currentPage * offSetIncrement);
+  //   }, [currentPage, offSetIncrement, updateOffset]);
 
   const incrementHandler = (): void => {
     if (currentPage < pagesNeeded) {
       setCurrentPage(currentPage + 1);
+      updateOffset((currentPage + 1) * offSetIncrement);
     }
   };
 
   const decrementHandler = (): void => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      updateOffset((currentPage - 1) * offSetIncrement);
     }
   };
 

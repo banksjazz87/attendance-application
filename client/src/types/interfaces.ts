@@ -122,12 +122,13 @@ export interface APIAttendanceSheet {
 }
 
 export interface AllPeopleProps {
-  allPeople: Attendee[];
+  allPeople: Attendee[] | null;
   deletePersonHandler: Function;
   editPersonHandler: Function;
   totalRows: number;
   updateOffsetHandler: Function;
   offSetIncrement: number;
+  dataRetrieved: boolean;
 }
 
 export interface DeleteProps {

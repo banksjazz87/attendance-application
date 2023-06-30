@@ -179,10 +179,22 @@ class DBMethods {
             this.endDb();
         });
     }
+    //Used to return the number of rows in a table.
     numberOfRows(table) {
         return new Promise((resolve, reject) => {
             const database = this.db();
             const neededSql = `SELECT COUNT(*) AS total FROM ${table};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    //Used to return a limited number of rows from a table.
+    limitNumberOfRowsReturned(table, limit, offset, fieldOrder, order) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT * FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
