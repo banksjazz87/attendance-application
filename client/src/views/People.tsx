@@ -12,7 +12,6 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 
 export default function People() {
   const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
-  const [peopleRetrieved, setPeopleRetrieved] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
   const [showEditUser, setShowEditUser] = useState<boolean>(false);
@@ -24,24 +23,12 @@ export default function People() {
   const offSetIncrement: number = 10;
 
   useEffect((): void => {
-    // fetch("/all-attendants")
-    //   .then((data: Response): Promise<APIPeople> => {
-    //     return data.json();
-    //   })
-    //   .then((final: APIPeople): void => {
-    //     if (final.message === "Success") {
-    //       setPeople(final.data);
-    //     }
-    //   });
-
     fetch(`/row-count/Attendants`)
       .then((data: Response): Promise<APITotalRows> => {
         return data.json();
       })
       .then((final: APITotalRows): void => {
         if (final.message === "success") {
-          //setPeople(final.data);
-          console.log(final.data);
           setTotalDbRows(final.data[0].total);
         }
       });
@@ -53,15 +40,11 @@ export default function People() {
         return data.json();
       })
       .then((final: APIPeople): void => {
-        if (final.message === "Success") {
+        if (final.message === "success") {
           setPeople(final.data);
-          setPeopleRetrieved(true);
-          console.log(final.data);
-        } else {
-          console.log(final.data);
         }
       });
-  }, []);
+  }, [currentOffset]);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
@@ -106,9 +89,6 @@ export default function People() {
       <Navbar />
       <div className="header_wrapper">
         <h1>People</h1>
-        <p>{`Total rows in this table ${totalDbRows}`}</p>
-        <br />
-        <p>{currentOffset}</p>
       </div>
       <div id="people_content_wrapper">
         <TextAndIconButton
@@ -123,7 +103,6 @@ export default function People() {
         />
         <AllPeople
           allPeople={people}
-          dataRetrieved={peopleRetrieved}
           deletePersonHandler={deleteUserHandler}
           editPersonHandler={editUserHandler}
           totalRows={totalDbRows}
