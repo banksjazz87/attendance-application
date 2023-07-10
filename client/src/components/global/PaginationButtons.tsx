@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleRight, faAngleLeft } from "@fortawesome/free-solid-svg-icons";
+import "../../assets/styles/components/global/paginationButtons.scss";
 
 interface PaginationButtonsProps {
   totalRows: number;
