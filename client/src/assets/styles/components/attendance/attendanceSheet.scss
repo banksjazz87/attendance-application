@@ -1,75 +1,61 @@
-    @import "../../global/library.scss";
+@import "../../global/library.scss";
+.attendance_table_wrapper {
+    @include main-table-wrapper;
+    border-radius: unset;
+    table {
+        @include full-width-table;
+        th {
+            @include table-headers;
+        }
+        .first_name,
+        .last_name {
+            text-align: left;
+            padding-left: 1rem;
+        }
+        .dark_row {
+            background-color: $blue-highlight;
+        }
+        .number_id {
+            text-align: right;
+        }
+        .delete,
+        .delete_button {
+            text-align: center;
+        }
+        td {
+            @include table-center-data;
+            text-align: left;
+            padding-left: 1rem;
+            button {
+                width: auto;
+                padding: 6px 12px;
+                border-radius: 50%;
+            }
+            .present_click {
+                @include icon-button;
+            }
+            .check {
+                font-size: 32px;
+                font-weight: 200;
+            }
+            .circle {
+                font-size: 16px;
+            }
+            .trash_can {
+                @include trash-icon;
+            }
+            .trash_btn {
+                background-color: transparent;
+                &:hover {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+}
 
+@media (min-width: 1366px) {
     .attendance_table_wrapper {
-        @include main-table-wrapper;
-
-        table {
-            @include full-width-table;
-
-            th {
-                @include table-headers;
-            }
-
-            .first_name,
-            .last_name {
-                text-align: left;
-                padding-left: 1rem;
-            }
-
-            .dark_row {
-                background-color: $blue-highlight;
-            }
-
-            .number_id {
-                text-align: right;
-            }
-
-            .delete,
-            .delete_button {
-                text-align: center;
-            }
-
-            td {
-                @include table-center-data;
-                text-align: left;
-                padding-left: 1rem;
-
-                button {
-                    width: auto;
-                    padding: 6px 12px;
-                    border-radius: 50%;
-                }
-
-                .present_click {
-                    @include icon-button;
-                }
-
-                .check {
-                    font-size: 32px;
-                    font-weight: 200;
-                }
-
-                .circle {
-                    font-size: 16px;
-                }
-
-                .trash_can {
-                    @include trash-icon;
-                }
-
-                .trash_btn {
-                    background-color: transparent;
-
-                    &:hover {
-                        box-shadow: none;
-                    }
-                }
-            }
-        }
+        width: 1290px;
     }
-
-    @media (min-width: 1366px) {
-        .attendance_table_wrapper {
-            width: 1290px;
-        }
-    }
+}
