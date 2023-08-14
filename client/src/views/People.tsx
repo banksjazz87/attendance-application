@@ -35,6 +35,18 @@ export default function People() {
   }, [totalDbRows]);
 
   useEffect((): void => {
+    let queryParams = new URLSearchParams(window.location.href);
+    if (window.location.href.includes('offset')) {
+      queryParams.set('offset', currentOffset.toString());
+    } else {
+      window.location.href = `${window.location.href}?offset=${currentOffset}`;
+    }
+
+    console.log(currentOffset);
+
+
+
+
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
         return data.json();
