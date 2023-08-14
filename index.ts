@@ -25,7 +25,7 @@ app.listen(port, (): void => {
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
-const paths = ["/dashboard", "/new-attendance", "/attendance", "search", "/people"];
+const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/search"];
 
 app.get(paths, (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));

@@ -9,6 +9,7 @@ import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import { useSearchParams } from "react-router-dom";
 
 export default function People() {
   const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
@@ -19,6 +20,8 @@ export default function People() {
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
   const [currentOffset, setCurrentOffset] = useState<number>(0);
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const offSetIncrement: number = 10;
 
@@ -35,17 +38,7 @@ export default function People() {
   }, [totalDbRows]);
 
   useEffect((): void => {
-    let queryParams = new URLSearchParams(window.location.href);
-    if (window.location.href.includes('offset')) {
-      queryParams.set('offset', currentOffset.toString());
-    } else {
-      window.location.href = `${window.location.href}?offset=${currentOffset}`;
-    }
-
-    console.log(currentOffset);
-
-
-
+    setSearchParams({offset: currentOffset.toString()});
 
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
@@ -56,7 +49,7 @@ export default function People() {
           setPeople(final.data);
         }
       });
-  }, [currentOffset]);
+  }, [currentOffset, setSearchParams]);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
