@@ -25,12 +25,14 @@ export default function PaginationButtons({ totalRows, updateOffset, offSetIncre
   const incrementHandler = (): void => {
     if (currentPage < pagesNeeded) {
       setCurrentPage(currentPage + 1);
+      sessionStorage.setItem('personPage', currentPage.toString());
     }
   };
 
   const decrementHandler = (): void => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      sessionStorage.setItem('personPage', currentPage.toString());
     }
   };
 

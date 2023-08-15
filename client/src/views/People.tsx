@@ -9,7 +9,6 @@ import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import { useSearchParams } from "react-router-dom";
 
 export default function People() {
   const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
@@ -19,9 +18,9 @@ export default function People() {
   const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
-  const [currentOffset, setCurrentOffset] = useState<number>(0);
+  
+  const [currentOffset, setCurrentOffset] = useState<number>(sessionStorage.getItem('personPage') ? parseInt(sessionStorage.getItem('personPage') as string) : 0);
 
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const offSetIncrement: number = 10;
 
@@ -39,12 +38,9 @@ export default function People() {
   }, [totalDbRows]);
 
   useEffect((): void => {
-    setSearchParams({offset: currentOffset.toString()});
-
-    console.log('Search Params =', searchParams);
+  
 
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
-    // fetch(`/table-return-few/Attendants/${offSetIncrement}/${searchParams.offset > 0 ? searchParams : currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
         return data.json();
       })
@@ -53,7 +49,7 @@ export default function People() {
           setPeople(final.data);
         }
       });
-  }, [currentOffset, setSearchParams, searchParams]);
+  }, [currentOffset]);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
@@ -115,7 +111,9 @@ export default function People() {
           deletePersonHandler={deleteUserHandler}
           editPersonHandler={editUserHandler}
           totalRows={totalDbRows}
-          updateOffsetHandler={(num: number): void => setCurrentOffset(num)}
+          updateOffsetHandler={(num: number): void => {
+            setCurrentOffset(num);
+          }}
           offSetIncrement={offSetIncrement}
         />
         <DeleteAlert
