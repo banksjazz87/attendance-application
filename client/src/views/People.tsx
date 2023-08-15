@@ -25,6 +25,7 @@ export default function People() {
 
   const offSetIncrement: number = 10;
 
+  //Used to get the number of rows from the table.
   useEffect((): void => {
     fetch(`/row-count/Attendants`)
       .then((data: Response): Promise<APITotalRows> => {
@@ -40,7 +41,10 @@ export default function People() {
   useEffect((): void => {
     setSearchParams({offset: currentOffset.toString()});
 
+    console.log('Search Params =', searchParams);
+
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
+    // fetch(`/table-return-few/Attendants/${offSetIncrement}/${searchParams.offset > 0 ? searchParams : currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
         return data.json();
       })
@@ -49,7 +53,7 @@ export default function People() {
           setPeople(final.data);
         }
       });
-  }, [currentOffset, setSearchParams]);
+  }, [currentOffset, setSearchParams, searchParams]);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);

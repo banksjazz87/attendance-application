@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
 import { SQLResponse } from "./interfaces/interfaces.ts";
+import queryString from 'querystring';
+import url from 'url';
 
 dotenv.config();
 
@@ -25,7 +27,7 @@ app.listen(port, (): void => {
 
 app.use(express.static(path.join(__dirname, "../client/build")));
 
-const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/search"];
+const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/"];
 
 app.get(paths, (req: Request, res: Response) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
@@ -398,4 +400,8 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
       });
       console.log(err);
     });
+});
+
+app.get('/people/fart', (req: Request, res: Response): void => {
+  res.send(req.query.offset);
 });

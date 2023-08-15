@@ -23,7 +23,7 @@ app.listen(port, () => {
     console.log("testing heree");
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
-const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/search"];
+const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/"];
 app.get(paths, (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
 });
@@ -346,4 +346,7 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
         });
         console.log(err);
     });
+});
+app.get('/people/fart', (req, res) => {
+    res.send(req.query.offset);
 });
