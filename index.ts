@@ -6,8 +6,8 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
 import { SQLResponse } from "./interfaces/interfaces.ts";
-import queryString from 'querystring';
-import url from 'url';
+import queryString from "querystring";
+import url from "url";
 
 dotenv.config();
 
@@ -402,6 +402,25 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
     });
 });
 
-app.get('/people/fart', (req: Request, res: Response): void => {
-  res.send(req.query.offset);
+app.get("/people/search/:table/:partialName", (req: Request, res: Response): void => {
+  let tableName: string = req.params.table;
+  let partial: string = req.params.partialName;
+
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  Db.searchForPartialName(tableName, partial)
+    .then((data) => {
+      res.send({
+        message: "success",
+        data: data,
+      });
+      console.log(data);
+    })
+    .catch((err) => {
+      res.send({
+        message: "failure",
+        data: Db.getSqlError(err),
+      });
+      console.log(err);
+    });
 });
