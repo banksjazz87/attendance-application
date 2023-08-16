@@ -209,6 +209,7 @@ class DBMethods {
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
+            this.endDb();
         });
     }
 }

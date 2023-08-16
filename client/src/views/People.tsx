@@ -19,6 +19,7 @@ export default function People() {
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
   const [currentOffset, setCurrentOffset] = useState<number>(0);
+  const [partialName, setPartialName] = useState<string>('');
 
   const offSetIncrement: number = 10;
 
@@ -36,6 +37,20 @@ export default function People() {
   }, [totalDbRows]);
 
   useEffect((): void => {
+    if (partialName.length > 0) {
+
+      console.log(partialName);
+      fetch(`/people/search/Attendants/${partialName}`)
+        .then((data: Response): Promise<APIPeople> => {
+          return data.json();
+        })
+        .then((final: APIPeople): void => {
+          if (final.message === 'success') {
+            setPeople(final.data)
+          }
+        });
+
+    } else {
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
         return data.json();
@@ -45,7 +60,8 @@ export default function People() {
           setPeople(final.data);
         }
       });
-  }, [currentOffset]);
+    }
+  }, [currentOffset, partialName]);
 
   const deleteUserHandler = (obj: Attendee): void => {
     setShowDeleteAlert(true);
@@ -85,6 +101,10 @@ export default function People() {
     }
   };
 
+  const updatePartialName = (string: string): void => {
+    setPartialName(string);
+  }
+
   return (
     <div id="people_page_wrapper">
       <Navbar />
@@ -111,6 +131,7 @@ export default function People() {
             setCurrentOffset(num);
           }}
           offSetIncrement={offSetIncrement}
+          updatePartial={updatePartialName}
         />
         <DeleteAlert
           message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}

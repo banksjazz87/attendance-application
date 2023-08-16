@@ -128,6 +128,7 @@ export interface AllPeopleProps {
   totalRows: number;
   updateOffsetHandler: Function;
   offSetIncrement: number;
+  updatePartial: Function;
 }
 
 export interface DeleteProps {
