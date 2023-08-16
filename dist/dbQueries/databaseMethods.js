@@ -201,5 +201,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    //Used to return a partial match of rows from a table.
+    searchForPartialName(table, partialName) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT * FROM ${table} WHERE firstName LIKE "%${partialName}%" OR lastName LIKE "%${partialName}%"`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
 }
 exports.DBMethods = DBMethods;

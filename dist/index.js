@@ -347,6 +347,23 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
         console.log(err);
     });
 });
-app.get('/people/fart', (req, res) => {
-    res.send(req.query.offset);
+app.get("/people/search/:table/:partialName", (req, res) => {
+    let tableName = req.params.table;
+    let partial = req.params.partialName;
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.searchForPartialName(tableName, partial)
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data,
+        });
+        console.log(data);
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            data: Db.getSqlError(err),
+        });
+        console.log(err);
+    });
 });
