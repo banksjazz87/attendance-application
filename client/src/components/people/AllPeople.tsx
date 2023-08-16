@@ -142,6 +142,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
           totalRows={totalRows}
           updateOffset={updateOffsetHandler}
           offSetIncrement={offSetIncrement}
+          sessionPageProperty={'personPage'}
         />
       </div>
     );

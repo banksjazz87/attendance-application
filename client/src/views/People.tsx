@@ -18,9 +18,7 @@ export default function People() {
   const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
   const [showAddMember, setShowAddMember] = useState<boolean>(false);
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
-  
-  const [currentOffset, setCurrentOffset] = useState<number>(sessionStorage.getItem('personPage') ? parseInt(sessionStorage.getItem('personPage') as string) : 0);
-
+  const [currentOffset, setCurrentOffset] = useState<number>(0);
 
   const offSetIncrement: number = 10;
 
@@ -38,8 +36,6 @@ export default function People() {
   }, [totalDbRows]);
 
   useEffect((): void => {
-  
-
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
         return data.json();
