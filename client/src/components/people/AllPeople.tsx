@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPencil, faTrashCan, faUserCheck, faUserMinus } from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
 import PaginationButtons from "../global/PaginationButtons.tsx";
+import SearchBar from "../global/SearchBar.tsx";
 
 export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement }: AllPeopleProps): JSX.Element {
   const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
@@ -132,6 +133,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
     return (
       <div id="all_people_table_wrapper">
         <h2>All Attendants</h2>
+        <SearchBar />
         <table id="all_people_table">
           <tbody>
             <tr>{currentWindowWidth > 1024 ? displayHeaders(lgScreenHeaders) : displayHeaders(mobileHeaders)}</tr>
