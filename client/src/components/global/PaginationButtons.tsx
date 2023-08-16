@@ -9,8 +9,9 @@ interface PaginationButtonsProps {
   offSetIncrement: number;
 }
 
+
 export default function PaginationButtons({ totalRows, updateOffset, offSetIncrement }: PaginationButtonsProps): JSX.Element {
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(sessionStorage.getItem('personPage') ? parseInt(sessionStorage.getItem('personPage') as string) : 1);
   const [pagesNeeded, setPagesNeeded] = useState<number>(1);
 
   useEffect((): void => {
@@ -20,19 +21,18 @@ export default function PaginationButtons({ totalRows, updateOffset, offSetIncre
 
   useEffect((): void => {
     updateOffset((currentPage - 1) * offSetIncrement);
+    sessionStorage.setItem('personPage', currentPage.toString());
   }, [currentPage, offSetIncrement, updateOffset]);
 
   const incrementHandler = (): void => {
     if (currentPage < pagesNeeded) {
       setCurrentPage(currentPage + 1);
-      sessionStorage.setItem('personPage', currentPage.toString());
     }
   };
 
   const decrementHandler = (): void => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
-      sessionStorage.setItem('personPage', currentPage.toString());
     }
   };
 
