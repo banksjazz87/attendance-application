@@ -129,6 +129,7 @@ export interface AllPeopleProps {
   updateOffsetHandler: Function;
   offSetIncrement: number;
   updatePartial: Function;
+  activeSearch: boolean;
 }
 
 export interface DeleteProps {

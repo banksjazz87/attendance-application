@@ -7,7 +7,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 import SearchBar from "../global/SearchBar.tsx";
 
-export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement, updatePartial }: AllPeopleProps): JSX.Element {
+export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch }: AllPeopleProps): JSX.Element {
   const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
 
   useEffect((): void => {
@@ -133,9 +133,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
     return (
       <div id="all_people_table_wrapper">
         <h2>All Attendants</h2>
-        <SearchBar 
-          updatePartial={updatePartial}
-        />
+        <SearchBar updatePartial={updatePartial} />
         <table id="all_people_table">
           <tbody>
             <tr>{currentWindowWidth > 1024 ? displayHeaders(lgScreenHeaders) : displayHeaders(mobileHeaders)}</tr>
@@ -146,8 +144,28 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
           totalRows={totalRows}
           updateOffset={updateOffsetHandler}
           offSetIncrement={offSetIncrement}
-          sessionPageProperty={'personPage'}
+          sessionPageProperty={"personPage"}
         />
+      </div>
+    );
+  } else if (activeSearch && allPeople.length < 1) {
+    return (
+      <div id="all_people_table_wrapper">
+        <h2>All Attendants</h2>
+        <SearchBar updatePartial={updatePartial} />
+      </div>
+    );
+  } else if (activeSearch && allPeople.length > 0) {
+    return (
+      <div id="all_people_table_wrapper">
+        <h2>All Attendants</h2>
+        <SearchBar updatePartial={updatePartial} />
+        <table id="all_people_table">
+          <tbody>
+            <tr>{currentWindowWidth > 1024 ? displayHeaders(lgScreenHeaders) : displayHeaders(mobileHeaders)}</tr>
+            {currentWindowWidth > 1024 ? returnAllPeopleLgScreen(allPeople) : returnAllPeopleMobile(allPeople)}
+          </tbody>
+        </table>
       </div>
     );
   } else {

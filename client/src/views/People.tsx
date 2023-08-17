@@ -20,6 +20,7 @@ export default function People() {
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
   const [currentOffset, setCurrentOffset] = useState<number>(0);
   const [partialName, setPartialName] = useState<string>('');
+  const [searching, setSearching] = useState<boolean>(false);
 
   const offSetIncrement: number = 10;
 
@@ -38,7 +39,7 @@ export default function People() {
 
   useEffect((): void => {
     if (partialName.length > 0) {
-
+      setSearching(true);
       console.log(partialName);
       fetch(`/people/search/Attendants/${partialName}`)
         .then((data: Response): Promise<APIPeople> => {
@@ -51,6 +52,7 @@ export default function People() {
         });
 
     } else {
+      setSearching(false);
     fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
       .then((data: Response): Promise<APIPeople> => {
         return data.json();
@@ -132,6 +134,7 @@ export default function People() {
           }}
           offSetIncrement={offSetIncrement}
           updatePartial={updatePartialName}
+          activeSearch={searching}
         />
         <DeleteAlert
           message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
