@@ -1,4 +1,6 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 interface SearchBarProps {
   updatePartial: Function;
@@ -13,17 +15,21 @@ export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Elemen
   };
 
   return (
-    <form
-      action="/search/query"
-      method="GET"
-    >
+    <div id="search-form-wrapper">
       <label htmlFor="search_term">Search</label>
-      <input
-        id="search_term"
-        name="search_term"
-        type="text"
-        onChange={changeHandler}
-      />
-    </form>
+      <div id="inner-search-wrapper">
+        <FontAwesomeIcon
+          className="search"
+          icon={faSearch}
+        />
+        <input
+          id="search_term"
+          name="search_term"
+          type="text"
+          onChange={changeHandler}
+        />
+      </div>
+      <p>(First or Last Name)</p>
+    </div>
   );
 }

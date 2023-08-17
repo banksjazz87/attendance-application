@@ -129,7 +129,7 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
     return returnRows;
   };
 
-  if (allPeople.length > 1) {
+  const allPeopleNoSearch = (): JSX.Element => {
     return (
       <div id="all_people_table_wrapper">
         <h2>All Attendants</h2>
@@ -148,14 +148,18 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
         />
       </div>
     );
-  } else if (activeSearch && allPeople.length < 1) {
+  };
+
+  const activeSearchNoPersonFound = (): JSX.Element => {
     return (
       <div id="all_people_table_wrapper">
         <h2>All Attendants</h2>
         <SearchBar updatePartial={updatePartial} />
       </div>
     );
-  } else if (activeSearch && allPeople.length > 0) {
+  };
+
+  const activeSearchPeopleFound = (): JSX.Element => {
     return (
       <div id="all_people_table_wrapper">
         <h2>All Attendants</h2>
@@ -168,6 +172,14 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
         </table>
       </div>
     );
+  };
+
+  if (allPeople.length > 1 && !activeSearch) {
+    return allPeopleNoSearch();
+  } else if (activeSearch && allPeople.length < 1) {
+    return activeSearchNoPersonFound();
+  } else if (activeSearch && allPeople.length > 0) {
+    return activeSearchPeopleFound();
   } else {
     return <h1>Fetching</h1>;
   }
