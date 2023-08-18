@@ -1,6 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import "../../assets/styles/components/global/searchBar.scss";
 
 interface SearchBarProps {
   updatePartial: Function;
@@ -15,9 +16,9 @@ export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Elemen
   };
 
   return (
-    <div id="search-form-wrapper">
+    <div id="search_form_wrapper">
       <label htmlFor="search_term">Search</label>
-      <div id="inner-search-wrapper">
+      <div id="inner_search_wrapper">
         <FontAwesomeIcon
           className="search"
           icon={faSearch}

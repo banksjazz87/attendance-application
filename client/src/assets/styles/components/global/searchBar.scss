@@ -1,0 +1,25 @@
+@import "../../global/library.scss";
+#search_form_wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: flex-start;
+    margin-left: 2rem;
+    #inner_search_wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        @include input-field;
+        width: 50%;
+        max-width: 350px;
+        input {
+            width: 100%;
+            box-shadow: none;
+            border: none;
+            &:focus-visible #inner_search_wrapper {
+                box-shadow: 0 2px 6px rgba(238, 108, 77, .6);
+            }
+        }
+    }
+}
