@@ -5,6 +5,7 @@
     width: 100%;
     justify-content: flex-start;
     margin-left: 2rem;
+    row-gap: 10px;
     #inner_search_wrapper {
         display: flex;
         flex-direction: row;
@@ -18,5 +19,12 @@
             box-shadow: none;
             border: none;
         }
+    }
+    .sub_text {
+        font-size: 14px;
+        font-style: italic;
+        font-weight: 200;
+        margin-top: -5px;
+        margin-left: 10%;
     }
 }

@@ -50,7 +50,7 @@ export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Elemen
           onChange={changeHandler}
         />
       </div>
-      <p>(First or Last Name)</p>
+      <p className="sub_text">(First or Last Name)</p>
     </div>
   );
 }
