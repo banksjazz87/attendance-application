@@ -36,7 +36,6 @@ export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Elemen
 
   return (
     <div id="search_form_wrapper">
-      <label htmlFor="search_term">Search</label>
       <div id="inner_search_wrapper" 
       style={activeSearch ? {boxShadow: "0 2px 6px rgba(238, 108, 77, .6)"} : {boxShadow: "0 1px 4px rgba(41, 50, 65, .6)" }}>
         <FontAwesomeIcon
@@ -48,9 +47,9 @@ export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Elemen
           name="search_term"
           type="text"
           onChange={changeHandler}
+          placeholder="First or Last Name"
         />
       </div>
-      <p className="sub_text">(First or Last Name)</p>
     </div>
   );
 }

@@ -1,4 +1,7 @@
 @import "../global/library.scss";
+#people_page_wrapper {
+    overflow-x: hidden;
+}
 
 #people_content_wrapper {
     @include content-wrapper-md;
