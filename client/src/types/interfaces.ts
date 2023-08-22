@@ -15,6 +15,9 @@ export interface AttendanceProps {
   parentTitle: string;
   tableName: string;
   deleteMemberHandler: Function;
+  updateOffsetHandler: Function;
+  offSetIncrement: number;
+  totalRows: number;
 }
 
 export interface Group {

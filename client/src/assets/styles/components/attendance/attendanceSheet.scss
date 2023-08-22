@@ -1,7 +1,8 @@
 @import "../../global/library.scss";
 .attendance_table_wrapper {
     @include main-table-wrapper;
-    border-radius: unset;
+    border-radius: 16px;
+    padding-bottom: 2rem;
     table {
         @include full-width-table;
         th {

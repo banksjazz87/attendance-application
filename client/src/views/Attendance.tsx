@@ -7,7 +7,7 @@ import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
-import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
+import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee, APITotalRows } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
@@ -28,6 +28,11 @@ export default function Attendance(): JSX.Element {
   const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 
+  const [totalDbRows, setTotalDbRows] = useState<number>(0);
+  const [currentOffset, setCurrentOffset] = useState<number>(0);
+
+  const offSetIncrement: number = 10;
+
   //Used to pull data from the session storage.
   useEffect((): void => {
     if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
@@ -45,15 +50,42 @@ export default function Attendance(): JSX.Element {
 
       setSelectedGroup([parent]);
 
-      fetch(`/attendance/get-list/${tableToDisplay.title}`)
+      // fetch(`/attendance/get-list/${tableToDisplay.title}`)
+      //   .then((data: Response): Promise<APIAttendanceSheet> => {
+      //     return data.json();
+      //   })
+      //   .then((final: APIAttendanceSheet): void => {
+      //     selectAttendanceSheet(final.data);
+      //   });
+
+      fetch(`/table-return-few/${tableToDisplay.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
           return data.json();
         })
         .then((final: APIAttendanceSheet): void => {
-          selectAttendanceSheet(final.data);
+          selectAttendanceSheet(final.data); 
+        })
+    }
+  }, [currentOffset]);
+
+
+  //Used to update the total db rows.
+  useEffect(() => {
+
+    if (selectedAttendance.title.length > 0) {
+      fetch(`/row-count/${selectedAttendance.title}`)
+        .then((data: Response): Promise<APITotalRows> => {
+          return data.json();
+        })
+        .then((final: APITotalRows): void => {
+          if (final.message === "success") {
+            setTotalDbRows(final.data[0].total)
+          }
         });
     }
-  }, []);
+  }, [totalDbRows, selectedAttendance]);
+
+
 
   //Used to determine fif the dropdown and the show option buttons should be displayed.
   useEffect((): void => {
@@ -182,6 +214,12 @@ export default function Attendance(): JSX.Element {
           attendanceData={currentListData}
           parentTitle={selectedGroup[0].displayName}
           deleteMemberHandler={updateDeleteMemberHandler}
+          updateOffsetHandler={(num: number): void => {
+            setCurrentOffset(num);
+          }}
+          offSetIncrement={offSetIncrement}
+          totalRows={totalDbRows}
+
         />
         <NewMember
           currentTable={selectedAttendance.title}

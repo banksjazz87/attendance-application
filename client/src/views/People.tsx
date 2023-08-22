@@ -40,7 +40,6 @@ export default function People() {
   useEffect((): void => {
     if (partialName.length > 0) {
       setSearching(true);
-      console.log(partialName);
       fetch(`/people/search/Attendants/${partialName}`)
         .then((data: Response): Promise<APIPeople> => {
           return data.json();
