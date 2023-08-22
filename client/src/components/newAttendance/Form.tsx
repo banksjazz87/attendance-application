@@ -129,6 +129,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
               postData("/new-attendance/create", form).then((data: APINewTable): void => {
                 if (data.message === "success") {
                   neededAttendants(data);
+                  sessionStorage.setItem('currentAttendancePage', '0');
                 } else {
                   alert("Error with the /new-attendance/create");
                 }

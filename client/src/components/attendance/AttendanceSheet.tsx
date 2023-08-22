@@ -110,7 +110,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
         id={`attendant_row_${y}`}
         className={MathMethods.checkForEven(y) ? "" : "dark_row"}
       >
-        <td className="number_id id_data">{`${y + 1}.`}</td>
         <td>{x.lastName}</td>
         <td>{x.firstName}</td>
         <td className="present_data">{checkedOrNot(x.present, y)}</td>
@@ -160,7 +159,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
   });
 
   const headersLgScreen: ValuesAndClass[] = [
-    { value: "", class: "id_number" },
     { value: "Last Name", class: "last_name" },
     { value: "First Name", class: "first_name" },
     { value: "Present", class: "present_header" },

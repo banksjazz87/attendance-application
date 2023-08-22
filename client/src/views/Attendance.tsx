@@ -33,6 +33,12 @@ export default function Attendance(): JSX.Element {
 
   const offSetIncrement: number = 10;
 
+  // useEffect(() => {
+  //   if (sessionStorage.getItem('currentAttendancePage')) {
+  //     setCurrentOffset(parseInt(sessionStorage.getItem('currentAttendancePage') as string));
+  //   }
+  // }, [currentOffset]);
+
   //Used to pull data from the session storage.
   useEffect((): void => {
     if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
@@ -57,7 +63,10 @@ export default function Attendance(): JSX.Element {
       //   .then((final: APIAttendanceSheet): void => {
       //     selectAttendanceSheet(final.data);
       //   });
-
+      if (sessionStorage.getItem('currentAttendancePage')) {
+        setCurrentOffset(parseInt(sessionStorage.getItem('currentAttendancePage') as string));
+      }
+      
       fetch(`/table-return-few/${tableToDisplay.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
           return data.json();
@@ -71,7 +80,6 @@ export default function Attendance(): JSX.Element {
 
   //Used to update the total db rows.
   useEffect(() => {
-
     if (selectedAttendance.title.length > 0) {
       fetch(`/row-count/${selectedAttendance.title}`)
         .then((data: Response): Promise<APITotalRows> => {

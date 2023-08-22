@@ -17,6 +17,7 @@ export default function GroupDropDown({ groupSelected, getGroups, currentGroups,
 
         if (getGroups) {
           getGroups(newArr);
+          sessionStorage.setItem('currentAttendancePage', '0'); 
         }
       });
   }, []);
