@@ -9,6 +9,7 @@ export default function DropDownForm({ clickHandler, groupHandler, name, groupSe
     if (clickHandler && groupHandler) {
       clickHandler();
       groupHandler(name);
+      sessionStorage.removeItem('currentAttendancePage');
     }
   };
 

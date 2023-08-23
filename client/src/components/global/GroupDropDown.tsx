@@ -17,12 +17,16 @@ export default function GroupDropDown({ groupSelected, getGroups, currentGroups,
 
         if (getGroups) {
           getGroups(newArr);
-          sessionStorage.setItem('currentAttendancePage', '0'); 
         }
       });
   }, []);
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+
+    sessionStorage.removeItem('currentAttendancePage'); 
+    console.log('removed');
+
+
     if (groupSelected) {
       groupSelected(currentGroups, e.target.value);
     } else if (attendanceGroupSelected) {

@@ -27,21 +27,18 @@ export default function Attendance(): JSX.Element {
   const [showOptionButtons, setShowOptionButtons] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+  const [initialRender, setInitialRender] = useState<boolean>(false);
 
   const [totalDbRows, setTotalDbRows] = useState<number>(0);
   const [currentOffset, setCurrentOffset] = useState<number>(0);
 
   const offSetIncrement: number = 10;
 
-  // useEffect(() => {
-  //   if (sessionStorage.getItem('currentAttendancePage')) {
-  //     setCurrentOffset(parseInt(sessionStorage.getItem('currentAttendancePage') as string));
-  //   }
-  // }, [currentOffset]);
-
+  
   //Used to pull data from the session storage.
   useEffect((): void => {
-    if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
+
+    if (sessionStorage.selectedTable && sessionStorage.selectedParent && !initialRender) {
       let tableToDisplay = JSON.parse(sessionStorage.selectedTable);
 
       setSelectedAttendance({
@@ -66,17 +63,32 @@ export default function Attendance(): JSX.Element {
       if (sessionStorage.getItem('currentAttendancePage')) {
         setCurrentOffset(parseInt(sessionStorage.getItem('currentAttendancePage') as string));
       }
-      
+
       fetch(`/table-return-few/${tableToDisplay.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
           return data.json();
         })
         .then((final: APIAttendanceSheet): void => {
           selectAttendanceSheet(final.data); 
+          setInitialRender(true);
+          console.log('this api has been hit');
         })
     }
-  }, [currentOffset]);
+  }, []);
 
+
+  useEffect((): void => {
+    if (initialRender) {
+    fetch(`/table-return-few/${selectedAttendance.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
+        .then((data: Response): Promise<APIAttendanceSheet> => {
+          return data.json();
+        })
+        .then((final: APIAttendanceSheet): void => {
+          selectAttendanceSheet(final.data); 
+          console.log('this api has been hit');
+        });
+      }
+  }, [initialRender, currentOffset, selectedAttendance.title]);
 
   //Used to update the total db rows.
   useEffect(() => {
