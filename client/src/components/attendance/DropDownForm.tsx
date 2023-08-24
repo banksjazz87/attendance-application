@@ -3,22 +3,13 @@ import { GroupProps } from "../../types/interfaces.ts";
 import GroupDropDown from "../../components/global/GroupDropDown.tsx";
 import "../../assets/styles/components/attendance/dropDownForm.scss";
 
-export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler, show, resetOffset }: GroupProps) {
-  
-  const updateOffset = (): void => {
-    if (resetOffset) {
-      resetOffset();
-      sessionStorage.setItem('currentAttendancePage', '1');
-      console.log(sessionStorage.getItem('currentAttendancePage'));
-    }
-  }
+export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler, show }: GroupProps) {
   
   const submitHandler = (e: React.FormEvent): void => {
     e.preventDefault();
     if (clickHandler && groupHandler) {
       clickHandler();
       groupHandler(name);
-      updateOffset();
     }
   };
 
@@ -31,7 +22,6 @@ export default function DropDownForm({ clickHandler, groupHandler, name, groupSe
         <form onSubmit={submitHandler}>
           <GroupDropDown 
           attendanceGroupSelected={groupSelectedHandler} 
-          resetOffset={resetOffset}
           />
           <input
             type="submit"

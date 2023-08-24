@@ -3,7 +3,6 @@ import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../t
 import putData from "../../functions/api/put.ts";
 import MathMethods from "../../functions/math.ts";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
-import PaginationButtons from "../global/PaginationButtons.tsx";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
@@ -11,7 +10,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updateOffsetHandler, offSetIncrement, totalRows }: AttendanceProps) {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler}: AttendanceProps) {
   //The below is for production
   const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -198,12 +197,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
           {screenSize > 767 ? dataPointsLgScreen : dataPointsMobile}
         </tbody>
       </table>
-      <PaginationButtons 
-        totalRows={totalRows}
-        updateOffset={updateOffsetHandler}
-        offSetIncrement={offSetIncrement}
-        sessionPageProperty={"currentAttendancePage"}
-      />
     </div>
   );
 }

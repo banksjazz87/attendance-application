@@ -27,18 +27,11 @@ export default function Attendance(): JSX.Element {
   const [showOptionButtons, setShowOptionButtons] = useState<boolean>(false);
   const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
   const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
-  const [initialRender, setInitialRender] = useState<boolean>(false);
-
-  const [totalDbRows, setTotalDbRows] = useState<number>(0);
-  const [currentOffset, setCurrentOffset] = useState<number>(0);
-
-  const offSetIncrement: number = 10;
-
   
   //Used to pull data from the session storage.
   useEffect((): void => {
 
-    if (sessionStorage.selectedTable && sessionStorage.selectedParent && !initialRender) {
+    if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
       let tableToDisplay = JSON.parse(sessionStorage.selectedTable);
 
       setSelectedAttendance({
@@ -53,57 +46,19 @@ export default function Attendance(): JSX.Element {
 
       setSelectedGroup([parent]);
 
-      // fetch(`/attendance/get-list/${tableToDisplay.title}`)
-      //   .then((data: Response): Promise<APIAttendanceSheet> => {
-      //     return data.json();
-      //   })
-      //   .then((final: APIAttendanceSheet): void => {
-      //     selectAttendanceSheet(final.data);
-      //   });
-     
-      fetch(`/table-return-few/${tableToDisplay.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
+      fetch(`/attendance/get-list/${tableToDisplay.title}`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
           return data.json();
         })
         .then((final: APIAttendanceSheet): void => {
-          selectAttendanceSheet(final.data); 
-          setInitialRender(true);
-          console.log('this api has been hit');
-        })
+          selectAttendanceSheet(final.data);
+        });
+  
     }
   }, []);
 
-  useEffect((): void => {
-    if (initialRender) {
-    fetch(`/table-return-few/${selectedAttendance.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
-        .then((data: Response): Promise<APIAttendanceSheet> => {
-          return data.json();
-        })
-        .then((final: APIAttendanceSheet): void => {
-          selectAttendanceSheet(final.data); 
-          console.log('this api has been hit');
-        });
-      }
-  }, [initialRender, currentOffset, selectedAttendance.title]);
-
-  //Used to update the total db rows.
-  useEffect(() => {
-    if (selectedAttendance.title.length > 0) {
-      fetch(`/row-count/${selectedAttendance.title}`)
-        .then((data: Response): Promise<APITotalRows> => {
-          return data.json();
-        })
-        .then((final: APITotalRows): void => {
-          if (final.message === "success") {
-            setTotalDbRows(final.data[0].total)
-          }
-        });
-    }
-  }, [totalDbRows, selectedAttendance]);
-
-
-
-  //Used to determine fif the dropdown and the show option buttons should be displayed.
+ 
+  //Used to determine if the dropdown and the show option buttons should be displayed.
   useEffect((): void => {
     if (displayAttendance) {
       setShowDropDown(false);
@@ -192,9 +147,6 @@ export default function Attendance(): JSX.Element {
     setShowDeleteAlert(true);
   };
 
-  const resetTheOffset = (): void => {
-    setCurrentOffset(0);
-  }
 
   return (
     <div id="attendance_wrapper">
@@ -209,7 +161,6 @@ export default function Attendance(): JSX.Element {
           groupSelectedHandler={selectGroup}
           groupHandler={dropDownSubmit}
           show={showDropDown}
-          resetOffset={resetTheOffset}
         />
         <div className="button_group">
           <TextAndIconButton
@@ -235,12 +186,6 @@ export default function Attendance(): JSX.Element {
           attendanceData={currentListData}
           parentTitle={selectedGroup[0].displayName}
           deleteMemberHandler={updateDeleteMemberHandler}
-          updateOffsetHandler={(num: number): void => {
-            setCurrentOffset(num);
-          }}
-          offSetIncrement={offSetIncrement}
-          totalRows={totalDbRows}
-
         />
         <NewMember
           currentTable={selectedAttendance.title}

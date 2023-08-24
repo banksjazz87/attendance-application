@@ -15,9 +15,6 @@ export interface AttendanceProps {
   parentTitle: string;
   tableName: string;
   deleteMemberHandler: Function;
-  updateOffsetHandler: Function;
-  offSetIncrement: number;
-  totalRows: number;
 }
 
 export interface Group {
@@ -48,7 +45,6 @@ export interface GroupDropDownProps {
   getGroups?: Function;
   currentGroups?: Group[];
   attendanceGroupSelected?: Function;
-  resetOffset?: Function;
 }
 
 export interface User {
