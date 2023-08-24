@@ -39,6 +39,8 @@ export interface GroupProps {
   currentGroups?: Group[];
   ageHandler?: Function;
   show?: Boolean;
+  resetOffset?: Function;
+
 }
 
 export interface GroupDropDownProps {
@@ -46,6 +48,7 @@ export interface GroupDropDownProps {
   getGroups?: Function;
   currentGroups?: Group[];
   attendanceGroupSelected?: Function;
+  resetOffset?: Function;
 }
 
 export interface User {

@@ -60,10 +60,7 @@ export default function Attendance(): JSX.Element {
       //   .then((final: APIAttendanceSheet): void => {
       //     selectAttendanceSheet(final.data);
       //   });
-      if (sessionStorage.getItem('currentAttendancePage')) {
-        setCurrentOffset(parseInt(sessionStorage.getItem('currentAttendancePage') as string));
-      }
-
+     
       fetch(`/table-return-few/${tableToDisplay.title}/${offSetIncrement}/${currentOffset}/lastName/ASC`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
           return data.json();
@@ -75,7 +72,6 @@ export default function Attendance(): JSX.Element {
         })
     }
   }, []);
-
 
   useEffect((): void => {
     if (initialRender) {
@@ -196,6 +192,10 @@ export default function Attendance(): JSX.Element {
     setShowDeleteAlert(true);
   };
 
+  const resetTheOffset = (): void => {
+    setCurrentOffset(0);
+  }
+
   return (
     <div id="attendance_wrapper">
       <Navbar />
@@ -209,6 +209,7 @@ export default function Attendance(): JSX.Element {
           groupSelectedHandler={selectGroup}
           groupHandler={dropDownSubmit}
           show={showDropDown}
+          resetOffset={resetTheOffset}
         />
         <div className="button_group">
           <TextAndIconButton

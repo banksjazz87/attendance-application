@@ -25,7 +25,6 @@ export default function PaginationButtons({ totalRows, updateOffset, offSetIncre
 		sessionStorage.setItem(sessionPageProperty, currentPage.toString());
 	}, [currentPage, offSetIncrement, updateOffset, sessionPageProperty]);
 
-	
 	const incrementHandler = (): void => {
 		if (currentPage < pagesNeeded) {
 			setCurrentPage(currentPage + 1);
