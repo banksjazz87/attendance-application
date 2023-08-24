@@ -1,51 +1,37 @@
 @import "../../global/library.scss";
-
 #display_attendance_wrapper {
     @include main-table-wrapper;
-
+    padding-bottom: 2rem;
     table {
         @include full-width-table;
-
         th {
             @include table-headers;
             text-align: left;
             padding-left: 1rem;
         }
-
         td {
             @include table-center-data;
             text-align: left;
             padding-left: 1rem;
         }
-
         .check {
             font-size: 32px;
             font-weight: 200;
             color: $dark-blue;
         }
-
         .circle {
             font-size: 16px;
             color: $dark-blue;
         }
-
         .present_data,
         .present_header {
             text-align: center;
         }
-
         .id_data {
             text-align: right;
         }
-
         .dark_row {
             background-color: $blue-highlight;
         }
-    }
-}
-
-@media (min-width: 1366px) {
-    #display_attendance_wrapper {
-        width: 1290px;
     }
 }
