@@ -27,6 +27,8 @@ export default function Attendance(): JSX.Element {
 	const [showOptionButtons, setShowOptionButtons] = useState<boolean>(false);
 	const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+	const [partialName, setPartialName] = useState<string>("");
+	const [searching, setSearching] = useState<boolean>(false);
 
 	//Used to pull data from the session storage.
 	useEffect((): void => {
@@ -45,15 +47,30 @@ export default function Attendance(): JSX.Element {
 
 			setSelectedGroup([parent]);
 
-			fetch(`/attendance/get-list/${tableToDisplay.title}`)
-				.then((data: Response): Promise<APIAttendanceSheet> => {
-					return data.json();
-				})
-				.then((final: APIAttendanceSheet): void => {
-					selectAttendanceSheet(final.data);
-				});
+			if (partialName.length > 0) {
+				setSearching(true);
+				fetch(`/people/search/${tableToDisplay.title}/${partialName}`)
+					.then((data: Response): Promise<APIAttendanceSheet> => {
+						return data.json();
+					})
+					.then((final: APIAttendanceSheet): void => {
+						if (final.message === "success") {
+							selectAttendanceSheet(final.data);
+							setSearching(false);
+						}
+					});
+			} else {
+				setSearching(false);
+				fetch(`/attendance/get-list/${tableToDisplay.title}`)
+					.then((data: Response): Promise<APIAttendanceSheet> => {
+						return data.json();
+					})
+					.then((final: APIAttendanceSheet): void => {
+						selectAttendanceSheet(final.data);
+					});
+			}
 		}
-	}, []);
+	}, [partialName]);
 
 	//Used to determine if the dropdown and the show option buttons should be displayed.
 	useEffect((): void => {
@@ -144,6 +161,10 @@ export default function Attendance(): JSX.Element {
 		setShowDeleteAlert(true);
 	};
 
+  const updatePartialName = (string: string): void => {
+    setPartialName(string);
+  }
+
 	return (
 		<div id="attendance_wrapper">
 			<Navbar />
@@ -182,6 +203,8 @@ export default function Attendance(): JSX.Element {
 					attendanceData={currentListData}
 					parentTitle={selectedGroup[0].displayName}
 					deleteMemberHandler={updateDeleteMemberHandler}
+          updatePartial={updatePartialName}
+          activeSearch={searching}
 				/>
 				<NewMember
 					currentTable={selectedAttendance.title}

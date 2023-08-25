@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
 import putData from "../../functions/api/put.ts";
 import MathMethods from "../../functions/math.ts";
+import SearchBar from "../global/SearchBar.tsx";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -10,7 +11,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler}: AttendanceProps) {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial}: AttendanceProps) {
   //The below is for production
   const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -191,6 +192,9 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
     >
       <h2>{parentTitle}</h2>
       <h3>{title}</h3>
+      <SearchBar 
+        updatePartial={updatePartial}
+      />
       <table>
         <tbody>
           <tr>{screenSize > 767 ? returnHeaders(headersLgScreen) : returnHeaders(headersMobileScreen)}</tr>

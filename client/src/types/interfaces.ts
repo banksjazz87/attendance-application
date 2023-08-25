@@ -15,6 +15,8 @@ export interface AttendanceProps {
   parentTitle: string;
   tableName: string;
   deleteMemberHandler: Function;
+  updatePartial: Function;
+  activeSearch: boolean;
 }
 
 export interface Group {
