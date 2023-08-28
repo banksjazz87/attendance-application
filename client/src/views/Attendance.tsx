@@ -11,6 +11,7 @@ import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Atte
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
+
 export default function Attendance(): JSX.Element {
 	const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
 	const [selectedGroup, setSelectedGroup] = useState<Group[]>([{ id: 0, name: "", age_group: "", displayName: "" }]);
@@ -161,9 +162,9 @@ export default function Attendance(): JSX.Element {
 		setShowDeleteAlert(true);
 	};
 
-  const updatePartialName = (string: string): void => {
-    setPartialName(string);
-  }
+	const updatePartialName = (string: string): void => {
+		setPartialName(string);
+	};
 
 	return (
 		<div id="attendance_wrapper">
@@ -203,8 +204,8 @@ export default function Attendance(): JSX.Element {
 					attendanceData={currentListData}
 					parentTitle={selectedGroup[0].displayName}
 					deleteMemberHandler={updateDeleteMemberHandler}
-          updatePartial={updatePartialName}
-          activeSearch={searching}
+					updatePartial={updatePartialName}
+					activeSearch={searching}
 				/>
 				<NewMember
 					currentTable={selectedAttendance.title}

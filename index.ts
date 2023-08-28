@@ -100,8 +100,11 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   const fieldValues = [tableName, req.body.title];
   const parentGroup = Db.createTableName(req.body.group);
 
-  Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.createNewAttendance(tableName)])
-    .then((data: [string[], string[]]): void => {
+  const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors";
+  const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0];
+
+  Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName)])
+    .then((data: [string[], string[], string[]]): void => {
       console.log("Success All", data);
       res.send({ message: "success", data: data, newTable: tableName });
     })
