@@ -11,6 +11,23 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
+
+interface TotalKey {
+	adult: string, 
+	youth: string,
+	child: string, 
+	member: string,
+	visitor: string
+}
+
+interface TotalSum {
+	totalChildren: number,
+	totalYouth: number, 
+	totalAdults: number,
+	totalMembers: number,
+	totalVisitors: number
+}
+
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch }: AttendanceProps) {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
@@ -19,28 +36,59 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 	//const [memberData, setMemberData] = useState<Attendee[]>(attendantData);
 	const [screenSize, setScreenSize] = useState<number>(window.innerWidth);
 
+	const [sumOfPresent, setSumOfPresent] = useState<TotalSum>({
+		totalChildren: 0,
+		totalYouth: 0,
+		totalAdults: 0,
+		totalMembers: 0,
+		totalVisitors: 0
+	});
+
 	//The below is for production
 	useEffect((): void => {
 		setMemberData(attendanceData);
 	}, [attendanceData]);
 
-
-	// function updateMember(member: string, objVal: string) {
-		
-	// }
-	// function updateSum() {
-	// 	const members = memberData.filter((x, y) => {
-	// 		if (x.present === 1) {
-				
-	// 		}
-	// 	})
-	// }
 	//Used to check the current screen size
 	useEffect((): void => {
 		window.addEventListener("resize", (e: UIEvent): void => {
 			setScreenSize(window.innerWidth);
 		});
 	}, [screenSize]);
+
+	useEffect((): void => {
+
+		const checkForAge = (currentVal: string):void => {
+			if (currentVal === "adult") {
+				setSumOfPresent({...sumOfPresent, totalAdults: sumOfPresent.totalAdults + 1});
+			} else if (currentVal === "youth") {
+				setSumOfPresent({...sumOfPresent, 
+				totalYouth: sumOfPresent.totalYouth + 1});
+			} else if (currentVal === "child") {
+				setSumOfPresent({...sumOfPresent, 
+				totalChildren: sumOfPresent.totalChildren + 1})
+			}
+		}
+	
+		const checkForMember = (currentVal: string): void => {
+			if (currentVal === "member") {
+				setSumOfPresent({...sumOfPresent, totalMembers: sumOfPresent.totalMembers + 1});
+			} else {
+				setSumOfPresent({...sumOfPresent, totalVisitors: sumOfPresent.totalVisitors + 1});
+			}
+		}
+
+		for (let i = 0; i < memberData.length; i++) {
+			if (memberData[i].present === 1) {
+				console.log("1 here");
+				checkForMember(memberData[i].memberType);
+				checkForAge(memberData[i].age);
+			}
+		}
+
+		console.log(sumOfPresent);
+	}, [memberData]);
+
 
 	const checkedHandler = (index: number): void => {
 		const copy: Attendee[] = memberData.slice();
@@ -57,6 +105,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			copy[index].present = 1;
 			setMemberData(copy);
 			currentObj.presentValue = 1;
+			
+			console.log('here', copy[index]);
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
@@ -69,6 +119,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			copy[index].present = 0;
 			setMemberData(copy);
 			currentObj.presentValue = 0;
+
+			console.log('here', copy[index]);
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
