@@ -24,6 +24,17 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 		setMemberData(attendanceData);
 	}, [attendanceData]);
 
+
+	// function updateMember(member: string, objVal: string) {
+		
+	// }
+	// function updateSum() {
+	// 	const members = memberData.filter((x, y) => {
+	// 		if (x.present === 1) {
+				
+	// 		}
+	// 	})
+	// }
 	//Used to check the current screen size
 	useEffect((): void => {
 		window.addEventListener("resize", (e: UIEvent): void => {
