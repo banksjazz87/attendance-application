@@ -11,21 +11,20 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-
 interface TotalKey {
-	adult: string, 
-	youth: string,
-	child: string, 
-	member: string,
-	visitor: string
+	adult: string;
+	youth: string;
+	child: string;
+	member: string;
+	visitor: string;
 }
 
 interface TotalSum {
-	totalChildren: number,
-	totalYouth: number, 
-	totalAdults: number,
-	totalMembers: number,
-	totalVisitors: number
+	totalChildren: number;
+	totalYouth: number;
+	totalAdults: number;
+	totalMembers: number;
+	totalVisitors: number;
 }
 
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch }: AttendanceProps) {
@@ -41,7 +40,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 		totalYouth: 0,
 		totalAdults: 0,
 		totalMembers: 0,
-		totalVisitors: 0
+		totalVisitors: 0,
 	});
 
 	//The below is for production
@@ -56,39 +55,49 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 		});
 	}, [screenSize]);
 
+	//Used to update the total number of people present.
 	useEffect((): void => {
-
-		const checkForAge = (currentVal: string):void => {
-			if (currentVal === "adult") {
-				setSumOfPresent({...sumOfPresent, totalAdults: sumOfPresent.totalAdults + 1});
-			} else if (currentVal === "youth") {
-				setSumOfPresent({...sumOfPresent, 
-				totalYouth: sumOfPresent.totalYouth + 1});
-			} else if (currentVal === "child") {
-				setSumOfPresent({...sumOfPresent, 
-				totalChildren: sumOfPresent.totalChildren + 1})
-			}
-		}
-	
-		const checkForMember = (currentVal: string): void => {
-			if (currentVal === "member") {
-				setSumOfPresent({...sumOfPresent, totalMembers: sumOfPresent.totalMembers + 1});
-			} else {
-				setSumOfPresent({...sumOfPresent, totalVisitors: sumOfPresent.totalVisitors + 1});
-			}
-		}
+		let child = 0;
+		let adult = 0;
+		let youth = 0;
+		let member = 0;
+		let visitor = 0;
 
 		for (let i = 0; i < memberData.length; i++) {
 			if (memberData[i].present === 1) {
-				console.log("1 here");
-				checkForMember(memberData[i].memberType);
-				checkForAge(memberData[i].age);
+				let currentAge = memberData[i].age;
+				let currentMember = memberData[i].memberType;
+
+				if (currentAge === "child") {
+					if (currentMember === "member") {
+						child = child + 1;
+						member = member + 1;
+					} else {
+						child = child + 1;
+						visitor = visitor + 1;
+					}
+				} else if (currentAge === "youth") {
+					if (currentMember === "member") {
+						youth = youth + 1;
+						member = member + 1;
+					} else {
+						youth = youth + 1;
+						visitor = visitor + 1;
+					}
+				} else {
+					if (currentMember === "member") {
+						adult = adult + 1;
+						member = member + 1;
+					} else {
+						adult = adult + 1;
+						visitor = visitor + 1;
+					}
+				}
 			}
 		}
 
-		console.log(sumOfPresent);
+		setSumOfPresent({ ...sumOfPresent, totalChildren: child, totalYouth: youth, totalAdults: adult, totalMembers: member, totalVisitors: visitor });
 	}, [memberData]);
-
 
 	const checkedHandler = (index: number): void => {
 		const copy: Attendee[] = memberData.slice();
@@ -105,8 +114,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			copy[index].present = 1;
 			setMemberData(copy);
 			currentObj.presentValue = 1;
-			
-			console.log('here', copy[index]);
+
+			console.log("here", copy[index]);
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
@@ -120,7 +129,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			setMemberData(copy);
 			currentObj.presentValue = 0;
 
-			console.log('here', copy[index]);
+			console.log("here", copy[index]);
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
