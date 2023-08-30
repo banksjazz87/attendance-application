@@ -174,3 +174,11 @@ export interface ValuesAndClass {
   value: string;
   class: string;
 }
+
+export interface TotalSum {
+	totalChildren: number;
+	totalYouth: number;
+	totalAdults: number;
+	totalMembers: number;
+	totalVisitors: number;
+}

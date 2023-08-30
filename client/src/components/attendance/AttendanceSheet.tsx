@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Attendee, AttendanceProps, UpdateAttendant, APIResponse } from "../../types/interfaces.tsx";
+import { Attendee, AttendanceProps, UpdateAttendant, APIResponse, TotalSum } from "../../types/interfaces.tsx";
 import putData from "../../functions/api/put.ts";
 import MathMethods from "../../functions/math.ts";
 import SearchBar from "../global/SearchBar.tsx";
@@ -11,21 +11,6 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-interface TotalKey {
-	adult: string;
-	youth: string;
-	child: string;
-	member: string;
-	visitor: string;
-}
-
-interface TotalSum {
-	totalChildren: number;
-	totalYouth: number;
-	totalAdults: number;
-	totalMembers: number;
-	totalVisitors: number;
-}
 
 export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch }: AttendanceProps) {
 	//The below is for production
