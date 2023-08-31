@@ -246,4 +246,17 @@ export class DBMethods {
       this.endDb();
     });
   }
+
+  updateTotalTable(currentTable: string, values: string[], children: number, youth: number, adults: number, members: number, visitors: number): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `UPDATE Attendance_Totals SET totalChilren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors} WHERE title = ${currentTable};`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+  
 }
