@@ -369,3 +369,8 @@ app.get("/people/search/:table/:partialName", (req, res) => {
         console.log(err);
     });
 });
+// app.put('/attendance-total/update', (req: Request, res: Response): void => {
+//   let tableName = req.params.table;
+//   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+//   Db.updateTotalTable(tableName, )
+// })

@@ -3,6 +3,7 @@ import { Attendee, AttendanceProps, UpdateAttendant, APIResponse, TotalSum } fro
 import putData from "../../functions/api/put.ts";
 import MathMethods from "../../functions/math.ts";
 import SearchBar from "../global/SearchBar.tsx";
+import SaveButton from "../attendance/SaveButton.tsx";
 import "../../assets/styles/components/attendance/attendanceSheet.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
@@ -11,8 +12,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch }: AttendanceProps) {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch }: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -249,7 +249,13 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			>
 				<h2>{parentTitle}</h2>
 				<h3>{title}</h3>
-				<SearchBar updatePartial={updatePartial} />
+				<div className="btn_group">
+					<SearchBar updatePartial={updatePartial} />
+					<SaveButton
+						tableTitle={tableName}
+						totalData={sumOfPresent}
+					 />
+				</div>
 				<table>
 					<tbody>
 						<tr>{screenSize > 767 ? returnHeaders(headersLgScreen) : returnHeaders(headersMobileScreen)}</tr>
@@ -271,7 +277,9 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			>
 				<h2>{parentTitle}</h2>
 				<h3>{title}</h3>
-				<SearchBar updatePartial={updatePartial} />
+				<div className="btn_group">
+					<SearchBar updatePartial={updatePartial} />
+				</div>
 				<p>Rendering...</p>
 			</div>
 		);
