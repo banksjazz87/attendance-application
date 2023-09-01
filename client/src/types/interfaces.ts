@@ -182,3 +182,11 @@ export interface TotalSum {
 	totalMembers: number;
 	totalVisitors: number;
 }
+
+export interface TotalSentSum {
+	children: number;
+	youth: number;
+	adults: number;
+	members: number;
+	visitors: number;
+}

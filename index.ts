@@ -6,6 +6,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
 import { SQLResponse } from "./interfaces/interfaces.ts";
+import {TotalSentSum} from "./client/src/types/interfaces.ts";
 import queryString from "querystring";
 import url from "url";
 
@@ -412,14 +413,14 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   Db.searchForPartialName(tableName, partial)
-    .then((data) => {
+    .then((data: string[]): void => {
       res.send({
         message: "success",
         data: data,
       });
       console.log(data);
     })
-    .catch((err) => {
+    .catch((err: SQLResponse): void => {
       res.send({
         message: "failure",
         data: Db.getSqlError(err),
@@ -428,10 +429,32 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
     });
 });
 
-// app.put('/attendance-total/update', (req: Request, res: Response): void => {
-//   let tableName = req.params.table;
+app.put('/attendance-total/update/', (req: Request, res: Response): void => {
+  let tableName = req.body.table;
 
-//   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+  let totals: TotalSentSum = {
+    children: req.body.data.totalChildren,
+    youth: req.body.data.totalYouth,
+    adults: req.body.data.totalAdults,
+    members: req.body.data.totalMembers,
+    visitors: req.body.data.totalVisitors
+  }
 
-//   Db.updateTotalTable(tableName, )
-// })
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  Db.updateTotalTable(tableName, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
+    .then((data: string[]): void => {
+      res.send({
+        message: "success",
+        data: data
+      });
+      console.log(data);
+    })
+    .catch((err: SQLResponse): void => {
+      res.send({
+        message: "failure", 
+        error: Db.getSqlError(err)
+      });
+      console.log(err);
+    });
+});

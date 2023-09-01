@@ -369,8 +369,29 @@ app.get("/people/search/:table/:partialName", (req, res) => {
         console.log(err);
     });
 });
-// app.put('/attendance-total/update', (req: Request, res: Response): void => {
-//   let tableName = req.params.table;
-//   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-//   Db.updateTotalTable(tableName, )
-// })
+app.put('/attendance-total/update/', (req, res) => {
+    let tableName = req.body.table;
+    let totals = {
+        children: req.body.data.totalChildren,
+        youth: req.body.data.totalYouth,
+        adults: req.body.data.totalAdults,
+        members: req.body.data.totalMembers,
+        visitors: req.body.data.totalVisitors
+    };
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.updateTotalTable(tableName, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data
+        });
+        console.log(data);
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: Db.getSqlError(err)
+        });
+        console.log(err);
+    });
+});
