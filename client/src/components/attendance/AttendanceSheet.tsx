@@ -114,8 +114,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			setMemberData(copy);
 			currentObj.presentValue = 0;
 
-			console.log("here", copy[index]);
-
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
 					alert(`${currentObj.firstName} ${currentObj.lastName} has been marked NOT present`);

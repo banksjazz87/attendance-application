@@ -19,6 +19,8 @@ export default function SaveButton ({tableTitle, totalData}: SaveButtonProps): J
             data: totalData
         }
 
+        console.log('data that is being sent', allTotalData);
+
         putData('/attendance-total/update/', allTotalData).then((data: APIResponse): void => {
                 if (data.message === "success") {
                     alert(`${allTotalData.title} has been saved.`)

@@ -430,7 +430,7 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 });
 
 app.put('/attendance-total/update/', (req: Request, res: Response): void => {
-  let tableName = req.body.table;
+  let tableName = req.body.title;
 
   let totals: TotalSentSum = {
     children: req.body.data.totalChildren,
@@ -439,6 +439,8 @@ app.put('/attendance-total/update/', (req: Request, res: Response): void => {
     members: req.body.data.totalMembers,
     visitors: req.body.data.totalVisitors
   }
+
+  console.log('This is being sent', tableName, totals.children, totals.youth, totals.adults, totals.members, totals.visitors);
 
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
