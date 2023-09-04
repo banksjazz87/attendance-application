@@ -215,7 +215,8 @@ class DBMethods {
     updateTotalTable(currentTable, children, youth, adults, members, visitors) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `UPDATE Attendance_Totals SET totalChildren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors} WHERE title = "${currentTable}";`;
+            const total = children + youth + adults;
+            const neededSql = `UPDATE Attendance_Totals SET totalChildren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors}, totalCount = ${total} WHERE title = "${currentTable}";`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

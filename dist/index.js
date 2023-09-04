@@ -378,7 +378,6 @@ app.put('/attendance-total/update/', (req, res) => {
         members: req.body.data.totalMembers,
         visitors: req.body.data.totalVisitors
     };
-    console.log('This is being sent', tableName, totals.children, totals.youth, totals.adults, totals.members, totals.visitors);
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     Db.updateTotalTable(tableName, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
         .then((data) => {

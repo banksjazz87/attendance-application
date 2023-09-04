@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {useNavigate} from "react-router-dom";
 import GroupDropDown from "../../components/global/GroupDropDown.tsx";
 import AttendanceTitle from "../../components/newAttendance/AttendanceTitle.tsx";
 import NewGroupForm from "../../components/newAttendance/NewGroupForm.tsx";
@@ -21,6 +22,9 @@ interface ApiResponse {
 }
 
 export default function Form({ show, formToShow }: FormProps): JSX.Element {
+
+  const navigate = useNavigate();
+
   const [form, setForm] = useState<NewAttendance>({
     title: currentDate,
     group: "",
@@ -120,6 +124,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
     if (searchForGroup(form.groupDisplayName, allGroups)) {
       postData("/new-attendance/create", form).then((data: APINewTable): void => {
         neededAttendants(data);
+        navigate('/attendance', {replace: true});
       });
     } else {
       postData("/new-group", form).then((data: ApiResponse): void => {
@@ -130,6 +135,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
                 if (data.message === "success") {
                   neededAttendants(data);
                   sessionStorage.setItem('currentAttendancePage', '0');
+                  navigate('/attendance', {replace: true});
                 } else {
                   alert("Error with the /new-attendance/create");
                 }
