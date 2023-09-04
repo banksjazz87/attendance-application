@@ -190,3 +190,13 @@ export interface TotalSentSum {
 	members: number;
 	visitors: number;
 }
+
+export interface SaveButtonProps {
+  tableTitle: string;
+  totalData: TotalSum
+}
+
+export interface SentData {
+  title: string;
+  data: TotalSum
+}
