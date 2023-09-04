@@ -85,9 +85,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
    * @description This function is used to throw an alert if a success message was retrieved by an API endpoint.
    */
   const checkForSuccess = (obj: APIResponse): void => {
-    if (obj.message === "success") {
-      alert("Success");
-    } else {
+    if (obj.message !== "success") {
       alert(`Failure, ${obj.error}`);
     }
   };
