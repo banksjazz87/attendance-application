@@ -6,20 +6,8 @@ import NewGroupForm from "../../components/newAttendance/NewGroupForm.tsx";
 import { Group } from "../../types/interfaces.ts";
 import { currentDate } from "../../variables/date.ts";
 import postData from "../../functions/api/post.ts";
-import { APIResponse, FormProps, APINewTable } from "../../types/interfaces.ts";
+import { APIResponse, FormProps, APINewTable, NewAttendance, ApiResponse } from "../../types/interfaces.ts";
 import "../../assets/styles/components/newAttendance/form.scss";
-
-interface NewAttendance {
-  title: string;
-  group: string;
-  ageGroup: string;
-  groupDisplayName: string;
-}
-
-interface ApiResponse {
-  message: string;
-  data: [] | string;
-}
 
 export default function Form({ show, formToShow }: FormProps): JSX.Element {
 
@@ -82,7 +70,7 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
    *
    * @param obj with a a type of APIResponse
    * @returns Void
-   * @description This function is used to throw an alert if a success message was retrieved by an API endpoint.
+   * @description This function is used to throw an alert if a non success message was retrieved by an API endpoint.
    */
   const checkForSuccess = (obj: APIResponse): void => {
     if (obj.message !== "success") {

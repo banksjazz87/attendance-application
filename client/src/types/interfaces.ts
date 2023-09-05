@@ -200,3 +200,15 @@ export interface SentData {
   title: string;
   data: TotalSum
 }
+
+export interface NewAttendance {
+  title: string;
+  group: string;
+  ageGroup: string;
+  groupDisplayName: string;
+}
+
+export interface ApiResponse {
+  message: string;
+  data: [] | string;
+}
