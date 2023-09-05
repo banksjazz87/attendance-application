@@ -223,5 +223,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    getMonthStatistics(groupName, monthName, yearDate) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}";`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
 }
 exports.DBMethods = DBMethods;

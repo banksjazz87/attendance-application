@@ -458,3 +458,27 @@ app.put('/attendance-total/update/', (req: Request, res: Response): void => {
       console.log(err);
     });
 });
+
+app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): void => {
+  const year: string = req.params.year;
+  const month: string = req.params.month;
+  const group: string = req.params.group;
+
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  Db.getMonthStatistics(group, month, year)
+    .then((data: string[]): void => {
+      res.send({
+        message: "success", 
+        data: data,
+      });
+    })
+    .catch((err: SQLResponse): void => {
+      res.send({
+        message: "failure", 
+        err: Db.getSqlError(err),
+        query: [ group, month, year ]
+      });
+      console.log(err);
+    });
+});
