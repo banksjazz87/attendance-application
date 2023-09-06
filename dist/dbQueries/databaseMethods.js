@@ -233,10 +233,10 @@ class DBMethods {
             this.endDb();
         });
     }
-    getDistinctStatisticYears(group) {
+    getDistinctStatisticYears(groupName) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `SELECT DISTINCT YEAR(dateCreated) AS years FROM Attendance_Totals WHERE groupName = "${group}" ORDER BY years DESC;`;
+            const neededSql = `SELECT DISTINCT YEAR(dateCreated) AS years FROM Attendance_Totals WHERE groupName = "${groupName}" ORDER BY years DESC;`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
