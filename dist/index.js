@@ -405,9 +405,7 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
         res.send({
             message: "success",
             data: data,
-            query: [group, month, year]
         });
-        console.log("Success!!!!", data);
     })
         .catch((err) => {
         res.send({
@@ -415,6 +413,6 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
             err: Db.getSqlError(err),
             query: [group, month, year]
         });
-        console.log("ERROR", Db.getSqlError(err));
+        console.log(err);
     });
 });

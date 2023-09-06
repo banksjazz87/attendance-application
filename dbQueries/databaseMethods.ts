@@ -263,12 +263,25 @@ export class DBMethods {
   getMonthStatistics(groupName: string, monthName: string, yearDate: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      const neededSql = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}";`;
+      const neededSql = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}" ORDER BY dateCreated ASC;`;
 
-      database.query(neededSql, (err: string[], results: string[]) => {
+      database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
       });
       this.endDb();
     });
   }
+
+  getDistinctStatisticYears(group: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      const neededSql = `SELECT DISTINCT YEAR(dateCreated) AS years FROM Attendance_Totals WHERE groupName = "${group}" ORDER BY years DESC;`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
 }

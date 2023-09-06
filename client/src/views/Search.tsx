@@ -37,7 +37,7 @@ export default function Search() {
   };
 
   const dropDownChangeHandler = (arr: Group[], value: string): void => {
-    let index = returnIndexOfSelected(arr, value);
+    let index = returnIndexOfSelected(arr, value); 
     if (index) {
       setGroupTable({
         ...groupTable,

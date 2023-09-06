@@ -226,7 +226,17 @@ class DBMethods {
     getMonthStatistics(groupName, monthName, yearDate) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}";`;
+            const neededSql = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}" ORDER BY dateCreated ASC;`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    getDistinctStatisticYears(group) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT DISTINCT YEAR(dateCreated) AS years FROM Attendance_Totals WHERE groupName = "${group}" ORDER BY years DESC;`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
