@@ -86,6 +86,16 @@ export interface APIResponse {
   error: string;
 }
 
+export interface YearsDataObj {
+  years: number;
+}
+
+export interface YearsDataResponse {
+  message: string;
+  data: YearsDataObj[];
+  error: string;
+}
+
 export interface APINewTable extends APIResponse {
   newTable: string;
 }
