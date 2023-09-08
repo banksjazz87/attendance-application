@@ -482,7 +482,7 @@ app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): 
     });
 });
 
-app.get('/group-statistics/years/:groupName', (req: Request, res: Response): void => {
+app.get('/group-years/:groupName', (req: Request, res: Response): void => {
 
   const group: string = req.params.groupName;
 

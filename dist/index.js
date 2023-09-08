@@ -415,7 +415,7 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
         console.log(err);
     });
 });
-app.get('/group-statistics/years/:groupName', (req, res) => {
+app.get('/group-years/:groupName', (req, res) => {
     const group = req.params.groupName;
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     Db.getDistinctStatisticYears(group)
@@ -443,7 +443,6 @@ app.get('/group-months/:yearDate/:groupName', (req, res) => {
             message: "success",
             data: data
         });
-        console.log('Success', data);
     })
         .catch((err) => {
         res.send({

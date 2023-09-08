@@ -246,7 +246,7 @@ class DBMethods {
     getDistinctStatisticMonths(groupName, yearDate) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `SELECT DISTINCT MONTHNAME(dateCreated) AS months FROM Attendance_Totals WHERE groupName = "${groupName}" AND YEAR(dateCreated) = ${yearDate};`;
+            const neededSql = `SELECT DISTINCT MONTHNAME(dateCreated) AS months FROM Attendance_Totals WHERE groupName = "${groupName}" AND YEAR(dateCreated) = ${yearDate} ORDER BY months DESC;`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

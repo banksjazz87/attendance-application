@@ -15,7 +15,7 @@ export default function Dashboard() {
 	//Used to update the valid years that can be used for the selected group.
 	useEffect((): void => {
 		if (searchYears) {
-			fetch(`/group-statistics/years/${selectedGroup}`)
+			fetch(`/group-years/${selectedGroup}`)
 				.then((data: Response): Promise<YearsDataResponse> => {
 					return data.json();
 				})
@@ -82,7 +82,7 @@ export default function Dashboard() {
 			</div>
 			<GroupDropDown attendanceGroupSelected={updateGroup} />
 			<YearDropDown 
-			  years={dataYears}
+			  dateData={dataYears}
 			  changeHandler={yearChangeHandler}
 			/>
 		</div>

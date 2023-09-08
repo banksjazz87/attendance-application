@@ -94,6 +94,10 @@ export interface MonthsDataObj {
   months: string;
 }
 
+export interface MonthsDataObj {
+  months: string;
+}
+
 export interface YearsDataResponse {
   message: string;
   data: YearsDataObj[];
