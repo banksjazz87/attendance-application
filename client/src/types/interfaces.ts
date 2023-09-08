@@ -90,9 +90,19 @@ export interface YearsDataObj {
   years: number;
 }
 
+export interface MonthsDataObj {
+  months: string;
+}
+
 export interface YearsDataResponse {
   message: string;
   data: YearsDataObj[];
+  error: string;
+}
+
+export interface MonthsDataResponse {
+  message: string;
+  data: MonthsDataObj[];
   error: string;
 }
 

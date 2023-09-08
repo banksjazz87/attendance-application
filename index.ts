@@ -503,3 +503,24 @@ app.get('/group-statistics/years/:groupName', (req: Request, res: Response): voi
       console.log('Error', err);
     });
 });
+
+app.get('/group-statistics/months/:year/:groupName', (req: Request, res: Response): void => {
+  const year: number = parseInt(req.params.year);
+  const group: string = req.params.groupName;
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  Db.getDistinctStatisticMonths(group, year)
+    .then((data: string[]): void => {
+      res.send({
+        message: "success", 
+        data: data
+      });
+    })
+    .catch((err: SQLResponse): void => {
+      res.send({
+        message: "failure", 
+        error: Db.getSqlError(err)
+      });
+      console.log('Error', err);
+    });
+});
