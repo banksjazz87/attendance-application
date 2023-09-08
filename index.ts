@@ -504,8 +504,8 @@ app.get('/group-statistics/years/:groupName', (req: Request, res: Response): voi
     });
 });
 
-app.get('/group-statistics/months/:year/:groupName', (req: Request, res: Response): void => {
-  const year: number = parseInt(req.params.year);
+app.get('/group-months/:yearDate/:groupName', (req: Request, res: Response): void => {
+  const year: string = req.params.yearDate;
   const group: string = req.params.groupName;
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 

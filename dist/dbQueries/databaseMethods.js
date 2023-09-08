@@ -243,5 +243,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    getDistinctStatisticMonths(groupName, yearDate) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT DISTINCT MONTHNAME(dateCreated) AS months FROM Attendance_Totals WHERE groupName = "${groupName}" AND YEAR(dateCreated) = ${yearDate};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
 }
 exports.DBMethods = DBMethods;

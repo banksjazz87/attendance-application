@@ -433,3 +433,23 @@ app.get('/group-statistics/years/:groupName', (req, res) => {
         console.log('Error', err);
     });
 });
+app.get('/group-months/:yearDate/:groupName', (req, res) => {
+    const year = req.params.yearDate;
+    const group = req.params.groupName;
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Db.getDistinctStatisticMonths(group, year)
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data
+        });
+        console.log('Success', data);
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: Db.getSqlError(err)
+        });
+        console.log('Error', err);
+    });
+});

@@ -36,13 +36,13 @@ export default function Dashboard() {
 	//Use to update the valid months according to the selected group and the selected year.
 	useEffect((): void => {
 		if (searchMonths) {
-			fetch(`/group-statistics/months/${selectedYear}/${selectedGroup}`)
+			fetch(`/group-months/${selectedYear}/${selectedGroup}`)
 				.then((data: Response): Promise<MonthsDataResponse> => {
 					return data.json();
 				})
 				.then((final: MonthsDataResponse): void => {
 					if (final.message === "success") {
-						console.log(final.data);
+						console.log(final);
 						setDataMonths(final.data);
 						setSearchMonths(false);
 					} else {
