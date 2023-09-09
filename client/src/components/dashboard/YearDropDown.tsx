@@ -2,15 +2,15 @@ import React from "react";
 import { YearsDataObj } from "../../types/interfaces.ts";
 
 interface YearDropDownProps {
-	dateData: YearsDataObj[];
+	yearData: YearsDataObj[];
 	changeHandler: Function;
 }
 
-export default function YearDropDown({ dateData, changeHandler }: YearDropDownProps): JSX.Element {
+export default function YearDropDown({ yearData, changeHandler }: YearDropDownProps): JSX.Element {
 	
-    const returnOptions = (arr: YearsDataObj[]): JSX.Element[] | undefined => {
+    const returnYearOptions = (arr: YearsDataObj[]): JSX.Element[] | undefined => {
 		const options = arr.map((x: YearsDataObj, y: number): JSX.Element => {
-			return (
+            return (
 				<option
 					key={`year_option_${y}`}
 					value={x.years}
@@ -28,7 +28,7 @@ export default function YearDropDown({ dateData, changeHandler }: YearDropDownPr
 	return (
 		<div
 			id="year_search_wrapper"
-			style={dateData.length > 0 ? { display: "" } : { display: "none" }}
+			style={yearData.length > 0 ? { display: "" } : { display: "none" }}
 		>
 			<label htmlFor="year_search">Select a year</label>
 			<select
@@ -39,7 +39,7 @@ export default function YearDropDown({ dateData, changeHandler }: YearDropDownPr
 				}}
 			>
 				<option value="">Select one...</option>
-				{returnOptions(dateData)}
+				{returnYearOptions(yearData)}
 			</select>
 		</div>
 	);

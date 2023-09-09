@@ -3,6 +3,7 @@ import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse } from "../types/interfaces.ts";
 import YearDropDown from "../components/dashboard/YearDropDown.tsx";
+import MonthDropDown from "../components/dashboard/MonthDropDown.tsx";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -11,6 +12,7 @@ export default function Dashboard() {
 	const [selectedYear, setSelectedYear] = useState<string>("");
 	const [searchMonths, setSearchMonths] = useState<boolean>(false);
 	const [dataMonths, setDataMonths] = useState<MonthsDataObj[]>([]);
+	const [selectedMonth, setSelectedMonth] = useState<string>('');
 
 	//Used to update the valid years that can be used for the selected group.
 	useEffect((): void => {
@@ -74,6 +76,13 @@ export default function Dashboard() {
 		}
 	}
 
+	const monthChangeHandler = (value: string): void => {
+		if (value.length > 0) {
+			console.log('selected month is ', value);
+			setSelectedMonth(value);
+		}
+	}
+
 	return (
 		<div>
 			<Navbar />
@@ -82,8 +91,12 @@ export default function Dashboard() {
 			</div>
 			<GroupDropDown attendanceGroupSelected={updateGroup} />
 			<YearDropDown 
-			  dateData={dataYears}
+			  yearData={dataYears}
 			  changeHandler={yearChangeHandler}
+			/>
+			<MonthDropDown
+			  monthData={dataMonths}
+			  changeHandler={monthChangeHandler}
 			/>
 		</div>
 	);
