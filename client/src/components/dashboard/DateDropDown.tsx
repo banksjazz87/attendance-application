@@ -8,7 +8,7 @@ interface DateDropDownProps<T extends object, K extends keyof T> {
 }
 
 
-export default function YearDropDown<T extends object, K extends keyof T>({ dateData, changeHandler, keyWord, idTag }: DateDropDownProps<T, K>): JSX.Element {
+export default function DateDropDown<T extends object, K extends keyof T>({ dateData, changeHandler, keyWord, idTag }: DateDropDownProps<T, K>): JSX.Element {
 	
     const returnDateOptions = (arr: T[]): JSX.Element[] | undefined => {
 		

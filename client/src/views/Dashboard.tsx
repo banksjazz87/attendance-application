@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse } from "../types/interfaces.ts";
-import YearDropDown from "../components/dashboard/YearDropDown.tsx";
-import MonthDropDown from "../components/dashboard/MonthDropDown.tsx";
+import DateDropDown from "../components/dashboard/DateDropDown.tsx";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -91,15 +90,17 @@ export default function Dashboard() {
 				<h1>Dashboard</h1>
 			</div>
 			<GroupDropDown attendanceGroupSelected={updateGroup} />
-			<YearDropDown
+			<DateDropDown
 			  dateData={dataYears}
 			  changeHandler={yearChangeHandler}
 			  keyWord="years"
 			  idTag="year_search"
 			/>
-			<MonthDropDown
-			  monthData={dataMonths}
+			<DateDropDown
+			  dateData={dataMonths}
 			  changeHandler={monthChangeHandler}
+			  keyWord="months"
+			  idTag="month_search"
 			/>
 		</div>
 	);
