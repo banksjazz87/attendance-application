@@ -23,6 +23,7 @@ export default function Dashboard() {
 				})
 				.then((final: YearsDataResponse): void => {
 					if (final.message === "success") {
+						console.log(final.data);
 						setDataYears(final.data);
 						setSearchYears(false);
 					} else {
@@ -90,9 +91,11 @@ export default function Dashboard() {
 				<h1>Dashboard</h1>
 			</div>
 			<GroupDropDown attendanceGroupSelected={updateGroup} />
-			<YearDropDown 
-			  yearData={dataYears}
+			<YearDropDown
+			  dateData={dataYears}
 			  changeHandler={yearChangeHandler}
+			  keyWord="years"
+			  idTag="year_search"
 			/>
 			<MonthDropDown
 			  monthData={dataMonths}

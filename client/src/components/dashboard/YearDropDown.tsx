@@ -1,24 +1,30 @@
 import React from "react";
-import { YearsDataObj } from "../../types/interfaces.ts";
 
-interface YearDropDownProps {
-	yearData: YearsDataObj[];
+interface DateDropDownProps<T extends object, K extends keyof T> {
+	dateData: T[];
+	keyWord: K;
 	changeHandler: Function;
+	idTag: string;
 }
 
-export default function YearDropDown({ yearData, changeHandler }: YearDropDownProps): JSX.Element {
+
+export default function YearDropDown<T extends object, K extends keyof T>({ dateData, changeHandler, keyWord, idTag }: DateDropDownProps<T, K>): JSX.Element {
 	
-    const returnYearOptions = (arr: YearsDataObj[]): JSX.Element[] | undefined => {
-		const options = arr.map((x: YearsDataObj, y: number): JSX.Element => {
-            return (
-				<option
-					key={`year_option_${y}`}
-					value={x.years}
-				>
-					{x.years}
-				</option>
-			);
-		});
+    const returnDateOptions = (arr: T[]): JSX.Element[] | undefined => {
+		
+		const options = arr.map((x: T, y: number): JSX.Element => {
+			const currentValue = x[keyWord] as string | number;
+			console.log('Look here', typeof(currentValue));
+			console.log(currentValue);
+				return (
+					<option
+						key={`${y}`}
+						value={currentValue}
+					>
+						{currentValue}
+					</option>
+				);
+			});
 
 		if (arr.length > 0) {
 			return options;
@@ -28,18 +34,20 @@ export default function YearDropDown({ yearData, changeHandler }: YearDropDownPr
 	return (
 		<div
 			id="year_search_wrapper"
-			style={yearData.length > 0 ? { display: "" } : { display: "none" }}
+			style={dateData.length > 0 ? { display: "" } : { display: "none" }}
 		>
-			<label htmlFor="year_search">Select a year</label>
+			
+			<label htmlFor={idTag}>Select a year</label>
+			<p>{keyWord.toString()}</p>
 			<select
-				id="year_search"
-				name="year_search"
+				id={idTag}
+				name={idTag}
 				onChange={(e: React.ChangeEvent<HTMLSelectElement>): void => {
 					changeHandler(e.target.value);
 				}}
 			>
 				<option value="">Select one...</option>
-				{returnYearOptions(yearData)}
+				{returnDateOptions(dateData)}
 			</select>
 		</div>
 	);
