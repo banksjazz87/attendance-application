@@ -217,12 +217,12 @@ export interface TotalSentSum {
 
 export interface SaveButtonProps {
   tableTitle: string;
-  totalData: TotalSum
+  totalData: TotalSum;
 }
 
 export interface SentData {
   title: string;
-  data: TotalSum
+  data: TotalSum;
 }
 
 export interface NewAttendance {
@@ -235,4 +235,24 @@ export interface NewAttendance {
 export interface ApiResponse {
   message: string;
   data: [] | string;
+}
+
+export interface AttendanceTotals {
+  id: number,
+  groupName: string;
+  displayTitle: string;
+  dateCreated: string;
+  totalChildren: number;
+  totalYouth: number;
+  totalAdults: number;
+  totalMembers: number;
+  totalVisitors: number;
+  title: string;
+  totalCount: number;
+}
+
+export interface AttendanceResponse {
+  data: AttendanceTotals[];
+  message: string;
+  error: string;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
-import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse } from "../types/interfaces.ts";
+import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceResponse, AttendanceTotals } from "../types/interfaces.ts";
 import DateDropDown from "../components/dashboard/DateDropDown.tsx";
 
 export default function Dashboard() {
@@ -11,7 +11,8 @@ export default function Dashboard() {
 	const [selectedYear, setSelectedYear] = useState<string>("");
 	const [searchMonths, setSearchMonths] = useState<boolean>(false);
 	const [dataMonths, setDataMonths] = useState<MonthsDataObj[]>([]);
-	const [selectedMonth, setSelectedMonth] = useState<string>('');
+	const [selectedMonth, setSelectedMonth] = useState<string>("");
+	const [dataResults, setDataResults] = useState<AttendanceTotals[]>([]);
 
 	//Used to update the valid years that can be used for the selected group.
 	useEffect((): void => {
@@ -34,7 +35,6 @@ export default function Dashboard() {
 		}
 	}, [searchYears, selectedGroup]);
 
-
 	//Use to update the valid months according to the selected group and the selected year.
 	useEffect((): void => {
 		if (searchMonths) {
@@ -52,11 +52,9 @@ export default function Dashboard() {
 						setDataMonths([]);
 						setSearchMonths(false);
 					}
-				})
+				});
 		}
 	}, [selectedYear, searchMonths, selectedGroup]);
-
-
 
 	const updateGroup = (arr: Group[], value: string): void => {
 		for (let i = 0; i < arr.length; i++) {
@@ -67,21 +65,20 @@ export default function Dashboard() {
 		}
 	};
 
-
 	const yearChangeHandler = (value: string): void => {
 		if (value.length > 0) {
 			console.log(value);
 			setSelectedYear(value);
 			setSearchMonths(true);
 		}
-	}
+	};
 
 	const monthChangeHandler = (value: string): void => {
 		if (value.length > 0) {
-			console.log('selected month is ', value);
+			console.log("selected month is ", value);
 			setSelectedMonth(value);
 		}
-	}
+	};
 
 	return (
 		<div>
@@ -89,19 +86,44 @@ export default function Dashboard() {
 			<div className="header_wrapper">
 				<h1>Dashboard</h1>
 			</div>
-			<GroupDropDown attendanceGroupSelected={updateGroup} />
-			<DateDropDown
-			  dateData={dataYears}
-			  changeHandler={yearChangeHandler}
-			  keyWord="years"
-			  idTag="year_search"
-			/>
-			<DateDropDown
-			  dateData={dataMonths}
-			  changeHandler={monthChangeHandler}
-			  keyWord="months"
-			  idTag="month_search"
-			/>
+			<form
+				method="GET"
+				action={`/group-statisitics/${selectedGroup}/${selectedMonth}/${selectedYear}`}
+				onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
+					e.preventDefault();
+					fetch(`/group-statisitics/${selectedGroup}/${selectedMonth}/${selectedYear}`)
+						.then((data: Response): Promise<AttendanceResponse> => {
+							return data.json();
+						})
+						.then((final: AttendanceResponse): void => {
+							if (final.message === "success") {
+								console.log(final);
+								setDataResults(final.data)
+							} else {
+								console.log(final);
+								alert(`The following error occurred: ${final.error}`);
+							}	
+						});
+				}}
+			>
+				<GroupDropDown attendanceGroupSelected={updateGroup} />
+				<DateDropDown
+					dateData={dataYears}
+					changeHandler={yearChangeHandler}
+					keyWord="years"
+					idTag="year_search"
+				/>
+				<DateDropDown
+					dateData={dataMonths}
+					changeHandler={monthChangeHandler}
+					keyWord="months"
+					idTag="month_search"
+				/>
+				<input
+					type="submit"
+					value="Submit"
+				/>
+			</form>
 		</div>
 	);
 }
