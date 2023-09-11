@@ -3,6 +3,7 @@ import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceResponse, AttendanceTotals } from "../types/interfaces.ts";
 import DateDropDown from "../components/dashboard/DateDropDown.tsx";
+import AllDataForm from "../components/dashboard/AllDataForm.tsx";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -80,18 +81,22 @@ export default function Dashboard() {
 		}
 	};
 
+	const setAllDataResults = (arr: AttendanceTotals[]): void => {
+		setDataResults(arr);
+	}
+
 	return (
 		<div>
 			<Navbar />
 			<div className="header_wrapper">
 				<h1>Dashboard</h1>
 			</div>
-			<form
+			{/* <form
 				method="GET"
-				action={`/group-statisitics/${selectedGroup}/${selectedMonth}/${selectedYear}`}
+				action={`/group-statistics/${selectedGroup}/${selectedMonth}/${selectedYear}`}
 				onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
 					e.preventDefault();
-					fetch(`/group-statisitics/${selectedGroup}/${selectedMonth}/${selectedYear}`)
+					fetch(`/group-statistics/${selectedGroup}/${selectedMonth}/${selectedYear}`)
 						.then((data: Response): Promise<AttendanceResponse> => {
 							return data.json();
 						})
@@ -123,7 +128,23 @@ export default function Dashboard() {
 					type="submit"
 					value="Submit"
 				/>
-			</form>
+			</form> */}
+			<AllDataForm
+				yearData={dataYears}
+				yearHandler={yearChangeHandler}
+				yearKeyWord="years"
+				yearIdTag="year_search"
+
+				monthData={dataMonths}
+				monthHandler={monthChangeHandler}
+				monthKeyWord="months"
+				monthIdTag="month_search"
+				group={selectedGroup}
+				month={selectedMonth}
+				year={selectedYear}
+				submitHandler={setAllDataResults}
+				groupChange={updateGroup}
+			/>
 		</div>
 	);
 }
