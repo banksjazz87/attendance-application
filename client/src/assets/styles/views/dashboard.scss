@@ -1,4 +1,9 @@
 @import "../../styles/global/library.scss";
 #all_data_form_wrapper {
     @include content-wrapper-md;
+    .year_month_options {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
 }

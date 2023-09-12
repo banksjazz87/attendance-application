@@ -1,0 +1,7 @@
+@import "../../global/library.scss";
+.date_wrapper {
+    @include shadow-form-input-pair;
+    width: 40%;
+    min-width: 40%;
+    row-gap: 8px;
+}

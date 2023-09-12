@@ -1,44 +1,42 @@
 import React from "react";
+import "../../assets/styles/components/dashboard/dateDropDown.scss";
 
 interface DateDropDownProps<T extends object, K extends keyof T> {
 	dateData: T[];
 	keyWord: K;
 	changeHandler: Function;
 	idTag: string;
+	title: string;
 }
 
+export default function DateDropDown<T extends object, K extends keyof T>({ dateData, changeHandler, keyWord, idTag, title }: DateDropDownProps<T, K>): JSX.Element {
 
-export default function DateDropDown<T extends object, K extends keyof T>({ dateData, changeHandler, keyWord, idTag }: DateDropDownProps<T, K>): JSX.Element {
-	
-    const returnDateOptions = (arr: T[]): JSX.Element[] | undefined => {
-		
+
+	const returnDateOptions = (arr: T[]): JSX.Element[] | undefined => {
 		const options = arr.map((x: T, y: number): JSX.Element => {
 			const currentValue = x[keyWord] as string | number;
-			console.log('Look here', typeof(currentValue));
-			console.log(currentValue);
-				return (
-					<option
-						key={`${y}`}
-						value={currentValue}
-					>
-						{currentValue}
-					</option>
-				);
-			});
+			return (
+				<option
+					key={`${y}`}
+					value={currentValue}
+				>
+					{currentValue}
+				</option>
+			);
+		});
 
 		if (arr.length > 0) {
 			return options;
 		}
 	};
+	
 
 	return (
 		<div
-			id="year_search_wrapper"
-			style={dateData.length > 0 ? { display: "" } : { display: "none" }}
+			id={`${idTag}_wrapper`}
+			className="date_wrapper"
 		>
-			
-			<label htmlFor={idTag}>Select a year</label>
-			<p>{keyWord.toString()}</p>
+			<label htmlFor={idTag}>{`Select a ${title}`}</label>
 			<select
 				id={idTag}
 				name={idTag}

@@ -1,4 +1,7 @@
 @import "../../global/library.scss";
 #all_data_form {
     @include shadow-form;
+    .year_month_options {
+        width: 60%;
+    }
 }

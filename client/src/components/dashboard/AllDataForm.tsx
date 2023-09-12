@@ -16,8 +16,6 @@ interface AllDataFormProps {
 	groupChange: Function;
 }
 export default function AllDataForm({ yearData, yearHandler, monthData, monthHandler, group, month, year, submitHandler, groupChange }: AllDataFormProps) {
-
-
 	const formHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		fetch(`/group-statistics/${group}/${month}/${year}`)
@@ -33,31 +31,33 @@ export default function AllDataForm({ yearData, yearHandler, monthData, monthHan
 			});
 	};
 
-
 	return (
 		<form
-            id="all_data_form"
+			id="all_data_form"
 			method="GET"
 			action={`/group-statistics/${group}/${month}/${year}`}
 			onSubmit={formHandler}
 		>
 			<GroupDropDown attendanceGroupSelected={groupChange} />
-			<DateDropDown
-				dateData={yearData}
-				changeHandler={yearHandler}
-				keyWord="years"
-				idTag="year_search"
-			/>
-			<DateDropDown
-				dateData={monthData}
-				changeHandler={monthHandler}
-				keyWord="months"
-				idTag="month_search"
-			/>
+			<div className="year_month_options">
+				<DateDropDown
+					dateData={yearData}
+					changeHandler={yearHandler}
+					keyWord="years"
+					idTag="year_search"
+                    title="year"
+				/>
+				<DateDropDown
+					dateData={monthData}
+					changeHandler={monthHandler}
+					keyWord="months"
+					idTag="month_search"
+                    title="month"
+				/>
+			</div>
 			<input
 				type="submit"
 				value="Submit"
-                style={year.length > 0 ? {display: ""}: {display: "none"}}
 			/>
 		</form>
 	);
