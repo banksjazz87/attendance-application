@@ -1,0 +1,4 @@
+@import "../../styles/global/library.scss";
+#all_data_form_wrapper {
+    @include content-wrapper-md;
+}

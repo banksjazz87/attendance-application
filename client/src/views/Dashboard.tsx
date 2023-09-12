@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
-import GroupDropDown from "../components/global/GroupDropDown.tsx";
-import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceResponse, AttendanceTotals } from "../types/interfaces.ts";
-import DateDropDown from "../components/dashboard/DateDropDown.tsx";
+import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceTotals } from "../types/interfaces.ts";
 import AllDataForm from "../components/dashboard/AllDataForm.tsx";
+import "../assets/styles/views/dashboard.scss";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -68,7 +67,6 @@ export default function Dashboard() {
 
 	const yearChangeHandler = (value: string): void => {
 		if (value.length > 0) {
-			console.log(value);
 			setSelectedYear(value);
 			setSearchMonths(true);
 		}
@@ -76,14 +74,13 @@ export default function Dashboard() {
 
 	const monthChangeHandler = (value: string): void => {
 		if (value.length > 0) {
-			console.log("selected month is ", value);
 			setSelectedMonth(value);
 		}
 	};
 
 	const setAllDataResults = (arr: AttendanceTotals[]): void => {
 		setDataResults(arr);
-	}
+	};
 
 	return (
 		<div>
@@ -91,60 +88,19 @@ export default function Dashboard() {
 			<div className="header_wrapper">
 				<h1>Dashboard</h1>
 			</div>
-			{/* <form
-				method="GET"
-				action={`/group-statistics/${selectedGroup}/${selectedMonth}/${selectedYear}`}
-				onSubmit={(e: React.FormEvent<HTMLFormElement>): void => {
-					e.preventDefault();
-					fetch(`/group-statistics/${selectedGroup}/${selectedMonth}/${selectedYear}`)
-						.then((data: Response): Promise<AttendanceResponse> => {
-							return data.json();
-						})
-						.then((final: AttendanceResponse): void => {
-							if (final.message === "success") {
-								console.log(final);
-								setDataResults(final.data)
-							} else {
-								console.log(final);
-								alert(`The following error occurred: ${final.error}`);
-							}	
-						});
-				}}
-			>
-				<GroupDropDown attendanceGroupSelected={updateGroup} />
-				<DateDropDown
-					dateData={dataYears}
-					changeHandler={yearChangeHandler}
-					keyWord="years"
-					idTag="year_search"
+			<div id="all_data_form_wrapper">
+				<AllDataForm
+					yearData={dataYears}
+					yearHandler={yearChangeHandler}
+					monthData={dataMonths}
+					monthHandler={monthChangeHandler}
+					group={selectedGroup}
+					month={selectedMonth}
+					year={selectedYear}
+					submitHandler={setAllDataResults}
+					groupChange={updateGroup}
 				/>
-				<DateDropDown
-					dateData={dataMonths}
-					changeHandler={monthChangeHandler}
-					keyWord="months"
-					idTag="month_search"
-				/>
-				<input
-					type="submit"
-					value="Submit"
-				/>
-			</form> */}
-			<AllDataForm
-				yearData={dataYears}
-				yearHandler={yearChangeHandler}
-				yearKeyWord="years"
-				yearIdTag="year_search"
-
-				monthData={dataMonths}
-				monthHandler={monthChangeHandler}
-				monthKeyWord="months"
-				monthIdTag="month_search"
-				group={selectedGroup}
-				month={selectedMonth}
-				year={selectedYear}
-				submitHandler={setAllDataResults}
-				groupChange={updateGroup}
-			/>
+			</div>
 		</div>
 	);
 }

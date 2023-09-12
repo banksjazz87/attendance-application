@@ -1,0 +1,4 @@
+@import "../../global/library.scss";
+#all_data_form {
+    @include shadow-form;
+}
