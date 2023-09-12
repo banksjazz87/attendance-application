@@ -1,7 +1,14 @@
 @import "../../global/library.scss";
 #all_data_form {
     @include shadow-form;
+    padding-top: 32px;
+    h2 {
+        margin-top: 0;
+    }
     .year_month_options {
         width: 60%;
+    }
+    .submit_button {
+        margin-top: 1rem;
     }
 }

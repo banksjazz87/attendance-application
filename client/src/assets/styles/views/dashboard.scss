@@ -7,3 +7,16 @@
         justify-content: space-between;
     }
 }
+
+@media (max-width: 767px) {
+    #all_data_form_wrapper {
+        .year_month_options {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            row-gap: 2rem;
+            align-items: center;
+            width: 100%;
+        }
+    }
+}

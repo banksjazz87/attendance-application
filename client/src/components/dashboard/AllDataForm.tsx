@@ -38,6 +38,7 @@ export default function AllDataForm({ yearData, yearHandler, monthData, monthHan
 			action={`/group-statistics/${group}/${month}/${year}`}
 			onSubmit={formHandler}
 		>
+            <h2>Statistics Selector</h2>
 			<GroupDropDown attendanceGroupSelected={groupChange} />
 			<div className="year_month_options">
 				<DateDropDown
@@ -58,6 +59,7 @@ export default function AllDataForm({ yearData, yearHandler, monthData, monthHan
 			<input
 				type="submit"
 				value="Submit"
+                className="submit_button"
 			/>
 		</form>
 	);
