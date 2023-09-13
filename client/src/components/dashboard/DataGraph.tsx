@@ -36,7 +36,10 @@ export default function DataGraph({ allData }: DataGraphProps): JSX.Element {
 	};
 
 	return (
-		<div style={allData.length > 0 ? { marginTop: "4rem", display: "" } : { display: "none" }}>
+		<div
+			id="line_graph"
+			style={allData.length > 0 ? { marginTop: "4rem", display: "" } : { display: "none" }}
+		>
 			<LineChart
 				width={1000}
 				height={600}
@@ -48,41 +51,41 @@ export default function DataGraph({ allData }: DataGraphProps): JSX.Element {
 					bottom: 5,
 				}}
 			>
-				<CartesianGrid strokeDasharray="3 3" />
-				<XAxis dataKey="name" />
+				<CartesianGrid  />
+				<XAxis dataKey="name"/>
 				<YAxis />
 				<Tooltip />
-				<Legend />
+				<Legend style={{marginTop: "140px"}} />
+                <Line
+					type="monotone"
+					dataKey="total"
+					stroke="#9a031e"
+					strokeWidth="2"
+					activeDot={{ r: 8 }}
+				/>
+                <Line
+					type="monotone"
+					dataKey="visitors"
+					stroke="#5f0f40"
+					strokeWidth="2"
+				/>
 				<Line
 					type="monotone"
 					dataKey="children"
-					stroke="#8884d8"
+					stroke="#ee6c4d"
 					strokeWidth="2"
 				/>
 				<Line
 					type="monotone"
 					dataKey="youth"
-					stroke="#82ca9d"
+					stroke="#3d5a80"
 					strokeWidth="2"
 				/>
 				<Line
 					type="monotone"
 					dataKey="adults"
-					stroke="#CC76A1"
+					stroke="#0f4c5c"
 					strokeWidth="2"
-				/>
-				<Line
-					type="monotone"
-					dataKey="visitors"
-					stroke="#87B38D"
-					strokeWidth="2"
-				/>
-				<Line
-					type="monotone"
-					dataKey="total"
-					stroke="#1C448E"
-					strokeWidth="2"
-					activeDot={{ r: 8 }}
 				/>
 			</LineChart>
 		</div>
