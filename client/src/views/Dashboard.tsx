@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceTotals } from "../types/interfaces.ts";
 import AllDataForm from "../components/dashboard/AllDataForm.tsx";
+import DataGraph from "../components/dashboard/DataGraph.tsx";
 import "../assets/styles/views/dashboard.scss";
+import TestGraph from "../components/dashboard/TestGraph.tsx";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -44,7 +46,6 @@ export default function Dashboard() {
 				})
 				.then((final: MonthsDataResponse): void => {
 					if (final.message === "success") {
-						console.log(final);
 						setDataMonths(final.data);
 						setSearchMonths(false);
 					} else {
@@ -100,6 +101,10 @@ export default function Dashboard() {
 					submitHandler={setAllDataResults}
 					groupChange={updateGroup}
 				/>
+				<DataGraph
+					allData={dataResults}
+				/>
+				{/* <TestGraph /> */}
 			</div>
 		</div>
 	);
