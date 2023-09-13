@@ -4,7 +4,6 @@ import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataRespon
 import AllDataForm from "../components/dashboard/AllDataForm.tsx";
 import DataGraph from "../components/dashboard/DataGraph.tsx";
 import "../assets/styles/views/dashboard.scss";
-import TestGraph from "../components/dashboard/TestGraph.tsx";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
