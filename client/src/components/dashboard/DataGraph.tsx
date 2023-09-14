@@ -1,9 +1,11 @@
 import React from "react";
 import { AttendanceTotals } from "../../types/interfaces.ts";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import "../../assets/styles/components/dashboard/dataGraph.scss";
 
 interface DataGraphProps {
 	allData: AttendanceTotals[];
+    month: string;
 }
 
 interface DataGraphSet {
@@ -15,7 +17,7 @@ interface DataGraphSet {
 	total: number;
 }
 
-export default function DataGraph({ allData }: DataGraphProps): JSX.Element {
+export default function DataGraph({ allData, month }: DataGraphProps): JSX.Element {
 	const neededData = (arr: AttendanceTotals[]): DataGraphSet[] => {
 		let array = [];
 		for (let i = 0; i < arr.length; i++) {
@@ -35,14 +37,22 @@ export default function DataGraph({ allData }: DataGraphProps): JSX.Element {
 		return array;
 	};
 
+    const removeUnderScore = (value: string): string => {
+		const regex = /_/g;
+		let finalStr = value.replace(regex, " ");
+		return finalStr;
+	}
+
 	return (
 		<div
 			id="line_graph"
 			style={allData.length > 0 ? { marginTop: "4rem", display: "" } : { display: "none" }}
 		>
+            <h2>{allData.length > 0 ? removeUnderScore(allData[0].groupName) : ""}</h2>
+            <h3>{month}</h3>
 			<LineChart
-				width={1000}
-				height={600}
+				width={750}
+				height={500}
 				data={neededData(allData)}
 				margin={{
 					top: 5,

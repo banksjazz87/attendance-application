@@ -41,7 +41,7 @@ export default function AllDataForm({ yearData, yearHandler, monthData, monthHan
 		}
 		return array;
 	};
-	
+
 
 	const scrollToGraph = (): void => {
 		const graphElement = document.getElementById("line_graph") as HTMLElement;

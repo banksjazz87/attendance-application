@@ -1,0 +1,6 @@
+@import "../../global/library.scss";
+#line_graph {
+    @include content-wrapper-md;
+    @include shadow-form;
+    margin-bottom: 6rem;
+}

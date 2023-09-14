@@ -102,8 +102,8 @@ export default function Dashboard() {
 				/>
 				<DataGraph
 					allData={dataResults}
+					month={selectedMonth}
 				/>
-				{/* <TestGraph /> */}
 			</div>
 		</div>
 	);
