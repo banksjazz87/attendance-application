@@ -103,6 +103,7 @@ export default function Dashboard() {
 				<DataGraph
 					allData={dataResults}
 					month={selectedMonth}
+					year={selectedYear}
 				/>
 			</div>
 		</div>

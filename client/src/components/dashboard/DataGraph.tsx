@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AttendanceTotals } from "../../types/interfaces.ts";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from "recharts";
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from "recharts";
 import "../../assets/styles/components/dashboard/dataGraph.scss";
 
 interface DataGraphProps {
 	allData: AttendanceTotals[];
-    month: string;
+	month: string;
+    year: string;
 }
 
 interface DataGraphSet {
@@ -17,33 +18,49 @@ interface DataGraphSet {
 	total: number;
 }
 
-export default function DataGraph({ allData, month }: DataGraphProps): JSX.Element {
-    
-    const returnMonthDay = (str: string): string => {
-        let months = ['', "January", "February", 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+export default function DataGraph({ allData, month, year }: DataGraphProps): JSX.Element {
+	const [isMobile, setIsMobile] = useState<boolean>(false);
 
-        //Create an array of the string
-        let arrayOfStr = str.split(' ');
+	const checkForMobile = (num: number): void => {
+		if (num > 767) {
+			setIsMobile(false);
+		} else {
+			setIsMobile(true);
+		}
+	};
 
-        //Get the last two of the year
-        let year = arrayOfStr.slice(2).toString();
-        let arrYear = year.split('');
-        let lastTwoOfYear = arrYear.slice(2).join('');
+	useEffect(() => {
+		window.addEventListener("resize", (e: UIEvent): void => {
+			checkForMobile(window.innerWidth);
+		});
+		checkForMobile(window.innerWidth);
+	});
 
-        //Just get the month and day
-        let noYear = arrayOfStr.slice(0, 2);
+	const returnMonthDay = (str: string): string => {
+		let months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
-        //Replace the text of the month to a number
-        noYear.splice(0, 1, months.indexOf(noYear[0]).toString());
+		//Create an array of the string
+		let arrayOfStr = str.split(" ");
 
-        //Add the last two of the year to the end.
-        noYear.push(lastTwoOfYear);
+		//Get the last two of the year
+		let year = arrayOfStr.slice(2).toString();
+		let arrYear = year.split("");
+		let lastTwoOfYear = arrYear.slice(2).join("");
 
-        let addDash = noYear.join('/');
-        return addDash;
-    }
-    
-    const neededData = (arr: AttendanceTotals[]): DataGraphSet[] => {
+		//Just get the month and day
+		let noYear = arrayOfStr.slice(0, 2);
+
+		//Replace the text of the month to a number
+		noYear.splice(0, 1, months.indexOf(noYear[0]).toString());
+
+		//Add the last two of the year to the end.
+		noYear.push(lastTwoOfYear);
+
+		let addDash = noYear.join("/");
+		return addDash;
+	};
+
+	const neededData = (arr: AttendanceTotals[]): DataGraphSet[] => {
 		let array = [];
 		for (let i = 0; i < arr.length; i++) {
 			let dataSet = {
@@ -61,23 +78,22 @@ export default function DataGraph({ allData, month }: DataGraphProps): JSX.Eleme
 		return array;
 	};
 
-    const removeUnderScore = (value: string): string => {
+	const removeUnderScore = (value: string): string => {
 		const regex = /_/g;
 		let finalStr = value.replace(regex, " ");
 		return finalStr;
-	}
-
+	};
 
 	return (
 		<div
 			id="line_graph"
 			style={allData.length > 0 ? { marginTop: "4rem", display: "" } : { display: "none" }}
 		>
-            <h2>{allData.length > 0 ? removeUnderScore(allData[0].groupName) : ""}</h2>
-            <h3>{month}</h3>
-			<LineChart
-				width={750}
-				height={500}
+			<h2>{allData.length > 0 ? removeUnderScore(allData[0].groupName) : ""}</h2>
+			<h3>{`${month} ${year}`}</h3>
+			<BarChart
+				width={isMobile ? 450 : 750}
+				height={isMobile ? 200 : 500}
 				data={neededData(allData)}
 				margin={{
 					top: 5,
@@ -86,66 +102,32 @@ export default function DataGraph({ allData, month }: DataGraphProps): JSX.Eleme
 					bottom: 5,
 				}}
 			>
-				<CartesianGrid  />
-				<XAxis dataKey="name"/>
+				<CartesianGrid />
+				<XAxis dataKey="name" />
 				<YAxis />
 				<Tooltip />
-				<Legend style={{marginTop: "140px"}} />
-                <Line
-					type="monotone"
+				<Legend style={{ backgroundColor: "rgba(0, 0, 0, .2)" }} />
+				<Bar
 					dataKey="total"
-					stroke="#9a031e"
-					strokeWidth="2"
-					activeDot={{ r: 8 }}
+					fill="#fd7f6f"
 				/>
-                <Line
-					type="monotone"
+				<Bar
 					dataKey="visitors"
-					stroke="#5f0f40"
-					strokeWidth="2"
+					fill="#7eb0d5"
 				/>
-				<Line
-					type="monotone"
+				<Bar
 					dataKey="children"
-					stroke="#ee6c4d"
-					strokeWidth="2"
+					fill="#b2e061"
 				/>
-				<Line
-					type="monotone"
+				<Bar
 					dataKey="youth"
-					stroke="#3d5a80"
-					strokeWidth="2"
+					fill="#bd7ebe"
 				/>
-				<Line
-					type="monotone"
+				<Bar
 					dataKey="adults"
-					stroke="#0f4c5c"
-					strokeWidth="2"
+					fill="#beb9db"
 				/>
-			</LineChart>
-
-            <BarChart
-          width={500}
-          height={300}
-          data={neededData(allData)}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="total" fill="#8884d8" />
-          <Bar dataKey="visitors" fill="#82ca9d" />
-          <Bar dataKey="children" fill="#8884d8" />
-          <Bar dataKey="youth" fill="#82ca9d" />
-          <Bar dataKey="adults" fill="#82ca9d" />
-        </BarChart>
+			</BarChart>
 		</div>
 	);
 }

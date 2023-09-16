@@ -1,6 +1,15 @@
 @import "../../global/library.scss";
 #line_graph {
-    @include content-wrapper-md;
     @include shadow-form;
     margin-bottom: 6rem;
+    margin-top: 0;
+    padding-top: 0;
+    overflow-x: default;
+    h2 {
+        margin-top: 1rem;
+        margin-bottom: 0;
+    }
+    h3 {
+        margin-top: 0;
+    }
 }

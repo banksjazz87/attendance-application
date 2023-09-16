@@ -1,5 +1,4 @@
 @import '../../global/library.scss';
-
 #main_nav_wrapper {
     position: fixed;
     left: 0;
@@ -7,22 +6,19 @@
     height: 100%;
     background-color: $dark-background;
     z-index: 5;
-
+    padding-top: 95px;
     ul {
         display: flex;
         flex-direction: column;
         row-gap: 2rem;
         padding: 18px 18px;
-
         li {
             list-style: none;
             margin: auto;
-
             a {
                 color: white;
                 font-size: 20px;
-
-                :hover {
+                 :hover {
                     color: $orange;
                 }
             }
@@ -42,7 +38,7 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
-
+        padding-top: 0;
         ul {
             display: flex;
             flex-direction: row;

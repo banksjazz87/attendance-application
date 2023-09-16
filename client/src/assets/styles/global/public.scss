@@ -1,5 +1,4 @@
 @import '../global/library.scss';
-
 body {
     margin: 0;
     padding: 0;
@@ -7,11 +6,9 @@ body {
     font-family: $primary-font;
     overflow-x: hidden;
     overscroll-behavior: none;
-
     h1 {
         @include header-large-bold;
     }
-
     .header_wrapper {
         width: 100vw;
         padding-top: .25rem;
@@ -26,7 +23,8 @@ body {
         margin-bottom: 6rem;
         margin-top: 0;
         padding-top: 0;
-
+        position: sticky;
+        z-index: 10;
         h1 {
             color: white;
             text-shadow: 2px 3px rgba(20, 20, 20, .7);
@@ -35,40 +33,32 @@ body {
             line-height: 40px;
         }
     }
-
     input[type="text"],
     input[type="password"],
     select {
         @include input-field;
     }
-
     input[type="submit"],
     button {
         @include blue-btn;
     }
-
     p {
         @include body-text;
     }
-
     table {
         .present_data {
             text-align: center;
             padding-left: 0;
         }
-
         .present_header {
             text-align: center;
         }
-
         .id_number {
             text-align: right;
         }
-
         .id_data {
             text-align: right;
         }
-
         .delete {
             text-align: center;
         }
