@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AttendanceTotals } from "../../types/interfaces.ts";
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from "recharts";
 import "../../assets/styles/components/dashboard/dataGraph.scss";
+import DateMethods from "../../functions/dateMethods.ts";
 
 interface DataGraphProps {
 	allData: AttendanceTotals[];
@@ -36,35 +37,12 @@ export default function DataGraph({ allData, month, year }: DataGraphProps): JSX
 		checkForMobile(window.innerWidth);
 	});
 
-	const returnMonthDay = (str: string): string => {
-		let months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-
-		//Create an array of the string
-		let arrayOfStr = str.split(" ");
-
-		//Get the last two of the year
-		let year = arrayOfStr.slice(2).toString();
-		let arrYear = year.split("");
-		let lastTwoOfYear = arrYear.slice(2).join("");
-
-		//Just get the month and day
-		let noYear = arrayOfStr.slice(0, 2);
-
-		//Replace the text of the month to a number
-		noYear.splice(0, 1, months.indexOf(noYear[0]).toString());
-
-		//Add the last two of the year to the end.
-		noYear.push(lastTwoOfYear);
-
-		let addDash = noYear.join("/");
-		return addDash;
-	};
 
 	const neededData = (arr: AttendanceTotals[]): DataGraphSet[] => {
 		let array = [];
 		for (let i = 0; i < arr.length; i++) {
 			let dataSet = {
-				name: returnMonthDay(arr[i].displayTitle),
+				name: DateMethods.getMonthDay(arr[i].displayTitle),
 				children: arr[i].totalChildren,
 				youth: arr[i].totalYouth,
 				adults: arr[i].totalAdults,

@@ -4,6 +4,7 @@ import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataRespon
 import AllDataForm from "../components/dashboard/AllDataForm.tsx";
 import DataGraph from "../components/dashboard/DataGraph.tsx";
 import "../assets/styles/views/dashboard.scss";
+import DateMethods from "../functions/dateMethods.ts";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -55,6 +56,14 @@ export default function Dashboard() {
 				});
 		}
 	}, [selectedYear, searchMonths, selectedGroup]);
+
+	useEffect((): void => {
+		const date: Date = new Date();
+		let month = date.getMonth();
+		let monthName = DateMethods.getMonthName(month);
+
+		console.log('THIS IS THE MONTH', monthName);
+	}, []);
 
 	const updateGroup = (arr: Group[], value: string): void => {
 		for (let i = 0; i < arr.length; i++) {
