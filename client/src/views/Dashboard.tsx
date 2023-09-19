@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
-import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceTotals } from "../types/interfaces.ts";
+import { Group, YearsDataResponse, YearsDataObj, MonthsDataObj, MonthsDataResponse, AttendanceTotals, AttendanceResponse } from "../types/interfaces.ts";
 import AllDataForm from "../components/dashboard/AllDataForm.tsx";
 import DataGraph from "../components/dashboard/DataGraph.tsx";
 import "../assets/styles/views/dashboard.scss";
@@ -15,6 +15,9 @@ export default function Dashboard() {
 	const [dataMonths, setDataMonths] = useState<MonthsDataObj[]>([]);
 	const [selectedMonth, setSelectedMonth] = useState<string>("");
 	const [dataResults, setDataResults] = useState<AttendanceTotals[]>([]);
+
+	//Main attendance to display for the user.
+	const mainAttendance: string = "Sunday_Service";
 
 	//Used to update the valid years that can be used for the selected group.
 	useEffect((): void => {
@@ -57,12 +60,34 @@ export default function Dashboard() {
 		}
 	}, [selectedYear, searchMonths, selectedGroup]);
 
+
 	useEffect((): void => {
 		const date: Date = new Date();
-		let month = date.getMonth();
-		let monthName = DateMethods.getMonthName(month);
 
-		console.log('THIS IS THE MONTH', monthName);
+		//Get month name
+		let month = date.getMonth();
+		let monthName = DateMethods.getMonthName(month + 1);
+
+		//Get the year
+		let year: string = date.getUTCFullYear().toString();
+
+		//Update the current states 
+		setSelectedMonth(monthName ? monthName : "");
+		setSelectedYear(year);
+		setSelectedGroup(mainAttendance);
+
+		//Get current statistics for the current month
+		fetch(`/group-statistics/${mainAttendance}/${monthName}/${year}`)
+			.then((data: Response): Promise<AttendanceResponse> => {
+				return data.json();
+			})
+			.then((final: AttendanceResponse): void => {
+				if (final.message === 'success') {
+					setDataResults(final.data);
+				} else {
+					alert(final.error);
+				}
+			})
 	}, []);
 
 	const updateGroup = (arr: Group[], value: string): void => {
