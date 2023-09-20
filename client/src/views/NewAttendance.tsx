@@ -3,6 +3,7 @@ import Navbar from "../components/global/Navbar.tsx";
 import Form from "../components/newAttendance/Form.tsx";
 import NewOrExisting from "../components/newAttendance/NewOrExisting.tsx";
 import "../assets/styles/views/newAttendance.scss";
+import LoadingBar from "../components/global/LoadingBar.tsx";
 
 interface ShowFormOptions {
   formNeeded: "New" | "Existing";
@@ -11,6 +12,7 @@ interface ShowFormOptions {
 export default function NewAttendance() {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [formOption, setFormOption] = useState<ShowFormOptions>({ formNeeded: "Existing" });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const showExisting = (): void => {
     setShowForm(true);
@@ -36,8 +38,13 @@ export default function NewAttendance() {
         <Form
           show={showForm}
           formToShow={formOption.formNeeded}
+          startLoading={() => setIsLoading(true)}
+          endLoading={() => setIsLoading(false)}
         />
       </div>
+      <LoadingBar 
+        show={isLoading}
+      />
     </div>
   );
 }

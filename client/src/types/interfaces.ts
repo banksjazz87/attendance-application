@@ -176,6 +176,8 @@ export interface DeleteResponse {
 export interface FormProps {
   show: boolean;
   formToShow: "New" | "Existing";
+  startLoading: Function;
+  endLoading: Function;
 }
 
 export interface UpdateAttendant {

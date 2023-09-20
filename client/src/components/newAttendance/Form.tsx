@@ -9,7 +9,7 @@ import postData from "../../functions/api/post.ts";
 import { APIResponse, FormProps, APINewTable, NewAttendance, ApiResponse } from "../../types/interfaces.ts";
 import "../../assets/styles/components/newAttendance/form.scss";
 
-export default function Form({ show, formToShow }: FormProps): JSX.Element {
+export default function Form({ show, formToShow, startLoading, endLoading }: FormProps): JSX.Element {
 
   const navigate = useNavigate();
 
@@ -107,9 +107,11 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
    */
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    startLoading();
     if (searchForGroup(form.groupDisplayName, allGroups)) {
       postData("/new-attendance/create", form).then((data: APINewTable): void => {
         neededAttendants(data);
+        endLoading();
         navigate('/attendance', {replace: true});
       });
     } else {
@@ -120,17 +122,21 @@ export default function Form({ show, formToShow }: FormProps): JSX.Element {
               postData("/new-attendance/create", form).then((data: APINewTable): void => {
                 if (data.message === "success") {
                   neededAttendants(data);
+                  endLoading();
                   sessionStorage.setItem('currentAttendancePage', '0');
                   navigate('/attendance', {replace: true});
                 } else {
+                  endLoading();
                   alert("Error with the /new-attendance/create");
                 }
               });
             } else {
+              endLoading();
               alert("Failure with the /new-group/create");
             }
           });
         } else {
+          endLoading();
           alert(`Failure with new-group ${data.data}`);
         }
       });

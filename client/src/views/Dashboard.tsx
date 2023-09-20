@@ -6,7 +6,7 @@ import DataGraph from "../components/dashboard/DataGraph.tsx";
 import "../assets/styles/views/dashboard.scss";
 import DateMethods from "../functions/dateMethods.ts";
 import LoadingBar from "../components/global/LoadingBar.tsx";
-import { faScaleUnbalancedFlip } from "@fortawesome/free-solid-svg-icons";
+
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
