@@ -5,6 +5,8 @@ import AllDataForm from "../components/dashboard/AllDataForm.tsx";
 import DataGraph from "../components/dashboard/DataGraph.tsx";
 import "../assets/styles/views/dashboard.scss";
 import DateMethods from "../functions/dateMethods.ts";
+import LoadingBar from "../components/global/LoadingBar.tsx";
+import { faScaleUnbalancedFlip } from "@fortawesome/free-solid-svg-icons";
 
 export default function Dashboard() {
 	const [selectedGroup, setSelectedGroup] = useState<string>("");
@@ -15,6 +17,7 @@ export default function Dashboard() {
 	const [dataMonths, setDataMonths] = useState<MonthsDataObj[]>([]);
 	const [selectedMonth, setSelectedMonth] = useState<string>("");
 	const [dataResults, setDataResults] = useState<AttendanceTotals[]>([]);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	//Main attendance to display for the user.
 	const mainAttendance: string = "Sunday_Service";
@@ -60,7 +63,6 @@ export default function Dashboard() {
 		}
 	}, [selectedYear, searchMonths, selectedGroup]);
 
-
 	useEffect((): void => {
 		const date: Date = new Date();
 
@@ -71,10 +73,12 @@ export default function Dashboard() {
 		//Get the year
 		let year: string = date.getUTCFullYear().toString();
 
-		//Update the current states 
+		//Update the current states
 		setSelectedMonth(monthName ? monthName : "");
 		setSelectedYear(year);
 		setSelectedGroup(mainAttendance);
+
+		setIsLoading(true);
 
 		//Get current statistics for the current month
 		fetch(`/group-statistics/${mainAttendance}/${monthName}/${year}`)
@@ -82,12 +86,14 @@ export default function Dashboard() {
 				return data.json();
 			})
 			.then((final: AttendanceResponse): void => {
-				if (final.message === 'success') {
+				if (final.message === "success") {
 					setDataResults(final.data);
+					setIsLoading(false);
 				} else {
 					alert(final.error);
+					setIsLoading(false);
 				}
-			})
+			});
 	}, []);
 
 	const updateGroup = (arr: Group[], value: string): void => {
@@ -133,12 +139,15 @@ export default function Dashboard() {
 					year={selectedYear}
 					submitHandler={setAllDataResults}
 					groupChange={updateGroup}
+					startLoading={() => setIsLoading(true)}
+					stopLoading={() => setIsLoading(false)}
 				/>
 				<DataGraph
 					allData={dataResults}
 					month={selectedMonth}
 					year={selectedYear}
 				/>
+				<LoadingBar show={isLoading} />
 			</div>
 		</div>
 	);

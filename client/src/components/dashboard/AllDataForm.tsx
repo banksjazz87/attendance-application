@@ -14,6 +14,8 @@ interface AllDataFormProps {
 	year: string;
 	submitHandler: Function;
 	groupChange: Function;
+	startLoading: Function;
+	stopLoading: Function;
 }
 
 interface DataGraphSet {
@@ -24,7 +26,7 @@ interface DataGraphSet {
 	visitors: number;
 	total: number;
 }
-export default function AllDataForm({ yearData, yearHandler, monthData, monthHandler, group, month, year, submitHandler, groupChange }: AllDataFormProps) {
+export default function AllDataForm({ yearData, yearHandler, monthData, monthHandler, group, month, year, submitHandler, groupChange, startLoading, stopLoading }: AllDataFormProps) {
 	const neededData = (arr: AttendanceTotals[]): DataGraphSet[] => {
 		let array = [];
 		for (let i = 0; i < arr.length; i++) {
@@ -53,6 +55,7 @@ export default function AllDataForm({ yearData, yearHandler, monthData, monthHan
 
 	const formHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
+		startLoading();
 		fetch(`/group-statistics/${group}/${month}/${year}`)
 			.then((data: Response): Promise<AttendanceResponse> => {
 				return data.json();
@@ -62,8 +65,10 @@ export default function AllDataForm({ yearData, yearHandler, monthData, monthHan
 					neededData(final.data);
 					submitHandler(final.data);
 					scrollToGraph();
+					stopLoading();
 				} else {
 					alert(`The following error occurred: ${final.error}`);
+					stopLoading();
 				}
 			});
 	};

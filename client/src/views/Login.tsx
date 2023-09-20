@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import LoginForm from "../components/login/LoginForm.tsx";
 import "../assets/styles/views/login.scss";
-import LoadingBar from "../components/global/LoadingBar.tsx";
 
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -19,7 +18,6 @@ export default function Login() {
           showForm={loggedIn ? false : true}
           logIn={logInSuccess}
         />
-        <LoadingBar />
       </div>
     </div>
   );
