@@ -5,6 +5,7 @@ import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
+import LoadingBar from "../components/global/LoadingBar.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
 import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
@@ -115,7 +116,8 @@ export default function Attendance(): JSX.Element {
 	};
 
 	const dropDownSubmit = (value: string): void => {
-		console.log(value);
+		setSearching(true);
+
 		fetch(`/group-lists/attendance/${value}`)
 			.then((data: Response): Promise<APIAttendanceTitles> => {
 				return data.json();
@@ -152,6 +154,7 @@ export default function Attendance(): JSX.Element {
 						selectAttendanceSheet(final.data);
 						setShowOptionButtons(true);
 						setShowDropDown(false);
+						setSearching(false);
 					});
 			});
 	};
@@ -206,6 +209,8 @@ export default function Attendance(): JSX.Element {
 					deleteMemberHandler={updateDeleteMemberHandler}
 					updatePartial={updatePartialName}
 					activeSearch={searching}
+					startLoading={() => setSearching(true)}
+					stopLoading={() => setSearching(false)}
 				/>
 				<NewMember
 					currentTable={selectedAttendance.title}
@@ -218,6 +223,9 @@ export default function Attendance(): JSX.Element {
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}
+				/>
+				<LoadingBar
+					show={searching}
 				/>
 			</div>
 		</div>

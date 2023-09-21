@@ -9,7 +9,7 @@ import postData from "../../functions/api/post.ts";
 import { APIResponse, FormProps, APINewTable, NewAttendance, ApiResponse } from "../../types/interfaces.ts";
 import "../../assets/styles/components/newAttendance/form.scss";
 
-export default function Form({ show, formToShow, startLoading, endLoading }: FormProps): JSX.Element {
+export default function Form({ show, formToShow, updateLoadingStatus }: FormProps): JSX.Element {
 
   const navigate = useNavigate();
 
@@ -107,11 +107,11 @@ export default function Form({ show, formToShow, startLoading, endLoading }: For
    */
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    startLoading();
+    updateLoadingStatus();
     if (searchForGroup(form.groupDisplayName, allGroups)) {
       postData("/new-attendance/create", form).then((data: APINewTable): void => {
         neededAttendants(data);
-        endLoading();
+        updateLoadingStatus();
         navigate('/attendance', {replace: true});
       });
     } else {
@@ -122,21 +122,21 @@ export default function Form({ show, formToShow, startLoading, endLoading }: For
               postData("/new-attendance/create", form).then((data: APINewTable): void => {
                 if (data.message === "success") {
                   neededAttendants(data);
-                  endLoading();
+                  updateLoadingStatus();
                   sessionStorage.setItem('currentAttendancePage', '0');
                   navigate('/attendance', {replace: true});
                 } else {
-                  endLoading();
+                  updateLoadingStatus();
                   alert("Error with the /new-attendance/create");
                 }
               });
             } else {
-              endLoading();
+              updateLoadingStatus();
               alert("Failure with the /new-group/create");
             }
           });
         } else {
-          endLoading();
+          updateLoadingStatus();
           alert(`Failure with new-group ${data.data}`);
         }
       });

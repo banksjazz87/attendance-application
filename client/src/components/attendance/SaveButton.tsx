@@ -2,17 +2,22 @@ import React from "react";
 import {APIResponse, SaveButtonProps, SentData} from "../../types/interfaces.ts";
 import putData from "../../functions/api/put.ts";
 
-export default function SaveButton ({tableTitle, totalData}: SaveButtonProps): JSX.Element {
+export default function SaveButton ({tableTitle, totalData, startLoading, stopLoading}: SaveButtonProps): JSX.Element {
 
     const clickHandler = (e: React.MouseEvent<HTMLButtonElement>): void => {
         let allTotalData: SentData = {
             title: tableTitle,
             data: totalData
         }
+
+        startLoading();
+
         putData('/attendance-total/update/', allTotalData).then((data: APIResponse): void => {
                 if (data.message === "success") {
-                    alert(`${allTotalData.title} has been saved.`)
+                    stopLoading();
+                    alert(`${allTotalData.title} has been saved.`);
                 } else {
+                    stopLoading();
                     alert(`The following error has occured: ${data.error}`);
                 }
             });

@@ -12,7 +12,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch }: AttendanceProps): JSX.Element {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch, startLoading, stopLoading }: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -252,6 +252,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 					<SaveButton
 						tableTitle={tableName}
 						totalData={sumOfPresent}
+						startLoading={startLoading}
+						stopLoading={stopLoading}
 					 />
 				</div>
 				<table>

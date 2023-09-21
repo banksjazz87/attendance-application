@@ -17,6 +17,8 @@ export interface AttendanceProps {
   deleteMemberHandler: Function;
   updatePartial: Function;
   activeSearch: boolean;
+  startLoading: Function;
+  stopLoading: Function;
 }
 
 export interface Group {
@@ -176,8 +178,7 @@ export interface DeleteResponse {
 export interface FormProps {
   show: boolean;
   formToShow: "New" | "Existing";
-  startLoading: Function;
-  endLoading: Function;
+  updateLoadingStatus: Function;
 }
 
 export interface UpdateAttendant {
@@ -220,6 +221,8 @@ export interface TotalSentSum {
 export interface SaveButtonProps {
   tableTitle: string;
   totalData: TotalSum;
+  startLoading: Function;
+  stopLoading: Function;
 }
 
 export interface SentData {
