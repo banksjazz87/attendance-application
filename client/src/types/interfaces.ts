@@ -59,6 +59,7 @@ export interface User {
 export interface UserProps {
   showForm: boolean;
   logIn: any;
+  updateLoadingStatus: Function;
 }
 
 export interface JSDate {

@@ -4,7 +4,7 @@ import postData from "../../functions/api/post.ts";
 import { User, UserProps } from "../../types/interfaces.ts";
 import "../../assets/styles/components/login/loginForm.scss";
 
-export default function LoginForm({ showForm, logIn }: UserProps) {
+export default function LoginForm({ showForm, logIn, updateLoadingStatus }: UserProps) {
   const [login, setLogin] = useState<User>({ name: "", password: "" });
 
   const inputChange = (input: string, field: string): void => {
@@ -20,11 +20,14 @@ export default function LoginForm({ showForm, logIn }: UserProps) {
       style={showForm ? { display: "" } : { display: "none" }}
       onSubmit={(e: React.FormEvent): void => {
         e.preventDefault();
+        updateLoadingStatus();
         postData("/login", login).then((data) => {
           if (data.message === "valid") {
             logIn();
+            updateLoadingStatus();
             navigate("/new-attendance", { replace: true });
           } else {
+            updateLoadingStatus();
             alert("Invalid User, please try again");
           }
         });
