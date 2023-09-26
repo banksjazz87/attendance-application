@@ -122,6 +122,8 @@ export default function People() {
         <NewMember
           show={showAddMember}
           showHandler={displayAddMember}
+          currentTable={"Attendants"}
+          masterTable={true}
         />
         <AllPeople
           allPeople={people}

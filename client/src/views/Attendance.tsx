@@ -216,6 +216,7 @@ export default function Attendance(): JSX.Element {
 					currentTable={selectedAttendance.title}
 					show={showAddNewMember}
 					showHandler={showNewMemberHandler}
+					masterTable={false}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}

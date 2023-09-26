@@ -8,7 +8,7 @@ import "../../assets/styles/components/people/newMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable, show, showHandler }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler, masterTable }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -104,9 +104,21 @@ export default function NewMember({ currentTable, show, showHandler }: NewMember
     );
   });
 
+  const postNewAttendant = (obj: UpdateAttendant): void => {
+    postData("/attendance/insert/attendant", obj).then((data: APIResponse): void => {
+      if (data.message === "success") {
+        alert(`${obj.firstName} has been added.`);
+        (document.getElementById("new_member_form") as HTMLFormElement).reset();
+        window.location.reload();
+      } else {
+        alert(`${data.data}`);
+      }
+    });
+  }
+
   const addNewAttendantToSheet = (obj: APIAttendanceSheet): void => {
-    if (obj && obj.message === "success") {
-      const neededData: UpdateAttendant = {
+   if (obj && obj.message === "success") {
+      let neededData: UpdateAttendant = {
         firstName: obj.data[0].firstName,
         lastName: obj.data[0].lastName,
         age: obj.data[0].age,
@@ -114,21 +126,13 @@ export default function NewMember({ currentTable, show, showHandler }: NewMember
         memberType: obj.data[0].memberType,
         table: currentTable,
         presentValue: 0,
-      };
-
-      postData("/attendance/insert/attendant", neededData).then((data: APIResponse): void => {
-        if (data.message === "success") {
-          alert(`${neededData.firstName} has been added.`);
-          (document.getElementById("new_member_form") as HTMLFormElement).reset();
-          window.location.reload();
-        } else {
-          alert(`${data.data}`);
-        }
-      });
+      }
+      postNewAttendant(neededData);
     } else {
       alert(obj.data);
     }
   };
+
 
   const getAttendantDataAndSetIt = (obj: APIResponse): Promise<APIAttendanceSheet> | void => {
     if (obj.message === "Success") {
@@ -150,7 +154,13 @@ export default function NewMember({ currentTable, show, showHandler }: NewMember
       alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
-        getAttendantDataAndSetIt(data);
+
+        if (!masterTable) {
+          getAttendantDataAndSetIt(data);
+        } else {
+          alert(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`)
+        }
+        
       });
     }
   };

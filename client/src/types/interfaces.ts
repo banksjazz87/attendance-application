@@ -187,7 +187,7 @@ export interface UpdateAttendant {
   lastName: string;
   attendantId: number | undefined;
   table: string | undefined;
-  presentValue: number;
+  presentValue?: number;
   age?: string;
   memberType?: string;
 }
@@ -196,6 +196,7 @@ export interface NewMemberProps {
   currentTable?: string;
   show: boolean;
   showHandler: Function;
+  masterTable: boolean;
 }
 
 export interface ValuesAndClass {
