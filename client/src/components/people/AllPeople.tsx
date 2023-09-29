@@ -7,9 +7,10 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 import SearchBar from "../global/SearchBar.tsx";
 
+
 export default function AllPeople({ allPeople, deletePersonHandler, editPersonHandler, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch }: AllPeopleProps): JSX.Element {
   const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
-
+ 
   useEffect((): void => {
     window.addEventListener("resize", (ev: UIEvent): void => {
       setCurrentWindowWidth(window.innerWidth);
@@ -174,13 +175,28 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
     );
   };
 
-  if (allPeople.length > 1 && !activeSearch) {
+  const searchBarNoTable = (): JSX.Element => {
+    return (
+      <div id="all_people_table_wrapper">
+        <h2>All Attendants</h2>
+        <SearchBar updatePartial={updatePartial} />
+        <PaginationButtons
+          totalRows={totalRows}
+          updateOffset={updateOffsetHandler}
+          offSetIncrement={offSetIncrement}
+          sessionPageProperty={"personPage"}
+        />
+      </div>
+    );
+  }
+
+  if (allPeople.length > 0 && !activeSearch) {
     return allPeopleNoSearch();
   } else if (activeSearch && allPeople.length < 1) {
     return activeSearchNoPersonFound();
   } else if (activeSearch && allPeople.length > 0) {
     return activeSearchPeopleFound();
   } else {
-    return <h1>Fetching</h1>;
+    return searchBarNoTable();
   }
 }
