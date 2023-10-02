@@ -16,6 +16,7 @@ interface EditMemberProps {
 }
 
 export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember }: EditMemberProps): JSX.Element {
+
   const updateAgeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     console.log("This is the age value", e.target.value);
     updateAge(e.target.value);

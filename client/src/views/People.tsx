@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
+import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import AllPeople from "../components/people/AllPeople.tsx";
@@ -21,6 +22,8 @@ export default function People() {
   const [currentOffset, setCurrentOffset] = useState<number>(0);
   const [partialName, setPartialName] = useState<string>('');
   const [searching, setSearching] = useState<boolean>(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+  const [successMessageText, setSuccessMessageText] = useState<string>('');
 
   const offSetIncrement: number = 10;
 
@@ -106,6 +109,17 @@ export default function People() {
     setPartialName(string);
   }
 
+  const successMessageTrigger = (): void =>  {
+    setShowSuccessMessage(true);
+    setTimeout((): void => {
+      setShowSuccessMessage(false);
+    }, 1000);
+  }
+
+  const updateSuccessMessageText = (str: string): void => {
+    setSuccessMessageText(str);
+  }
+
   return (
     <div id="people_page_wrapper">
       <Navbar />
@@ -151,6 +165,10 @@ export default function People() {
           updateName={updateEditName}
           updateAge={updateEditAge}
           updateMember={updateEditMember}
+        />
+        <SuccessMessage
+         message={successMessageText}
+         show={showSuccessMessage}
         />
       </div>
     </div>
