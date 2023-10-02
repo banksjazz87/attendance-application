@@ -23,7 +23,7 @@ export default function People() {
   const [partialName, setPartialName] = useState<string>('');
   const [searching, setSearching] = useState<boolean>(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
-  const [successMessageText, setSuccessMessageText] = useState<string>('');
+  const [successMessageText, setSuccessMessageText] = useState<string>('TESTING');
 
   const offSetIncrement: number = 10;
 
@@ -165,6 +165,8 @@ export default function People() {
           updateName={updateEditName}
           updateAge={updateEditAge}
           updateMember={updateEditMember}
+          triggerSuccessMessage={successMessageTrigger}
+          updateSuccessMessage={updateSuccessMessageText}
         />
         <SuccessMessage
          message={successMessageText}

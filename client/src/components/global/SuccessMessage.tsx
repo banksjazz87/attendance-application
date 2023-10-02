@@ -1,4 +1,5 @@
 import React from "react";
+import "../../assets/styles/components/global/successMessage.scss";
 
 interface SuccessMessageProps {
     message: string;

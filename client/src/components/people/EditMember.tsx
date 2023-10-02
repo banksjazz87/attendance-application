@@ -13,9 +13,11 @@ interface EditMemberProps {
   updateName: Function;
   updateAge: Function;
   updateMember: Function;
+  triggerSuccessMessage: Function;
+  updateSuccessMessage: Function;
 }
 
-export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember }: EditMemberProps): JSX.Element {
+export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, triggerSuccessMessage, updateSuccessMessage }: EditMemberProps): JSX.Element {
 
   const updateAgeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     console.log("This is the age value", e.target.value);
@@ -31,8 +33,15 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     e.preventDefault();
     putData("/update-attendant", editUser).then((data: APIResponse): void => {
       if (data.message === "Success") {
-        hideHandler();
-        window.location.reload();
+        
+        updateSuccessMessage(`${editUser.firstName} ${editUser.lastName} has been updated.`);
+        triggerSuccessMessage();
+
+        setTimeout((): void  => {
+          hideHandler();
+          window.location.reload();
+        }, 1200);
+
       } else {
         alert(data.error);
       }
