@@ -109,13 +109,6 @@ export default function People() {
     setPartialName(string);
   }
 
-  const successMessageTrigger = (): void =>  {
-    setShowSuccessMessage(true);
-    setTimeout((): void => {
-      setShowSuccessMessage(false);
-    }, 1000);
-  }
-
   const updateSuccessMessageText = (str: string): void => {
     setSuccessMessageText(str);
   }
@@ -157,6 +150,8 @@ export default function People() {
           show={showDeleteAlert}
           deleteUser={userToDelete}
           hideHandler={hideDeleteHandler}
+          triggerSuccessMessage={() => setShowSuccessMessage(true)}
+          updateSuccessMessage={updateSuccessMessageText}
         />
         <EditMember
           show={showEditUser}
@@ -165,12 +160,13 @@ export default function People() {
           updateName={updateEditName}
           updateAge={updateEditAge}
           updateMember={updateEditMember}
-          triggerSuccessMessage={successMessageTrigger}
+          triggerSuccessMessage={() => setShowSuccessMessage(true)}
           updateSuccessMessage={updateSuccessMessageText}
         />
         <SuccessMessage
          message={successMessageText}
          show={showSuccessMessage}
+         closeMessage={() => setShowSuccessMessage(false)}
         />
       </div>
     </div>

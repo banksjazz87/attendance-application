@@ -29,19 +29,24 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     updateMember(e.target.value);
   };
 
+  const reloadWindow = (): void => {
+    setTimeout((): void  => {
+      hideHandler();
+      window.location.reload();
+    }, 3500);
+  }
+  
+  const editConfirmation = (): void => {
+    updateSuccessMessage(`${editUser.firstName} ${editUser.lastName} has been updated.`);
+    triggerSuccessMessage();
+    reloadWindow();
+  }
+
   const updateSubmitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     putData("/update-attendant", editUser).then((data: APIResponse): void => {
       if (data.message === "Success") {
-        
-        updateSuccessMessage(`${editUser.firstName} ${editUser.lastName} has been updated.`);
-        triggerSuccessMessage();
-
-        setTimeout((): void  => {
-          hideHandler();
-          window.location.reload();
-        }, 1200);
-
+        editConfirmation();
       } else {
         alert(data.error);
       }

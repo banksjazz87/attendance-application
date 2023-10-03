@@ -169,6 +169,8 @@ export interface DeleteProps {
   show: boolean;
   deleteUser: Attendee;
   hideHandler: Function;
+  triggerSuccessMessage: Function;
+  updateSuccessMessage: Function;
 }
 
 export interface DeleteResponse {

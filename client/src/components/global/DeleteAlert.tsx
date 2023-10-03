@@ -5,15 +5,23 @@ import "../../assets/styles/components/global/deleteAlert.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function DeleteAlert({ message, hideHandler, url, show, deleteUser }: DeleteProps) {
+export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage }: DeleteProps) {
+
+  const deleteConfirmation = (obj: DeleteResponse): void => {
+          triggerSuccessMessage();
+          updateSuccessMessage(obj.message);
+          setTimeout((): void => {
+            window.location.reload();
+          }, 3500);
+  }
+
   const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
     if (deleteUser) {
       deleteData(url).then((data: DeleteResponse): void => {
         if (data.message === "failure") {
           alert(data.error);
         } else {
-          alert(data.message);
-          window.location.reload();
+         deleteConfirmation(data);
         }
       });
     }

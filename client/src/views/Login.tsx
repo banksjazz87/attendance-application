@@ -3,7 +3,6 @@ import Navbar from "../components/global/Navbar.tsx";
 import LoginForm from "../components/login/LoginForm.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import "../assets/styles/views/login.scss";
-import SuccessMessage from "../components/global/SuccessMessage.tsx";
 
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState<boolean>(false);
@@ -26,10 +25,6 @@ export default function Login() {
           show={isLoading}
         />
       </div>
-      <SuccessMessage 
-        show={true}
-        message="A sample Attendant has been updated"
-      />
     </div>
   );
 }
