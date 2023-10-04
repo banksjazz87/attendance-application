@@ -131,6 +131,8 @@ export default function People() {
           showHandler={displayAddMember}
           currentTable={"Attendants"}
           masterTable={true}
+          triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
+          updateSuccessMessage={updateSuccessMessageText}
         />
         <AllPeople
           allPeople={people}

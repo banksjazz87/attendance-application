@@ -8,7 +8,7 @@ import "../../assets/styles/components/people/newMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable, show, showHandler, masterTable }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -24,7 +24,6 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
       .then((data) => data.json())
       .then((final) => {
         setAllAttendants(final.data);
-        console.log(allAttendants);
       });
   }, []);
 
@@ -158,7 +157,8 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
         if (!masterTable) {
           getAttendantDataAndSetIt(data);
         } else {
-          alert(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`)
+          triggerSuccessMessage();
+          updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`);
         }
         
       });

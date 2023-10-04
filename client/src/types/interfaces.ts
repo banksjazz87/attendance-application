@@ -199,6 +199,9 @@ export interface NewMemberProps {
   show: boolean;
   showHandler: Function;
   masterTable: boolean;
+  triggerSuccessMessage: Function;
+  updateSuccessMessage: Function;
+
 }
 
 export interface ValuesAndClass {

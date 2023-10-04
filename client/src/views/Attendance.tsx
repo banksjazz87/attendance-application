@@ -225,6 +225,8 @@ export default function Attendance(): JSX.Element {
 					show={showAddNewMember}
 					showHandler={showNewMemberHandler}
 					masterTable={false}
+					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					updateSuccessMessage={setNewSuccessMessage}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to permanently delete ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
