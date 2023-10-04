@@ -349,7 +349,7 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:table", (r
   Promise.all([Db.removePerson(table, first, last, idNum), Db.removePerson("Attendants", first, last, idNum)])
     .then((data: [string[], string[]]): void => {
       res.send({
-        message: "success",
+        message: `Success, ${first} ${last} has been removed from the ${table} table.`,
         data: () => {
           return data[0], data[1];
         },

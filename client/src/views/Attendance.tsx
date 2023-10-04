@@ -5,6 +5,7 @@ import AttendanceSheet from "../components/attendance/AttendanceSheet.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
+import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
@@ -31,6 +32,9 @@ export default function Attendance(): JSX.Element {
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 	const [partialName, setPartialName] = useState<string>("");
 	const [searching, setSearching] = useState<boolean>(false);
+	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+	const [successMessage, setSuccessMessage] = useState<string>('');
+
 
 	//Used to pull data from the session storage.
 	useEffect((): void => {
@@ -169,6 +173,10 @@ export default function Attendance(): JSX.Element {
 		setPartialName(string);
 	};
 
+	const setNewSuccessMessage = (str: string): void => {
+		setSuccessMessage(str);
+	}
+
 	return (
 		<div id="attendance_wrapper">
 			<Navbar />
@@ -219,14 +227,21 @@ export default function Attendance(): JSX.Element {
 					masterTable={false}
 				/>
 				<DeleteAlert
-					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
+					message={`Are sure that you would like to permanently delete ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
 					url={`/attendance-sheet/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}/${selectedAttendance.title}`}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}
+					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					updateSuccessMessage={setNewSuccessMessage}
 				/>
 				<LoadingBar
 					show={searching}
+				/>
+				<SuccessMessage
+					message={successMessage}
+					show={showSuccessMessage}
+					closeMessage={() => setShowSuccessMessage(false)}
 				/>
 			</div>
 		</div>
