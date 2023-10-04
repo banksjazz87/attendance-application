@@ -54,7 +54,7 @@ export default function Attendance(): JSX.Element {
 			setSelectedGroup([parent]);
 
 			if (partialName.length > 0) {
-				setSearching(true);
+				// setSearching(true);
 				fetch(`/people/search/${tableToDisplay.title}/${partialName}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
@@ -62,11 +62,11 @@ export default function Attendance(): JSX.Element {
 					.then((final: APIAttendanceSheet): void => {
 						if (final.message === "success") {
 							selectAttendanceSheet(final.data);
-							setSearching(false);
+							// setSearching(false);
 						}
 					});
 			} else {
-				setSearching(false);
+				// setSearching(false);
 				fetch(`/attendance/get-list/${tableToDisplay.title}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
