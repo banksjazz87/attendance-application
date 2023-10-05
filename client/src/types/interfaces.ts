@@ -19,6 +19,9 @@ export interface AttendanceProps {
   activeSearch: boolean;
   startLoading: Function;
   stopLoading: Function;
+  triggerSuccessMessage: Function;
+  hideSuccessMessage: Function;
+  updateSuccessMessage: Function;
 }
 
 export interface Group {

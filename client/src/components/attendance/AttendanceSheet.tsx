@@ -12,7 +12,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch, startLoading, stopLoading }: AttendanceProps): JSX.Element {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch, startLoading, stopLoading, triggerSuccessMessage, hideSuccessMessage, updateSuccessMessage }: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -84,9 +84,14 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 		setSumOfPresent({ ...sumOfPresent, totalChildren: child, totalYouth: youth, totalAdults: adult, totalMembers: member, totalVisitors: visitor });
 	}, [memberData]);
 
+
+	const displaySuccessMessage = (str: string): void => {
+		updateSuccessMessage(str);
+		triggerSuccessMessage();
+	}
+
 	const checkedHandler = (index: number): void => {
 		const copy: Attendee[] = memberData.slice();
-
 		let currentObj: UpdateAttendant = {
 			firstName: copy[index].firstName,
 			lastName: copy[index].lastName,
@@ -95,16 +100,17 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			presentValue: 0,
 		};
 
+		hideSuccessMessage();
+
 		if (copy[index].present === 0) {
 			copy[index].present = 1;
 			setMemberData(copy);
 			currentObj.presentValue = 1;
 
-			console.log("here", copy[index]);
-
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
-					alert(`${currentObj.firstName} ${currentObj.lastName} has been marked present`);
+					let successMessage: string = `${currentObj.firstName} ${currentObj.lastName} has been marked present.`;
+					displaySuccessMessage(successMessage);
 				} else {
 					alert(data.data);
 				}
@@ -116,7 +122,8 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
-					alert(`${currentObj.firstName} ${currentObj.lastName} has been marked NOT present`);
+					let successMessage: string = `${currentObj.firstName} ${currentObj.lastName} has been marked NOT present`;
+					displaySuccessMessage(successMessage);
 				} else {
 					alert(data.data);
 				}

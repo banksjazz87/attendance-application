@@ -54,7 +54,6 @@ export default function Attendance(): JSX.Element {
 			setSelectedGroup([parent]);
 
 			if (partialName.length > 0) {
-				// setSearching(true);
 				fetch(`/people/search/${tableToDisplay.title}/${partialName}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
@@ -62,11 +61,9 @@ export default function Attendance(): JSX.Element {
 					.then((final: APIAttendanceSheet): void => {
 						if (final.message === "success") {
 							selectAttendanceSheet(final.data);
-							// setSearching(false);
 						}
 					});
 			} else {
-				// setSearching(false);
 				fetch(`/attendance/get-list/${tableToDisplay.title}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
@@ -219,6 +216,9 @@ export default function Attendance(): JSX.Element {
 					activeSearch={searching}
 					startLoading={() => setSearching(true)}
 					stopLoading={() => setSearching(false)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
+					hideSuccessMessage={(): void => setShowSuccessMessage(false)}
+					updateSuccessMessage={setNewSuccessMessage}
 				/>
 				<NewMember
 					currentTable={selectedAttendance.title}
