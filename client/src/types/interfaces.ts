@@ -3,6 +3,7 @@ export interface Attendee {
   lastName: string;
   age: string;
   memberType: string;
+  active: number;
   present?: number;
   id?: number;
   table?: string;

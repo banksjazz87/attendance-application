@@ -14,6 +14,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     lastName: "",
     age: "",
     memberType: "",
+    active: 1
   };
 
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
