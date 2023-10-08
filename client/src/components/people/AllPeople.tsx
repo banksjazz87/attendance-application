@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AllPeopleProps, Attendee } from "../../types/interfaces.ts";
 import "../../assets/styles/components/people/allPeople.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPencil, faTrashCan, faUserCheck, faUserMinus } from "@fortawesome/free-solid-svg-icons";
+import { faPencil, faTrashCan, faUserCheck, faUserMinus, faCheck, faMinus} from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 import SearchBar from "../global/SearchBar.tsx";
@@ -19,9 +19,10 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
 
   const lgScreenHeaders: ValuesAndClass[] = [
     { value: "Last Name", class: "last_name_header" },
-    { value: "First Name", class: "first_name_headerheader" },
-    { value: "Age Group", class: "age_group_header_header" },
-    { value: "Member Status", class: "member_status_header" },
+    { value: "First Name", class: "first_name_header" },
+    { value: "Age Group", class: "age_group_header" },
+    { value: "Member", class: "member_status_header" },
+    { value: "Active", class: "active_attendant_header" },
     { value: "Edit", class: "edit_header" },
     { value: "Delete", class: "delete_header" },
   ];
@@ -60,6 +61,12 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
             <FontAwesomeIcon
               className="user_check"
               icon={x.memberType === "member" ? faUserCheck : faUserMinus}
+            />
+          </td>
+          <td className="align_center">
+            <FontAwesomeIcon
+              className="user_active"
+              icon={x.active === 0 ? faMinus : faCheck}
             />
           </td>
           <td className="align_center">

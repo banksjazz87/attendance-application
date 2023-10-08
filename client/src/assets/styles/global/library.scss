@@ -122,7 +122,7 @@ $blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-back
 
 @mixin main-table-wrapper {
     @include shadow-form;
-    max-width: 1150px;
+    max-width: 1400px;
     min-width: 300px;
     padding-bottom: 0;
     padding-top: 1rem;

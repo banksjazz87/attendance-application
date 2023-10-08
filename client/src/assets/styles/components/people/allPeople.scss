@@ -27,7 +27,8 @@
         button {
             @include icon-button;
         }
-        .user_check {
+        .user_check,
+        .user_active {
             font-size: 20px;
             color: $dark-blue;
         }

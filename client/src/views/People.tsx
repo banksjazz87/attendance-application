@@ -93,6 +93,7 @@ export default function People() {
     setUserToEdit({ ...userToEdit, age: elementValue });
   };
 
+  
   const updateEditMember = (elementValue: string): void => {
     setUserToEdit({ ...userToEdit, memberType: elementValue });
   };
