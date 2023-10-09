@@ -262,7 +262,6 @@ app.delete("/remove-person/:firstName/:lastName/:id", (req: Request, res: Respon
 
 app.put("/update-attendant", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-  console.log("age =" + req.body.age + "memberType = " + req.body.memberType);
   Db.updatePerson("Attendants", req.body)
     .then((data: string[]): void => {
       res.send({ message: "Success", data: data });

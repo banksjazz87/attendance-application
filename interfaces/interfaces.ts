@@ -8,5 +8,6 @@ export interface DBAttendee {
   lastName: string;
   age: string;
   memberType: string;
+  active: number;
   id: number;
 }

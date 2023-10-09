@@ -98,6 +98,10 @@ export default function People() {
     setUserToEdit({ ...userToEdit, memberType: elementValue });
   };
 
+  const updateEditMemberStatus = (elementValue: string): void => {
+    setUserToEdit({...userToEdit, active: parseInt(elementValue)});
+  }
+
   const displayAddMember = (): void => {
     if (showAddMember) {
       setShowAddMember(false);
@@ -163,6 +167,7 @@ export default function People() {
           updateName={updateEditName}
           updateAge={updateEditAge}
           updateMember={updateEditMember}
+          updateActiveStatus={updateEditMemberStatus}
           triggerSuccessMessage={() => setShowSuccessMessage(true)}
           updateSuccessMessage={updateSuccessMessageText}
         />

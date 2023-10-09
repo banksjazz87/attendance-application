@@ -47,6 +47,25 @@ export const AttendantFormLayout: AttendanceLayout = {
     },
   ],
 
+  active: [
+    {
+      placeholder: "",
+      type: "radio",
+      name: "active_status",
+      id: "active",
+      value: "1",
+      label: "Active",
+    },
+    {
+      placeholder: "",
+      type: "radio",
+      name: "active_status",
+      id: "in-active",
+      value: "0",
+      label: "In-Active",
+    }
+  ],
+
   memberStatus: [
     {
       placeholder: "",

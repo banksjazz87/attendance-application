@@ -163,7 +163,7 @@ export class DBMethods {
   updatePerson(tableName: string, obj: DBAttendee): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
-      const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
+      const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", active = ${obj.active},  memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);

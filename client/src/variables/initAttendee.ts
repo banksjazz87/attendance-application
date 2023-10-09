@@ -5,5 +5,6 @@ export const InitAttendee: Attendee = {
   lastName: "",
   age: "",
   memberType: "",
+  active: 1,
   id: 0,
 };

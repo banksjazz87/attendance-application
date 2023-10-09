@@ -13,11 +13,12 @@ interface EditMemberProps {
   updateName: Function;
   updateAge: Function;
   updateMember: Function;
+  updateActiveStatus: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
 }
 
-export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, triggerSuccessMessage, updateSuccessMessage }: EditMemberProps): JSX.Element {
+export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, updateActiveStatus, triggerSuccessMessage, updateSuccessMessage }: EditMemberProps): JSX.Element {
 
   const updateAgeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     console.log("This is the age value", e.target.value);
@@ -28,6 +29,10 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     console.log("This is the member value", e.target.value);
     updateMember(e.target.value);
   };
+
+  const updateActiveHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    updateActiveStatus(e.target.value);
+  }
 
   const reloadWindow = (): void => {
     setTimeout((): void  => {
@@ -114,6 +119,46 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     }
   });
 
+
+  const returnActiveStatus: JSX.Element[] = AttendantFormLayout.active.map((x: AttendanceInputs, y: number) => {
+    if (editUser.active === parseInt(x.value)) {
+      return (
+        <div
+          className="input_wrapper"
+          key={`active_${y}`}
+        >
+          <label htmlFor={x.id}>{x.label}</label>
+          <input
+            placeholder={x.placeholder}
+            type={x.type}
+            id={`edit_${x.id}`}
+            name={`edit_${x.name}`}
+            value={x.value}
+            onChange={updateActiveHandler}
+            checked
+          />
+        </div>
+      );
+    } else {
+      return (
+        <div
+          className="input_wrapper"
+          key={`in_active_${y}`}
+        >
+          <label htmlFor={x.id}>{x.label}</label>
+          <input
+            placeholder={x.placeholder}
+            type={x.type}
+            id={`edit_${x.id}`}
+            name={`edit_${x.name}`}
+            value={x.value}
+            onChange={updateActiveHandler}
+          />
+        </div>
+      );
+    }
+  });
+
   const returnMemberFields: JSX.Element[] = AttendantFormLayout.memberStatus.map((x: AttendanceInputs, y: number) => {
     if (editUser.memberType === x.value) {
       return (
@@ -180,6 +225,11 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
           <div className="header_fields_wrapper">
             <h3>Age Group</h3>
             <div className="age_fields_wrapper fields_wrapper">{returnAgeFields}</div>
+          </div>
+
+          <div className="header_fields_wrapper">
+            <h3>Active Attendant</h3>
+            <div className="member_fields_wrapper fields_wrapper">{returnActiveStatus}</div>
           </div>
 
           <div className="header_fields_wrapper">

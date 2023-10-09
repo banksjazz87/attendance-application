@@ -85,6 +85,7 @@ export interface AttendanceLayout {
   name: AttendanceInputs[];
   ageGroup: AttendanceInputs[];
   memberStatus: AttendanceInputs[];
+  active: AttendanceInputs[];
 }
 
 export interface APIResponse {
