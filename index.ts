@@ -95,8 +95,9 @@ app.get("/groups", (req: Request, res: Response): void => {
 app.post("/new-attendance/create", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  let groupPlusDate = req.body.group + " " + req.body.title;
-  let tableName = Db.createTableName(groupPlusDate);
+  let groupAttendance = req.body.group + " " + "attendance";
+  let columnTitle = Db.createTableName(req.body.title);
+  let tableName = Db.createTableName(groupAttendance);
   const columnNames = "title, displayTitle";
   const fieldValues = [tableName, req.body.title];
   const parentGroup = Db.createTableName(req.body.group);
@@ -104,7 +105,7 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
   const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, tableName];
 
-  Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName)])
+  Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName, columnTitle)])
     .then((data: [string[], string[], string[]]): void => {
       console.log("Success All", data);
       res.send({ message: "success", data: data, newTable: tableName });
