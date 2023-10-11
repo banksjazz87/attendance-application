@@ -84,12 +84,12 @@ app.post("/new-attendance/create", (req, res) => {
     let groupAttendance = req.body.group + " " + "attendance";
     let columnTitle = Db.createTableName(req.body.title);
     let tableName = Db.createTableName(groupAttendance);
-    let attendanceColumnName = req.body.group + req.body.title;
+    let attendanceColumnName = req.body.group + " " + req.body.title;
     const columnNames = "title, displayTitle, parentGroup";
     const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group];
     const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
     const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, tableName];
-    Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName, columnTitle)])
+    Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
         .then((data) => {
         console.log("Success All", data);
         res.send({ message: "success", data: data, newTable: tableName });
@@ -104,6 +104,16 @@ app.post("/new-attendance/create", (req, res) => {
                 Db.getSqlError(err[2]);
             },
         });
+    });
+});
+app.post('/new-attendance/create/master/table', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    let groupAttendance = req.body.group + " " + "attendance";
+    let tableName = Db.createTableName(groupAttendance);
+    Db.createNewAttendance(tableName)
+        .then((data) => {
+        console.log("Success", data);
+        res.send({ message: "success", data: data });
     });
 });
 app.post("/new-attendance/insert/all", (req, res) => {

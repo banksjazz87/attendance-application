@@ -116,15 +116,21 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 		} else {
 			postData("/new-group", form).then((data: ApiResponse): void => {
 				if (data.message === "success") {
-					postData("/new-attendance/create", form).then((data: APINewTable): void => {
+					postData('/new-attendance/create/master/table', form).then((data: APINewTable): void => {
 						if (data.message === "success") {
-							neededAttendants(data);
-							updateLoadingStatus();
-							sessionStorage.setItem("currentAttendancePage", "0");
-							navigate("/attendance", { replace: true });
+							postData("/new-attendance/create", form).then((data: APINewTable): void => {
+								if (data.message === "success") {
+									neededAttendants(data);
+									updateLoadingStatus();
+									sessionStorage.setItem("currentAttendancePage", "0");
+									navigate("/attendance", { replace: true });
+								} else {
+									updateLoadingStatus();
+									alert("Error with the /new-attendance/create");
+								}
+							});
 						} else {
-							updateLoadingStatus();
-							alert("Error with the /new-attendance/create");
+							alert('Error with /new-attendance/master/table');
 						}
 					});
 				} else {

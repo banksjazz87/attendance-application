@@ -104,11 +104,11 @@ export class DBMethods {
   }
 
   //This will be used to create a new attendance table.
-  createNewAttendance(tableName: string, columnName: string): Promise<string[]> {
+  createNewAttendance(tableName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
-        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), ${columnName} tinyInt(1) DEFAULT 0, PRIMARY KEY (id));`;
+        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), PRIMARY KEY (id));`;
 
       database.query(sql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -116,6 +116,20 @@ export class DBMethods {
       this.endDb();
     });
   }
+
+  //This will be used to add a new attendance column to the group master attendance.
+  addNewColumnToMaster(tableName: string, columnName: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.db();
+      let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) DEFAULT 0;`;
+
+      database.query(sql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
 
   //This will be used to insert all of the people of a certain age group into an attendance table.
   insertAgeGroup(tableName: string, group: string): Promise<string[]> {

@@ -89,11 +89,22 @@ class DBMethods {
         return resultNoSpaces;
     }
     //This will be used to create a new attendance table.
-    createNewAttendance(tableName, columnName) {
+    createNewAttendance(tableName) {
         return new Promise((resolve, reject) => {
             const database = this.db();
             let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
-        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), ${columnName} tinyInt(1) DEFAULT 0, PRIMARY KEY (id));`;
+        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), PRIMARY KEY (id));`;
+            database.query(sql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    //This will be used to add a new attendance column to the group master attendance.
+    addNewColumnToMaster(tableName, columnName) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) DEFAULT 0;`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
