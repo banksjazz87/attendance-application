@@ -81,14 +81,15 @@ app.get("/groups", (req, res) => {
 });
 app.post("/new-attendance/create", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    let groupPlusDate = req.body.group + " " + req.body.title;
-    let tableName = Db.createTableName(groupPlusDate);
+    let groupAttendance = req.body.group + " " + "attendance";
+    let columnTitle = Db.createTableName(req.body.title);
+    let tableName = Db.createTableName(groupAttendance);
     const columnNames = "title, displayTitle";
     const fieldValues = [tableName, req.body.title];
     const parentGroup = Db.createTableName(req.body.group);
     const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
     const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, tableName];
-    Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName)])
+    Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName, columnTitle)])
         .then((data) => {
         console.log("Success All", data);
         res.send({ message: "success", data: data, newTable: tableName });
@@ -107,14 +108,14 @@ app.post("/new-attendance/create", (req, res) => {
 });
 app.post("/new-attendance/insert/all", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    Db.addAllApplicants(req.body.createdTableName)
+    Db.addAllActiveApplicants(req.body.createdTableName)
         .then((data) => {
         console.log("success", data);
         res.send({ message: "success" });
     })
         .catch((err) => {
         console.log("failure", err);
-        res.send({ message: "failure", error: err });
+        res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 app.post("/new-attendance/insert/select-attendants", (req, res) => {
@@ -128,7 +129,7 @@ app.post("/new-attendance/insert/select-attendants", (req, res) => {
     })
         .catch((err) => {
         console.log("failure", err);
-        res.send({ message: "failure", error: err });
+        res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 app.post("/new-group/create", (req, res) => {

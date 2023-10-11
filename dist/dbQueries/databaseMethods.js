@@ -89,11 +89,11 @@ class DBMethods {
         return resultNoSpaces;
     }
     //This will be used to create a new attendance table.
-    createNewAttendance(tableName) {
+    createNewAttendance(tableName, columnName) {
         return new Promise((resolve, reject) => {
             const database = this.db();
             let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
-        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), present tinyint DEFAULT 0, PRIMARY KEY (id));`;
+        lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), ${columnName} tinyInt(1) DEFAULT 0, PRIMARY KEY (id));`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
@@ -159,10 +159,20 @@ class DBMethods {
             this.endDb();
         });
     }
+    addAllActiveApplicants(table) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT id, firstName, lastName, age, memberType FROM Attendants WHERE active = 1;`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
     addSelectApplicants(table, neededAge) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants WHERE age = "${neededAge}";`;
+            const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT id, firstName, lastName, age, memberType FROM Attendants WHERE age = "${neededAge}" AND active = 1;`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

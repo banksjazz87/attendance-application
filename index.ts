@@ -126,14 +126,14 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  Db.addAllApplicants(req.body.createdTableName)
+  Db.addAllActiveApplicants(req.body.createdTableName)
     .then((data: string[]): void => {
       console.log("success", data);
       res.send({ message: "success" });
     })
     .catch((err: SQLResponse): void => {
       console.log("failure", err);
-      res.send({ message: "failure", error: err });
+      res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 
@@ -150,7 +150,7 @@ app.post("/new-attendance/insert/select-attendants", (req: Request, res: Respons
     })
     .catch((err: SQLResponse): void => {
       console.log("failure", err);
-      res.send({ message: "failure", error: err });
+      res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 
