@@ -98,29 +98,29 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   let groupAttendance = req.body.group + " " + "attendance";
   let columnTitle = Db.createTableName(req.body.title);
   let tableName = Db.createTableName(groupAttendance);
-  const columnNames = "title, displayTitle";
-  const fieldValues = [tableName, req.body.title];
-  const parentGroup = Db.createTableName(req.body.group);
+  let attendanceColumnName = req.body.group + req.body.title;
+  const columnNames = "title, displayTitle, parentGroup";
+  const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group];
 
   const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
   const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, tableName];
 
-  Promise.all([Db.insert(parentGroup, columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName, columnTitle)])
-    .then((data: [string[], string[], string[]]): void => {
-      console.log("Success All", data);
-      res.send({ message: "success", data: data, newTable: tableName });
-    })
-    .catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
-      console.log("Failure Alllll", err);
-      res.send({
-        message: "failure",
-        error: () => {
-          Db.getSqlError(err[0]);
-          Db.getSqlError(err[1]);
-          Db.getSqlError(err[2]);
-        },
-      });
+  Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.createNewAttendance(tableName, columnTitle)])
+  .then((data: [string[], string[], string[]]): void => {
+    console.log("Success All", data);
+    res.send({ message: "success", data: data, newTable: tableName });
+  })
+  .catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
+    console.log("Failure Alllll", err);
+    res.send({
+      message: "failure",
+      error: () => {
+        Db.getSqlError(err[0]);
+        Db.getSqlError(err[1]);
+        Db.getSqlError(err[2]);
+      },
     });
+  });
 });
 
 app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
@@ -154,19 +154,33 @@ app.post("/new-attendance/insert/select-attendants", (req: Request, res: Respons
     });
 });
 
-app.post("/new-group/create", (req: Request, res: Response) => {
+app.post("/insert/new-attendance", (req: Request, res: Response) => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  let tableName = Db.createTableName(req.body.group);
-  Db.createGroupTable(tableName)
-    .then((data: string[]): void => {
-      console.log(data);
-      res.send({ message: "success", data: data });
-    })
-    .catch((err: SQLResponse): void => {
-      console.log("err", err);
-      res.send({ message: "failure", error: Db.getSqlError(err) });
-    });
+  let tableName = Db.createTableName(req.body.group + " " + req.body.title);
+  let columnNames = 'title, displayTitle, parentGroup';
+  let neededValues = [tableName, req.body.title, req.body.group];
+
+  console.log(`${tableName} ${columnNames} ${neededValues}`);
+
+  // Db.insert('All_Attendance', columnNames, neededValues)
+  //   .then((data: string[]): void => {
+  //     console.log(data);
+  //     res.send({ message: "success", data: data})
+  //   })
+  //   .catch((err: SQLResponse): void => {
+  //     console.log('err', err);
+  //     res.send({ message: "failure", error: Db.getSqlError(err)})
+  //   });
+  // Db.createGroupTable(tableName)
+  //   .then((data: string[]): void => {
+  //     console.log(data);
+  //     res.send({ message: "success", data: data });
+  //   })
+  //   .catch((err: SQLResponse): void => {
+  //     console.log("err", err);
+  //     res.send({ message: "failure", error: Db.getSqlError(err) });
+  //   });
 });
 
 app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
