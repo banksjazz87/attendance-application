@@ -322,4 +322,16 @@ export class DBMethods {
     });
   }
 
+  getGroupTable(groupName: string, column: string, order: "asc" | "desc"): Promise <string[]> {
+    return new Promise<string[]>((resolve, reject): void => {
+      const database = this.db();
+      const neededSql = `SELECT * FROM all_attendance WHERE parentGroup = "${groupName}" ORDER BY ${column} ${order};`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
 }

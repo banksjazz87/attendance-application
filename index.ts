@@ -313,6 +313,13 @@ app.get("/group-lists/attendance/:listParent", (req: Request, res: Response): vo
     });
 });
 
+
+app.get('/group-lists/attendance/:group', (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  
+})
+
 app.get("/attendance/get-list/:listName", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
