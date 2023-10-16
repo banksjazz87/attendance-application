@@ -274,5 +274,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    getAttendanceByGroupName(groupName, column, order) {
+        return new Promise((resolve, reject) => {
+            const database = this.db();
+            const neededSql = `SELECT * FROM all_attendance WHERE parentGroup = "${groupName}" ORDER BY ${column} ${order};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
 }
 exports.DBMethods = DBMethods;

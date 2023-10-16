@@ -151,6 +151,29 @@ export interface APIAttendanceTitles {
   error: string;
 }
 
+
+
+
+
+export interface DBAllAttendance {
+  id: number;
+  title: string;
+  displayTitle: string;
+  parentGroup: string;
+  dateCreated: string;
+}
+
+export interface APIAttendanceAllTitles {
+  message: string;
+  data: DBAllAttendance[];
+  error: string;
+}
+
+
+
+
+
+
 export interface APIAttendanceSheet {
   message: string;
   data: Attendee[];

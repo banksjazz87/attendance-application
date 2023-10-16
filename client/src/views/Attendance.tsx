@@ -9,7 +9,7 @@ import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
-import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee } from "../../src/types/interfaces.ts";
+import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee, DBAllAttendance, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,10 +17,11 @@ import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 export default function Attendance(): JSX.Element {
 	const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
 	const [selectedGroup, setSelectedGroup] = useState<Group[]>([{ id: 0, name: "", age_group: "", displayName: "" }]);
-	const [selectedAttendance, setSelectedAttendance] = useState<DBAttendanceTitle>({
+	const [selectedAttendance, setSelectedAttendance] = useState<DBAllAttendance>({
 		id: 0,
 		title: "",
 		displayTitle: "",
+		parentGroup: "",
 		dateCreated: "",
 	});
 
@@ -120,10 +121,10 @@ export default function Attendance(): JSX.Element {
 		setSearching(true);
 
 		fetch(`/group-lists/attendance/${value}`)
-			.then((data: Response): Promise<APIAttendanceTitles> => {
+			.then((data: Response): Promise<APIAttendanceAllTitles> => {
 				return data.json();
 			})
-			.then((final: APIAttendanceTitles): void => {
+			.then((final: APIAttendanceAllTitles): void => {
 				setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
 
 				//Used to set the session storage
@@ -147,16 +148,20 @@ export default function Attendance(): JSX.Element {
 				const jsonSelectedParent = JSON.stringify(selectedParent);
 				sessionStorage.setItem("selectedParent", jsonSelectedParent);
 
-				fetch(`/attendance/get-list/${final.data[0].title}`)
-					.then((data: Response): Promise<APIAttendanceSheet> => {
-						return data.json();
-					})
-					.then((final: APIAttendanceSheet): void => {
-						selectAttendanceSheet(final.data);
-						setShowOptionButtons(true);
-						setShowDropDown(false);
-						setSearching(false);
-					});
+
+				setSearching(false);
+				console.log(final.data);
+
+				// fetch(`/attendance/get-list/${final.data[0].title}`)
+				// 	.then((data: Response): Promise<APIAttendanceSheet> => {
+				// 		return data.json();
+				// 	})
+				// 	.then((final: APIAttendanceSheet): void => {
+				// 		selectAttendanceSheet(final.data);
+				// 		setShowOptionButtons(true);
+				// 		setShowDropDown(false);
+				// 		setSearching(false);
+				// 	});
 			});
 	};
 

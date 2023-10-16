@@ -255,15 +255,27 @@ app.put("/update-attendant", (req, res) => {
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
-app.get("/group-lists/attendance/:listParent", (req, res) => {
+// app.get("/group-lists/attendance/:listParent", (req: Request, res: Response): void => {
+//   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+//   Db.getTable(req.params.listParent, "DESC", "dateCreated")
+//     .then((data: string[]): void => {
+//       console.log(data);
+//       res.send({ message: "success", data: data });
+//     })
+//     .catch((err: SQLResponse): void => {
+//       console.log("Failure", err);
+//       res.send({ message: "Failure", error: Db.getSqlError(err) });
+//     });
+// });
+app.get('/group-lists/attendance/:group', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    Db.getTable(req.params.listParent, "DESC", "dateCreated")
+    Db.getAttendanceByGroupName(req.params.group, "dateCreated", "desc")
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
     })
         .catch((err) => {
-        console.log("Failure", err);
+        console.log('Failureeee', err);
         res.send({ message: "Failure", error: Db.getSqlError(err) });
     });
 });

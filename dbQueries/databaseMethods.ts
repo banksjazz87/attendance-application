@@ -322,7 +322,7 @@ export class DBMethods {
     });
   }
 
-  getGroupTable(groupName: string, column: string, order: "asc" | "desc"): Promise <string[]> {
+  getAttendanceByGroupName(groupName: string, column: string, order: "asc" | "desc"): Promise <string[]> {
     return new Promise<string[]>((resolve, reject): void => {
       const database = this.db();
       const neededSql = `SELECT * FROM all_attendance WHERE parentGroup = "${groupName}" ORDER BY ${column} ${order};`;

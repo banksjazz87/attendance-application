@@ -299,26 +299,35 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
     });
 });
 
-app.get("/group-lists/attendance/:listParent", (req: Request, res: Response): void => {
-  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+// app.get("/group-lists/attendance/:listParent", (req: Request, res: Response): void => {
+//   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  Db.getTable(req.params.listParent, "DESC", "dateCreated")
-    .then((data: string[]): void => {
-      console.log(data);
-      res.send({ message: "success", data: data });
-    })
-    .catch((err: SQLResponse): void => {
-      console.log("Failure", err);
-      res.send({ message: "Failure", error: Db.getSqlError(err) });
-    });
-});
+//   Db.getTable(req.params.listParent, "DESC", "dateCreated")
+//     .then((data: string[]): void => {
+//       console.log(data);
+//       res.send({ message: "success", data: data });
+//     })
+//     .catch((err: SQLResponse): void => {
+//       console.log("Failure", err);
+//       res.send({ message: "Failure", error: Db.getSqlError(err) });
+//     });
+// });
 
 
 app.get('/group-lists/attendance/:group', (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-  
-})
+  Db.getAttendanceByGroupName(req.params.group, "dateCreated", "desc")
+    .then((data: string[]): void => {
+      console.log(data);
+      res.send({ message: "success", data: data });
+    })
+    .catch((err: SQLResponse): void => {
+      console.log('Failureeee', err);
+      res.send({ message: "Failure", error: Db.getSqlError(err) });
+    });
+
+});
 
 app.get("/attendance/get-list/:listName", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
