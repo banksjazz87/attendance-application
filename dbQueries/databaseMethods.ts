@@ -74,7 +74,7 @@ export class DBMethods {
   }
 
   getTable(table: string, order: string, column: string): Promise<string[]> {
-    return new Promise<string[]>((resolve, reject) => {
+    return new Promise<string[]> ((resolve, reject)=> {
       const database = this.db();
       let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
 

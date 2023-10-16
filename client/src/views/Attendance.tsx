@@ -152,16 +152,20 @@ export default function Attendance(): JSX.Element {
 				setSearching(false);
 				console.log(final.data);
 
-				// fetch(`/attendance/get-list/${final.data[0].title}`)
-				// 	.then((data: Response): Promise<APIAttendanceSheet> => {
-				// 		return data.json();
-				// 	})
-				// 	.then((final: APIAttendanceSheet): void => {
-				// 		selectAttendanceSheet(final.data);
-				// 		setShowOptionButtons(true);
-				// 		setShowDropDown(false);
-				// 		setSearching(false);
-				// 	});
+				const parentAttendanceList = `${final.data[0].parentGroup}_attendance`;
+				
+				fetch(`/attendance/get-list/${parentAttendanceList}`)
+					.then((data: Response): Promise<APIAttendanceSheet> => {
+						return data.json();
+					})
+					.then((final: APIAttendanceSheet): void => {
+						// selectAttendanceSheet(final.data);
+						// setShowOptionButtons(true);
+						// setShowDropDown(false);
+						// setSearching(false);
+
+						console.log(final);
+					});
 			});
 	};
 

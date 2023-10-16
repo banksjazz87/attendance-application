@@ -98,7 +98,7 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   let groupAttendance = req.body.group + " " + "attendance";
   let columnTitle = Db.createTableName(req.body.title);
   let tableName = Db.createTableName(groupAttendance);
-  let attendanceColumnName = req.body.group + " " + req.body.title;
+  let attendanceColumnName = req.body.title;
   const columnNames = "title, displayTitle, parentGroup";
   const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group];
 
