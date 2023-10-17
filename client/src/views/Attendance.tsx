@@ -159,7 +159,7 @@ export default function Attendance(): JSX.Element {
 						return data.json();
 					})
 					.then((final: APIAttendanceSheet): void => {
-						// selectAttendanceSheet(final.data);
+						selectAttendanceSheet(final.data);
 						// setShowOptionButtons(true);
 						// setShowDropDown(false);
 						// setSearching(false);

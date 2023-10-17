@@ -170,6 +170,21 @@ export interface APIAttendanceAllTitles {
 }
 
 
+export interface GroupAttendance {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: string;
+  memberType: string;
+  [x: string]: string | number;
+}
+
+export interface APIGroupAttendance {
+  message: string;
+  data: GroupAttendance[];
+  error: string;
+}
+
 
 
 

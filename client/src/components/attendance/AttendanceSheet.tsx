@@ -166,6 +166,9 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 	};
 
 	const dataPointsLgScreen = memberData.map((x: Attendee, y: number): JSX.Element => {
+
+		const tableTitle = tableName as keyof Attendee;
+
 		return (
 			<tr
 				key={`attendant_row_${y}`}
@@ -174,7 +177,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 			>
 				<td>{x.lastName}</td>
 				<td>{x.firstName}</td>
-				<td className="present_data">{checkedOrNot(x.present, y)}</td>
+				<td className="present_data">{checkedOrNot(x[tableTitle] as number, y)}</td>
 				<td className="delete_button">
 					<button
 						type="button"
