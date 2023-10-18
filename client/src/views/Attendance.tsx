@@ -13,7 +13,6 @@ import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Atte
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
-
 export default function Attendance(): JSX.Element {
 	const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
 	const [selectedGroup, setSelectedGroup] = useState<Group[]>([{ id: 0, name: "", age_group: "", displayName: "" }]);
@@ -34,8 +33,7 @@ export default function Attendance(): JSX.Element {
 	const [partialName, setPartialName] = useState<string>("");
 	const [searching, setSearching] = useState<boolean>(false);
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
-	const [successMessage, setSuccessMessage] = useState<string>('');
-
+	const [successMessage, setSuccessMessage] = useState<string>("");
 
 	//Used to pull data from the session storage.
 	useEffect((): void => {
@@ -44,19 +42,16 @@ export default function Attendance(): JSX.Element {
 			let parentTable = JSON.parse(sessionStorage.selectedParent);
 			let tableTitle = `${parentTable.name}_attendance`;
 
-			console.log(tableTitle);
+			setSelectedAttendance({
+				...selectedAttendance,
+				id: tableToDisplay.id,
+				title: tableToDisplay.title,
+				displayTitle: tableToDisplay.displayTitle,
+				dateCreated: tableToDisplay.dateCreated,
+			});
 
-		// 	setSelectedAttendance({
-		// 		...selectedAttendance,
-		// 		id: tableToDisplay.id,
-		// 		title: tableTitle,
-		// 		displayTitle: tableToDisplay.displayTitle,
-		// 		dateCreated: tableToDisplay.dateCreated,
-		// 	});
-
-		// 	let parent = JSON.parse(sessionStorage.selectedParent);
-
-		// 	setSelectedGroup([parent]);
+			let parent = JSON.parse(sessionStorage.selectedParent);
+			setSelectedGroup([parent]);
 
 			if (partialName.length > 0) {
 				fetch(`/people/search/${tableTitle}/${partialName}`)
@@ -75,6 +70,7 @@ export default function Attendance(): JSX.Element {
 					})
 					.then((final: APIAttendanceSheet): void => {
 						selectAttendanceSheet(final.data);
+						console.log(final.data[0]);
 					});
 			}
 		}
@@ -152,23 +148,20 @@ export default function Attendance(): JSX.Element {
 				const jsonSelectedParent = JSON.stringify(selectedParent);
 				sessionStorage.setItem("selectedParent", jsonSelectedParent);
 
-
 				setSearching(false);
 				console.log(final.data);
 
 				const parentAttendanceList = `${final.data[0].parentGroup}_attendance`;
-				
+
 				fetch(`/attendance/get-list/${parentAttendanceList}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
 					})
 					.then((final: APIAttendanceSheet): void => {
 						selectAttendanceSheet(final.data);
-						// setShowOptionButtons(true);
-						// setShowDropDown(false);
-						// setSearching(false);
-
-						console.log(final);
+						setShowOptionButtons(true);
+						setShowDropDown(false);
+						setSearching(false);
 					});
 			});
 	};
@@ -185,7 +178,7 @@ export default function Attendance(): JSX.Element {
 
 	const setNewSuccessMessage = (str: string): void => {
 		setSuccessMessage(str);
-	}
+	};
 
 	return (
 		<div id="attendance_wrapper">
@@ -250,9 +243,7 @@ export default function Attendance(): JSX.Element {
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
 				/>
-				<LoadingBar
-					show={searching}
-				/>
+				<LoadingBar show={searching} />
 				<SuccessMessage
 					message={successMessage}
 					show={showSuccessMessage}
