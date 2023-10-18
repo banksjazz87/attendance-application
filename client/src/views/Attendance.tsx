@@ -41,21 +41,25 @@ export default function Attendance(): JSX.Element {
 	useEffect((): void => {
 		if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
 			let tableToDisplay = JSON.parse(sessionStorage.selectedTable);
+			let parentTable = JSON.parse(sessionStorage.selectedParent);
+			let tableTitle = `${parentTable.name}_attendance`;
 
-			setSelectedAttendance({
-				...selectedAttendance,
-				id: tableToDisplay.id,
-				title: tableToDisplay.title,
-				displayTitle: tableToDisplay.displayTitle,
-				dateCreated: tableToDisplay.dateCreated,
-			});
+			console.log(tableTitle);
 
-			let parent = JSON.parse(sessionStorage.selectedParent);
+		// 	setSelectedAttendance({
+		// 		...selectedAttendance,
+		// 		id: tableToDisplay.id,
+		// 		title: tableTitle,
+		// 		displayTitle: tableToDisplay.displayTitle,
+		// 		dateCreated: tableToDisplay.dateCreated,
+		// 	});
 
-			setSelectedGroup([parent]);
+		// 	let parent = JSON.parse(sessionStorage.selectedParent);
+
+		// 	setSelectedGroup([parent]);
 
 			if (partialName.length > 0) {
-				fetch(`/people/search/${tableToDisplay.title}/${partialName}`)
+				fetch(`/people/search/${tableTitle}/${partialName}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
 					})
@@ -65,7 +69,7 @@ export default function Attendance(): JSX.Element {
 						}
 					});
 			} else {
-				fetch(`/attendance/get-list/${tableToDisplay.title}`)
+				fetch(`/attendance/get-list/${tableTitle}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
 					})
