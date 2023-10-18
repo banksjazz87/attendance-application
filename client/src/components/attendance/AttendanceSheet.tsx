@@ -12,7 +12,7 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch, startLoading, stopLoading, triggerSuccessMessage, hideSuccessMessage, updateSuccessMessage }: AttendanceProps): JSX.Element {
+export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch, startLoading, stopLoading, triggerSuccessMessage, hideSuccessMessage, updateSuccessMessage, parentName }: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -92,20 +92,25 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 
 	const checkedHandler = (index: number): void => {
 		const copy: Attendee[] = memberData.slice();
+
+		let columnName = tableName as keyof Attendee;
+		
 		let currentObj: UpdateAttendant = {
 			firstName: copy[index].firstName,
 			lastName: copy[index].lastName,
 			attendantId: copy[index].id,
-			table: tableName,
-			presentValue: 0,
+			table: `${parentName}_attendance`,
+			[columnName]: 0,
 		};
 
 		hideSuccessMessage();
 
-		if (copy[index].present === 0) {
-			copy[index].present = 1;
+		let currentPresentStatus = copy[index][columnName];
+
+		if (currentPresentStatus === 0) {
+			currentPresentStatus = 1;
 			setMemberData(copy);
-			currentObj.presentValue = 1;
+			currentObj[columnName] = 1;
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
@@ -118,7 +123,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 		} else {
 			copy[index].present = 0;
 			setMemberData(copy);
-			currentObj.presentValue = 0;
+			currentObj[columnName] = 0;
 
 			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {

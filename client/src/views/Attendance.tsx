@@ -215,6 +215,7 @@ export default function Attendance(): JSX.Element {
 					show={displayAttendance}
 					title={selectedAttendance.displayTitle}
 					tableName={selectedAttendance.title}
+					parentName={selectedGroup[0].name}
 					attendanceData={currentListData}
 					parentTitle={selectedGroup[0].displayName}
 					deleteMemberHandler={updateDeleteMemberHandler}

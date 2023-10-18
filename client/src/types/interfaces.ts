@@ -14,6 +14,7 @@ export interface AttendanceProps {
   title: string;
   attendanceData: Attendee[];
   parentTitle: string;
+  parentName: string;
   tableName: string;
   deleteMemberHandler: Function;
   updatePartial: Function;
@@ -235,6 +236,7 @@ export interface UpdateAttendant {
   presentValue?: number;
   age?: string;
   memberType?: string;
+  [x: string]: any;
 }
 
 export interface NewMemberProps {
