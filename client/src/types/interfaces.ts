@@ -7,6 +7,7 @@ export interface Attendee {
   present?: number;
   id?: number;
   table?: string;
+  [x: string]: string | number | undefined;
 }
 
 export interface AttendanceProps {

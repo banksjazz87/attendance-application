@@ -292,13 +292,15 @@ app.get("/attendance/get-list/:listName", (req, res) => {
         res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });
-app.put("/attendance/update-table", (req, res) => {
+app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    console.log(req.body);
     const neededTable = req.body.table;
     const neededId = req.body.attendantId;
     const neededLastName = req.body.lastName;
-    const present = req.body.presentValue;
-    Db.updateAttendance(neededTable, neededId, neededLastName, present)
+    const present = parseInt(req.params.presentValue);
+    const column = req.params.columnName;
+    Db.updateAttendance(neededTable, column, neededId, neededLastName, present)
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });

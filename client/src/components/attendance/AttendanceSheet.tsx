@@ -12,7 +12,22 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 //For Development
 //import { attendantData } from "../../variables/dummyAttendant.ts";
 
-export default function AttendanceSheet({ show, title, attendanceData, parentTitle, tableName, deleteMemberHandler, updatePartial, activeSearch, startLoading, stopLoading, triggerSuccessMessage, hideSuccessMessage, updateSuccessMessage, parentName }: AttendanceProps): JSX.Element {
+export default function AttendanceSheet({
+	show,
+	title,
+	attendanceData,
+	parentTitle,
+	tableName,
+	deleteMemberHandler,
+	updatePartial,
+	activeSearch,
+	startLoading,
+	stopLoading,
+	triggerSuccessMessage,
+	hideSuccessMessage,
+	updateSuccessMessage,
+	parentName,
+}: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
 
@@ -84,35 +99,28 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 		setSumOfPresent({ ...sumOfPresent, totalChildren: child, totalYouth: youth, totalAdults: adult, totalMembers: member, totalVisitors: visitor });
 	}, [memberData]);
 
-
 	const displaySuccessMessage = (str: string): void => {
 		updateSuccessMessage(str);
 		triggerSuccessMessage();
-	}
+	};
 
 	const checkedHandler = (index: number): void => {
 		const copy: Attendee[] = memberData.slice();
 
-		let columnName = tableName as keyof Attendee;
-		
 		let currentObj: UpdateAttendant = {
 			firstName: copy[index].firstName,
 			lastName: copy[index].lastName,
 			attendantId: copy[index].id,
 			table: `${parentName}_attendance`,
-			[columnName]: 0,
 		};
 
 		hideSuccessMessage();
 
-		let currentPresentStatus = copy[index][columnName];
-
-		if (currentPresentStatus === 0) {
-			currentPresentStatus = 1;
+		if (copy[index][tableName] === 0) {
+			copy[index][tableName] = 1;
 			setMemberData(copy);
-			currentObj[columnName] = 1;
 
-			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
+			putData(`/attendance/update-table/${tableName}/1`, currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
 					let successMessage: string = `${currentObj.firstName} ${currentObj.lastName} has been marked present.`;
 					displaySuccessMessage(successMessage);
@@ -121,11 +129,10 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 				}
 			});
 		} else {
-			copy[index].present = 0;
+			copy[index][tableName] = 0;
 			setMemberData(copy);
-			currentObj[columnName] = 0;
 
-			putData("/attendance/update-table", currentObj).then((data: APIResponse): void => {
+			putData(`/attendance/update-table/${tableName}/0`, currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
 					let successMessage: string = `${currentObj.firstName} ${currentObj.lastName} has been marked NOT present`;
 					displaySuccessMessage(successMessage);
@@ -171,7 +178,6 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 	};
 
 	const dataPointsLgScreen = memberData.map((x: Attendee, y: number): JSX.Element => {
-
 		const tableTitle = tableName as keyof Attendee;
 
 		return (
@@ -271,7 +277,7 @@ export default function AttendanceSheet({ show, title, attendanceData, parentTit
 						totalData={sumOfPresent}
 						startLoading={startLoading}
 						stopLoading={stopLoading}
-					 />
+					/>
 				</div>
 				<table>
 					<tbody>

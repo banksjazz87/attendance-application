@@ -344,15 +344,18 @@ app.get("/attendance/get-list/:listName", (req: Request, res: Response): void =>
     });
 });
 
-app.put("/attendance/update-table", (req: Request, res: Response): void => {
+app.put("/attendance/update-table/:columnName/:presentValue", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+  console.log(req.body);
 
   const neededTable = req.body.table;
   const neededId = req.body.attendantId;
   const neededLastName = req.body.lastName;
-  const present = req.body.presentValue;
+  const present = parseInt(req.params.presentValue as string);
+  const column = req.params.columnName;
 
-  Db.updateAttendance(neededTable, neededId, neededLastName, present)
+  Db.updateAttendance(neededTable, column, neededId, neededLastName, present)
     .then((data: string[]): void => {
       console.log(data);
       res.send({ message: "success", data: data });

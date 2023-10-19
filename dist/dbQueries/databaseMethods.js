@@ -190,10 +190,10 @@ class DBMethods {
             this.endDb();
         });
     }
-    updateAttendance(table, attendeeId, attendeeLastName, status) {
+    updateAttendance(table, columnName, attendeeId, attendeeLastName, status) {
         return new Promise((resolve, reject) => {
             const database = this.db();
-            const neededSql = `UPDATE ${table} SET present = ${status} WHERE id = ${attendeeId} AND lastName = "${attendeeLastName}";`;
+            const neededSql = `UPDATE ${table} SET ${columnName} = ${status} WHERE id = ${attendeeId} AND lastName = "${attendeeLastName}";`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
