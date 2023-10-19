@@ -384,31 +384,26 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
     });
 });
 
-app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:table", (req: Request, res: Response): void => {
+app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   const first = req.params.firstName;
   const last = req.params.lastName;
   const idNum = parseInt(req.params.id);
-  const table = req.params.table;
+  const table = `${req.params.group}_attendance`;
 
-  Promise.all([Db.removePerson(table, first, last, idNum), Db.removePerson("Attendants", first, last, idNum)])
-    .then((data: [string[], string[]]): void => {
+ Db.removePerson(table, first, last, idNum)
+    .then((data: string[]): void => {
       res.send({
         message: `Success, ${first} ${last} has been removed from the ${table} table.`,
-        data: () => {
-          return data[0], data[1];
-        },
+        data: data
       });
-      console.log(data[0], data[1]);
+      console.log(data);
     })
-    .catch((err: SQLResponse[]): void => {
+    .catch((err: SQLResponse): void => {
       res.send({
         message: "failure",
-        data: () => {
-          Db.getSqlError(err[0]);
-          Db.getSqlError(err[1]);
-        },
+        data: Db.getSqlError(err)
       });
     });
 });

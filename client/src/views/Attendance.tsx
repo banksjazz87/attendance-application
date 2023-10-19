@@ -236,8 +236,8 @@ export default function Attendance(): JSX.Element {
 					updateSuccessMessage={setNewSuccessMessage}
 				/>
 				<DeleteAlert
-					message={`Are sure that you would like to permanently delete ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={`/attendance-sheet/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}/${selectedAttendance.title}`}
+					message={`Are sure that you would like to delete ${userToDelete.firstName} ${userToDelete.lastName} from this attendance sheet?`}
+					url={`/attendance-sheet/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}/${selectedGroup[0].name}`}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}

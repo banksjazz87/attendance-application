@@ -325,12 +325,12 @@ app.post("/attendance/insert/attendant", (req, res) => {
         res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });
-app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:table", (req, res) => {
+app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const first = req.params.firstName;
     const last = req.params.lastName;
     const idNum = parseInt(req.params.id);
-    const table = req.params.table;
+    const table = `${req.params.group}_attendance`;
     Promise.all([Db.removePerson(table, first, last, idNum), Db.removePerson("Attendants", first, last, idNum)])
         .then((data) => {
         res.send({
