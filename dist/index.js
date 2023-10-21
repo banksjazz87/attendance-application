@@ -85,8 +85,8 @@ app.post("/new-attendance/create", (req, res) => {
     let columnTitle = Db.createTableName(req.body.title);
     let tableName = Db.createTableName(groupAttendance);
     let attendanceColumnName = req.body.title;
-    const columnNames = "title, displayTitle, parentGroup";
-    const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group];
+    const columnNames = "title, displayTitle, parentGroup, parentGroupValue";
+    const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group, Db.createTableName(req.body.group)];
     const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
     const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
     Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
@@ -269,8 +269,8 @@ app.put("/update-attendant", (req, res) => {
 // });
 app.get('/group-lists/attendance/:group', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    const table = Db.createTableName(`${req.params.group}_attendance`);
-    Db.getAttendanceByGroupName(table, "dateCreated", "desc")
+    const group = req.params.group;
+    Db.getAttendanceByGroupName(group, "dateCreated", "desc")
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });

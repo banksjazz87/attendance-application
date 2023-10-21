@@ -163,6 +163,7 @@ export interface DBAllAttendance {
   displayTitle: string;
   parentGroup: string;
   dateCreated: string;
+  parentGroupValue: string;
 }
 
 export interface APIAttendanceAllTitles {

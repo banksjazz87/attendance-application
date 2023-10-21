@@ -99,8 +99,8 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   let columnTitle = Db.createTableName(req.body.title);
   let tableName = Db.createTableName(groupAttendance);
   let attendanceColumnName = req.body.title;
-  const columnNames = "title, displayTitle, parentGroup";
-  const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group];
+  const columnNames = "title, displayTitle, parentGroup, parentGroupValue";
+  const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group, Db.createTableName(req.body.group)];
 
   const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
   const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
@@ -316,9 +316,9 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
 
 app.get('/group-lists/attendance/:group', (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-  const table = Db.createTableName(`${req.params.group}_attendance`);
+  const group = req.params.group;
 
-  Db.getAttendanceByGroupName(table, "dateCreated", "desc")
+  Db.getAttendanceByGroupName(group, "dateCreated", "desc")
     .then((data: string[]): void => {
       console.log(data);
       res.send({ message: "success", data: data });

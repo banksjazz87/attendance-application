@@ -22,6 +22,7 @@ export default function Attendance(): JSX.Element {
 		displayTitle: "",
 		parentGroup: "",
 		dateCreated: "",
+		parentGroupValue: "",
 	});
 
 	const [showDropDown, setShowDropDown] = useState<boolean>(true);
@@ -119,17 +120,14 @@ export default function Attendance(): JSX.Element {
 
 	const dropDownSubmit = (value: string): void => {
 		setSearching(true);
-		let fullTableName: string = `${value}_attendance`;
-		let tableName: string = fullTableName.replace(/[.-/?! ]/g, "_");
 
-		fetch(`/attendance/get-list/${tableName}`)
+		fetch(`/group-lists/attendance/${value}`)
 			.then((data: Response): Promise<APIAttendanceAllTitles> => {
 				return data.json();
 			})
 			.then((final: APIAttendanceAllTitles): void => {
-
 				console.log(final);
-				setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
+				setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
 
 				//Used to set the session storage
 				const displayedSheet = {
@@ -155,17 +153,18 @@ export default function Attendance(): JSX.Element {
 				setSearching(false);
 				console.log(final.data);
 
-				const parentAttendanceList = `${final.data[0].parentGroup}_attendance`;
+				const parentAttendanceList = `${final.data[0].parentGroupValue}_attendance`;
 
 				fetch(`/attendance/get-list/${parentAttendanceList}`)
 					.then((data: Response): Promise<APIAttendanceSheet> => {
 						return data.json();
 					})
 					.then((final: APIAttendanceSheet): void => {
-						selectAttendanceSheet(final.data);
-						setShowOptionButtons(true);
-						setShowDropDown(false);
-						setSearching(false);
+						// selectAttendanceSheet(final.data);
+						// setShowOptionButtons(true);
+						// setShowDropDown(false);
+						// setSearching(false);
+						console.log(final);
 					});
 			});
 	};
