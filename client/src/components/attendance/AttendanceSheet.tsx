@@ -290,9 +290,7 @@ export default function AttendanceSheet({
 	};
 
 	//FOR PRODUCTION change the below divs style={show ? { display: "" } : { display: "" }} for production. Remove conditionals from h2 and h3.
-	if (attendanceData.length > 0) {
-		return mainContent();
-	} else {
+	if (attendanceData.length === 0) {
 		return (
 			<div
 				className="attendance_table_wrapper"
@@ -306,5 +304,7 @@ export default function AttendanceSheet({
 				<p>Rendering...</p>
 			</div>
 		);
+	} else {
+		return mainContent();
 	}
 }

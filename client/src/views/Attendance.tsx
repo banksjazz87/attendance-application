@@ -119,12 +119,16 @@ export default function Attendance(): JSX.Element {
 
 	const dropDownSubmit = (value: string): void => {
 		setSearching(true);
+		let fullTableName: string = `${value}_attendance`;
+		let tableName: string = fullTableName.replace(/[.-/?! ]/g, "_");
 
-		fetch(`/group-lists/attendance/${value}`)
+		fetch(`/attendance/get-list/${tableName}`)
 			.then((data: Response): Promise<APIAttendanceAllTitles> => {
 				return data.json();
 			})
 			.then((final: APIAttendanceAllTitles): void => {
+
+				console.log(final);
 				setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated });
 
 				//Used to set the session storage

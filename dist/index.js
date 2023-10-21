@@ -88,7 +88,7 @@ app.post("/new-attendance/create", (req, res) => {
     const columnNames = "title, displayTitle, parentGroup";
     const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group];
     const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
-    const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, tableName];
+    const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
     Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
         .then((data) => {
         console.log("Success All", data);
@@ -269,7 +269,8 @@ app.put("/update-attendant", (req, res) => {
 // });
 app.get('/group-lists/attendance/:group', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    Db.getAttendanceByGroupName(req.params.group, "dateCreated", "desc")
+    const table = Db.createTableName(`${req.params.group}_attendance`);
+    Db.getAttendanceByGroupName(table, "dateCreated", "desc")
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
@@ -281,7 +282,6 @@ app.get('/group-lists/attendance/:group', (req, res) => {
 });
 app.get("/attendance/get-list/:listName", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    console.log("this is the table name", req.params.listName);
     Db.getTable(req.params.listName, "ASC", "lastName")
         .then((data) => {
         console.log(data);
@@ -331,23 +331,18 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
     const last = req.params.lastName;
     const idNum = parseInt(req.params.id);
     const table = `${req.params.group}_attendance`;
-    Promise.all([Db.removePerson(table, first, last, idNum), Db.removePerson("Attendants", first, last, idNum)])
+    Db.removePerson(table, first, last, idNum)
         .then((data) => {
         res.send({
             message: `Success, ${first} ${last} has been removed from the ${table} table.`,
-            data: () => {
-                return data[0], data[1];
-            },
+            data: data
         });
-        console.log(data[0], data[1]);
+        console.log(data);
     })
         .catch((err) => {
         res.send({
             message: "failure",
-            data: () => {
-                Db.getSqlError(err[0]);
-                Db.getSqlError(err[1]);
-            },
+            data: Db.getSqlError(err)
         });
     });
 });
