@@ -223,7 +223,7 @@ export default function AttendanceSheet({
 						type="button"
 						className="trash_btn"
 						onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-							deleteMemberHandler(event, y);
+							deleteMemberHandler(memberData, y);
 						}}
 					>
 						<FontAwesomeIcon

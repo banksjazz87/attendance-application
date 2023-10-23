@@ -120,56 +120,46 @@ export default function Attendance(): JSX.Element {
 
 	const dropDownSubmit = (value: string): void => {
 		setSearching(true);
-		// setCurrentListData([]);
-		console.log(value);
-
 		fetch(`/group-lists/attendance/${value}`)
 			.then((data: Response): Promise<APIAttendanceAllTitles> => {
 				return data.json();
 			})
 			.then((final: APIAttendanceAllTitles): void => {
-				console.log(`/group-lists/attendance/${value}`);
-				console.log('fucker', final);
-				// setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
+				setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
 
-				//Used to set the session storage
-				// const displayedSheet = {
-				// 	id: final.data[0].id,
-				// 	title: final.data[0].title,
-				// 	displayTitle: final.data[0].displayTitle,
-				// 	dateCreated: final.data[0].dateCreated,
-				// };
+				// Used to set the session storage for the selected attendance.
+				const displayedSheet = {
+					id: final.data[0].id,
+					title: final.data[0].title,
+					displayTitle: final.data[0].displayTitle,
+					dateCreated: final.data[0].dateCreated,
+				};
 
-				// const displayedJSON = JSON.stringify(displayedSheet);
-				// sessionStorage.setItem("selectedTable", displayedJSON);
+				const displayedJSON = JSON.stringify(displayedSheet);
+				sessionStorage.setItem("selectedTable", displayedJSON);
 
-				// const selectedParent: Group = {
-				// 	id: selectedGroup[0].id,
-				// 	name: selectedGroup[0].name,
-				// 	age_group: selectedGroup[0].age_group,
-				// 	displayName: selectedGroup[0].displayName,
-				// };
+				// Set the session storage for the selected group
+				const selectedParent: Group = {
+					id: selectedGroup[0].id,
+					name: selectedGroup[0].name,
+					age_group: selectedGroup[0].age_group,
+					displayName: selectedGroup[0].displayName,
+				};
 
-				// const jsonSelectedParent = JSON.stringify(selectedParent);
-				// sessionStorage.setItem("selectedParent", jsonSelectedParent);
+				const jsonSelectedParent = JSON.stringify(selectedParent);
+				sessionStorage.setItem("selectedParent", jsonSelectedParent);
 
-				// setSearching(false);
-
-				// const parentAttendanceList = `${final.data[0].parentGroupValue}_attendance`;
-
-				// fetch(`/attendance/get-list/${parentAttendanceList}`)
-				// 	.then((data: Response): Promise<APIAttendanceSheet> => {
-				// 		return data.json();
-				// 	})
-				// 	.then((final: APIAttendanceSheet): void => {
-				// 		// selectAttendanceSheet(final.data);
-				// 		// setShowOptionButtons(true);
-				// 		// setShowDropDown(false);
-				// 		// setSearching(false);
-				// 		console.log("HERRRRREEEE", final);
-				// 		console.log(selectedAttendance);
-				// 		console.log(parentAttendanceList);
-				// 	});
+				const parentAttendanceList = `${final.data[0].parentGroupValue}_attendance`;
+				fetch(`/attendance/get-list/${parentAttendanceList}`)
+					.then((data: Response): Promise<APIAttendanceSheet> => {
+						return data.json();
+					})
+					.then((final: APIAttendanceSheet): void => {
+						selectAttendanceSheet(final.data);
+						setShowOptionButtons(true);
+						setShowDropDown(false);
+						setSearching(false);
+					});
 			});
 	};
 
