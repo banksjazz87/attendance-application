@@ -62,6 +62,10 @@ export default function Attendance(): JSX.Element {
 					.then((final: APIAttendanceSheet): void => {
 						if (final.message === "success") {
 							selectAttendanceSheet(final.data);
+							setSearching(false);
+						} else {
+							setSearching(false);
+							alert(final.error);
 						}
 					});
 			} else {
@@ -70,8 +74,13 @@ export default function Attendance(): JSX.Element {
 						return data.json();
 					})
 					.then((final: APIAttendanceSheet): void => {
-						selectAttendanceSheet(final.data);
-						console.log(final.data[0]);
+						if (final.message === "success") {
+							selectAttendanceSheet(final.data);
+							setSearching(false);
+						} else {
+							setSearching(false);
+							alert(final.error);
+						}
 					});
 			}
 		}
@@ -125,41 +134,50 @@ export default function Attendance(): JSX.Element {
 				return data.json();
 			})
 			.then((final: APIAttendanceAllTitles): void => {
-				setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
+					setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
 
-				// Used to set the session storage for the selected attendance.
-				const displayedSheet = {
-					id: final.data[0].id,
-					title: final.data[0].title,
-					displayTitle: final.data[0].displayTitle,
-					dateCreated: final.data[0].dateCreated,
-				};
+					// Used to set the session storage for the selected attendance.
+					const displayedSheet = {
+						id: final.data[0].id,
+						title: final.data[0].title,
+						displayTitle: final.data[0].displayTitle,
+						dateCreated: final.data[0].dateCreated,
+					};
 
-				const displayedJSON = JSON.stringify(displayedSheet);
-				sessionStorage.setItem("selectedTable", displayedJSON);
+					const displayedJSON = JSON.stringify(displayedSheet);
+					sessionStorage.setItem("selectedTable", displayedJSON);
 
-				// Set the session storage for the selected group
-				const selectedParent: Group = {
-					id: selectedGroup[0].id,
-					name: selectedGroup[0].name,
-					age_group: selectedGroup[0].age_group,
-					displayName: selectedGroup[0].displayName,
-				};
+					// Set the session storage for the selected group
+					const selectedParent: Group = {
+						id: selectedGroup[0].id,
+						name: selectedGroup[0].name,
+						age_group: selectedGroup[0].age_group,
+						displayName: selectedGroup[0].displayName,
+					};
 
-				const jsonSelectedParent = JSON.stringify(selectedParent);
-				sessionStorage.setItem("selectedParent", jsonSelectedParent);
+					const jsonSelectedParent = JSON.stringify(selectedParent);
+					sessionStorage.setItem("selectedParent", jsonSelectedParent);
 
-				const parentAttendanceList = `${final.data[0].parentGroupValue}_attendance`;
-				fetch(`/attendance/get-list/${parentAttendanceList}`)
-					.then((data: Response): Promise<APIAttendanceSheet> => {
-						return data.json();
-					})
-					.then((final: APIAttendanceSheet): void => {
-						selectAttendanceSheet(final.data);
-						setShowOptionButtons(true);
-						setShowDropDown(false);
-						setSearching(false);
-					});
+					const parentAttendanceList = `${final.data[0].parentGroupValue}_attendance`;
+
+					fetch(`/attendance/get-list/${parentAttendanceList}`)
+						.then((data: Response): Promise<APIAttendanceSheet> => {
+							return data.json();
+						})
+						.then((final: APIAttendanceSheet): void => {
+							if (final.message === "success") {
+								console.log("message here burriot", final.message, final.data);
+								selectAttendanceSheet(final.data);
+								setShowOptionButtons(true);
+								setShowDropDown(false);
+								setSearching(false);
+							} else {
+								console.log('farter here', final.message, final);
+								setSearching(false);
+								alert(final.error);
+							}
+						});
+				
 			});
 	};
 
