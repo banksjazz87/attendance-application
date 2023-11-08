@@ -134,6 +134,12 @@ export default function Attendance(): JSX.Element {
 				return data.json();
 			})
 			.then((final: APIAttendanceAllTitles): void => {
+				if (final.data.length === 0 && final.message === 'success')  {
+					setSearching(false);
+					setTimeout(() => alert('No data has been found for this group, please create a new attendance sheet.'), 500);
+					setDisplayAttendance(false);
+
+				} else if (final.message === 'success' && final.data.length > 0) {
 					setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
 
 					// Used to set the session storage for the selected attendance.
@@ -177,6 +183,11 @@ export default function Attendance(): JSX.Element {
 								alert(final.error);
 							}
 						});
+
+					} else {
+						setSearching(false);
+						alert(final.error);
+					}
 				
 			});
 	};
