@@ -9,7 +9,7 @@ import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
-import { Group, DBAttendanceTitle, APIAttendanceTitles, APIAttendanceSheet, Attendee, DBAllAttendance, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
+import { Group, APIAttendanceSheet, Attendee, DBAllAttendance, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
