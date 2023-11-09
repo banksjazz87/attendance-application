@@ -107,16 +107,19 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		updateLoadingStatus();
-		if (searchForGroup(form.groupDisplayName, allGroups)) {
+
+		if (formToShow === "Existing"  && searchForGroup(form.groupDisplayName, allGroups)) {
 			postData("/new-attendance/create", form).then((data: APINewTable): void => {
-				// neededAttendants(data);
 				updateLoadingStatus();
 				navigate("/attendance", { replace: true });
 			});
+		} else if (formToShow === "New" && searchForGroup(form.groupDisplayName, allGroups)) {
+			alert("This group has already been created.");
+			window.location.reload();
 		} else {
 			postData("/new-group", form).then((data: ApiResponse): void => {
 				if (data.message === "success") {
-					postData('/new-attendance/create/master/table', form).then((data: APINewTable): void => {
+					postData("/new-attendance/create/master/table", form).then((data: APINewTable): void => {
 						if (data.message === "success") {
 							postData("/new-attendance/create", form).then((data: APINewTable): void => {
 								if (data.message === "success") {
@@ -130,7 +133,7 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 								}
 							});
 						} else {
-							alert('Error with /new-attendance/master/table');
+							alert("Error with /new-attendance/master/table");
 						}
 					});
 				} else {
