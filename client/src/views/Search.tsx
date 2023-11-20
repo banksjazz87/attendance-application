@@ -68,10 +68,8 @@ export default function Search() {
   };
 
   const attDropDownChangeHandler = (arr: DBAttendanceTitle[], value: string): void => {
-
-    console.log('This is the passed in value', value);
-
-    fetch(`/attendance/get-list/${value}`)
+    const groupTableName = `${groupTable.name}_attendance`;
+    fetch(`/attendance/get-list-by-name/${groupTableName}/${value}`)
       .then((data: Response): Promise<APIAttendanceSheet> => {
         return data.json();
       })
@@ -79,6 +77,7 @@ export default function Search() {
         if (final.message === "success") {
           updateSelectedTable(arr, value);
           setSelectedAttendance(final.data);
+          console.log('Success', final.data);
         } else {
           alert(final.error);
         }

@@ -344,6 +344,23 @@ app.get("/attendance/get-list/:listName", (req: Request, res: Response): void =>
     });
 });
 
+
+app.get('/attendance/get-list-by-name/:tableName/:colName', (req: Request, res: Response): void => {
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+  const tableName = req.params.tableName;
+  const columnName = req.params.colName;
+
+  Db.getTableByColumn(tableName, 'ASC', columnName, 'lastName')
+  .then((data: string[]): void => {
+    console.log(data);
+    res.send({ message: "success", data: data });
+  })
+  .catch((err: SQLResponse): void => {
+    console.log("there was an error", err);
+    res.send({ message: "failure", data: Db.getSqlError(err) });
+  });
+})
+
 app.put("/attendance/update-table/:columnName/:presentValue", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 

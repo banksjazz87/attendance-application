@@ -85,6 +85,18 @@ export class DBMethods {
     });
   }
 
+  getTableByColumn(table: string, order: string, targetColumn: string, orderColumn: string): Promise<string[]> {
+    return new Promise<string[]> ((resolve, reject) => {
+      const database = this.db();
+      let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn} FROM ${table} ORDER BY ${orderColumn} ${order};`;
+
+      database.query(sql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
   createGroupTable(tableName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();

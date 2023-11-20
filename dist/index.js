@@ -292,6 +292,20 @@ app.get("/attendance/get-list/:listName", (req, res) => {
         res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });
+app.get('/attendance/get-list-by-name/:tableName/:colName', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const tableName = req.params.tableName;
+    const columnName = req.params.colName;
+    Db.getTableByColumn(tableName, 'ASC', columnName, 'lastName')
+        .then((data) => {
+        console.log(data);
+        res.send({ message: "success", data: data });
+    })
+        .catch((err) => {
+        console.log("there was an error", err);
+        res.send({ message: "failure", data: Db.getSqlError(err) });
+    });
+});
 app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     console.log(req.body);
