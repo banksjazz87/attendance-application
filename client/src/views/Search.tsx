@@ -68,6 +68,9 @@ export default function Search() {
   };
 
   const attDropDownChangeHandler = (arr: DBAttendanceTitle[], value: string): void => {
+
+    console.log('This is the passed in value', value);
+
     fetch(`/attendance/get-list/${value}`)
       .then((data: Response): Promise<APIAttendanceSheet> => {
         return data.json();
@@ -81,6 +84,7 @@ export default function Search() {
         }
       });
   };
+
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
