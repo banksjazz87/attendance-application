@@ -316,9 +316,9 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
 
 app.get('/group-lists/attendance/:group', (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-  const group = req.params.group;
+  const groupValue = req.params.group;
 
-  Db.getAttendanceByGroupName(group, "dateCreated", "desc")
+  Db.getAttendanceByGroupName(groupValue, "dateCreated", "desc")
     .then((data: string[]): void => {
       console.log(data);
       res.send({ message: "success", data: data });

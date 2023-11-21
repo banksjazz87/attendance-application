@@ -337,7 +337,7 @@ export class DBMethods {
   getAttendanceByGroupName(groupName: string, column: string, order: "asc" | "desc"): Promise <string[]> {
     return new Promise<string[]>((resolve, reject): void => {
       const database = this.db();
-      const neededSql = `SELECT * FROM all_attendance WHERE parentGroup = "${groupName}" ORDER BY ${column} ${order};`;
+      const neededSql = `SELECT * FROM all_attendance WHERE parentGroupValue = "${groupName}" ORDER BY ${column} ${order};`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
