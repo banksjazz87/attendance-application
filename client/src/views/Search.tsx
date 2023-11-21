@@ -77,7 +77,6 @@ export default function Search() {
         if (final.message === "success") {
           updateSelectedTable(arr, value);
           setSelectedAttendance(final.data);
-          console.log('Success', final.data);
         } else {
           alert(final.error);
         }
@@ -129,6 +128,7 @@ export default function Search() {
         <DisplayAttendance
           sheetData={selectedAttendance}
           sheetTitle={selectedTable.displayTitle}
+          presentColumn={selectedTable.title}
         />
       </div>
     </div>

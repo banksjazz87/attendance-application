@@ -9,12 +9,18 @@ import { ValuesAndClass } from "../../types/interfaces.ts";
 interface DisplayAttendanceProps {
   sheetData: Attendee[];
   sheetTitle: string;
+  presentColumn: string;
 }
 
-export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAttendanceProps): JSX.Element {
+export default function DisplayAttendance({ sheetData, sheetTitle, presentColumn }: DisplayAttendanceProps): JSX.Element {
+
+  //Get the current screen size.
   let currentWidth = window.innerWidth;
+
+  //Set the current screen size.
   const [screenSize, setScreenSize] = useState<number>(currentWidth);
 
+  //Checking the screen size, and updating the state.
   useEffect(() => {
     window.addEventListener("resize", (e): void => {
       let width = window.innerWidth;
@@ -22,7 +28,13 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
     });
   });
 
+
+  //Return all of the needed fields.
   const returnFields: JSX.Element[] = sheetData?.map((x: Attendee, y: number): JSX.Element => {
+
+    //This is the title of the column that holds the value of whether the attendant is present or not.
+    const present = presentColumn as keyof Attendee;
+
     if (screenSize > 1024) {
       return (
         <tr
@@ -36,8 +48,8 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
           <td>{`${x.memberType}`}</td>
           <td className="present_data">
             <FontAwesomeIcon
-              className={x.present === 0 ? "circle" : "check"}
-              icon={x.present === 0 ? faCircle : faCheck}
+              className={x[present] as number === 0 ? "circle" : "check"}
+              icon={x[present] === 0 ? faCircle : faCheck}
             />
           </td>
         </tr>
@@ -51,8 +63,8 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
           <td>{`${x.firstName}, ${x.lastName}`}</td>
           <td className="present_data">
             <FontAwesomeIcon
-              className={x.present === 0 ? "circle" : "check"}
-              icon={x.present === 0 ? faCircle : faCheck}
+              className={x[present] as number === 0 ? "circle" : "check"}
+              icon={x[present] as number === 0 ? faCircle : faCheck}
             />
           </td>
         </tr>
@@ -60,6 +72,8 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
     }
   });
 
+
+  //Headers for larg screen sizes.
   const largeScreenHeaders: ValuesAndClass[] = [
     { value: "", class: "id_number" },
     { value: "First Name", class: "first_name" },
@@ -69,11 +83,15 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
     { value: "Present", class: "present_header" },
   ];
 
+
+  //Headers for mobile devices.
   const mobileHeaders: ValuesAndClass[] = [
     { value: "Name", class: "name" },
     { value: "Present", class: "present_header" },
   ];
 
+
+  //Return the headers
   const returnHeaders = (arr: ValuesAndClass[]): JSX.Element[] => {
     const displayHeaders = arr.map((x: ValuesAndClass, y: number): JSX.Element => {
       return (
@@ -88,7 +106,7 @@ export default function DisplayAttendance({ sheetData, sheetTitle }: DisplayAtte
     return displayHeaders;
   };
 
-  //Remove conditional from h1
+//Final return to return the elements.
   return (
     <div
       id="display_attendance_wrapper"
