@@ -274,6 +274,7 @@ export interface TotalSentSum {
 
 export interface SaveButtonProps {
   tableTitle: string;
+  groupName: string;
   totalData: TotalSum;
   startLoading: Function;
   stopLoading: Function;
@@ -281,6 +282,7 @@ export interface SaveButtonProps {
 
 export interface SentData {
   title: string;
+  group: string;
   data: TotalSum;
 }
 

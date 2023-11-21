@@ -62,9 +62,10 @@ export default function AttendanceSheet({
 		let youth = 0;
 		let member = 0;
 		let visitor = 0;
+		const attendanceColumn = tableName as keyof Attendee;
 
 		for (let i = 0; i < memberData.length; i++) {
-			if (memberData[i].present === 1) {
+			if (memberData[i][attendanceColumn] === 1) {
 				let currentAge = memberData[i].age;
 				let currentMember = memberData[i].memberType;
 
@@ -277,6 +278,7 @@ export default function AttendanceSheet({
 						totalData={sumOfPresent}
 						startLoading={startLoading}
 						stopLoading={stopLoading}
+						groupName={parentName}
 					/>
 				</div>
 				<table>

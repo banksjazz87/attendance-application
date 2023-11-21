@@ -416,6 +416,7 @@ app.get("/people/search/:table/:partialName", (req, res) => {
 });
 app.put('/attendance-total/update/', (req, res) => {
     let tableName = req.body.title;
+    let groupValue = req.body.group;
     let totals = {
         children: req.body.data.totalChildren,
         youth: req.body.data.totalYouth,
@@ -424,7 +425,7 @@ app.put('/attendance-total/update/', (req, res) => {
         visitors: req.body.data.totalVisitors
     };
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    Db.updateTotalTable(tableName, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
+    Db.updateTotalTable(tableName, groupValue, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
         .then((data) => {
         res.send({
             message: "success",

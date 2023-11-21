@@ -285,11 +285,11 @@ export class DBMethods {
     });
   }
 
-  updateTotalTable(currentTable: string, children: number, youth: number, adults: number, members: number, visitors: number): Promise<string[]> {
+  updateTotalTable(currentTable: string, group: string, children: number, youth: number, adults: number, members: number, visitors: number): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.db();
       const total = children + youth + adults;
-      const neededSql = `UPDATE Attendance_Totals SET totalChildren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors}, totalCount = ${total} WHERE title = "${currentTable}";`;
+      const neededSql = `UPDATE Attendance_Totals SET totalChildren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors}, totalCount = ${total} WHERE groupName = "${group}" AND title = "${currentTable}";`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
