@@ -85,7 +85,6 @@ export default function Search() {
 
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-    console.log('table name', groupTable.name)
 		fetch(`/group-lists/attendance/${groupTable.name}`)
 			.then((data: Response): Promise<APIAttendanceTitles> => {
 				return data.json();

@@ -103,7 +103,7 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
   const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group, Db.createTableName(req.body.group)];
 
   const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
-  const totalFieldValues = [req.body.group, req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
+  const totalFieldValues = [Db.createTableName(req.body.group), req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
 
   Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
   .then((data: [string[], string[], string[]]): void => {
