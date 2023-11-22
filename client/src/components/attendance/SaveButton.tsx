@@ -13,8 +13,6 @@ export default function SaveButton ({tableTitle, groupName, totalData, startLoad
 
         startLoading();
 
-        console.log("this is the table title that's being passed'", allTotalData.title);
-
         putData('/attendance-total/update/', allTotalData).then((data: APIResponse): void => {
                 if (data.message === "success") {
                     stopLoading();
