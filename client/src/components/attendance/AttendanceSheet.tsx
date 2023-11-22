@@ -279,6 +279,7 @@ export default function AttendanceSheet({
 						startLoading={startLoading}
 						stopLoading={stopLoading}
 						groupName={parentName}
+						successHandler={displaySuccessMessage}
 					/>
 				</div>
 				<table>

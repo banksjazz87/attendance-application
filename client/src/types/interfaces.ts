@@ -278,6 +278,7 @@ export interface SaveButtonProps {
   totalData: TotalSum;
   startLoading: Function;
   stopLoading: Function;
+  successHandler: Function;
 }
 
 export interface SentData {
