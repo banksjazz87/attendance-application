@@ -34,6 +34,11 @@ export interface Group {
   displayName: string;
 }
 
+export interface PartialGroupFields {
+  name: string;
+  displayName: string;
+}
+
 export interface GroupProps {
   clickHandler?: Function;
   groupHandler?: Function;
@@ -153,12 +158,12 @@ export interface APIAttendanceTitles {
   error: string;
 }
 
-
-
-
+export interface DBPartialAttendanceFields {
+  title: string;
+  displayTitle: string;
+}
 
 export interface DBAllAttendance {
-  id: number;
   title: string;
   displayTitle: string;
   parentGroup: string;

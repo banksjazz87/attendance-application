@@ -9,20 +9,16 @@ import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Bool } from "../../src/types/types.ts";
-import { Group, APIAttendanceSheet, Attendee, DBAllAttendance, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
+import { Group, APIAttendanceSheet, Attendee, DBPartialAttendanceFields, PartialGroupFields, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
 export default function Attendance(): JSX.Element {
 	const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
-	const [selectedGroup, setSelectedGroup] = useState<Group[]>([{ id: 0, name: "", age_group: "", displayName: "" }]);
-	const [selectedAttendance, setSelectedAttendance] = useState<DBAllAttendance>({
-		id: 0,
+	const [selectedGroup, setSelectedGroup] = useState<PartialGroupFields[]>([{name: "", displayName: ""}]);
+	const [selectedAttendance, setSelectedAttendance] = useState<DBPartialAttendanceFields>({
 		title: "",
 		displayTitle: "",
-		parentGroup: "",
-		dateCreated: "",
-		parentGroupValue: "",
 	});
 
 	const [showDropDown, setShowDropDown] = useState<boolean>(true);
@@ -45,10 +41,8 @@ export default function Attendance(): JSX.Element {
 
 			setSelectedAttendance({
 				...selectedAttendance,
-				id: tableToDisplay.id,
 				title: tableToDisplay.title,
 				displayTitle: tableToDisplay.displayTitle,
-				dateCreated: tableToDisplay.dateCreated,
 			});
 
 			let parent = JSON.parse(sessionStorage.selectedParent);
@@ -140,24 +134,20 @@ export default function Attendance(): JSX.Element {
 					setDisplayAttendance(false);
 
 				} else if (final.message === 'success' && final.data.length > 0) {
-					setSelectedAttendance({ ...selectedAttendance, id: final.data[0].id, title: final.data[0].title, displayTitle: final.data[0].displayTitle, dateCreated: final.data[0].dateCreated, parentGroupValue: final.data[0].parentGroupValue });
+					setSelectedAttendance({ ...selectedAttendance, title: final.data[0].title, displayTitle: final.data[0].displayTitle });
 
 					// Used to set the session storage for the selected attendance.
 					const displayedSheet = {
-						id: final.data[0].id,
 						title: final.data[0].title,
 						displayTitle: final.data[0].displayTitle,
-						dateCreated: final.data[0].dateCreated,
 					};
 
 					const displayedJSON = JSON.stringify(displayedSheet);
 					sessionStorage.setItem("selectedTable", displayedJSON);
 
 					// Set the session storage for the selected group
-					const selectedParent: Group = {
-						id: selectedGroup[0].id,
+					const selectedParent: PartialGroupFields = {
 						name: selectedGroup[0].name,
-						age_group: selectedGroup[0].age_group,
 						displayName: selectedGroup[0].displayName,
 					};
 
@@ -172,13 +162,11 @@ export default function Attendance(): JSX.Element {
 						})
 						.then((final: APIAttendanceSheet): void => {
 							if (final.message === "success") {
-								console.log("message here burriot", final.message, final.data);
 								selectAttendanceSheet(final.data);
 								setShowOptionButtons(true);
 								setShowDropDown(false);
 								setSearching(false);
 							} else {
-								console.log('farter here', final.message, final);
 								setSearching(false);
 								alert(final.error);
 							}
