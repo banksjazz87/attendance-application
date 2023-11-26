@@ -15,7 +15,7 @@ import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
 export default function Attendance(): JSX.Element {
 	const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
-	const [selectedGroup, setSelectedGroup] = useState<PartialGroupFields[]>([{name: "", displayName: ""}]);
+	const [selectedGroup, setSelectedGroup] = useState<PartialGroupFields[]>([{ name: "", displayName: "" }]);
 	const [selectedAttendance, setSelectedAttendance] = useState<DBPartialAttendanceFields>({
 		title: "",
 		displayTitle: "",
@@ -32,10 +32,10 @@ export default function Attendance(): JSX.Element {
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = useState<string>("");
 
-	//Used to pull data from the session storage.
+	//Used to check if an attendance is stored in the session storage and displays the attendance sheet if that's the case.
 	useEffect((): void => {
-		if (sessionStorage.selectedTable && sessionStorage.selectedParent) {
-			let tableToDisplay = JSON.parse(sessionStorage.selectedTable);
+		if (sessionStorage.selectedAttendance && sessionStorage.selectedParent) {
+			let tableToDisplay = JSON.parse(sessionStorage.selectedAttendance);
 			let parentTable = JSON.parse(sessionStorage.selectedParent);
 			let tableTitle = `${parentTable.name}_attendance`;
 
@@ -48,35 +48,42 @@ export default function Attendance(): JSX.Element {
 			let parent = JSON.parse(sessionStorage.selectedParent);
 			setSelectedGroup([parent]);
 
-			if (partialName.length > 0) {
-				fetch(`/people/search/${tableTitle}/${partialName}`)
-					.then((data: Response): Promise<APIAttendanceSheet> => {
-						return data.json();
-					})
-					.then((final: APIAttendanceSheet): void => {
-						if (final.message === "success") {
-							selectAttendanceSheet(final.data);
-							setSearching(false);
-						} else {
-							setSearching(false);
-							alert(final.error);
-						}
-					});
-			} else {
-				fetch(`/attendance/get-list/${tableTitle}`)
-					.then((data: Response): Promise<APIAttendanceSheet> => {
-						return data.json();
-					})
-					.then((final: APIAttendanceSheet): void => {
-						if (final.message === "success") {
-							selectAttendanceSheet(final.data);
-							setSearching(false);
-						} else {
-							setSearching(false);
-							alert(final.error);
-						}
-					});
-			}
+			fetch(`/attendance/get-list/${tableTitle}`)
+				.then((data: Response): Promise<APIAttendanceSheet> => {
+					return data.json();
+				})
+				.then((final: APIAttendanceSheet): void => {
+					if (final.message === "success") {
+						selectAttendanceSheet(final.data);
+						setSearching(false);
+						console.log("You did it");
+					} else {
+						setSearching(false);
+						alert(final.error);
+					}
+				});
+		}
+	}, []);
+
+	//Pulls data from the session storage for the selected parent to get the attendance title, and checks for a partial name search in the First or Last Name search box.
+	useEffect((): void => {
+		const parentTable = JSON.parse(sessionStorage.selectedParent);
+		const tableTitle = `${parentTable.name}_attendance`;
+
+		if (partialName.length > 0) {
+			fetch(`/people/search/${tableTitle}/${partialName}`)
+				.then((data: Response): Promise<APIAttendanceSheet> => {
+					return data.json();
+				})
+				.then((final: APIAttendanceSheet): void => {
+					if (final.message === "success") {
+						selectAttendanceSheet(final.data);
+						setSearching(false);
+					} else {
+						setSearching(false);
+						alert(final.error);
+					}
+				});
 		}
 	}, [partialName]);
 
@@ -128,12 +135,11 @@ export default function Attendance(): JSX.Element {
 				return data.json();
 			})
 			.then((final: APIAttendanceAllTitles): void => {
-				if (final.data.length === 0 && final.message === 'success')  {
+				if (final.data.length === 0 && final.message === "success") {
 					setSearching(false);
-					setTimeout(() => alert('No data has been found for this group, please create a new attendance sheet.'), 500);
+					setTimeout(() => alert("No data has been found for this group, please create a new attendance sheet."), 500);
 					setDisplayAttendance(false);
-
-				} else if (final.message === 'success' && final.data.length > 0) {
+				} else if (final.message === "success" && final.data.length > 0) {
 					setSelectedAttendance({ ...selectedAttendance, title: final.data[0].title, displayTitle: final.data[0].displayTitle });
 
 					// Used to set the session storage for the selected attendance.
@@ -171,12 +177,10 @@ export default function Attendance(): JSX.Element {
 								alert(final.error);
 							}
 						});
-
-					} else {
-						setSearching(false);
-						alert(final.error);
-					}
-				
+				} else {
+					setSearching(false);
+					alert(final.error);
+				}
 			});
 	};
 

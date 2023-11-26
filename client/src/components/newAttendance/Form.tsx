@@ -100,17 +100,16 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 	};
 
 	/**
-	 * 
-	 * @param str 
-	 * @returns string 
+	 *
+	 * @param str
+	 * @returns string
 	 * @description creates a database appropriate table name.
 	 */
 	const convertToDbTitle = (str: string): string => {
 		let result: string = str.replace(/[.-/?!]/g, "_");
-		let resultNoSpaces: string = result.replace(/ /g, '_');
+		let resultNoSpaces: string = result.replace(/ /g, "_");
 		return resultNoSpaces;
-	}
-
+	};
 
 	/**
 	 * @return void
@@ -118,23 +117,22 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 	 */
 	const updateSessionStorage = (): void => {
 		const currentParent = {
-			name: convertToDbTitle(form.group), 
-			displayName:  form.groupDisplayName
-		}
+			name: convertToDbTitle(form.group),
+			displayName: form.groupDisplayName,
+		};
 
 		const currentAttendance = {
-			title: convertToDbTitle(form.title), 
-			displayTitle: form.title
-		}
+			title: convertToDbTitle(form.title),
+			displayTitle: form.title,
+		};
 
 		const stringifyParent = JSON.stringify(currentParent);
 		const stringifyAttendance = JSON.stringify(currentAttendance);
 
-		sessionStorage.setItem('selectedParent', stringifyParent);
-		sessionStorage.setItem('selectedAttendance', stringifyAttendance);
+		sessionStorage.setItem("selectedParent", stringifyParent);
+		sessionStorage.setItem("selectedAttendance", stringifyAttendance);
 		sessionStorage.setItem("currentAttendancePage", "0");
-	}
-
+	};
 
 	/**
 	 *
@@ -145,7 +143,7 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 		e.preventDefault();
 		updateLoadingStatus();
 
-		if (formToShow === "Existing"  && searchForGroup(form.groupDisplayName, allGroups)) {
+		if (formToShow === "Existing" && searchForGroup(form.groupDisplayName, allGroups)) {
 			postData("/new-attendance/create", form).then((data: APINewTable): void => {
 				updateSessionStorage();
 				updateLoadingStatus();
