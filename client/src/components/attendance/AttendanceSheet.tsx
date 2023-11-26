@@ -274,7 +274,7 @@ export default function AttendanceSheet({
 				<div className="btn_group">
 					<SearchBar updatePartial={updatePartial} />
 					<SaveButton
-						tableTitle={tableName}
+						tableTitle={title}
 						totalData={sumOfPresent}
 						startLoading={startLoading}
 						stopLoading={stopLoading}
