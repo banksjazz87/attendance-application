@@ -56,7 +56,6 @@ export default function Attendance(): JSX.Element {
 					if (final.message === "success") {
 						selectAttendanceSheet(final.data);
 						setSearching(false);
-						console.log("You did it");
 					} else {
 						setSearching(false);
 						alert(final.error);
