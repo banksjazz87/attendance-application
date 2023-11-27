@@ -6,9 +6,12 @@ import "../../assets/styles/components/global/searchBar.scss";
 interface SearchBarProps {
 	updatePartial: Function;
 }
+
+
 export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Element {
 	const [activeSearch, setSearchActive] = useState<boolean>(false);
 
+	//Used with the search bar, to keep track if a search should be running.
 	useEffect(() => {
 		window.addEventListener("click", (e) => {
 			let target = e.target as HTMLElement;
@@ -20,6 +23,12 @@ export default function SearchBar({ updatePartial }: SearchBarProps): JSX.Elemen
 		});
 	});
 
+	/**
+	 *
+	 * @param e change event on an input field.
+	 * @return void
+	 * @description updates the results for the partial search query and sets the search to active.
+	 */
 	const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
 		let target = e.target as HTMLInputElement;
 		updatePartial(target.value);

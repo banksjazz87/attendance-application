@@ -9,6 +9,7 @@ interface SuccessMessageProps {
 
 export default function SuccessMessage({message, show, closeMessage}: SuccessMessageProps): JSX.Element {
 
+    //If the message is set to show it will close the message after a certain amount of time.
     useEffect((): void => {
         if (show) {
             setTimeout((): void => {

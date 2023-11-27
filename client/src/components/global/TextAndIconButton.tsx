@@ -11,10 +11,19 @@ interface AddNewMemberButtonProps {
 }
 
 export default function TextAndIconButton({ show, clickHandler, text, iconName }: AddNewMemberButtonProps): JSX.Element {
+  
+  /**
+   * 
+   * @param e button click
+   * @return void
+   * @description runs whatevern function is passed in as the clickHandler.
+   */
   const btnClickHandler = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     clickHandler();
   };
+
+  
   return (
     <button
       style={show ? { display: "" } : { display: "none" }}

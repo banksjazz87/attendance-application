@@ -3,6 +3,14 @@ import { GroupProps } from "../../types/interfaces.ts";
 import "../../assets/styles/components/newAttendance/attendanceTitle.scss";
 
 export default function AttendanceTitle({ titleHandler, attendanceTitle }: GroupProps) {
+
+  /**
+   * 
+   * @param e change event on an input element
+   * @return void
+   * @description update the attendance title.
+   * 
+   */
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (titleHandler) {
       titleHandler(e.target.value);

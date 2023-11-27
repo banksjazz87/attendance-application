@@ -43,10 +43,20 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 		});
 	};
 
+
+	//Update the title of the form.
 	const titleChange = (value: string): void => {
 		setForm({ ...form, title: value });
 	};
 
+
+	/**
+	 * 
+	 * @param value string
+	 * @param arr an array of the type Group.
+	 * @returns boolean
+	 * @description searches to see if a group already exists.
+	 */
 	const searchForGroup = (value: string, arr: Group[]): boolean => {
 		let final = false;
 		for (let i = 0; i < arr.length; i++) {
@@ -57,10 +67,24 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 		return final;
 	};
 
+
+	/**
+	 * 
+	 * @param value 
+	 * @returns void
+	 * @description updates the age group value.
+	 */
 	const setGroupAge = (value: string): void => {
 		setForm({ ...form, ageGroup: value });
 	};
 
+
+	/**
+	 * 
+	 * @param value string
+	 * @returns void
+	 * @description updates the group display name value and the group value.
+	 */
 	const setNewGroupName = (value: string): void => {
 		setForm({ ...form, groupDisplayName: value, group: value });
 	};

@@ -21,7 +21,7 @@ export default function DataGraph({ allData, month, year }: DataGraphProps): JSX
 		}
 	};
 
-	//Add an event listener for an resize event, and checks to see if the width is mobile or not.
+	//Add an event listener for any resize event, and checks to see if the width is mobile or not.
 	useEffect(() => {
 		window.addEventListener("resize", (e: UIEvent): void => {
 			checkForMobile(window.innerWidth);

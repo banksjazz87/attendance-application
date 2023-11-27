@@ -7,6 +7,12 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage }: DeleteProps) {
 
+  /**
+   * 
+   * @param obj takes on an object of type of DeleteResponse
+   * @returns void
+   * @description triggers a succes message, updates the contents of the message and reloads the page.
+   */
   const deleteConfirmation = (obj: DeleteResponse): void => {
           triggerSuccessMessage();
           updateSuccessMessage(obj.message);
@@ -15,6 +21,13 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
           }, 3500);
   }
 
+
+  /**
+   * 
+   * @param event Pointer event on a button
+   * @returns void
+   * @description deletes the data from database and then displays a confirmation or an alert.
+   */
   const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
     if (deleteUser) {
       deleteData(url).then((data: DeleteResponse): void => {
@@ -27,6 +40,13 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
     }
   };
 
+
+  /**
+   * 
+   * @param e Pointer event 
+   * @returns void
+   * @description hides the alert.
+   */
   const hideAlert = (e: React.PointerEvent<HTMLButtonElement>): void => {
     hideHandler();
   };

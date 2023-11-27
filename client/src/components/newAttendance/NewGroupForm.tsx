@@ -5,18 +5,33 @@ import "../../assets/styles/components/newAttendance/newGroupForm.scss";
 export default function NewGroupForm({ groupSelected, ageHandler }: GroupProps): JSX.Element {
   const groupAge = ["Select One", "All", "Adult", "Youth", "Child"];
 
+
+  /**
+   * 
+   * @param e change event on an input element.
+   * @returns void
+   * @description updates the group selected state.
+   */
   const changeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (groupSelected) {
       groupSelected(e.target.value);
     }
   };
 
+
+  /**
+   * 
+   * @param e change event on a select field
+   * @returns void
+   * @description updates the target age of the group.
+   */
   const selectAgeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     if (ageHandler) {
       ageHandler(e.target.value);
     }
   };
 
+  //Display the group ages that can be chosen.
   const groupOptions = groupAge.map((x: string, y: number): JSX.Element => {
     return (
       <option

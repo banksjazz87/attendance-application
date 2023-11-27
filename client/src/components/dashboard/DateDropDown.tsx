@@ -12,6 +12,12 @@ interface DateDropDownProps<T extends object, K extends keyof T> {
 export default function DateDropDown<T extends object, K extends keyof T>({ dateData, changeHandler, keyWord, idTag, title }: DateDropDownProps<T, K>): JSX.Element {
 
 
+	/**
+	 * 
+	 * @param arr Array of objects.
+	 * @returns an array of jsx elements or undefined.
+	 * @description returns the date options.
+	 */
 	const returnDateOptions = (arr: T[]): JSX.Element[] | undefined => {
 		const options = arr.map((x: T, y: number): JSX.Element => {
 			const currentValue = x[keyWord] as string | number;

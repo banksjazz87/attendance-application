@@ -6,10 +6,24 @@ interface NewOrExistingProps {
   existingHandler: Function;
 }
 export default function NewOrExisting({ newHandler, existingHandler }: NewOrExistingProps): JSX.Element {
+  
+  /**
+   * 
+   * @param e Mouse evevent click, on a button
+   * @returns void
+   * @description fires the new handler function.
+   */
   const newClickHandler = (e: React.MouseEvent<HTMLElement>): void => {
     newHandler();
   };
 
+
+  /**
+   * 
+   * @param e Mouse event click on a button
+   * @returns void
+   * @description fires the existing handler function.
+   */
   const existingClickHandler = (e: React.MouseEvent<HTMLElement>): void => {
     existingHandler();
   };

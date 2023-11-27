@@ -6,6 +6,8 @@ import "../../assets/styles/components/global/groupDropDown.scss";
 export default function GroupDropDown({ groupSelected, getGroups, currentGroups, attendanceGroupSelected }: GroupDropDownProps): JSX.Element {
 	const [groups, setGroups] = useState<Group[]>([]);
 
+	
+	//Get different groups associated with the app.
 	useEffect((): void => {
 		fetch("/groups")
 			.then((data: Response): any => {
@@ -21,6 +23,13 @@ export default function GroupDropDown({ groupSelected, getGroups, currentGroups,
 			});
 	}, []);
 
+
+	/**
+	 * 
+	 * @param e Change event
+	 * @return void
+	 * @description this runs with an on change event when selecting groups.  Updates the session storage Page number, sets a new value for the group selected.
+	 */
 	const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
 		sessionStorage.removeItem("currentAttendancePage");
 		if (groupSelected) {
@@ -30,6 +39,12 @@ export default function GroupDropDown({ groupSelected, getGroups, currentGroups,
 		}
 	};
 
+
+	/**
+	 * 
+	 * @returns an array of JSX elements or undefined.
+	 * @description provides the options for the groups available.
+	 */
 	const dropDownItems = (): JSX.Element[] | undefined => {
 		const options = groups.map((x: Group, y: number): JSX.Element => {
 			return (
