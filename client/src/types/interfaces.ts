@@ -323,3 +323,34 @@ export interface AttendanceResponse {
   message: string;
   error: string;
 }
+
+export interface AllDataFormProps {
+	yearData: YearsDataObj[];
+	yearHandler: Function;
+	monthData: MonthsDataObj[];
+	monthHandler: Function;
+	group: string;
+	month: string;
+	year: string;
+	submitHandler: Function;
+	groupChange: Function;
+	startLoading: Function;
+	stopLoading: Function;
+}
+
+export interface DataGraphSet {
+	name: string;
+	children: number;
+	youth: number;
+	adults: number;
+	visitors: number;
+	total: number;
+}
+
+export interface DataGraphProps {
+	allData: AttendanceTotals[];
+	month: string;
+    year: string;
+}
+
+

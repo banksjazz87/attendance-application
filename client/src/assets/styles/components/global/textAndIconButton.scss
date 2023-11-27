@@ -1,5 +1,4 @@
 @import "../../global/library.scss";
-
 .add_new_member_btn {
     margin: auto;
     display: flex;
@@ -13,7 +12,6 @@
     padding: 12px 36px;
     @include accent-bold;
     color: white;
-
     .add_member_icon {
         font-size: 22px;
     }

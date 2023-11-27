@@ -1,11 +1,9 @@
 @import "../../styles/global/library.scss";
-
 #search_content_wrapper {
     @include content-wrapper-md;
     display: flex;
     flex-direction: column;
     padding-bottom: 8rem;
-
     form {
         @include shadow-form;
         padding-top: 4rem;

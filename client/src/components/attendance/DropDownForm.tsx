@@ -5,6 +5,11 @@ import "../../assets/styles/components/attendance/dropDownForm.scss";
 
 export default function DropDownForm({ clickHandler, groupHandler, name, groupSelectedHandler, show }: GroupProps) {
   
+  /**
+   * 
+   * @param e React Form Event
+   * @desctiption updates the value of the current group.
+   */
   const submitHandler = (e: React.FormEvent): void => {
     e.preventDefault();
     if (clickHandler && groupHandler) {

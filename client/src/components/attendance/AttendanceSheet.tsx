@@ -9,9 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
 
-//For Development
-//import { attendantData } from "../../variables/dummyAttendant.ts";
-
 export default function AttendanceSheet({
 	show,
 	title,
@@ -20,7 +17,6 @@ export default function AttendanceSheet({
 	tableName,
 	deleteMemberHandler,
 	updatePartial,
-	activeSearch,
 	startLoading,
 	stopLoading,
 	triggerSuccessMessage,
@@ -105,9 +101,16 @@ export default function AttendanceSheet({
 		triggerSuccessMessage();
 	};
 
+	/**
+	 *
+	 * @param index number
+	 * @returns void
+	 * @description this is used to update the attendant, in regards to if they're present or not.  If they're present, their status is updated to 1 if they are not present their status is 0.
+	 */
 	const checkedHandler = (index: number): void => {
 		const copy: Attendee[] = memberData.slice();
 
+		//Object to represent the values for the attendant with the corresponding index number.
 		let currentObj: UpdateAttendant = {
 			firstName: copy[index].firstName,
 			lastName: copy[index].lastName,
@@ -118,9 +121,11 @@ export default function AttendanceSheet({
 		hideSuccessMessage();
 
 		if (copy[index][tableName] === 0) {
+			//Update the component's state.
 			copy[index][tableName] = 1;
 			setMemberData(copy);
 
+			//Update the database.
 			putData(`/attendance/update-table/${tableName}/1`, currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
 					let successMessage: string = `${currentObj.firstName} ${currentObj.lastName} has been marked present.`;
@@ -130,9 +135,11 @@ export default function AttendanceSheet({
 				}
 			});
 		} else {
+			//Update the component's state.
 			copy[index][tableName] = 0;
 			setMemberData(copy);
 
+			//Update the database.
 			putData(`/attendance/update-table/${tableName}/0`, currentObj).then((data: APIResponse): void => {
 				if (data.message === "success") {
 					let successMessage: string = `${currentObj.firstName} ${currentObj.lastName} has been marked NOT present`;
@@ -144,6 +151,14 @@ export default function AttendanceSheet({
 		}
 	};
 
+	/**
+	 *
+	 * @param value number or undefined
+	 * @param index number
+	 * @returns JSX element.
+	 * @description checks to see if the current attendant is present or not, and updates the present icon.
+	 *
+	 */
 	const checkedOrNot = (value: number | undefined, index: number): JSX.Element => {
 		if (value === 0) {
 			return (
@@ -178,6 +193,7 @@ export default function AttendanceSheet({
 		}
 	};
 
+	//Returns the data points for the desktop view.
 	const dataPointsLgScreen = memberData.map((x: Attendee, y: number): JSX.Element => {
 		const tableTitle = tableName as keyof Attendee;
 
@@ -208,6 +224,7 @@ export default function AttendanceSheet({
 		);
 	});
 
+	//Returns the data points for mobile devices, this is a limited view so that the most important fields are displayed.
 	const dataPointsMobile = memberData.map((x: Attendee, y: number): JSX.Element => {
 		const tableTitle = tableName as keyof Attendee;
 
@@ -237,18 +254,27 @@ export default function AttendanceSheet({
 		);
 	});
 
+	//Table headers for large screen devices.
 	const headersLgScreen: ValuesAndClass[] = [
 		{ value: "Last Name", class: "last_name" },
 		{ value: "First Name", class: "first_name" },
 		{ value: "Present", class: "present_header" },
 		{ value: "Delete", class: "delete" },
 	];
+
+	//Table headers for mobile devices.
 	const headersMobileScreen: ValuesAndClass[] = [
 		{ value: "Name", class: "name" },
 		{ value: "Present", class: "present_header" },
 		{ value: "Delete", class: "delete" },
 	];
 
+	/**
+	 *
+	 * @param arr Array of ValuesAndClass type.
+	 * @returns Array of JSX elements.
+	 * @description returns the needed table headers.
+	 */
 	const returnHeaders = (arr: ValuesAndClass[]): JSX.Element[] => {
 		const displayHeaders = arr.map((x: ValuesAndClass, y: number): JSX.Element => {
 			return (
@@ -263,6 +289,11 @@ export default function AttendanceSheet({
 		return displayHeaders;
 	};
 
+	/**
+	 *
+	 * @returns JSX Element
+	 * @description returns the main content needed for the UI.
+	 */
 	const mainContent = (): JSX.Element => {
 		return (
 			<div
@@ -292,7 +323,7 @@ export default function AttendanceSheet({
 		);
 	};
 
-	//FOR PRODUCTION change the below divs style={show ? { display: "" } : { display: "" }} for production. Remove conditionals from h2 and h3.
+	//If the attendance is 0, return a shell of what's needed, if not zero return the main content.
 	if (attendanceData.length === 0) {
 		return (
 			<div

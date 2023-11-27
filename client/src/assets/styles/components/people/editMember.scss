@@ -1,39 +1,31 @@
 @import "../../global/library.scss";
-
 .full_height_popout {
     @include full-height-popout-background;
 }
 
 #edit_member_form_wrapper {
     @include popout-content;
-
     .close_btn {
         @include icon-close-btn;
     }
-
     form {
         @include inner-shadow-form-wrapper;
-
         .fields_wrapper {
             @include inner-shadow-form-wrapper;
         }
-
         .input_wrapper {
             @include shadow-form-input-pair;
             width: 100%;
         }
-
         .header_fields_wrapper {
             display: flex;
             flex-direction: column;
             row-gap: 0;
             width: 60%;
-
             h2 {
                 text-align: center;
             }
         }
-
         .age_fields_wrapper,
         .member_fields_wrapper {
             display: flex;
@@ -45,17 +37,14 @@
             margin: auto;
             min-width: 250px;
             row-gap: 1rem;
-
             .input_wrapper {
                 display: flex;
                 flex-direction: row;
                 width: auto;
                 min-width: unset;
-
                 label {
                     margin-bottom: 0;
                 }
-
                 input {
                     width: 20px;
                 }

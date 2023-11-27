@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { AttendanceTotals } from "../../types/interfaces.ts";
+import { AttendanceTotals, DataGraphProps, DataGraphSet } from "../../types/interfaces.ts";
 import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from "recharts";
 import "../../assets/styles/components/dashboard/dataGraph.scss";
 import DateMethods from "../../functions/dateMethods.ts";
 
-interface DataGraphProps {
-	allData: AttendanceTotals[];
-	month: string;
-    year: string;
-}
-
-interface DataGraphSet {
-	name: string;
-	children: number;
-	youth: number;
-	adults: number;
-	visitors: number;
-	total: number;
-}
-
 export default function DataGraph({ allData, month, year }: DataGraphProps): JSX.Element {
 	const [isMobile, setIsMobile] = useState<boolean>(false);
 
+	/**
+	 *
+	 * @param num number
+	 * @returns void
+	 * @descriptions updates the is mobile state based on the current width of the device.
+	 */
 	const checkForMobile = (num: number): void => {
 		if (num > 767) {
 			setIsMobile(false);
@@ -30,6 +21,7 @@ export default function DataGraph({ allData, month, year }: DataGraphProps): JSX
 		}
 	};
 
+	//Add an event listener for an resize event, and checks to see if the width is mobile or not.
 	useEffect(() => {
 		window.addEventListener("resize", (e: UIEvent): void => {
 			checkForMobile(window.innerWidth);
@@ -37,7 +29,12 @@ export default function DataGraph({ allData, month, year }: DataGraphProps): JSX
 		checkForMobile(window.innerWidth);
 	});
 
-
+	/**
+	 *
+	 * @param arr Array of Attendance Totals
+	 * @returns Array of the type Data graph set.
+	 * @description return the needed array.
+	 */
 	const neededData = (arr: AttendanceTotals[]): DataGraphSet[] => {
 		let array = [];
 		for (let i = 0; i < arr.length; i++) {
@@ -56,6 +53,11 @@ export default function DataGraph({ allData, month, year }: DataGraphProps): JSX
 		return array;
 	};
 
+	/**
+	 *
+	 * @param value string
+	 * @returns a string with all underscores replaced with a space.
+	 */
 	const removeUnderScore = (value: string): string => {
 		const regex = /_/g;
 		let finalStr = value.replace(regex, " ");

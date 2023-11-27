@@ -1,12 +1,10 @@
 @import "../../global/library.scss";
-
 .pagination_button_wrapper {
     .button_group {
         display: flex;
         flex-direction: row;
         justify-content: center;
         column-gap: 1rem;
-
         button {
             @include icon-button;
         }

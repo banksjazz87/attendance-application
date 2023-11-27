@@ -1,11 +1,8 @@
 @import "../global/library.scss";
-
 #attendance_wrapper {
     padding-bottom: 8rem;
-
     #attendance_content_wrapper {
         @include content-wrapper-md;
-
         .button_group {
             display: flex;
             flex-direction: row;
