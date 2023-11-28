@@ -63,6 +63,8 @@ export default function Dashboard() {
 		}
 	}, [selectedYear, searchMonths, selectedGroup]);
 
+
+	//Gets the group statistics by pulling in the data for the current month and year.
 	useEffect((): void => {
 		const date: Date = new Date();
 
@@ -96,6 +98,8 @@ export default function Dashboard() {
 			});
 	}, []);
 
+
+	//Used to update the state for the group.
 	const updateGroup = (arr: Group[], value: string): void => {
 		for (let i = 0; i < arr.length; i++) {
 			if (arr[i].displayName === value) {
@@ -105,6 +109,8 @@ export default function Dashboard() {
 		}
 	};
 
+
+	//Used to update the state for the selectedYear.
 	const yearChangeHandler = (value: string): void => {
 		if (value.length > 0) {
 			setSelectedYear(value);
@@ -112,12 +118,16 @@ export default function Dashboard() {
 		}
 	};
 
+
+	//Used to update the state for the selectedMonth.
 	const monthChangeHandler = (value: string): void => {
 		if (value.length > 0) {
 			setSelectedMonth(value);
 		}
 	};
 
+
+	//Update the state of the dataResults.
 	const setAllDataResults = (arr: AttendanceTotals[]): void => {
 		setDataResults(arr);
 	};

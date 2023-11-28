@@ -26,6 +26,14 @@ export default function Search() {
 	const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
 	const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
 
+
+	/**
+	 * 
+	 * @param arr array of type of Group
+	 * @param value string
+	 * @returns number or void
+	 * @description returns the index of the selected group.
+	 */
 	const returnIndexOfSelected = (arr: Group[], value: string): number | void => {
 		let index = 0;
 		for (let i = 0; i < arr.length; i++) {
@@ -36,6 +44,14 @@ export default function Search() {
 		}
 	};
 
+
+	/**
+	 * 
+	 * @param arr array of type of Group
+	 * @param value string
+	 * @returns void
+	 * @description Gets the index of the selected group and updates the state of the group table.
+	 */
 	const dropDownChangeHandler = (arr: Group[], value: string): void => {
 		let index = returnIndexOfSelected(arr, value);
 		if (index) {
@@ -49,6 +65,14 @@ export default function Search() {
 		}
 	};
 
+
+	/**
+	 * 
+	 * @param arr array with type of DBAttendanceTitle
+	 * @param value string
+	 * @returns void
+	 * @description updates the state of the selected table.
+	 */
 	const updateSelectedTable = (arr: DBAttendanceTitle[], value: string): void => {
 		let index = 0;
 
@@ -67,6 +91,8 @@ export default function Search() {
 		});
 	};
 
+
+	//Gets the attendance information from the selected group and updates the selected table and sets the selected attendance.
 	const attDropDownChangeHandler = (arr: DBAttendanceTitle[], value: string): void => {
 		const groupTableName = `${groupTable.name}_attendance`;
 		fetch(`/attendance/get-list-by-name/${groupTableName}/${value}`)
@@ -83,6 +109,8 @@ export default function Search() {
 			});
 	};
 
+
+	//Returns all of the attendance titles found for the selected group name.
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
 		fetch(`/group-lists/attendance/${groupTable.name}`)

@@ -14,11 +14,14 @@ export default function NewAttendance() {
   const [formOption, setFormOption] = useState<ShowFormOptions>({ formNeeded: "Existing" });
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  //Shows the form to create a new attendance and uses the "Existing" group form.
   const showExisting = (): void => {
     setShowForm(true);
     setFormOption({ ...formOption, formNeeded: "Existing" });
   };
 
+
+  //Shows the form to create a new attendance and uses the "New" group form.
   const showNew = (): void => {
     setShowForm(true);
     setFormOption({ ...formOption, formNeeded: "New" });

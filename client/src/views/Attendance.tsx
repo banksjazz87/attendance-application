@@ -100,6 +100,13 @@ export default function Attendance(): JSX.Element {
 		setDisplayAttendance(true);
 	};
 
+	/**
+	 *
+	 * @param groupArray array of type group
+	 * @param value string
+	 * @returns void
+	 * @description updates the state of the group that's selected.
+	 */
 	const selectGroup = (groupArray: Group[], value: string): void => {
 		let arrayCopy = groupArray.slice();
 		let index = 0;
@@ -117,15 +124,23 @@ export default function Attendance(): JSX.Element {
 		setShowOptionButtons(false);
 	};
 
+	//Used to select the attendance sheet and display it.
 	const selectAttendanceSheet = (arr: Attendee[]): void => {
 		setCurrentListData(arr);
 		setDisplayAttendance(true);
 	};
 
+	//Displays the option to add a new member.
 	const showNewMemberHandler = (): void => {
 		showAddNewMember ? setShowAddNewMember(false) : setShowAddNewMember(true);
 	};
 
+	/**
+	 *
+	 * @param value string
+	 * @returns void
+	 * @description returns the most recent attendance sheet for the selected group.
+	 */
 	const dropDownSubmit = (value: string): void => {
 		setSearching(true);
 		fetch(`/group-lists/attendance/${value}`)
@@ -182,16 +197,19 @@ export default function Attendance(): JSX.Element {
 			});
 	};
 
+	//Used to delete a member.
 	const updateDeleteMemberHandler = (arr: Attendee[], key: number): void => {
 		let selectedAtt = arr[key];
 		setUserToDelete(selectedAtt);
 		setShowDeleteAlert(true);
 	};
 
+	//Used to update the state of the parital name, this is passed through the search bar.
 	const updatePartialName = (string: string): void => {
 		setPartialName(string);
 	};
 
+	//Used to set the contents of the success message.
 	const setNewSuccessMessage = (str: string): void => {
 		setSuccessMessage(str);
 	};
