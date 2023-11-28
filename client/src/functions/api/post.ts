@@ -1,3 +1,11 @@
+/**
+ * 
+ * @param url string, of the needed api endpoint.
+ * @param data object of type any, this data will be used to post.
+ * @returns a promise.
+ * @description makes a post request to the provided url with the provided object.
+ */
+
 async function postData(url: string, data: object): Promise<any> {
   const response: any = await fetch(url, {
     method: "Post",

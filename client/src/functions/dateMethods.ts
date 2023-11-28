@@ -1,10 +1,19 @@
+//An object of different methods that can be used to alter dates.
 const DateMethods = {
    
+	//Returns an array of strings with the names of the months, the first one is left blank so the index corresponds with the month ex. (January is index 1, instead of index 2).
     getAllMonthNames(): string[] {
         let months = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
         return months;
     },
 
+	
+	/**
+	 * 
+	 * @param str string
+	 * @returns string of the month day and year.
+	 * 
+	 */
     getMonthDay(str: string): string {
 
         let months = this.getAllMonthNames();
@@ -30,6 +39,12 @@ const DateMethods = {
 		return addDash;
     },
 
+
+	/**
+	 * 
+	 * @param num number
+	 * @returns string of the month name or undefined.
+	 */
 	getMonthName(num: number): string | undefined {
 		const months = this.getAllMonthNames();
 		const selectedArr = months.slice(num, num + 1);

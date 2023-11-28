@@ -1,39 +1,33 @@
 import React from "react";
 import { AttendantFormLayout } from "../../variables/newAttendantForm.ts";
-import { AttendanceInputs, Attendee, APIResponse } from "../../types/interfaces.ts";
+import { AttendanceInputs, Attendee, APIResponse, EditMemberProps } from "../../types/interfaces.ts";
 import putData from "../../functions/api/put.ts";
 import "../../assets/styles/components/people/editMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-interface EditMemberProps {
-  show: boolean;
-  editUser: Attendee;
-  hideHandler: Function;
-  updateName: Function;
-  updateAge: Function;
-  updateMember: Function;
-  updateActiveStatus: Function;
-  triggerSuccessMessage: Function;
-  updateSuccessMessage: Function;
-}
 
 export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, updateActiveStatus, triggerSuccessMessage, updateSuccessMessage }: EditMemberProps): JSX.Element {
 
+
+  //Used to update the age of the attendant.
   const updateAgeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log("This is the age value", e.target.value);
     updateAge(e.target.value);
   };
 
+
+  //Used to update the member status of the attendant.
   const updateMemberHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    console.log("This is the member value", e.target.value);
     updateMember(e.target.value);
   };
 
+
+  //Used to update active status of the attendant.
   const updateActiveHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     updateActiveStatus(e.target.value);
   }
 
+  //Hides the edit box and reloads the current window location.
   const reloadWindow = (): void => {
     setTimeout((): void  => {
       hideHandler();
@@ -41,12 +35,16 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     }, 3500);
   }
   
+
+  //Confirmation message for a successful edit.
   const editConfirmation = (): void => {
     updateSuccessMessage(`${editUser.firstName} ${editUser.lastName} has been updated.`);
     triggerSuccessMessage();
     reloadWindow();
   }
 
+
+  //Submit handler for updating an attendant.
   const updateSubmitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     putData("/update-attendant", editUser).then((data: APIResponse): void => {
@@ -58,6 +56,8 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     });
   };
 
+
+  //Array of JSX elements fills in the name information for the selected attendant.
   const returnNameFields: JSX.Element[] = AttendantFormLayout.name.map((x: AttendanceInputs, y: number): JSX.Element => {
     const key = x.id as string;
     return (
@@ -80,6 +80,8 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     );
   });
 
+
+  //Returns the age fields for the form.
   const returnAgeFields: JSX.Element[] = AttendantFormLayout.ageGroup.map((x: AttendanceInputs, y: number): JSX.Element => {
     if (editUser.age === x.value) {
       return (
@@ -120,6 +122,7 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
   });
 
 
+  //Fills in the attendant's active status in the form.
   const returnActiveStatus: JSX.Element[] = AttendantFormLayout.active.map((x: AttendanceInputs, y: number) => {
     if (editUser.active === parseInt(x.value)) {
       return (
@@ -159,6 +162,8 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     }
   });
 
+
+  //Returns the member fields for the form.
   const returnMemberFields: JSX.Element[] = AttendantFormLayout.memberStatus.map((x: AttendanceInputs, y: number) => {
     if (editUser.memberType === x.value) {
       return (

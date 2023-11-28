@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Attendee } from "../../types/interfaces.ts";
+import { Attendee, DisplayAttendanceProps } from "../../types/interfaces.ts";
 import "../../assets/styles/components/search/displayAttendance.scss";
 import MathMethods from "../../functions/math.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { ValuesAndClass } from "../../types/interfaces.ts";
 
-interface DisplayAttendanceProps {
-	sheetData: Attendee[];
-	sheetTitle: string;
-	presentColumn: string;
-}
+
 
 export default function DisplayAttendance({ sheetData, sheetTitle, presentColumn }: DisplayAttendanceProps): JSX.Element {
 	//Get the current screen size.

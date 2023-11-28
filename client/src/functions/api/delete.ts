@@ -1,3 +1,11 @@
+/**
+ * 
+ * @param url string
+ * @returns a Promise with a type of any
+ * @description delete method to make a delete request.
+ */
+
+
 async function deleteData(url: string): Promise<any> {
     const response: any = await fetch(url, {
       method: "DELETE",

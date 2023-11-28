@@ -353,6 +353,31 @@ export interface DataGraphProps {
     year: string;
 }
 
+export interface EditMemberProps {
+  show: boolean;
+  editUser: Attendee;
+  hideHandler: Function;
+  updateName: Function;
+  updateAge: Function;
+  updateMember: Function;
+  updateActiveStatus: Function;
+  triggerSuccessMessage: Function;
+  updateSuccessMessage: Function;
+}
+
+export interface AttendanceDropDownProps {
+  attendanceSheets?: DBAttendanceTitle[];
+  show: boolean;
+  changeHandler: Function;
+  allTitles: DBAttendanceTitle[];
+}
+
+export interface DisplayAttendanceProps {
+	sheetData: Attendee[];
+	sheetTitle: string;
+	presentColumn: string;
+}
+
 
 
 

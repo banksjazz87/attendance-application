@@ -8,13 +8,12 @@ import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
-import { Bool } from "../../src/types/types.ts";
 import { Group, APIAttendanceSheet, Attendee, DBPartialAttendanceFields, PartialGroupFields, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
 import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
 
 export default function Attendance(): JSX.Element {
-	const [displayAttendance, setDisplayAttendance] = useState<Bool>(false);
+	const [displayAttendance, setDisplayAttendance] = useState<boolean>(false);
 	const [selectedGroup, setSelectedGroup] = useState<PartialGroupFields[]>([{ name: "", displayName: "" }]);
 	const [selectedAttendance, setSelectedAttendance] = useState<DBPartialAttendanceFields>({
 		title: "",

@@ -20,6 +20,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
   const [newAttendant, setNewAttendant] = useState<Attendee>(initAttendants);
 
+  //Get all of the attendants.
   useEffect((): void => {
     fetch("/all-attendants")
       .then((data) => data.json())
@@ -28,18 +29,26 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
       });
   }, []);
 
+
+  //Set a new attendant's name.
   const nameHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewAttendant({ ...newAttendant, [e.target.id]: e.target.value });
   };
 
+
+  //Set a new attendant's age.
   const radioAgeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewAttendant({ ...newAttendant, age: e.target.value });
   };
 
+
+  //Set a new attendant's member type.
   const radioMemberChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewAttendant({ ...newAttendant, memberType: e.target.value });
   };
 
+
+  //Returns an array of a match, or null.  If there's a match, the match is returned.
   const nameMatches = allAttendants.filter((x: Attendee, y: number): Attendee | null => {
     if (x.firstName.toLowerCase() === newAttendant.firstName.toLowerCase() && x.lastName.toLowerCase() === newAttendant.lastName.toLowerCase()) {
       return x;
@@ -48,6 +57,8 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     }
   });
 
+
+  //Display the name fields for the new member.
   const nameFields: JSX.Element[] = AttendantFormLayout.name.map((x: AttendanceInputs, y: number): JSX.Element => {
     return (
       <div
@@ -66,6 +77,8 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     );
   });
 
+
+  //Display the age fields for the new member.
   const ageFields: JSX.Element[] = AttendantFormLayout.ageGroup.map((x: AttendanceInputs, y: number): JSX.Element => {
     return (
       <div
@@ -85,6 +98,8 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     );
   });
 
+
+  //Display the member fields for the new member.
   const memberFields: JSX.Element[] = AttendantFormLayout.memberStatus.map((x: AttendanceInputs, y: number): JSX.Element => {
     return (
       <div
@@ -104,6 +119,13 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     );
   });
 
+
+  /**
+   * 
+   * @param obj object type of UpdateAttendant
+   * @returns void
+   * @description make a post request to add a new member.
+   */
   const postNewAttendant = (obj: UpdateAttendant): void => {
     postData("/attendance/insert/attendant", obj).then((data: APIResponse): void => {
       if (data.message === "success") {
@@ -116,6 +138,13 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     });
   }
 
+
+  /**
+   * 
+   * @param obj object type of APIAttendanceSheet
+   * @returns void
+   * @description checks for a success message and updates the UI accordingly.
+   */
   const addNewAttendantToSheet = (obj: APIAttendanceSheet): void => {
    if (obj && obj.message === "success") {
       let neededData: UpdateAttendant = {
@@ -134,7 +163,13 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
   };
 
 
-  const getAttendantDataAndSetIt = (obj: APIResponse): Promise<APIAttendanceSheet> | void => {
+  /**
+   * 
+   * @param obj object type of APIResponse
+   * @returns void
+   * @description adds the new attendant to the currently displayed sheet.
+   */
+  const getAttendantDataAndSetIt = (obj: APIResponse): void => {
     if (obj.message === "Success") {
       fetch(`/get-attendant/${newAttendant.firstName}/${newAttendant.lastName}`)
         .then((data: Response): Promise<APIAttendanceSheet> => {
@@ -148,6 +183,13 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     }
   };
 
+
+  /**
+   * 
+   * @param e Form submit event
+   * @returns void
+   * @description Checks to see if the attendant already exists and alerts if that's the case, otherwise gets the information from the database and updates the UI.
+   */
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
     if (nameMatches.length > 0) {
