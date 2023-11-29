@@ -9,7 +9,7 @@ import postData from "../../functions/api/post.ts";
 import { APIResponse, FormProps, APINewTable, NewAttendance, ApiResponse } from "../../types/interfaces.ts";
 import "../../assets/styles/components/newAttendance/form.scss";
 
-export default function Form({ show, formToShow, updateLoadingStatus }: FormProps): JSX.Element {
+export default function Form({ show, formToShow, startLoading, stopLoading }: FormProps): JSX.Element {
 	const navigate = useNavigate();
 
 	const [form, setForm] = useState<NewAttendance>({
@@ -165,17 +165,20 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 	 */
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
-		updateLoadingStatus();
+		startLoading();
 
 		if (formToShow === "Existing" && searchForGroup(form.groupDisplayName, allGroups)) {
 			postData("/new-attendance/create", form).then((data: APINewTable): void => {
 				updateSessionStorage();
-				updateLoadingStatus();
+				stopLoading();
 				navigate("/attendance", { replace: true });
 			});
 		} else if (formToShow === "New" && searchForGroup(form.groupDisplayName, allGroups)) {
 			alert("This group has already been created.");
 			window.location.reload();
+		} else if (formToShow === "New" && form.groupDisplayName.length === 0) {
+			stopLoading();
+			alert('Please create a group name.');
 		} else {
 			postData("/new-group", form).then((data: ApiResponse): void => {
 				if (data.message === "success") {
@@ -185,10 +188,10 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 								if (data.message === "success") {
 									updateSessionStorage();
 									neededAttendants(data);
-									updateLoadingStatus();
+									stopLoading();
 									navigate("/attendance", { replace: true });
 								} else {
-									updateLoadingStatus();
+									stopLoading();
 									alert("Error with the /new-attendance/create");
 								}
 							});
@@ -197,7 +200,7 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 						}
 					});
 				} else {
-					updateLoadingStatus();
+					stopLoading();
 					alert(`Failure with new-group ${data.data}`);
 				}
 			});
@@ -208,7 +211,6 @@ export default function Form({ show, formToShow, updateLoadingStatus }: FormProp
 		<form
 			id="new_attendance_form"
 			method="post"
-			action="/insert/new-attendance"
 			style={show ? { display: "" } : { display: "none" }}
 			onSubmit={submitHandler}
 		>

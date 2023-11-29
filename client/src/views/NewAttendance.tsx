@@ -41,7 +41,8 @@ export default function NewAttendance() {
         <Form
           show={showForm}
           formToShow={formOption.formNeeded}
-          updateLoadingStatus={() => isLoading ? setIsLoading(false) : setIsLoading(true)}
+          startLoading={() => setIsLoading(true)}
+          stopLoading={() => setIsLoading(false)}
         />
       </div>
       <LoadingBar 

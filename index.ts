@@ -165,35 +165,6 @@ app.post("/new-attendance/insert/select-attendants", (req: Request, res: Respons
     });
 });
 
-app.post("/insert/new-attendance", (req: Request, res: Response) => {
-  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-
-  let tableName = Db.createTableName(req.body.group + " " + req.body.title);
-  let columnNames = 'title, displayTitle, parentGroup';
-  let neededValues = [tableName, req.body.title, req.body.group];
-
-  console.log(`${tableName} ${columnNames} ${neededValues}`);
-
-  // Db.insert('All_Attendance', columnNames, neededValues)
-  //   .then((data: string[]): void => {
-  //     console.log(data);
-  //     res.send({ message: "success", data: data})
-  //   })
-  //   .catch((err: SQLResponse): void => {
-  //     console.log('err', err);
-  //     res.send({ message: "failure", error: Db.getSqlError(err)})
-  //   });
-  // Db.createGroupTable(tableName)
-  //   .then((data: string[]): void => {
-  //     console.log(data);
-  //     res.send({ message: "success", data: data });
-  //   })
-  //   .catch((err: SQLResponse): void => {
-  //     console.log("err", err);
-  //     res.send({ message: "failure", error: Db.getSqlError(err) });
-  //   });
-});
-
 app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
@@ -247,9 +218,6 @@ app.post("/new-attendant", (req: Request, res: Response) => {
     });
 });
 
-/**
- * New endpoint
- */
 app.post("/new-attendant/add-to-table/", (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 });
@@ -296,21 +264,6 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
       res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
-
-// app.get("/group-lists/attendance/:listParent", (req: Request, res: Response): void => {
-//   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-
-//   Db.getTable(req.params.listParent, "DESC", "dateCreated")
-//     .then((data: string[]): void => {
-//       console.log(data);
-//       res.send({ message: "success", data: data });
-//     })
-//     .catch((err: SQLResponse): void => {
-//       console.log("Failure", err);
-//       res.send({ message: "Failure", error: Db.getSqlError(err) });
-//     });
-// });
-
 
 app.get('/group-lists/attendance/:group', (req: Request, res: Response): void => {
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
@@ -486,7 +439,9 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 });
 
 app.put('/attendance-total/update/', (req: Request, res: Response): void => {
-  let tableName = req.body.title;
+  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+  
+  let tableName = Db.createTableName(req.body.title);
   let groupValue = req.body.group;
 
   let totals: TotalSentSum = {
@@ -496,8 +451,6 @@ app.put('/attendance-total/update/', (req: Request, res: Response): void => {
     members: req.body.data.totalMembers,
     visitors: req.body.data.totalVisitors
   }
-
-  const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   Db.updateTotalTable(tableName, groupValue, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
     .then((data: string[]): void => {
