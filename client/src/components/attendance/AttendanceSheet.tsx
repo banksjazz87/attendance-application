@@ -94,6 +94,8 @@ export default function AttendanceSheet({
 		}
 
 		setSumOfPresent({ ...sumOfPresent, totalChildren: child, totalYouth: youth, totalAdults: adult, totalMembers: member, totalVisitors: visitor });
+
+		console.log(sumOfPresent);
 	}, [memberData]);
 
 	const displaySuccessMessage = (str: string): void => {

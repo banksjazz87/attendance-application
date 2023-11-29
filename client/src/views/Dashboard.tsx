@@ -31,7 +31,6 @@ export default function Dashboard() {
 				})
 				.then((final: YearsDataResponse): void => {
 					if (final.message === "success") {
-						console.log(final.data);
 						setDataYears(final.data);
 						setSearchYears(false);
 					} else {

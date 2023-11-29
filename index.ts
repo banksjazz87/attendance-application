@@ -7,8 +7,6 @@ import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
 import { SQLResponse } from "./interfaces/interfaces.ts";
 import {TotalSentSum} from "./client/src/types/interfaces.ts";
-import queryString from "querystring";
-import url from "url";
 
 dotenv.config();
 
