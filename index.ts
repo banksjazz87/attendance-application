@@ -387,10 +387,10 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
   const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
   const neededTable: string = req.body.table;
-  const allColumns: string = "id, firstName, lastName, age, memberType, present";
-  const allData: string[] = [req.body.attendantId, req.body.firstName, req.body.lastName, req.body.age, req.body.memberType, req.body.presentValue];
+  const allColumns: string = `id, firstName, lastName, age, memberType, ${req.body.attendanceColumn}`;
+  const allData: string[] = [req.body.attendantId, req.body.firstName, req.body.lastName, req.body.age, req.body.memberType, 1];
 
-  Db.insert(req.body.table, allColumns, allData)
+  Db.insert(neededTable, allColumns, allData)
     .then((data: string[]): void => {
       console.log("Success", data);
       res.send({ message: "success", data: data });

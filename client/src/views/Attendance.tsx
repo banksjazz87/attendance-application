@@ -65,10 +65,10 @@ export default function Attendance(): JSX.Element {
 
 	//Pulls data from the session storage for the selected parent to get the attendance title, and checks for a partial name search in the First or Last Name search box.
 	useEffect((): void => {
-		const parentTable = JSON.parse(sessionStorage.selectedParent);
-		const tableTitle = `${parentTable.name}_attendance`;
+		if (partialName.length > 0 && sessionStorage.selectedParent) {
+			const parentTable = JSON.parse(sessionStorage.selectedParent);
+			const tableTitle = `${parentTable.name}_attendance`;
 
-		if (partialName.length > 0) {
 			fetch(`/people/search/${tableTitle}/${partialName}`)
 				.then((data: Response): Promise<APIAttendanceSheet> => {
 					return data.json();
@@ -162,7 +162,7 @@ export default function Attendance(): JSX.Element {
 					};
 
 					const displayedJSON = JSON.stringify(displayedSheet);
-					sessionStorage.setItem("selectedTable", displayedJSON);
+					sessionStorage.setItem("selectedAttendance", displayedJSON);
 
 					// Set the session storage for the selected group
 					const selectedParent: PartialGroupFields = {
@@ -262,7 +262,8 @@ export default function Attendance(): JSX.Element {
 					updateSuccessMessage={setNewSuccessMessage}
 				/>
 				<NewMember
-					currentTable={selectedAttendance.title}
+					currentTable={`${selectedGroup[0].name}_attendance`}
+					currentAttendanceColumn={selectedAttendance.title}
 					show={showAddNewMember}
 					showHandler={showNewMemberHandler}
 					masterTable={false}

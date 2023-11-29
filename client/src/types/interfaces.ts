@@ -253,6 +253,7 @@ export interface NewMemberProps {
   masterTable: boolean;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
+  currentAttendanceColumn?: string;
 
 }
 

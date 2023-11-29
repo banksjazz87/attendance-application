@@ -8,7 +8,7 @@ import "../../assets/styles/components/people/newMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -154,7 +154,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
         attendantId: obj.data[0].id,
         memberType: obj.data[0].memberType,
         table: currentTable,
-        presentValue: 0,
+        attendanceColumn: currentAttendanceColumn
       }
       postNewAttendant(neededData);
     } else {

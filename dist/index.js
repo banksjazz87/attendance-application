@@ -327,9 +327,9 @@ app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
 app.post("/attendance/insert/attendant", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const neededTable = req.body.table;
-    const allColumns = "id, firstName, lastName, age, memberType, present";
-    const allData = [req.body.attendantId, req.body.firstName, req.body.lastName, req.body.age, req.body.memberType, req.body.presentValue];
-    Db.insert(req.body.table, allColumns, allData)
+    const allColumns = `id, firstName, lastName, age, memberType, ${req.body.attendanceColumn}`;
+    const allData = [req.body.attendantId, req.body.firstName, req.body.lastName, req.body.age, req.body.memberType, 1];
+    Db.insert(neededTable, allColumns, allData)
         .then((data) => {
         console.log("Success", data);
         res.send({ message: "success", data: data });
