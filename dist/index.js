@@ -20,7 +20,6 @@ app.use((0, cookie_parser_1.default)());
 const port = process.env.PORT || 3900;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
-    console.log("testing heree");
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
 const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/"];
@@ -89,7 +88,7 @@ app.post("/new-attendance/create", (req, res) => {
     const fieldValues = [Db.createTableName(attendanceColumnName), req.body.title, req.body.group, Db.createTableName(req.body.group)];
     const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
     const totalFieldValues = [Db.createTableName(req.body.group), req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
-    Promise.all([Db.insert('all_attendance', columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
+    Promise.all([Db.insert("all_attendance", columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
         .then((data) => {
         console.log("Success All", data);
         res.send({ message: "success", data: data, newTable: tableName });
@@ -106,12 +105,11 @@ app.post("/new-attendance/create", (req, res) => {
         });
     });
 });
-app.post('/new-attendance/create/master/table', (req, res) => {
+app.post("/new-attendance/create/master/table", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     let groupAttendance = req.body.group + " " + "attendance";
     let tableName = Db.createTableName(groupAttendance);
-    Db.createNewAttendance(tableName)
-        .then((data) => {
+    Db.createNewAttendance(tableName).then((data) => {
         console.log("Success", data);
         res.send({ message: "success", data: data });
     });
@@ -227,7 +225,7 @@ app.put("/update-attendant", (req, res) => {
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
-app.get('/group-lists/attendance/:group', (req, res) => {
+app.get("/group-lists/attendance/:group", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const groupValue = Db.createTableName(req.params.group);
     Db.getAttendanceByGroupName(groupValue, "dateCreated", "desc")
@@ -236,7 +234,7 @@ app.get('/group-lists/attendance/:group', (req, res) => {
         res.send({ message: "success", data: data });
     })
         .catch((err) => {
-        console.log('Failureeee', err);
+        console.log("Failureeee", err);
         res.send({ message: "Failure", error: Db.getSqlError(err) });
     });
 });
@@ -252,11 +250,11 @@ app.get("/attendance/get-list/:listName", (req, res) => {
         res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });
-app.get('/attendance/get-list-by-name/:tableName/:colName', (req, res) => {
+app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const tableName = req.params.tableName;
     const columnName = req.params.colName;
-    Db.getTableByColumn(tableName, 'ASC', columnName, 'lastName')
+    Db.getTableByColumn(tableName, "ASC", columnName, "lastName")
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
@@ -309,14 +307,14 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
         .then((data) => {
         res.send({
             message: `Success, ${first} ${last} has been removed from the ${table} table.`,
-            data: data
+            data: data,
         });
         console.log(data);
     })
         .catch((err) => {
         res.send({
             message: "failure",
-            data: Db.getSqlError(err)
+            data: Db.getSqlError(err),
         });
     });
 });
@@ -374,7 +372,7 @@ app.get("/people/search/:table/:partialName", (req, res) => {
         console.log(err);
     });
 });
-app.put('/attendance-total/update/', (req, res) => {
+app.put("/attendance-total/update/", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     let tableName = Db.createTableName(req.body.title);
     let groupValue = req.body.group;
@@ -383,20 +381,20 @@ app.put('/attendance-total/update/', (req, res) => {
         youth: req.body.data.totalYouth,
         adults: req.body.data.totalAdults,
         members: req.body.data.totalMembers,
-        visitors: req.body.data.totalVisitors
+        visitors: req.body.data.totalVisitors,
     };
     Db.updateTotalTable(tableName, groupValue, totals.children, totals.youth, totals.adults, totals.members, totals.visitors)
         .then((data) => {
         res.send({
             message: "success",
-            data: data
+            data: data,
         });
         console.log(data);
     })
         .catch((err) => {
         res.send({
             message: "failure",
-            error: Db.getSqlError(err)
+            error: Db.getSqlError(err),
         });
         console.log(err);
     });
@@ -421,25 +419,25 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
         console.log(err);
     });
 });
-app.get('/group-years/:groupName', (req, res) => {
+app.get("/group-years/:groupName", (req, res) => {
     const group = req.params.groupName;
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     Db.getDistinctStatisticYears(group)
         .then((data) => {
         res.send({
             message: "success",
-            data: data
+            data: data,
         });
     })
         .catch((err) => {
         res.send({
             message: "failure",
-            error: Db.getSqlError(err)
+            error: Db.getSqlError(err),
         });
-        console.log('Error', err);
+        console.log("Error", err);
     });
 });
-app.get('/group-months/:yearDate/:groupName', (req, res) => {
+app.get("/group-months/:yearDate/:groupName", (req, res) => {
     const year = req.params.yearDate;
     const group = req.params.groupName;
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
@@ -447,14 +445,14 @@ app.get('/group-months/:yearDate/:groupName', (req, res) => {
         .then((data) => {
         res.send({
             message: "success",
-            data: data
+            data: data,
         });
     })
         .catch((err) => {
         res.send({
             message: "failure",
-            error: Db.getSqlError(err)
+            error: Db.getSqlError(err),
         });
-        console.log('Error', err);
+        console.log("Error", err);
     });
 });
