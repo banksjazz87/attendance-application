@@ -232,7 +232,6 @@ export interface DeleteResponse {
 export interface FormProps {
   show: boolean;
   formToShow: "New" | "Existing";
-  // updateLoadingStatus: Function;
   startLoading: Function;
   stopLoading: Function;
 }
