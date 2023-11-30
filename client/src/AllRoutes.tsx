@@ -1,5 +1,3 @@
-import React from "react";
-//import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./views/Login.tsx";
 import Attendance from "./views/Attendance.tsx";
