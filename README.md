@@ -3,7 +3,7 @@
 # What Does It Do?
 
 ### `Problem`
-Using printed out spreadsheets to take attendance.  This was initially designed for more church to provide an easier way to take attendance, and gather data on the people that are showing up (such as age, and membership status). 
+Using printed out spreadsheets to take attendance.  Having a tedious process in keeping track of members and visitors. 
 
 <br/>
 
@@ -11,10 +11,6 @@ Using printed out spreadsheets to take attendance.  This was initially designed 
 With this attendance application the user can:
 
 - Create a new attendance sheet.
-    - This is done by first creating a group.
-    - If you want to use a group that already exists that's also an option.
-    - A title is automatically assigned to the attendance, using today's date.
-    - If the user would like to use a different title for the attendance sheet, they're able to do that by altering the input field.
 - Ability to create, update, delete, any attendant or attendance sheet.
 - Have access to a dynamic attendance sheet, that you can add and remove from on the day of the event.
 - Have access to all of the statistics gathered from the attendance, this is displayed with a bar graph.
@@ -44,27 +40,14 @@ Provides the user the ability to select the most recent attendance sheet for a p
 
 <br/>
 
-### `Foodbank List Dashboard`
-Gives the user three different options.
-
-    -Create Foodbank List
-    -Search Foodbank Lists
-    -Current Foodbank List
+### `Search Page`
+Gives the user the ability to view past attendance sheets.  This page is strictly read only.
 
 <br/>
 
-### `Create Foodbank List Page`
-Gives the user the ability to create a new list and add applicants to the list.  This page automatically saves, so there is no need to worry about saving.
+### `People Page`
+Gives the user the ability to search through all of the attendants' information and edit, update, or delete it.  This page is layed out with pagination and a search bar to make searching for attendants quicker.
 
-<br/>
-
-### `Search Foodbank Lists Page`
-The user is provided the chance to search past lists and delete them if they so desire.
-
-<br/>
-
-### `Current Foodbank List Page`
-This is a dynamic attendance sheet that is to be used on the day of the foodbank, or if you ever need to add applicants to the current list.
 
 <br/>
 <br/>
@@ -87,12 +70,16 @@ Once Node is installed.  In the project directory , you will need to install all
 ### `Change Directory`
 You will need to enter into the correct directory in your terminal.
 
-    cd my-app
+    cd client
+
+Open another terminal and cd into the root of the project.
+
+    cd attendanceApplication
 
 <br/>
 
 ### `Development Mode` 
-The development mode will run on [http://localhost:3000](http://localhost:3000).  Development mode can be started by running the command.  (Keep in mind, none of the app will run completely in development mode, as most of it relies on being connected to the server).
+The development mode will run on [http://localhost:3000](http://localhost:3000).  Development mode can be started by running the command.  (Keep in mind, the app will run completely in development mode, as most of it relies on being connected to the server).
 
     npm run start
 
@@ -101,10 +88,15 @@ The development mode will run on [http://localhost:3000](http://localhost:3000).
 <br/>
 
 ### `Production Mode`
-The server will run on [localhost:4000](localhost:4000).  The entire application can be ran locally by entering the following commands.
+The server will run on [localhost:3900](localhost:3900).  The entire application can be ran locally by entering the following commands.
+    - In the client terminal run the command:
 
     npm run build
-    npm run server
+
+    -  In the root terminal run the commands:
+
+    npm run build
+    npm run start
 <br/>
 <br/>
 
@@ -114,12 +106,19 @@ The server will run on [localhost:4000](localhost:4000).  The entire application
 - React Router
 - Node
 - Express
+- DotEnv
+- Cors
+- Cookie Parser
+- React Chart JS 2
+- Font Awesome
+- Recharts
+- Typescript
 - Mysql
 
 <br/>
 <br/>
 
 #  Summary
-This application was created largely for my wife.  She is in charge of running the logistics of the food bank at our church, and I thought it was crazy that she was still doing everything with pen and paper.  I built this app to streamline the foodbank application process, and simplify this aspect of her life.  I hope that others can benefit from it as well.
+This application was created largely for my church.  We needed to update and get away from using pen and paper for taking attendance.
 
-If you would like to have any fetures added or if you would like to make any, just shoot me a message or a pull request.  Thanks for checking out my food bank app.
+If you would like to have any features added or if you would like to make any, just shoot me a message or a pull request.  Thanks for checking out my attendance app.
