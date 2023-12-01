@@ -1,20 +1,23 @@
-# Food Bank Application
+# Attendance Application
 
 # What Does It Do?
 
 ### `Problem`
-Manually filling out food bank applications, creating food bank attendance lists, and tallying up the number of people that have attended a food bank, is both tedious and time consuming.  
+Using printed out spreadsheets to take attendance.  This was initially designed for more church to provide an easier way to take attendance, and gather data on the people that are showing up (such as age, and membership status). 
 
 <br/>
 
 ### `Solution`
-With this food application the user can:
+With this attendance application the user can:
 
-- Fill out a food bank application.
-- Instantly find out if the applicant qualifies.
-- Create, update and delete food bank lists, and applicants.
+- Create a new attendance sheet.
+    - This is done by first creating a group.
+    - If you want to use a group that already exists that's also an option.
+    - A title is automatically assigned to the attendance, using today's date.
+    - If the user would like to use a different title for the attendance sheet, they're able to do that by altering the input field.
+- Ability to create, update, delete, any attendant or attendance sheet.
 - Have access to a dynamic attendance sheet, that you can add and remove from on the day of the event.
-- Have access to all of the statistics needed for the food bank organization.
+- Have access to all of the statistics gathered from the attendance, this is displayed with a bar graph.
  
 <br/>
 <br/>
@@ -26,18 +29,18 @@ For demo purposes the username is "Demo" and the password is "demo123".
 
 <br/>
 
-### `Dashboard Page`
-The dashboard page supplies the user with all of the statistics from the most recently created foodbank attendance list.
+### `Dashboard`
+The dashboard page supplies the user with all of the statistics from past attendance sheets.  Results can be viewed by selecting a group, followed by a year and month.  This will provide the user with a visual representation of the attendance sheet.
 
 <br/>
 
-### `New Applicant Page`
-Supplies a very simple looking form for the user to fill out.  Upon completing the form the user is notified if the applicant qualifies or not.
+### `New Attendance Page`
+This gives the opportunity to use a group that already exists or create a new one.  An attendance title is automatically assigned to the attendance, using today's date, but this can be altered if so desired.
 
 <br/>
 
-### `Search Page`
-Provides the user the ability to look up an applicant's information and the ability to print the official foodbank form, with the data pre-filled.
+### `Attendance Page`
+Provides the user the ability to select the most recent attendance sheet for a particular group and take attendance with it.
 
 <br/>
 
