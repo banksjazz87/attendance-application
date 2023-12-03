@@ -30,7 +30,7 @@ app.post("/login", (req, res) => {
     if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
         const Db = new databaseMethods_1.DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
         Db.connect();
-        res.cookie("account", "test");
+        res.cookie("account", "demo");
         res.cookie("user", process.env.MYSQL_USER, {
             httpOnly: true,
             sameSite: "lax",

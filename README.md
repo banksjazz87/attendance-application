@@ -21,7 +21,7 @@ With this attendance application the user can:
 # Features
 
 ### `Login Page`
-For demo purposes the username is "Demo" and the password is "demo123".
+For demo purposes the username is "demo" and the password is "Demo123".
 
 <br/>
 
