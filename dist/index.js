@@ -30,7 +30,7 @@ app.post("/login", (req, res) => {
     if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
         const Db = new databaseMethods_1.DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
         Db.connect();
-        res.cookie("account", "demo");
+        res.cookie("account", "Tester");
         res.cookie("user", process.env.MYSQL_USER, {
             httpOnly: true,
             sameSite: "lax",
@@ -44,6 +44,29 @@ app.post("/login", (req, res) => {
             sameSite: "lax",
         });
         res.cookie("password", process.env.MYSQL_PASSWORD, {
+            httpOnly: true,
+            sameSite: "lax",
+        });
+        res.cookie("loggedIn", true);
+        res.send({ message: "valid" });
+    }
+    else if (req.body.name === process.env.HEROKU_USER && req.body.password === process.env.HEROKU_PASSWORD) {
+        const Db = new databaseMethods_1.DBMethods(process.env.CLEARDB_HOST, process.env.CLEARDB_USER, process.env.CLEARDB_NAME, process.env.CLEARDB_PASSWORD);
+        Db.connect();
+        res.cookie("account", "Demo");
+        res.cookie("user", process.env.CLEARDB_USER, {
+            httpOnly: true,
+            sameSite: "lax",
+        });
+        res.cookie("host", process.env.CLEARDB_HOST, {
+            httpOnly: true,
+            sameSite: "lax",
+        });
+        res.cookie("database", process.env.CLEARDB_NAME, {
+            httpOnly: true,
+            sameSite: "lax",
+        });
+        res.cookie("password", process.env.CLEARDB_PASSWORD, {
             httpOnly: true,
             sameSite: "lax",
         });
