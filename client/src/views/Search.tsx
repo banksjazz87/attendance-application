@@ -34,14 +34,14 @@ export default function Search() {
 	 * @returns number or void
 	 * @description returns the index of the selected group.
 	 */
-	const returnIndexOfSelected = (arr: Group[], value: string): number | void => {
-		let index = 0;
+	const returnIndexOfSelected = (arr: Group[], value: string): number => {
+		let index = -1;
 		for (let i = 0; i < arr.length; i++) {
 			if (arr[i].displayName === value) {
 				index = i;
-				return index;
 			}
 		}
+		return index;
 	};
 
 
@@ -54,15 +54,15 @@ export default function Search() {
 	 */
 	const dropDownChangeHandler = (arr: Group[], value: string): void => {
 		let index = returnIndexOfSelected(arr, value);
-		if (index) {
+		if (index > -1) {
 			setGroupTable({
 				...groupTable,
 				name: arr[index]["name"],
 				age_group: arr[index]["age_group"],
 				displayName: value,
 			});
-			setShowAttendanceDropDown(false);
-		}
+			setShowAttendanceDropDown(false);	
+		} 
 	};
 
 
