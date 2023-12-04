@@ -21,10 +21,10 @@ const port = process.env.PORT || 3900;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-app.use(express_1.default.static(path_1.default.join(__dirname, "/client/build")));
+app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
 const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/"];
 app.get(paths, (req, res) => {
-    res.sendFile(path_1.default.join(__dirname, "/client/build", "index.html"));
+    res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
 });
 app.post("/login", (req, res) => {
     if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
