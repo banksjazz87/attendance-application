@@ -1,1 +1,1 @@
-web: cd .. npm run build cd attendanceApplication cd client npm run build npm run start
+web: npm run start
