@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people/"];
 
 app.get(paths, (req: Request, res: Response) => {
-	res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+	res.sendFile(path.join(__dirname, "client/build", "index.html"));
 });
 
 app.post("/login", (req: Request, res: Response): any => {
