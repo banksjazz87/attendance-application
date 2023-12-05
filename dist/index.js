@@ -98,6 +98,7 @@ app.get("/groups", (req, res) => {
         res.send({ message: "success", data: data });
     })
         .catch((err) => {
+        console.log(err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });

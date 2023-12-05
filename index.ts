@@ -83,6 +83,7 @@ app.post("/login", (req: Request, res: Response): any => {
 		res.cookie("loggedIn", true);
 		res.send({ message: "valid" });
 
+
 	} else {
 		res.send({ message: "invalid" });
 	}
@@ -113,6 +114,7 @@ app.get("/groups", (req: Request, res: Response): void => {
 			res.send({ message: "success", data: data });
 		})
 		.catch((err: SQLResponse): void => {
+			console.log(err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
 		});
 });
