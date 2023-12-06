@@ -56,6 +56,7 @@ app.post("/login", (req: Request, res: Response): any => {
 		});
 		res.cookie("loggedIn", true);
 		res.send({ message: "valid" });
+		Db.endDb();
 
 	} else if (req.body.name === process.env.HEROKU_USER && req.body.password === process.env.HEROKU_PASSWORD) {
 
@@ -83,6 +84,8 @@ app.post("/login", (req: Request, res: Response): any => {
 		res.cookie("loggedIn", true);
 		res.send({ message: "valid" });
 
+		Db.endDb();
+
 
 	} else {
 		res.send({ message: "invalid" });
@@ -97,11 +100,14 @@ app.post("/new-group", (req: Request, res: Response) => {
 
 	Db.insert("group_names", dbColumns, dbValues)
 		.then((data: string[]): void => {
+			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log(Db.getSqlError(err));
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -112,10 +118,12 @@ app.get("/groups", (req: Request, res: Response): void => {
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log(err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -134,8 +142,9 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 
 	Promise.all([Db.insert("all_attendance", columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
 		.then((data: [string[], string[], string[]]): void => {
-			console.log("Success All", data);
+			console.log(data);
 			res.send({ message: "success", data: data, newTable: tableName });
+			Db.endDb();
 		})
 		.catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
 			console.log("Failure Alllll", err);
@@ -147,6 +156,7 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 					Db.getSqlError(err[2]);
 				},
 			});
+			Db.endDb();
 		});
 });
 
@@ -157,8 +167,9 @@ app.post("/new-attendance/create/master/table", (req: Request, res: Response): v
 	let tableName = Db.createTableName(groupAttendance);
 
 	Db.createNewAttendance(tableName).then((data: string[]): void => {
-		console.log("Success", data);
+		console.log(data);
 		res.send({ message: "success", data: data });
+		Db.endDb();
 	});
 });
 
@@ -167,12 +178,14 @@ app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
 
 	Db.addAllActiveApplicants(req.body.createdTableName)
 		.then((data: string[]): void => {
-			console.log("success", data);
+			console.log(data);
 			res.send({ message: "success" });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("failure", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -184,12 +197,14 @@ app.post("/new-attendance/insert/select-attendants", (req: Request, res: Respons
 
 	Db.addSelectApplicants(tableName, neededAge)
 		.then((data: string[]): void => {
-			console.log("success", data);
+			console.log(data);
 			res.send({ message: "success" });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("failure", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -204,6 +219,7 @@ app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
 		.then((data: [string[], string[]]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: [SQLResponse, SQLResponse]): void => {
 			console.log("err", err);
@@ -213,6 +229,7 @@ app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
 					Db.getSqlError(err[0]), Db.getSqlError(err[1]);
 				},
 			});
+			Db.endDb();
 		});
 });
 
@@ -223,10 +240,12 @@ app.get("/all-attendants", (req: Request, res: Response) => {
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "Success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log(err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -239,28 +258,29 @@ app.post("/new-attendant", (req: Request, res: Response) => {
 	Db.insert("Attendants", neededColumns, neededValues)
 		.then((data: string[]): void => {
 			res.send({ message: "Success", data: data });
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Error", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
-app.post("/new-attendant/add-to-table/", (req: Request, res: Response): void => {
-	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-});
 
 app.get("/get-attendant/:firstName/:lastName", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
 	Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
 		.then((data: string[]): void => {
-			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("FAILURE", err);
 			res.send({ message: "failure", data: err });
+			Db.endDb();
 		});
 });
 
@@ -275,10 +295,13 @@ app.delete("/remove-person/:firstName/:lastName/:id", (req: Request, res: Respon
 			res.send({
 				message: `Success, ${req.params.firstName} ${req.params.lastName} has been deleted`,
 			});
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("ERRRRORRRR", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -287,9 +310,13 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
 	Db.updatePerson("Attendants", req.body)
 		.then((data: string[]): void => {
 			res.send({ message: "Success", data: data });
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({ message: "failure", error: Db.getSqlError(err) });
+			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -301,10 +328,12 @@ app.get("/group-lists/attendance/:group", (req: Request, res: Response): void =>
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Failureeee", err);
 			res.send({ message: "Failure", error: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -314,10 +343,12 @@ app.get("/attendance/get-list/:listName", (req: Request, res: Response): void =>
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("there was an error", err);
 			res.send({ message: "failure", data: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -330,17 +361,17 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req: Request, res: 
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("there was an error", err);
 			res.send({ message: "failure", data: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
 app.put("/attendance/update-table/:columnName/:presentValue", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-
-	console.log(req.body);
 
 	const neededTable = req.body.table;
 	const neededId = req.body.attendantId;
@@ -352,10 +383,12 @@ app.put("/attendance/update-table/:columnName/:presentValue", (req: Request, res
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("FAILURE", err);
 			res.send({ message: "Failure", data: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -370,10 +403,12 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
 		.then((data: string[]): void => {
 			console.log("Success", data);
 			res.send({ message: "success", data: data });
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Errorr inserting attendant", err);
 			res.send({ message: "failure", data: Db.getSqlError(err) });
+			Db.endDb();
 		});
 });
 
@@ -392,12 +427,15 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
 				data: data,
 			});
 			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
 				data: Db.getSqlError(err),
 			});
+			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -410,12 +448,16 @@ app.get("/row-count/:tableName", (req: Request, res: Response): void => {
 				message: "success",
 				data: data,
 			});
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
 				data: Db.getSqlError(err),
 			});
+			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -430,6 +472,7 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
 			});
 
 			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -437,6 +480,7 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
 				data: Db.getSqlError(err),
 			});
 			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -453,6 +497,7 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 				data: data,
 			});
 			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -460,6 +505,7 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 				data: Db.getSqlError(err),
 			});
 			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -484,6 +530,7 @@ app.put("/attendance-total/update/", (req: Request, res: Response): void => {
 				data: data,
 			});
 			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -491,6 +538,7 @@ app.put("/attendance-total/update/", (req: Request, res: Response): void => {
 				error: Db.getSqlError(err),
 			});
 			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -507,6 +555,8 @@ app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): 
 				message: "success",
 				data: data,
 			});
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -514,6 +564,7 @@ app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): 
 				err: Db.getSqlError(err),
 			});
 			console.log(err);
+			Db.endDb();
 		});
 });
 
@@ -527,6 +578,8 @@ app.get("/group-years/:groupName", (req: Request, res: Response): void => {
 				message: "success",
 				data: data,
 			});
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -534,6 +587,7 @@ app.get("/group-years/:groupName", (req: Request, res: Response): void => {
 				error: Db.getSqlError(err),
 			});
 			console.log("Error", err);
+			Db.endDb();
 		});
 });
 
@@ -548,6 +602,8 @@ app.get("/group-months/:yearDate/:groupName", (req: Request, res: Response): voi
 				message: "success",
 				data: data,
 			});
+			console.log(data);
+			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -555,5 +611,6 @@ app.get("/group-months/:yearDate/:groupName", (req: Request, res: Response): voi
 				error: Db.getSqlError(err),
 			});
 			console.log("Error", err);
+			Db.endDb();
 		});
 });
