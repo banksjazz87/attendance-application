@@ -28,8 +28,8 @@ app.get(paths, (req, res) => {
 });
 app.post("/login", (req, res) => {
     if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
-        const Db = new databaseMethods_1.DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
-        Db.connect();
+        // const Db = new DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
+        // Db.connect();
         res.cookie("account", "Tester");
         res.cookie("user", process.env.MYSQL_USER, {
             httpOnly: true,
@@ -49,31 +49,29 @@ app.post("/login", (req, res) => {
         });
         res.cookie("loggedIn", true);
         res.send({ message: "valid" });
-        Db.endDb();
     }
     else if (req.body.name === process.env.HEROKU_USER && req.body.password === process.env.HEROKU_PASSWORD) {
-        const Db = new databaseMethods_1.DBMethods(process.env.CLEARDB_HOST, process.env.CLEARDB_USER, process.env.CLEARDB_NAME, process.env.CLEARDB_PASSWORD);
-        Db.connect();
+        // const Db = new DBMethods(process.env.CLEARDB_HOST, process.env.CLEARDB_USER, process.env.CLEARDB_NAME, process.env.CLEARDB_PASSWORD);
+        // Db.connect();
         res.cookie("account", "Demo");
-        res.cookie("user", process.env.CLEARDB_USER, {
+        res.cookie("user", process.env.JAWSDB_USERNAME, {
             httpOnly: true,
             sameSite: "lax",
         });
-        res.cookie("host", process.env.CLEARDB_HOST, {
+        res.cookie("host", process.env.JAWSDB_HOSTNAME, {
             httpOnly: true,
             sameSite: "lax",
         });
-        res.cookie("database", process.env.CLEARDB_NAME, {
+        res.cookie("database", process.env.JAWSDB_DATABASENAME, {
             httpOnly: true,
             sameSite: "lax",
         });
-        res.cookie("password", process.env.CLEARDB_PASSWORD, {
+        res.cookie("password", process.env.JAWSDB_PASSWORD, {
             httpOnly: true,
             sameSite: "lax",
         });
         res.cookie("loggedIn", true);
         res.send({ message: "valid" });
-        Db.endDb();
     }
     else {
         res.send({ message: "invalid" });
@@ -87,12 +85,10 @@ app.post("/new-group", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log(Db.getSqlError(err));
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.get("/groups", (req, res) => {
@@ -101,12 +97,10 @@ app.get("/groups", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log(err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.post("/new-attendance/create", (req, res) => {
@@ -123,7 +117,6 @@ app.post("/new-attendance/create", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data, newTable: tableName });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("Failure Alllll", err);
@@ -135,7 +128,6 @@ app.post("/new-attendance/create", (req, res) => {
                 Db.getSqlError(err[2]);
             },
         });
-        Db.endDb();
     });
 });
 app.post("/new-attendance/create/master/table", (req, res) => {
@@ -145,7 +137,6 @@ app.post("/new-attendance/create/master/table", (req, res) => {
     Db.createNewAttendance(tableName).then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     });
 });
 app.post("/new-attendance/insert/all", (req, res) => {
@@ -154,12 +145,10 @@ app.post("/new-attendance/insert/all", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success" });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("failure", err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.post("/new-attendance/insert/select-attendants", (req, res) => {
@@ -170,12 +159,10 @@ app.post("/new-attendance/insert/select-attendants", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success" });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("failure", err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.post("/new-group/new-attendance/create", (req, res) => {
@@ -187,7 +174,6 @@ app.post("/new-group/new-attendance/create", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("err", err);
@@ -197,7 +183,6 @@ app.post("/new-group/new-attendance/create", (req, res) => {
                 Db.getSqlError(err[0]), Db.getSqlError(err[1]);
             },
         });
-        Db.endDb();
     });
 });
 app.get("/all-attendants", (req, res) => {
@@ -206,12 +191,10 @@ app.get("/all-attendants", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "Success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log(err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.post("/new-attendant", (req, res) => {
@@ -222,12 +205,10 @@ app.post("/new-attendant", (req, res) => {
         .then((data) => {
         res.send({ message: "Success", data: data });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         console.log("Error", err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.get("/get-attendant/:firstName/:lastName", (req, res) => {
@@ -235,12 +216,10 @@ app.get("/get-attendant/:firstName/:lastName", (req, res) => {
     Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
         .then((data) => {
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("FAILURE", err);
         res.send({ message: "failure", data: err });
-        Db.endDb();
     });
 });
 app.delete("/remove-person/:firstName/:lastName/:id", (req, res) => {
@@ -253,12 +232,10 @@ app.delete("/remove-person/:firstName/:lastName/:id", (req, res) => {
             message: `Success, ${req.params.firstName} ${req.params.lastName} has been deleted`,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         console.log("ERRRRORRRR", err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.put("/update-attendant", (req, res) => {
@@ -267,12 +244,10 @@ app.put("/update-attendant", (req, res) => {
         .then((data) => {
         res.send({ message: "Success", data: data });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({ message: "failure", error: Db.getSqlError(err) });
         console.log(err);
-        Db.endDb();
     });
 });
 app.get("/group-lists/attendance/:group", (req, res) => {
@@ -282,12 +257,10 @@ app.get("/group-lists/attendance/:group", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("Failureeee", err);
         res.send({ message: "Failure", error: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.get("/attendance/get-list/:listName", (req, res) => {
@@ -296,12 +269,10 @@ app.get("/attendance/get-list/:listName", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("there was an error", err);
         res.send({ message: "failure", data: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
@@ -312,12 +283,10 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("there was an error", err);
         res.send({ message: "failure", data: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
@@ -331,12 +300,10 @@ app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("FAILURE", err);
         res.send({ message: "Failure", data: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.post("/attendance/insert/attendant", (req, res) => {
@@ -348,12 +315,10 @@ app.post("/attendance/insert/attendant", (req, res) => {
         .then((data) => {
         console.log("Success", data);
         res.send({ message: "success", data: data });
-        Db.endDb();
     })
         .catch((err) => {
         console.log("Errorr inserting attendant", err);
         res.send({ message: "failure", data: Db.getSqlError(err) });
-        Db.endDb();
     });
 });
 app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (req, res) => {
@@ -369,7 +334,6 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -377,7 +341,6 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
             data: Db.getSqlError(err),
         });
         console.log(err);
-        Db.endDb();
     });
 });
 app.get("/row-count/:tableName", (req, res) => {
@@ -389,7 +352,6 @@ app.get("/row-count/:tableName", (req, res) => {
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -397,7 +359,6 @@ app.get("/row-count/:tableName", (req, res) => {
             data: Db.getSqlError(err),
         });
         console.log(err);
-        Db.endDb();
     });
 });
 app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderValue", (req, res) => {
@@ -409,7 +370,6 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -417,7 +377,6 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
             data: Db.getSqlError(err),
         });
         console.log(err);
-        Db.endDb();
     });
 });
 app.get("/people/search/:table/:partialName", (req, res) => {
@@ -431,7 +390,6 @@ app.get("/people/search/:table/:partialName", (req, res) => {
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -439,7 +397,6 @@ app.get("/people/search/:table/:partialName", (req, res) => {
             data: Db.getSqlError(err),
         });
         console.log(err);
-        Db.endDb();
     });
 });
 app.put("/attendance-total/update/", (req, res) => {
@@ -460,7 +417,6 @@ app.put("/attendance-total/update/", (req, res) => {
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -468,7 +424,6 @@ app.put("/attendance-total/update/", (req, res) => {
             error: Db.getSqlError(err),
         });
         console.log(err);
-        Db.endDb();
     });
 });
 app.get("/group-statistics/:group/:month/:year", (req, res) => {
@@ -483,7 +438,6 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -491,7 +445,6 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
             err: Db.getSqlError(err),
         });
         console.log(err);
-        Db.endDb();
     });
 });
 app.get("/group-years/:groupName", (req, res) => {
@@ -504,7 +457,6 @@ app.get("/group-years/:groupName", (req, res) => {
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -512,7 +464,6 @@ app.get("/group-years/:groupName", (req, res) => {
             error: Db.getSqlError(err),
         });
         console.log("Error", err);
-        Db.endDb();
     });
 });
 app.get("/group-months/:yearDate/:groupName", (req, res) => {
@@ -526,7 +477,6 @@ app.get("/group-months/:yearDate/:groupName", (req, res) => {
             data: data,
         });
         console.log(data);
-        Db.endDb();
     })
         .catch((err) => {
         res.send({
@@ -534,6 +484,5 @@ app.get("/group-months/:yearDate/:groupName", (req, res) => {
             error: Db.getSqlError(err),
         });
         console.log("Error", err);
-        Db.endDb();
     });
 });

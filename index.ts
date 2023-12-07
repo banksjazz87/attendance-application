@@ -32,10 +32,9 @@ app.get(paths, (req: Request, res: Response) => {
 });
 
 app.post("/login", (req: Request, res: Response): any => {
-	
 	if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
-		const Db = new DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
-		Db.connect();
+		// const Db = new DBMethods(process.env.MYSQL_HOST, process.env.MYSQL_USER, process.env.TEST_DB, process.env.MYSQL_PASSWORD);
+		// Db.connect();
 
 		res.cookie("account", "Tester");
 		res.cookie("user", process.env.MYSQL_USER, {
@@ -56,37 +55,30 @@ app.post("/login", (req: Request, res: Response): any => {
 		});
 		res.cookie("loggedIn", true);
 		res.send({ message: "valid" });
-		Db.endDb();
-
 	} else if (req.body.name === process.env.HEROKU_USER && req.body.password === process.env.HEROKU_PASSWORD) {
+		// const Db = new DBMethods(process.env.CLEARDB_HOST, process.env.CLEARDB_USER, process.env.CLEARDB_NAME, process.env.CLEARDB_PASSWORD);
 
-		const Db = new DBMethods(process.env.CLEARDB_HOST, process.env.CLEARDB_USER, process.env.CLEARDB_NAME, process.env.CLEARDB_PASSWORD);
-
-		Db.connect();
+		// Db.connect();
 
 		res.cookie("account", "Demo");
-		res.cookie("user", process.env.CLEARDB_USER, {
+		res.cookie("user", process.env.JAWSDB_USERNAME, {
 			httpOnly: true,
 			sameSite: "lax",
 		});
-		res.cookie("host", process.env.CLEARDB_HOST, {
+		res.cookie("host", process.env.JAWSDB_HOSTNAME, {
 			httpOnly: true,
 			sameSite: "lax",
 		});
-		res.cookie("database", process.env.CLEARDB_NAME, {
+		res.cookie("database", process.env.JAWSDB_DATABASENAME, {
 			httpOnly: true,
 			sameSite: "lax",
 		});
-		res.cookie("password", process.env.CLEARDB_PASSWORD, {
+		res.cookie("password", process.env.JAWSDB_PASSWORD, {
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("loggedIn", true);
 		res.send({ message: "valid" });
-
-		Db.endDb();
-
-
 	} else {
 		res.send({ message: "invalid" });
 	}
@@ -102,12 +94,10 @@ app.post("/new-group", (req: Request, res: Response) => {
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log(Db.getSqlError(err));
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -118,12 +108,10 @@ app.get("/groups", (req: Request, res: Response): void => {
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log(err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -144,7 +132,6 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 		.then((data: [string[], string[], string[]]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data, newTable: tableName });
-			Db.endDb();
 		})
 		.catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
 			console.log("Failure Alllll", err);
@@ -156,7 +143,6 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 					Db.getSqlError(err[2]);
 				},
 			});
-			Db.endDb();
 		});
 });
 
@@ -169,7 +155,6 @@ app.post("/new-attendance/create/master/table", (req: Request, res: Response): v
 	Db.createNewAttendance(tableName).then((data: string[]): void => {
 		console.log(data);
 		res.send({ message: "success", data: data });
-		Db.endDb();
 	});
 });
 
@@ -180,12 +165,10 @@ app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success" });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("failure", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -199,12 +182,10 @@ app.post("/new-attendance/insert/select-attendants", (req: Request, res: Respons
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success" });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("failure", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -219,7 +200,6 @@ app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
 		.then((data: [string[], string[]]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: [SQLResponse, SQLResponse]): void => {
 			console.log("err", err);
@@ -229,7 +209,6 @@ app.post("/new-group/new-attendance/create", (req: Request, res: Response) => {
 					Db.getSqlError(err[0]), Db.getSqlError(err[1]);
 				},
 			});
-			Db.endDb();
 		});
 });
 
@@ -240,12 +219,10 @@ app.get("/all-attendants", (req: Request, res: Response) => {
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "Success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log(err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -259,15 +236,12 @@ app.post("/new-attendant", (req: Request, res: Response) => {
 		.then((data: string[]): void => {
 			res.send({ message: "Success", data: data });
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Error", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
-
 
 app.get("/get-attendant/:firstName/:lastName", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
@@ -275,12 +249,10 @@ app.get("/get-attendant/:firstName/:lastName", (req: Request, res: Response): vo
 	Db.getPerson("Attendants", req.params.firstName, req.params.lastName)
 		.then((data: string[]): void => {
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("FAILURE", err);
 			res.send({ message: "failure", data: err });
-			Db.endDb();
 		});
 });
 
@@ -296,12 +268,10 @@ app.delete("/remove-person/:firstName/:lastName/:id", (req: Request, res: Respon
 				message: `Success, ${req.params.firstName} ${req.params.lastName} has been deleted`,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("ERRRRORRRR", err);
 			res.send({ message: "failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -311,12 +281,10 @@ app.put("/update-attendant", (req: Request, res: Response): void => {
 		.then((data: string[]): void => {
 			res.send({ message: "Success", data: data });
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({ message: "failure", error: Db.getSqlError(err) });
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -328,12 +296,10 @@ app.get("/group-lists/attendance/:group", (req: Request, res: Response): void =>
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Failureeee", err);
 			res.send({ message: "Failure", error: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -343,12 +309,10 @@ app.get("/attendance/get-list/:listName", (req: Request, res: Response): void =>
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("there was an error", err);
 			res.send({ message: "failure", data: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -361,12 +325,10 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req: Request, res: 
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("there was an error", err);
 			res.send({ message: "failure", data: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -383,12 +345,10 @@ app.put("/attendance/update-table/:columnName/:presentValue", (req: Request, res
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("FAILURE", err);
 			res.send({ message: "Failure", data: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -403,12 +363,10 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
 		.then((data: string[]): void => {
 			console.log("Success", data);
 			res.send({ message: "success", data: data });
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Errorr inserting attendant", err);
 			res.send({ message: "failure", data: Db.getSqlError(err) });
-			Db.endDb();
 		});
 });
 
@@ -427,7 +385,6 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -435,7 +392,6 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
 				data: Db.getSqlError(err),
 			});
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -449,7 +405,6 @@ app.get("/row-count/:tableName", (req: Request, res: Response): void => {
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -457,7 +412,6 @@ app.get("/row-count/:tableName", (req: Request, res: Response): void => {
 				data: Db.getSqlError(err),
 			});
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -472,7 +426,6 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
 			});
 
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -480,7 +433,6 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
 				data: Db.getSqlError(err),
 			});
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -497,7 +449,6 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -505,7 +456,6 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 				data: Db.getSqlError(err),
 			});
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -530,7 +480,6 @@ app.put("/attendance-total/update/", (req: Request, res: Response): void => {
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -538,7 +487,6 @@ app.put("/attendance-total/update/", (req: Request, res: Response): void => {
 				error: Db.getSqlError(err),
 			});
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -556,7 +504,6 @@ app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): 
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -564,7 +511,6 @@ app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): 
 				err: Db.getSqlError(err),
 			});
 			console.log(err);
-			Db.endDb();
 		});
 });
 
@@ -579,7 +525,6 @@ app.get("/group-years/:groupName", (req: Request, res: Response): void => {
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -587,7 +532,6 @@ app.get("/group-years/:groupName", (req: Request, res: Response): void => {
 				error: Db.getSqlError(err),
 			});
 			console.log("Error", err);
-			Db.endDb();
 		});
 });
 
@@ -603,7 +547,6 @@ app.get("/group-months/:yearDate/:groupName", (req: Request, res: Response): voi
 				data: data,
 			});
 			console.log(data);
-			Db.endDb();
 		})
 		.catch((err: SQLResponse): void => {
 			res.send({
@@ -611,6 +554,5 @@ app.get("/group-months/:yearDate/:groupName", (req: Request, res: Response): voi
 				error: Db.getSqlError(err),
 			});
 			console.log("Error", err);
-			Db.endDb();
 		});
 });
