@@ -141,7 +141,7 @@ export class DBMethods {
   addNewColumnToMaster(tableName: string, columnName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
-      let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) DEFAULT 0;`;
+      let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) NOT NULL DEFAULT 0;`;
 
       database.query(sql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);

@@ -120,7 +120,7 @@ class DBMethods {
     addNewColumnToMaster(tableName, columnName) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
-            let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) DEFAULT 0;`;
+            let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) NOT NULL DEFAULT 0;`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

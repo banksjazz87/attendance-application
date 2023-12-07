@@ -105,6 +105,7 @@ app.get("/groups", (req, res) => {
 });
 app.post("/new-attendance/create", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    console.log(req.body);
     let groupAttendance = req.body.group + " " + "attendance";
     let columnTitle = Db.createTableName(req.body.title);
     let tableName = Db.createTableName(groupAttendance);
