@@ -168,7 +168,6 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		startLoading();
 
 		if (formToShow === "Existing" && searchForGroup(form.groupDisplayName, allGroups)) {
-			console.log('the correct item is being hit.')
 			postData("/new-attendance/create", form).then((data: APINewTable): void => {
 				updateSessionStorage();
 				stopLoading();
@@ -182,21 +181,48 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 			alert('Please create a group name.');
 		} else {
 			postData("/new-group", form).then((data: ApiResponse): void => {
-				console.log('incorrect item is being hit');
 				if (data.message === "success") {
 					postData("/new-attendance/create/master/table", form).then((data: APINewTable): void => {
 						if (data.message === "success") {
-							postData("/new-attendance/create", form).then((data: APINewTable): void => {
-								if (data.message === "success") {
-									updateSessionStorage();
-									neededAttendants(data);
-									stopLoading();
-									navigate("/attendance", { replace: true });
-								} else {
-									stopLoading();
-									alert("Error with the /new-attendance/create");
-								}
-							});
+							if (form.ageGroup === 'All') {
+								postData('/new-attendance/insert/all', form).then((data: APIResponse): void => {
+									if (data.message === 'success') {
+										postData("/new-attendance/create", form).then((data: APINewTable): void => {
+											if (data.message === "success") {
+												updateSessionStorage();
+												neededAttendants(data);
+												stopLoading();
+												navigate("/attendance", { replace: true });
+											} else {
+												stopLoading();
+												alert("Error with the /new-attendance/create");
+											}
+										});
+
+									} else {
+										alert('error with /new-attendance/insert/all');
+									}
+								});
+							} else {
+								postData('/new-attendance/insert/select-attendants', form).then((data: APIResponse): void => {
+									if (data.message === 'success') {
+									postData("/new-attendance/create", form).then((data: APINewTable): void => {
+										if (data.message === "success") {
+											updateSessionStorage();
+											neededAttendants(data);
+											stopLoading();
+											navigate("/attendance", { replace: true });
+										} else {
+											stopLoading();
+											alert("Error with the /new-attendance/create");
+										}
+									});
+									} else {
+										alert('error with /new-attendance/insert/select-attendants');
+									}
+								});
+
+							}
 						} else {
 							alert("Error with /new-attendance/master/table");
 						}

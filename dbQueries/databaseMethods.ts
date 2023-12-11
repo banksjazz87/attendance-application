@@ -69,6 +69,17 @@ export class DBMethods {
     });
   }
 
+  insertNoEnd(table: string, columns: string, values: string[]): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.dbConnection;
+      let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
+
+      database.query(sql, [values], (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+  }
+
   searchByValue(table: string, column: string, value: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
@@ -138,7 +149,7 @@ export class DBMethods {
   }
 
   //This will be used to add a new attendance column to the group master attendance.
-  addNewColumnToMaster(tableName: string, columnName: string): Promise<string[]> {
+  addNewColumnToMasterNoEnd(tableName: string, columnName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
       let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) NOT NULL DEFAULT 0;`;
@@ -146,7 +157,6 @@ export class DBMethods {
       database.query(sql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
       });
-      this.endDb();
     });
   }
 

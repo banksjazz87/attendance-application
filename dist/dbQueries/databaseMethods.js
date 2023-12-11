@@ -59,6 +59,15 @@ class DBMethods {
             this.endDb();
         });
     }
+    insertNoEnd(table, columns, values) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
+            database.query(sql, [values], (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
     searchByValue(table, column, value) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
@@ -117,14 +126,13 @@ class DBMethods {
         });
     }
     //This will be used to add a new attendance column to the group master attendance.
-    addNewColumnToMaster(tableName, columnName) {
+    addNewColumnToMasterNoEnd(tableName, columnName) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
             let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) NOT NULL DEFAULT 0;`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
-            this.endDb();
         });
     }
     //This will be used to insert all of the people of a certain age group into an attendance table.

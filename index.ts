@@ -128,10 +128,11 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 	const totalColNames = "groupName, displayTitle, totalChildren, totalYouth, totalAdults, totalMembers, totalVisitors, title";
 	const totalFieldValues = [Db.createTableName(req.body.group), req.body.title, 0, 0, 0, 0, 0, Db.createTableName(attendanceColumnName)];
 
-	Promise.all([Db.insert("all_attendance", columnNames, fieldValues), Db.insert("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMaster(tableName, columnTitle)])
+	Promise.all([Db.insertNoEnd("all_attendance", columnNames, fieldValues), Db.insertNoEnd("Attendance_Totals", totalColNames, totalFieldValues), Db.addNewColumnToMasterNoEnd(tableName, columnTitle)])
 		.then((data: [string[], string[], string[]]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data, newTable: tableName });
+			Db.endDb();
 		})
 		.catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
 			console.log("Failure Alllll", err);
@@ -143,8 +144,10 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 					Db.getSqlError(err[2]);
 				},
 			});
+			Db.endDb();
 		});
 });
+
 
 app.post("/new-attendance/create/master/table", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
@@ -161,7 +164,10 @@ app.post("/new-attendance/create/master/table", (req: Request, res: Response): v
 app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-	Db.addAllActiveApplicants(req.body.createdTableName)
+	const groupTable = req.body.group + " attendance";
+	const tableName = Db.createTableName(groupTable);
+
+	Db.addAllActiveApplicants(tableName)
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success" });
@@ -175,8 +181,9 @@ app.post("/new-attendance/insert/all", (req: Request, res: Response): void => {
 app.post("/new-attendance/insert/select-attendants", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-	const tableName = req.body.createdTableName;
-	const neededAge = req.body.allForm.ageGroup;
+	const groupTable = req.body.group + " attendance";
+	const tableName = Db.createTableName(groupTable);
+	const neededAge = req.body.ageGroup;
 
 	Db.addSelectApplicants(tableName, neededAge)
 		.then((data: string[]): void => {
