@@ -101,27 +101,6 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		}
 	};
 
-	/**
-	 *
-	 * @param obj
-	 * @description takes the response from the '/new-attendance/create endpoint and uses the newTable field to then create a new attendance sheet.
-	 */
-	const neededAttendants = (obj: APINewTable): void => {
-		let NeededInfo = {
-			createdTableName: obj.newTable,
-			allForm: form,
-		};
-
-		if (form.ageGroup === "All") {
-			postData("/new-attendance/insert/all", NeededInfo).then((data: APIResponse): void => {
-				checkForSuccess(data);
-			});
-		} else {
-			postData("/new-attendance/insert/select-attendants", NeededInfo).then((data: APIResponse): void => {
-				checkForSuccess(data);
-			});
-		}
-	};
 
 	/**
 	 *
@@ -190,15 +169,15 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 										postData("/new-attendance/create", form).then((data: APINewTable): void => {
 											if (data.message === "success") {
 												updateSessionStorage();
-												neededAttendants(data);
-												stopLoading();
-												navigate("/attendance", { replace: true });
+												setTimeout(() => {
+													stopLoading();
+													navigate('/attendance', { replace: true });
+												}, 500);
 											} else {
 												stopLoading();
 												alert("Error with the /new-attendance/create");
 											}
 										});
-
 									} else {
 										alert('error with /new-attendance/insert/all');
 									}
@@ -209,9 +188,10 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 									postData("/new-attendance/create", form).then((data: APINewTable): void => {
 										if (data.message === "success") {
 											updateSessionStorage();
-											neededAttendants(data);
-											stopLoading();
-											navigate("/attendance", { replace: true });
+											setTimeout(() => {
+												stopLoading();
+												navigate('/attendance', { replace: true });
+											}, 500);
 										} else {
 											stopLoading();
 											alert("Error with the /new-attendance/create");

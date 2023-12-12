@@ -57,7 +57,7 @@ export default function Attendance(): JSX.Element {
 						setSearching(false);
 					} else {
 						setSearching(false);
-						alert(final.error);
+						alert('/attendance/get-list/ error' + final.error);
 					}
 				});
 		}
