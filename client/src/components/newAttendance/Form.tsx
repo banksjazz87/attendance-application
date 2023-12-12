@@ -91,19 +91,6 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 
 	/**
 	 *
-	 * @param obj with a a type of APIResponse
-	 * @returns Void
-	 * @description This function is used to throw an alert if a non success message was retrieved by an API endpoint.
-	 */
-	const checkForSuccess = (obj: APIResponse): void => {
-		if (obj.message !== "success") {
-			alert(`Failure, ${obj.error}`);
-		}
-	};
-
-
-	/**
-	 *
 	 * @param str
 	 * @returns string
 	 * @description creates a database appropriate table name.
