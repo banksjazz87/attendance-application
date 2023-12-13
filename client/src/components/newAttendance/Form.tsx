@@ -124,6 +124,52 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		sessionStorage.setItem("currentAttendancePage", "0");
 	};
 
+
+	//This adds the new attendance to the needed tables and adds a column to the end of the master table.
+	const createNewAttendance = (): void => {
+		postData("/new-attendance/create", form).then((data: APINewTable): void => {
+			if (data.message === "success") {
+				updateSessionStorage();
+				setTimeout(() => {
+					stopLoading();
+					navigate('/attendance', { replace: true });
+				}, 500);
+			} else {
+				stopLoading();
+				alert('Error with creating a new attendance at "/new-attendance/create"');
+			}
+		});
+	}
+
+	const insertAll = (): void => {
+		postData('/new-attendance/insert/all', form).then((data: APIResponse): void => {
+			if (data.message === 'success') {
+				createNewAttendance();
+			} else {
+				alert('error with /new-attendance/insert/all');
+			}
+		});
+	}
+
+	const insertSelectAttendants = (): void => {
+		postData('/new-attendance/insert/select-attendants', form).then((data: APIResponse): void => {
+			if (data.message === 'success') {
+				createNewAttendance();
+			} else {
+				alert('error with /new-attendance/insert/select-attendants');
+			}
+		});
+	}
+
+	const insertNeededAttendants = (value: string): void => {
+		if (value === 'All') {
+			insertAll();
+		} else {
+			insertSelectAttendants();
+		}
+	}
+
+
 	/**
 	 *
 	 * @param e takes on the parameter of an event.
@@ -134,11 +180,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		startLoading();
 
 		if (formToShow === "Existing" && searchForGroup(form.groupDisplayName, allGroups)) {
-			postData("/new-attendance/create", form).then((data: APINewTable): void => {
-				updateSessionStorage();
-				stopLoading();
-				navigate("/attendance", { replace: true });
-			});
+			createNewAttendance();
 		} else if (formToShow === "New" && searchForGroup(form.groupDisplayName, allGroups)) {
 			alert("This group has already been created.");
 			window.location.reload();
@@ -150,46 +192,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 				if (data.message === "success") {
 					postData("/new-attendance/create/master/table", form).then((data: APINewTable): void => {
 						if (data.message === "success") {
-							if (form.ageGroup === 'All') {
-								postData('/new-attendance/insert/all', form).then((data: APIResponse): void => {
-									if (data.message === 'success') {
-										postData("/new-attendance/create", form).then((data: APINewTable): void => {
-											if (data.message === "success") {
-												updateSessionStorage();
-												setTimeout(() => {
-													stopLoading();
-													navigate('/attendance', { replace: true });
-												}, 500);
-											} else {
-												stopLoading();
-												alert("Error with the /new-attendance/create");
-											}
-										});
-									} else {
-										alert('error with /new-attendance/insert/all');
-									}
-								});
-							} else {
-								postData('/new-attendance/insert/select-attendants', form).then((data: APIResponse): void => {
-									if (data.message === 'success') {
-									postData("/new-attendance/create", form).then((data: APINewTable): void => {
-										if (data.message === "success") {
-											updateSessionStorage();
-											setTimeout(() => {
-												stopLoading();
-												navigate('/attendance', { replace: true });
-											}, 500);
-										} else {
-											stopLoading();
-											alert("Error with the /new-attendance/create");
-										}
-									});
-									} else {
-										alert('error with /new-attendance/insert/select-attendants');
-									}
-								});
-
-							}
+							insertNeededAttendants(form.ageGroup);
 						} else {
 							alert("Error with /new-attendance/master/table");
 						}
