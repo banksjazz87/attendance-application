@@ -89,6 +89,10 @@ $blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-back
     margin: auto;
     padding-left: 2rem;
     padding-right: 2rem;
+    @media (max-width: 767px) {
+        padding-left: .5rem;
+        padding-right: .5rem;
+    }
 }
 
 @mixin shadow-form {
@@ -118,6 +122,9 @@ $blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-back
     flex-direction: column;
     width: 60%;
     min-width: 250px;
+    @media (max-width: 767px) {
+        width: 90%;
+    }
 }
 
 @mixin main-table-wrapper {

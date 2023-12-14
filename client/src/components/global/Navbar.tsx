@@ -1,12 +1,23 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import "../../assets/styles/components/global/navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faKey, faChartLine, faFileCirclePlus, faFile, faSearch, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar() {
+  const [displayNavBar, setDisplayNavBar] = useState<boolean>(false);
+
+  useEffect(() => {
+      const currentPage: string = window.location.pathname;
+      if (currentPage !== '/') {
+        setDisplayNavBar(true);
+      } else {
+        setDisplayNavBar(false);
+      }
+  }, []);
+
   return (
-    <nav id="main_nav_wrapper">
+    <nav id="main_nav_wrapper" style={displayNavBar ? {display: ''}: {display: 'none'}}>
       <ul>
         <li>
           <Link to={`/`}>
