@@ -18,6 +18,9 @@
                 align-self: flex-start;
                 width: 60%;
                 margin: auto auto -2rem auto;
+                @media (max-width: 767px) {
+                    width: 90%;
+                }
             }
         }
         .fields_wrapper {
@@ -37,6 +40,9 @@
             margin: auto;
             min-width: 250px;
             row-gap: 1rem;
+            @media(max-width: 767px) {
+                width: 90%;
+            }
             .input_wrapper {
                 display: flex;
                 flex-direction: row;
@@ -50,5 +56,14 @@
                 }
             }
         }
+    }
+}
+
+@media (max-width: 767px) {
+    #new_attendant_form_wrapper {
+        overflow-y: scroll;
+        height: 80vh;
+        padding-top: 2rem;
+        margin-top: 10px;
     }
 }
