@@ -31,6 +31,9 @@ body {
             text-transform: uppercase;
             font-size: 36px;
             line-height: 40px;
+            @media (max-width: 767px) {
+                font-size: 32px;
+            }
         }
     }
     input[type="text"],
@@ -61,6 +64,15 @@ body {
         }
         .delete {
             text-align: center;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    body {
+        .header_wrapper {
+            padding-left: 0;
+            padding-left: 24px;
         }
     }
 }
