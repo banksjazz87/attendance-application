@@ -129,9 +129,11 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
   const postNewAttendant = (obj: UpdateAttendant): void => {
     postData("/attendance/insert/attendant", obj).then((data: APIResponse): void => {
       if (data.message === "success") {
-        alert(`${obj.firstName} has been added.`);
-        (document.getElementById("new_member_form") as HTMLFormElement).reset();
-        window.location.reload();
+        setTimeout(() => {
+          (document.getElementById("new_member_form") as HTMLFormElement).reset();
+          window.location.reload();
+        }, 3300);
+       
       } else {
         alert(`${data.data}`);
       }
@@ -198,6 +200,8 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
 
         if (!masterTable) {
+          triggerSuccessMessage();
+          updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added.`);
           getAttendantDataAndSetIt(data);
         } else {
           triggerSuccessMessage();

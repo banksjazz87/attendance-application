@@ -23,6 +23,7 @@ export default function AttendanceSheet({
 	hideSuccessMessage,
 	updateSuccessMessage,
 	parentName,
+	activeSearch
 }: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
@@ -335,7 +336,7 @@ export default function AttendanceSheet({
 				<div className="btn_group">
 					<SearchBar updatePartial={updatePartial} />
 				</div>
-				<p>Rendering...</p>
+				<p>No results found.</p>
 			</div>
 		);
 	} else {
