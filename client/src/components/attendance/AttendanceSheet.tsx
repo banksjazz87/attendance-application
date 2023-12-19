@@ -23,7 +23,7 @@ export default function AttendanceSheet({
 	hideSuccessMessage,
 	updateSuccessMessage,
 	parentName,
-	activeSearch
+	partialSearch
 }: AttendanceProps): JSX.Element {
 	//The below is for production
 	const [memberData, setMemberData] = useState<Attendee[]>(attendanceData);
@@ -324,8 +324,7 @@ export default function AttendanceSheet({
 		);
 	};
 
-	//If the attendance is 0, return a shell of what's needed, if not zero return the main content.
-	if (attendanceData.length === 0) {
+	const partialContent = (): JSX.Element => {
 		return (
 			<div
 				className="attendance_table_wrapper"
@@ -338,7 +337,14 @@ export default function AttendanceSheet({
 				</div>
 				<p>No results found.</p>
 			</div>
-		);
+		)
+	}
+
+	//If the attendance is 0, return a shell of what's needed, if not zero return the main content.
+	if (partialSearch.length > 0 && attendanceData.length === 0) {
+		return partialContent();
+	} else if (attendanceData.length === 0) {
+		return partialContent();
 	} else {
 		return mainContent();
 	}

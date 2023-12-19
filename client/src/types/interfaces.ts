@@ -25,6 +25,7 @@ export interface AttendanceProps {
   triggerSuccessMessage: Function;
   hideSuccessMessage: Function;
   updateSuccessMessage: Function;
+  partialSearch: String;
 }
 
 export interface Group {

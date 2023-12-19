@@ -31,6 +31,24 @@ export default function Attendance(): JSX.Element {
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = useState<string>("");
 
+	//Used to pull in the the main attendance that's needed.
+	const getMainAttendance = async (title: string): Promise<void> => {
+		const getTable: Response = await fetch(`/attendance/get-list/${title}`);
+		const tableJSON: APIAttendanceSheet = await getTable.json();
+
+		try {
+			if (tableJSON.message === "success") {
+				selectAttendanceSheet(tableJSON.data);
+				setSearching(false);
+			} else {
+				setSearching(false);
+				alert("/attendance/get-list/ error" + tableJSON.error);
+			}
+		} catch (e) {
+			console.log("Error with the /attendance/get-list", e);
+		}
+	};
+
 	//Used to check if an attendance is stored in the session storage and displays the attendance sheet if that's the case.
 	useEffect((): void => {
 		if (sessionStorage.selectedAttendance && sessionStorage.selectedParent) {
@@ -46,29 +64,16 @@ export default function Attendance(): JSX.Element {
 
 			let parent = JSON.parse(sessionStorage.selectedParent);
 			setSelectedGroup([parent]);
-
-			fetch(`/attendance/get-list/${tableTitle}`)
-				.then((data: Response): Promise<APIAttendanceSheet> => {
-					return data.json();
-				})
-				.then((final: APIAttendanceSheet): void => {
-					if (final.message === "success") {
-						selectAttendanceSheet(final.data);
-						setSearching(false);
-					} else {
-						setSearching(false);
-						alert('/attendance/get-list/ error' + final.error);
-					}
-				});
+			getMainAttendance(tableTitle);
 		}
 	}, []);
 
 	//Pulls data from the session storage for the selected parent to get the attendance title, and checks for a partial name search in the First or Last Name search box.
 	useEffect((): void => {
-		if (partialName.length > 0 && sessionStorage.selectedParent) {
-			const parentTable = JSON.parse(sessionStorage.selectedParent);
-			const tableTitle = `${parentTable.name}_attendance`;
+		const parentTable = JSON.parse(sessionStorage.selectedParent);
+		const tableTitle = `${parentTable.name}_attendance`;
 
+		if (partialName.length > 0 && sessionStorage.selectedParent) {
 			fetch(`/people/search/${tableTitle}/${partialName}`)
 				.then((data: Response): Promise<APIAttendanceSheet> => {
 					return data.json();
@@ -82,6 +87,8 @@ export default function Attendance(): JSX.Element {
 						alert(final.error);
 					}
 				});
+		} else {
+			getMainAttendance(tableTitle);
 		}
 	}, [partialName]);
 
@@ -260,6 +267,7 @@ export default function Attendance(): JSX.Element {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					hideSuccessMessage={(): void => setShowSuccessMessage(false)}
 					updateSuccessMessage={setNewSuccessMessage}
+					partialSearch={partialName}
 				/>
 				<NewMember
 					currentTable={`${selectedGroup[0].name}_attendance`}
