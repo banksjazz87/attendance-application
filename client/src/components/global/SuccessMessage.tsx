@@ -14,8 +14,9 @@ export default function SuccessMessage({message, show, closeMessage}: SuccessMes
         if (show) {
             setTimeout((): void => {
                 closeMessage();
-            }, 3200);
+            }, 1000);
         } else {
+            clearTimeout(1);
             closeMessage();
         }
     }, [show, closeMessage]);
