@@ -70,10 +70,11 @@ export default function Attendance(): JSX.Element {
 
 	//Pulls data from the session storage for the selected parent to get the attendance title, and checks for a partial name search in the First or Last Name search box.
 	useEffect((): void => {
-		const parentTable = JSON.parse(sessionStorage.selectedParent);
-		const tableTitle = `${parentTable.name}_attendance`;
 
 		if (partialName.length > 0 && sessionStorage.selectedParent) {
+			let parentTable = JSON.parse(sessionStorage.selectedParent);
+			let tableTitle = `${parentTable.name}_attendance`;
+
 			fetch(`/people/search/${tableTitle}/${partialName}`)
 				.then((data: Response): Promise<APIAttendanceSheet> => {
 					return data.json();
@@ -87,8 +88,12 @@ export default function Attendance(): JSX.Element {
 						alert(final.error);
 					}
 				});
-		} else {
+		} else if (partialName.length === 0 && sessionStorage.selectedParent && sessionStorage.selectedAttendance) {
+			let parentTable = JSON.parse(sessionStorage.selectedParent);
+			let tableTitle = `${parentTable.name}_attendance`;
 			getMainAttendance(tableTitle);
+		} else {
+			return;
 		}
 	}, [partialName]);
 
