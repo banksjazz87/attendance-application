@@ -16,12 +16,18 @@
         .input_wrapper {
             @include shadow-form-input-pair;
             width: 100%;
+            @media(max-width: 767px) {
+                width: 100%;
+            }
         }
         .header_fields_wrapper {
             display: flex;
             flex-direction: column;
             row-gap: 0;
             width: 60%;
+            @media (max-width: 767px) {
+                width: 90%;
+            }
             h2 {
                 text-align: center;
             }
@@ -50,5 +56,14 @@
                 }
             }
         }
+    }
+}
+
+@media (max-width: 767px) {
+    #edit_member_form_wrapper {
+        overflow-y: scroll;
+        height: 80vh;
+        padding-top: 2rem;
+        margin-top: 10px;
     }
 }

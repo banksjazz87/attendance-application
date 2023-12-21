@@ -13,7 +13,7 @@ export default function SuccessMessage({message, show, closeMessage}: SuccessMes
     useEffect((): void => {
         if (show) {
             let i = 0;
-            let id = setInterval((): void => {
+            let id: NodeJS.Timer = setInterval((): void => {
                 i++;
                 if (i === 10) {
                     clearInterval(id);
