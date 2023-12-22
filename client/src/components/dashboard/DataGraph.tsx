@@ -73,14 +73,10 @@ export default function DataGraph({ allData, month, year }: DataGraphProps): JSX
 			<h3>{`${month} ${year}`}</h3>
 			<BarChart
 				width={isMobile ? 450 : 750}
-				height={isMobile ? 200 : 500}
+				height={isMobile ? 400 : 500}
 				data={neededData(allData)}
-				margin={{
-					top: 5,
-					right: 30,
-					left: 50,
-					bottom: 5,
-				}}
+				margin={isMobile ? {top: 5, right: 30, left: 20, bottom: 5,} : { top: 5, right: 30, left: 50, bottom: 5 }
+				}
 			>
 				<CartesianGrid />
 				<XAxis dataKey="name" />

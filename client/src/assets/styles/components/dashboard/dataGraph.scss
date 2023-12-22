@@ -15,4 +15,21 @@
     h3 {
         margin-top: 0;
     }
+    .recharts-default-legend {
+        @media (max-width: 767px) {
+            display: flex;
+            flex-wrap: wrap;
+            width: 80%;
+            column-gap: 20px;
+            row-gap: 20px;
+            justify-content: center;
+        }
+    }
+    .recharts-legend-wrapper {
+        @media (max-width: 767px) {
+            left: 40px;
+            display: flex;
+            justify-content: center;
+        }
+    }
 }
