@@ -24,6 +24,9 @@ body {
         padding-top: 0;
         position: sticky;
         z-index: 10;
+        @media (max-width: 767px) {
+            margin-bottom: 3rem;
+        }
         h1 {
             color: white;
             text-shadow: 2px 3px rgba(20, 20, 20, .7);
