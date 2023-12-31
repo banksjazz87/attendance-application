@@ -5,7 +5,7 @@
         @include popout-content;
         background-color: rgba(0, 0, 0, 0);
         box-shadow: none;
-        margin-top: 20%;
+        margin-top: 60%;
         #loading_outer_color {
             background-image: radial-gradient(farthest-corner at 0px 0px, white, $orange 70%);
             height: 150px;
@@ -20,9 +20,9 @@
             animation-timing-function: linear;
             animation-iteration-count: infinite;
             #loading_inner_color {
-                background-color: rgba(255, 255, 255, .7);
-                height: 100px;
-                width: 100px;
+                background-color: rgba(0, 0, 0, .4);
+                height: 120px;
+                width: 120px;
                 border-radius: 50%;
             }
         }
