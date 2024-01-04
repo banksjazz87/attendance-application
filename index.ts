@@ -34,20 +34,26 @@ app.get(paths, (req: Request, res: Response) => {
 app.post("/login", (req: Request, res: Response): any => {
 	if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
 		
-		res.cookie("account", "Tester");
+		res.cookie("account", "Tester", {
+			maxAge: 31556952 * 1000,
+		});
 		res.cookie("user", process.env.MYSQL_USER, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("host", process.env.MYSQL_HOST, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("database", process.env.TEST_DB, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("password", process.env.MYSQL_PASSWORD, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
@@ -77,20 +83,26 @@ app.post("/login", (req: Request, res: Response): any => {
 
 	} else if (req.body.name === process.env.CHAPEL_USER && req.body.password === process.env.CHAPEL_PASSWORD) {
 		
-		res.cookie("account", "Demo");
+		res.cookie("account", "Chapel", {
+			maxAge: 31556952 * 1000
+		});
 		res.cookie("user", process.env.CHAPEL_MYSQL_USER, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("host", process.env.CHAPEL_MYSQL_HOST, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("database", process.env.CHAPEL_DB, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});
 		res.cookie("password", process.env.CHAPEL_DBPASSWORD, {
+			maxAge: 31556952 * 1000,
 			httpOnly: true,
 			sameSite: "lax",
 		});

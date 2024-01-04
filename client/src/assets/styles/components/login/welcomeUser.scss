@@ -1,0 +1,15 @@
+@import "../../global/library.scss";
+#welcome_page_wrapper {
+    width: 100%;
+    transition: all 2.4s ease-in-out;
+    margin-left: -1280px;
+    opacity: 0;
+    #welcome_wrapper {
+        @include shadow-form;
+        .button_group {
+            margin-top: 1rem;
+            display: flex;
+            column-gap: 1rem;
+        }
+    }
+}

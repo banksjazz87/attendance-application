@@ -146,6 +146,8 @@
 
 /*! decimal.js-light v2.5.1 https://github.com/MikeMcl/decimal.js-light/LICENCE */
 
+/*! js-cookie v3.0.5 | MIT */
+
 /**
  * @license React
  * react-dom.production.min.js
