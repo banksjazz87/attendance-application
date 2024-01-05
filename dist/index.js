@@ -51,7 +51,9 @@ app.post("/login", (req, res) => {
             httpOnly: true,
             sameSite: "lax",
         });
-        res.cookie("loggedIn", true);
+        res.cookie("loggedIn", true, {
+            maxAge: 31556952 * 1000,
+        });
         res.send({ message: "valid" });
     }
     else if (req.body.name === process.env.HEROKU_USER && req.body.password === process.env.HEROKU_PASSWORD) {
@@ -99,7 +101,9 @@ app.post("/login", (req, res) => {
             httpOnly: true,
             sameSite: "lax",
         });
-        res.cookie("loggedIn", true);
+        res.cookie("loggedIn", true, {
+            maxAge: 31556952 * 1000,
+        });
         res.send({ message: "valid" });
     }
     else {
