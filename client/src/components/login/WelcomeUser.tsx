@@ -25,7 +25,7 @@ export default function WelcomeUser({ userName }: WelcomeUserProps): JSX.Element
 			style={userName.length > 0 ? { opacity: "1", marginLeft: "0" } : { opacity: "0", marginLeft: "-1280px" }}
 		>
 			<div id="welcome_wrapper">
-				<p>{`Welcome ${userName} would you like to continue as ${userName}?`} </p>
+				<p>{`Welcome ${userName}`!}<br/>{` Would you like to continue as ${userName}?`}</p>
 				<div className="button_group">
 					<button
 						type="button"
