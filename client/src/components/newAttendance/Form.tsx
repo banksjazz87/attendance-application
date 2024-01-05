@@ -131,7 +131,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 				}, 500);
 			} else {
 				stopLoading();
-				alert('Error with creating a new attendance at "/new-attendance/create"');
+				alert('A table already exists with this name, please go the attendance page and select it (click on the blank page in the menu) Error with /new-attendance/create.');
 			}
 		});
 	};
