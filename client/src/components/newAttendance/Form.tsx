@@ -120,6 +120,23 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		sessionStorage.setItem("currentAttendancePage", "0");
 	};
 
+	const tableExists = async (table: string, column: string): Promise<boolean | void> => {
+		const tableResults: Response = await fetch(`/attendance/get-list-by-name/${table}/${column}`);
+		const results: ApiResponse = await tableResults.json();
+
+		try {
+			if (results.message === "success") {
+				console.log(results.message);
+				return true;
+			} else {
+				console.log(results.message);
+				return false;
+			}
+		} catch (e: unknown) {
+			console.log("error with the /attendance/get-list-by-name", e);
+		}
+	};
+
 	//This adds the new attendance to the needed tables and adds a column to the end of the master table.
 	const createNewAttendance = (): void => {
 		postData("/new-attendance/create", form).then((data: APINewTable): void => {
@@ -131,7 +148,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 				}, 500);
 			} else {
 				stopLoading();
-				alert('A table already exists with this name, please go the attendance page and select it (click on the blank page in the menu) Error with /new-attendance/create.');
+				alert("A table already exists with this name, please go the attendance page and select it (click on the blank page in the menu) Error with /new-attendance/create.");
 			}
 		});
 	};
@@ -167,15 +184,9 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		}
 	};
 
-	/**
-	 *
-	 * @param e takes on the parameter of an event.
-	 * @description final submithandler for the form, runs a number of different functions to create a new attendance sheet.
-	 */
-	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
-		e.preventDefault();
-		startLoading();
 
+	//This is called in the submit handler only if an attendance sheet with the same name doesn't already exist.
+	const createAllNeededTables = (): void => {
 		if (formToShow === "Existing" && searchForGroup(form.groupDisplayName, allGroups)) {
 			createNewAttendance();
 		} else if (formToShow === "New" && searchForGroup(form.groupDisplayName, allGroups)) {
@@ -199,6 +210,28 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 					alert(`Failure with new-group ${data.data}`);
 				}
 			});
+		}
+	};
+
+	/**
+	 *
+	 * @param e takes on the parameter of an event.
+	 * @description final submithandler for the form, runs a number of different functions to create a new attendance sheet.
+	 */
+	const submitHandler = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
+		e.preventDefault();
+		const groupAttendanceName = `${form.groupDisplayName} attendance`;
+		const attendanceExists = await tableExists(groupAttendanceName, form.title);
+
+		try {
+			if (attendanceExists === true) {
+				alert("An attendance sheet for this name has already been created.  Please go to the attendance sheet view and select it from the dropdown.  Or you can create one with a different name.");
+			} else if (attendanceExists === false) {
+				startLoading();
+				createAllNeededTables();
+			}
+		} catch (e: unknown) {
+			alert(`The following error has occured ${e}`);
 		}
 	};
 
