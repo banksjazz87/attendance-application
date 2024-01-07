@@ -315,8 +315,8 @@ app.get("/attendance/get-list/:listName", (req, res) => {
 });
 app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    const tableName = req.params.tableName;
-    const columnName = req.params.colName;
+    const tableName = Db.createTableName(req.params.tableName);
+    const columnName = Db.createTableName(req.params.colName);
     Db.getTableByColumn(tableName, "ASC", columnName, "lastName")
         .then((data) => {
         console.log(data);
