@@ -120,16 +120,22 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		sessionStorage.setItem("currentAttendancePage", "0");
 	};
 
+	/**
+	 * 
+	 * @param table string for the current table name, just needs to be the displayed group name.
+	 * @param column string for the column (date) that you want to search for.
+	 * @returns Promise<boolean | void> This will only return void if something goes wrong in getting the data, otherwise it will return true or false.
+	 */
 	const tableExists = async (table: string, column: string): Promise<boolean | void> => {
-		const tableResults: Response = await fetch(`/attendance/get-list-by-name/${table}/${column}`);
+
+		const groupAttendanceName = `${table} attendance`;
+		const tableResults: Response = await fetch(`/attendance/get-list-by-name/${groupAttendanceName}/${column}`);
 		const results: ApiResponse = await tableResults.json();
 
 		try {
 			if (results.message === "success") {
-				console.log(results.message);
 				return true;
 			} else {
-				console.log(results.message);
 				return false;
 			}
 		} catch (e: unknown) {
@@ -148,7 +154,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 				}, 500);
 			} else {
 				stopLoading();
-				alert("A table already exists with this name, please go the attendance page and select it (click on the blank page in the menu) Error with /new-attendance/create.");
+				alert("An error has occurred with the /new-attendance/create api.");
 			}
 		});
 	};
@@ -220,14 +226,15 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 	 */
 	const submitHandler = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
 		e.preventDefault();
-		const groupAttendanceName = `${form.groupDisplayName} attendance`;
-		const attendanceExists = await tableExists(groupAttendanceName, form.title);
+		startLoading();
+		
+		const attendanceExists = await tableExists(form.groupDisplayName, form.title);
 
 		try {
 			if (attendanceExists === true) {
 				alert("An attendance sheet for this name has already been created.  Please go to the attendance sheet view and select it from the dropdown.  Or you can create one with a different name.");
+				stopLoading();
 			} else if (attendanceExists === false) {
-				startLoading();
 				createAllNeededTables();
 			}
 		} catch (e: unknown) {
