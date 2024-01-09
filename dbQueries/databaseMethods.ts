@@ -95,7 +95,13 @@ export class DBMethods {
   getTable(table: string, order: string, column: string): Promise<string[]> {
     return new Promise<string[]> ((resolve, reject)=> {
       const database = this.dbConnection;
-      let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
+      let sql = "";
+
+      if (column === 'lastName') {
+        sql = `SELECT * FROM ${table} ORDER BY ${column} ${order}, firstName ${order}`;
+      } else {
+        sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
+      }
 
       database.query(sql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);

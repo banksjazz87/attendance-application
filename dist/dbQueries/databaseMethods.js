@@ -81,7 +81,13 @@ class DBMethods {
     getTable(table, order, column) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
-            let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
+            let sql = "";
+            if (column === 'lastName') {
+                sql = `SELECT * FROM ${table} ORDER BY ${column} ${order}, firstName ${order}`;
+            }
+            else {
+                sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
+            }
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
