@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Attendee, APIPeople } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
+import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface AttendantDropdownProps {
 	show: boolean;
+    currentAttendance: Attendee[];
 }
-export default function AttendantDropdown({ show }: AttendantDropdownProps) {
+export default function AttendantDropdown({ show, currentAttendance }: AttendantDropdownProps) {
 	const initAttendee = {
 		firstName: "",
 		lastName: "",
@@ -24,10 +27,9 @@ export default function AttendantDropdown({ show }: AttendantDropdownProps) {
 			})
 			.then((final: APIPeople): void => {
 				if (final.message === "Success") {
-					console.log(final.data);
 					setAttendants(final.data);
 				} else {
-					console.log("The following error has occured", final.error);
+					alert(`The following error has occured: ${final.error}`);
 				}
 			});
 	}, []);
@@ -46,8 +48,8 @@ export default function AttendantDropdown({ show }: AttendantDropdownProps) {
 		const copyOfCurrent = selectedAttendants.slice();
 		const currentUser = attendants[parseInt(e.target.value as string)];
 
-		if (checkForMatch(copyOfCurrent, currentUser)) {
-			alert(`${currentUser.firstName} ${currentUser.lastName} has already been added to the list.`);
+		if (checkForMatch(copyOfCurrent, currentUser) || checkForMatch(currentAttendance, currentUser)) {
+			alert(`${currentUser.firstName} ${currentUser.lastName} is already included on this list.`);
 		} else {
 			if (selectedAttendants[0].firstName.length < 1) {
 				setSelectedAttendants([currentUser]);
@@ -65,6 +67,24 @@ export default function AttendantDropdown({ show }: AttendantDropdownProps) {
 			>{`${x.lastName}, ${x.firstName}`}</option>
 		);
 	});
+
+    const removeClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+        const currentItem = e.target as HTMLElement;
+        const dataId = currentItem.closest('.list_data') as HTMLElement;
+        const idValue = dataId.getAttribute('data-reactId');
+        let indexOfId = -1;
+
+        for (let i = 0; i < selectedAttendants.length; i++) {
+            if (selectedAttendants[i].id === parseInt(idValue as string)) {
+                indexOfId = i;
+            }
+        }
+
+        const copyOfAllAdded = selectedAttendants.slice();
+        copyOfAllAdded.splice(indexOfId, 1);
+        setSelectedAttendants(copyOfAllAdded);
+    }
+
 
 	const showOptions: Function = (): JSX.Element => {
 		if (attendants[0].firstName.length > 1) {
@@ -87,7 +107,21 @@ export default function AttendantDropdown({ show }: AttendantDropdownProps) {
 	};
 
 	const displaySelected: JSX.Element[] = selectedAttendants.map((x: Attendee, y: number): JSX.Element => {
-		return <li key="selected_y">{`${y + 1}. ${x.lastName}, ${x.firstName}`}</li>;
+		return (
+            <div className="list_data" data-reactId={x.id}>
+                 <li key="selected_y">{`${y + 1}. ${x.lastName}, ${x.firstName}`}</li>
+                 <button
+						type="button"
+						className="trash_btn"
+						onClick={removeClickHandler}
+					>
+						<FontAwesomeIcon
+							className="trash_can"
+							icon={faTrashCan}
+						/>
+					</button>
+            </div>
+        ) 
 	});
 
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
@@ -101,6 +135,7 @@ export default function AttendantDropdown({ show }: AttendantDropdownProps) {
 			style={show ? { display: "" } : { display: "none" }}
 		>
 			<div id="attendant_dropdown_box_wrapper">
+                <h2>Add Existing Members</h2>
 				<form method="get">
 					{showOptions()}
 					<input
@@ -109,6 +144,7 @@ export default function AttendantDropdown({ show }: AttendantDropdownProps) {
 					></input>
 				</form>
 				<div id="display_attendants_wrapper">
+                    <h3>Members set to be added.</h3>
 					<ul>{selectedAttendants[0].firstName.length > 0 && selectedAttendants.length > 0 ? displaySelected : ""}</ul>
 				</div>
 			</div>

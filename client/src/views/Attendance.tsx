@@ -293,6 +293,7 @@ export default function Attendance(): JSX.Element {
 				/>
 				<AttendantDropdown
 					show={showAttendantDropdown}
+					currentAttendance={currentListData}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to delete ${userToDelete.firstName} ${userToDelete.lastName} from this attendance sheet?`}
