@@ -411,6 +411,24 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
 		});
 });
 
+
+app.post('/attendance/insert/new-attendants/:tableName', (req: Request, res: Response): void => {
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+	const neededTable: string = req.params.tableName;
+	const allColumns: string = `id, firstName, lastName, age, memberType`;
+	
+	Db.addBulkSelectApplicants(neededTable, allColumns, req.body.neededFields)
+		.then((data: string[]): void => {
+			console.log('success', data);
+			res.send({ message: "success", data: data})
+		})
+		.catch((err: SQLResponse): void => {
+			console.log('Error inserting multiple attendants', err);
+			res.send({ message: "failure", data: Db.getSqlError(err)});
+		});
+});
+
 app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 

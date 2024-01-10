@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Attendee, APIPeople } from "../../types/interfaces.ts";
+import { Attendee, APIPeople, APIResponse } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,14 +7,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 interface AttendantDropdownProps {
 	show: boolean;
     currentAttendance: Attendee[];
+    currentTable: string;
 }
-export default function AttendantDropdown({ show, currentAttendance }: AttendantDropdownProps) {
+export default function AttendantDropdown({ show, currentAttendance, currentTable }: AttendantDropdownProps) {
 	const initAttendee = {
 		firstName: "",
 		lastName: "",
 		age: "",
 		memberType: "",
-		active: 0,
+        active: 0,
 		id: -1,
 	};
 	const [attendants, setAttendants] = useState<Attendee[]>([initAttendee]);
@@ -126,7 +127,29 @@ export default function AttendantDropdown({ show, currentAttendance }: Attendant
 
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log("This is the selected value");
+        
+        const neededFields = selectedAttendants.map((x: Attendee, y: number): Object => {
+            let currentObj = {
+                id: x.id,
+                firstName: x.firstName,
+                lastName: x.lastName,
+                age: x.age,
+                memberType: x.memberType,
+            };
+
+            return currentObj;
+        });
+
+        const data = {neededFields};
+
+		postData(`/attendance/insert/new-attendants/${currentTable}`, data)
+            .then((data: APIResponse): void => {
+                if (data.message === 'success') {
+                    alert("This worked");
+                } else {
+                    alert(`The following error occured', ${data.data}`);
+                }
+            });
 	};
 
 	return (
@@ -136,7 +159,10 @@ export default function AttendantDropdown({ show, currentAttendance }: Attendant
 		>
 			<div id="attendant_dropdown_box_wrapper">
                 <h2>Add Existing Members</h2>
-				<form method="get">
+				<form 
+                    method="get"
+                    onSubmit={submitHandler}
+                >
 					{showOptions()}
 					<input
 						type="submit"

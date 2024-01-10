@@ -57,6 +57,26 @@ export class DBMethods {
     });
   }
 
+  prepBulkAddString(arr: Object[]): string {
+    let string = '';
+
+    for (let i = 0; i < arr.length; i++) {
+        let currentValues = Object.values(arr[i]);
+        string += '(';
+
+        for (let j = 0; j < currentValues.length; j++) {
+            if (j === currentValues.length - 1) {
+                string += `"${currentValues[j]}"), `;
+            } else {
+                string += `"${currentValues[j]}",`
+            }
+        }
+    }
+
+    let finalString = string.slice(0, string.length - 2);
+    return finalString;
+  }
+
   insert(table: string, columns: string, values: string[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
@@ -233,6 +253,27 @@ export class DBMethods {
       this.endDb();
     });
   }
+
+
+
+
+
+
+
+  addBulkSelectApplicants(table: string, columns: string, obj: Object[]): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.dbConnection;
+      const mysqlMultipleString = this.prepBulkAddString(obj);
+
+      const sql = `INSERT INTO ${table} (${columns}) VALUES ${mysqlMultipleString};`;
+
+      database.query(sql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
 
   addAllActiveApplicants(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
