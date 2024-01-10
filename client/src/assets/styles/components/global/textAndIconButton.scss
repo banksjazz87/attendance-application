@@ -7,11 +7,13 @@
     justify-content: center;
     align-items: center;
     align-content: bottom;
-    min-width: 250px;
+    min-width: 200px;
     height: 64px;
     padding: 12px 36px;
-    @include accent-bold;
-    color: white;
+    .add_new_member_btn_text {
+        @include accent-bold;
+        color: white;
+    }
     .add_member_icon {
         font-size: 22px;
     }

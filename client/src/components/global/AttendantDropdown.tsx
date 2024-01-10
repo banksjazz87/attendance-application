@@ -3,6 +3,7 @@ import { Attendee, APIPeople, APIResponse } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
 import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import SuccessMessage from "../../components/global/SuccessMessage.tsx";;
 
 interface AttendantDropdownProps {
 	show: boolean;
@@ -20,6 +21,8 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 	};
 	const [attendants, setAttendants] = useState<Attendee[]>([initAttendee]);
 	const [selectedAttendants, setSelectedAttendants] = useState<Attendee[]>([initAttendee]);
+    const [showSuccess, setShowSuccess] = useState<boolean>(false);
+    const [successText, setSuccessText] = useState<string>('');
 
 	useEffect(() => {
 		fetch("/all-attendants")
@@ -125,6 +128,17 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
         ) 
 	});
 
+    const closeMessageHandler = (text: string): void => {
+        if (text.includes('Success')) {
+            setShowSuccess(false);
+            setTimeout(() => {
+                window.location.reload();
+        }, 1500);   
+        } else {
+            setShowSuccess(false);
+        }
+    }
+
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
         
@@ -145,9 +159,10 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		postData(`/attendance/insert/new-attendants/${currentTable}`, data)
             .then((data: APIResponse): void => {
                 if (data.message === 'success') {
-                    alert("This worked");
+                    setSuccessText('Success!  All attendants have been added.')
+                    setShowSuccess(true);
                 } else {
-                    alert(`The following error occured', ${data.data}`);
+                    setSuccessText(`Failure! The following error occurred: ${data.data}`)
                 }
             });
 	};
@@ -173,6 +188,12 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
                     <h3>Members set to be added.</h3>
 					<ul>{selectedAttendants[0].firstName.length > 0 && selectedAttendants.length > 0 ? displaySelected : ""}</ul>
 				</div>
+            <SuccessMessage 
+                message={successText}
+                show={showSuccess}
+                closeMessage={() => closeMessageHandler(successText)}
+
+            />
 			</div>
 		</div>
 	);

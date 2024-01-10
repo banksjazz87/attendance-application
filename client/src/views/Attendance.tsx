@@ -245,19 +245,19 @@ export default function Attendance(): JSX.Element {
 				<div className="button_group">
 					<TextAndIconButton
 						show={showOptionButtons}
-						text={"Add New Member"}
+						text={"Add\r\nNew"}
 						iconName={faUserPlus}
 						clickHandler={() => setShowAddNewMember(true)}
 					/>
 					<TextAndIconButton
 						show={showOptionButtons}
-						text={"Add Existing Member"}
+						text={"Add\r\nExisting"}
 						iconName={faUser}
 						clickHandler={() => setShowAttendantDropdown(true)}
 					/>
 					<TextAndIconButton
 						show={showOptionButtons}
-						text={"Different Attendance"}
+						text={"Different\r\nAttendance"}
 						iconName={faFile}
 						clickHandler={() => {
 							setDisplayAttendance(false);
