@@ -1,0 +1,79 @@
+@import "../../global/library.scss";
+@import "../../global/library.scss";
+.full_height_popout {
+    @include full-height-popout-background;
+}
+
+#attendant_dropdown_wrapper {
+    @include popout-content;
+    .close_btn {
+        @include icon-close-btn;
+    }
+    #attendant_dropdown_box_wrapper {
+        min-height: 70vh;
+        @include inner-shadow-form-wrapper;
+        row-gap: 1rem;
+        justify-content: flex-start;
+        form {
+            @include inner-shadow-form-wrapper;
+            select {
+                width: 60%;
+                @media(max-width: 767px) {
+                    width: 90%;
+                }
+            }
+        }
+    }
+}
+
+#display_attendants_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    column-gap: 2rem;
+    width: 60%;
+    margin-top: 4rem;
+    min-width: 250px;
+    row-gap: 1rem;
+    @media(max-width: 767px) {
+        width: 90%;
+    }
+    h3 {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        @media (max-width: 767px) {
+            width: 90%;
+        }
+    }
+    ul {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        row-gap: 1rem;
+        margin-top: 2rem;
+        width: 100%;
+        .list_data {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            justify-content: space-between;
+            .trash_btn {
+                @include icon-button;
+            }
+            .trash_can {
+                @include trash-icon;
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    #new_attendant_form_wrapper {
+        overflow-y: scroll;
+        height: 80vh;
+        padding-top: 2rem;
+        margin-top: 10px;
+    }
+}

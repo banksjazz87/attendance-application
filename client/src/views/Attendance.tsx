@@ -295,6 +295,7 @@ export default function Attendance(): JSX.Element {
 					show={showAttendantDropdown}
 					currentAttendance={currentListData}
 					currentTable={`${selectedGroup[0].name}_attendance`}
+					showHandler={(): void => setShowAttendantDropdown(false)}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to delete ${userToDelete.firstName} ${userToDelete.lastName} from this attendance sheet?`}

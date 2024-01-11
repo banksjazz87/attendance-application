@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Attendee, APIPeople, APIResponse } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SuccessMessage from "../../components/global/SuccessMessage.tsx";;
+import SuccessMessage from "../../components/global/SuccessMessage.tsx";
+import "../../assets/styles/components/global/attendantDropdown.scss";
 
 interface AttendantDropdownProps {
 	show: boolean;
     currentAttendance: Attendee[];
     currentTable: string;
+    showHandler: Function;
 }
-export default function AttendantDropdown({ show, currentAttendance, currentTable }: AttendantDropdownProps) {
+export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler }: AttendantDropdownProps) {
 	const initAttendee = {
 		firstName: "",
 		lastName: "",
@@ -168,10 +170,16 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 	};
 
 	return (
+        <div className="full_height_popout" style={show ? { display: "" } : { display: "none" }}>
 		<div
 			id="attendant_dropdown_wrapper"
-			style={show ? { display: "" } : { display: "none" }}
 		>
+            <button
+                className="close_btn"
+                onClick={(e: React.MouseEvent<HTMLButtonElement>): void => showHandler()}
+            >
+                <FontAwesomeIcon icon={faClose}/>
+            </button>
 			<div id="attendant_dropdown_box_wrapper">
                 <h2>Add Existing Members</h2>
 				<form 
@@ -196,5 +204,6 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
             />
 			</div>
 		</div>
+        </div>
 	);
 }
