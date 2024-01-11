@@ -193,7 +193,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 					></input>
 				</form>
 				<div id="display_attendants_wrapper">
-                    <h3>Members set to be added.</h3>
+                    <h3>Members set to be added:</h3>
 					<ul>{selectedAttendants[0].firstName.length > 0 && selectedAttendants.length > 0 ? displaySelected : ""}</ul>
 				</div>
             <SuccessMessage 
