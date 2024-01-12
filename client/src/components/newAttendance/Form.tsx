@@ -143,6 +143,8 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		}
 	};
 
+
+
 	//This adds the new attendance to the needed tables and adds a column to the end of the master table.
 	const createNewAttendance = (): void => {
 		postData("/new-attendance/create", form).then((data: APINewTable): void => {
@@ -185,8 +187,10 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 	const insertNeededAttendants = (value: string): void => {
 		if (value === "All") {
 			insertAll();
-		} else {
+		} else if(value !== "Blank") {
 			insertSelectAttendants();
+		} else {
+			createNewAttendance();
 		}
 	};
 

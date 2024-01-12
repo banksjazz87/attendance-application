@@ -3,7 +3,7 @@ import { GroupProps } from "../../types/interfaces.ts";
 import "../../assets/styles/components/newAttendance/newGroupForm.scss";
 
 export default function NewGroupForm({ groupSelected, ageHandler }: GroupProps): JSX.Element {
-  const groupAge = ["Select One", "All", "Adult", "Youth", "Child"];
+  const groupAge = ["Select One", "Blank", "All", "Adult", "Youth", "Child"];
 
 
   /**
