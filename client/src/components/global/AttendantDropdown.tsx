@@ -115,7 +115,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
         const copyOfAllAdded = selectedAttendants.slice();
         copyOfAllAdded.splice(indexOfId, 1);
         setSelectedAttendants(copyOfAllAdded);
-    }
+    };
 
 
     //Used to display the options for the select dropdown.
@@ -170,7 +170,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
         } else {
             setShowSuccess(false);
         }
-    }
+    };
 
 
     /**
@@ -249,4 +249,4 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		</div>
         </div>
 	);
-}
+};
