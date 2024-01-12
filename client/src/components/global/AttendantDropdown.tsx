@@ -13,7 +13,7 @@ interface AttendantDropdownProps {
     showHandler: Function;
 }
 export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler }: AttendantDropdownProps) {
-	const initAttendee = {
+	const initAttendee: Attendee = {
 		firstName: "",
 		lastName: "",
 		age: "",
@@ -26,6 +26,8 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
     const [showSuccess, setShowSuccess] = useState<boolean>(false);
     const [successText, setSuccessText] = useState<string>('');
 
+    
+    //Get all of the available attendants, and set the attendants array.
 	useEffect(() => {
 		fetch("/all-attendants")
 			.then((data: Response): Promise<APIPeople> => {
@@ -40,6 +42,14 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 			});
 	}, []);
 
+
+    /**
+     * 
+     * @param selectedAttendants Attendee[]
+     * @param currentAttendant Attendee
+     * @returns boolean
+     * @description check to see if the selected attendant already exists in an array, returns true if there's a match and false if there's no match.
+     */
 	const checkForMatch = (selectedAttendants: Attendee[], currentAttendant: Attendee): boolean => {
 		let match = false;
 		for (let i = 0; i < selectedAttendants.length; i++) {
@@ -50,9 +60,16 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		return match;
 	};
 
-	const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const copyOfCurrent = selectedAttendants.slice();
-		const currentUser = attendants[parseInt(e.target.value as string)];
+
+    /**
+     * 
+     * @param e React.ChangeEvent<HTMLSelectElement>
+     * @returns void 
+     * @description this is the change handler that is fired when an option is selected from the dropdown.  First checks to see if the attendant alread exists in either the main array from the Attendance view, or if it already exists in the current list.
+     */
+	const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
+		const copyOfCurrent: Attendee[] = selectedAttendants.slice();
+		const currentUser: Attendee = attendants[parseInt(e.target.value as string)];
 
 		if (checkForMatch(copyOfCurrent, currentUser) || checkForMatch(currentAttendance, currentUser)) {
 			alert(`${currentUser.firstName} ${currentUser.lastName} is already included on this list.`);
@@ -65,6 +82,8 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		}
 	};
 
+
+    //Used to display the attendant options.
 	const attendantOptions: JSX.Element[] = attendants.map((x: Attendee, y: number): JSX.Element => {
 		return (
 			<option
@@ -74,6 +93,13 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		);
 	});
 
+
+    /**
+     * 
+     * @param e React.MouseEvent<HTMLButtonElement>
+     * @returns void
+     * @description removes the selected attendant from the current list.
+     */
     const removeClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
         const currentItem = e.target as HTMLElement;
         const dataId = currentItem.closest('.list_data') as HTMLElement;
@@ -92,6 +118,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
     }
 
 
+    //Used to display the options for the select dropdown.
 	const showOptions: Function = (): JSX.Element => {
 		if (attendants[0].firstName.length > 1) {
 			return (
@@ -112,6 +139,8 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		}
 	};
 
+
+    //Used to display any selected applicant, as a list item.
 	const displaySelected: JSX.Element[] = selectedAttendants.map((x: Attendee, y: number): JSX.Element => {
 		return (
             <div className="list_data" data-reactId={x.id}>
@@ -130,6 +159,8 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
         ) 
 	});
 
+
+    //Used to close the popup message, based on success or failure.
     const closeMessageHandler = (text: string): void => {
         if (text.includes('Success')) {
             setShowSuccess(false);
@@ -141,9 +172,17 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
         }
     }
 
-	const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+
+    /**
+     * 
+     * @param e React.FormEvent<HTMLFormElement>
+     * @returns void
+     * @description used for the final submit, adds all of the selected attendants to the list.
+     */
+	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
         
+        //Create an array of the fields that we need for the database.
         const neededFields = selectedAttendants.map((x: Attendee, y: number): Object => {
             let currentObj = {
                 id: x.id,
@@ -156,8 +195,11 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
             return currentObj;
         });
 
+        //Put the array of needed fields in an object.
         const data = {neededFields};
 
+
+        //Make a post request to insert the new attendants.
 		postData(`/attendance/insert/new-attendants/${currentTable}`, data)
             .then((data: APIResponse): void => {
                 if (data.message === 'success') {
@@ -168,6 +210,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
                 }
             });
 	};
+
 
 	return (
         <div className="full_height_popout" style={show ? { display: "" } : { display: "none" }}>
