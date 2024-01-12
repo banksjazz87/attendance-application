@@ -5,6 +5,7 @@ import NewOrExisting from "../components/newAttendance/NewOrExisting.tsx";
 import "../assets/styles/views/newAttendance.scss";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 
+
 interface ShowFormOptions {
   formNeeded: "New" | "Existing";
 }

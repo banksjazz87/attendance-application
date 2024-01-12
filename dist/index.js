@@ -359,6 +359,20 @@ app.post("/attendance/insert/attendant", (req, res) => {
         res.send({ message: "failure", data: Db.getSqlError(err) });
     });
 });
+app.post('/attendance/insert/new-attendants/:tableName', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const neededTable = req.params.tableName;
+    const allColumns = `id, firstName, lastName, age, memberType`;
+    Db.addBulkSelectApplicants(neededTable, allColumns, req.body.neededFields)
+        .then((data) => {
+        console.log('success', data);
+        res.send({ message: "success", data: data });
+    })
+        .catch((err) => {
+        console.log('Error inserting multiple attendants', err);
+        res.send({ message: "failure", data: Db.getSqlError(err) });
+    });
+});
 app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const first = req.params.firstName;

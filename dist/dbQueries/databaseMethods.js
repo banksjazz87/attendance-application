@@ -49,6 +49,23 @@ class DBMethods {
             err ? console.log("error, disconnecting") : console.log("disconnected");
         });
     }
+    prepBulkAddString(arr) {
+        let string = '';
+        for (let i = 0; i < arr.length; i++) {
+            let currentValues = Object.values(arr[i]);
+            string += '(';
+            for (let j = 0; j < currentValues.length; j++) {
+                if (j === currentValues.length - 1) {
+                    string += `"${currentValues[j]}"), `;
+                }
+                else {
+                    string += `"${currentValues[j]}",`;
+                }
+            }
+        }
+        let finalString = string.slice(0, string.length - 2);
+        return finalString;
+    }
     insert(table, columns, values) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
@@ -81,7 +98,13 @@ class DBMethods {
     getTable(table, order, column) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
-            let sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
+            let sql = "";
+            if (column === 'lastName') {
+                sql = `SELECT * FROM ${table} ORDER BY ${column} ${order}, firstName ${order}`;
+            }
+            else {
+                sql = `SELECT * FROM ${table} ORDER BY ${column} ${order};`;
+            }
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
@@ -189,6 +212,17 @@ class DBMethods {
             const database = this.dbConnection;
             const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
             database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
+    addBulkSelectApplicants(table, columns, obj) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            const mysqlMultipleString = this.prepBulkAddString(obj);
+            const sql = `INSERT INTO ${table} (${columns}) VALUES ${mysqlMultipleString};`;
+            database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
             this.endDb();

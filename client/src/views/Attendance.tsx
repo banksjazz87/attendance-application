@@ -7,10 +7,11 @@ import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
+import AttendantDropdown from "../components/global/AttendantDropdown.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import { Group, APIAttendanceSheet, Attendee, DBPartialAttendanceFields, PartialGroupFields, APIAttendanceAllTitles } from "../../src/types/interfaces.ts";
 import "../assets/styles/views/attendance.scss";
-import { faUserPlus, faFile } from "@fortawesome/free-solid-svg-icons";
+import { faUserPlus, faFile, faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function Attendance(): JSX.Element {
 	const [displayAttendance, setDisplayAttendance] = useState<boolean>(false);
@@ -30,6 +31,7 @@ export default function Attendance(): JSX.Element {
 	const [searching, setSearching] = useState<boolean>(false);
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = useState<string>("");
+	const [showAttendantDropdown, setShowAttendantDropdown] = useState<boolean>(false);
 
 	//Used to pull in the the main attendance that's needed.
 	const getMainAttendance = async (title: string): Promise<void> => {
@@ -243,13 +245,19 @@ export default function Attendance(): JSX.Element {
 				<div className="button_group">
 					<TextAndIconButton
 						show={showOptionButtons}
-						text={"Add New Member"}
+						text={"Add\r\nNew"}
 						iconName={faUserPlus}
 						clickHandler={() => setShowAddNewMember(true)}
 					/>
 					<TextAndIconButton
 						show={showOptionButtons}
-						text={"Different Attendance"}
+						text={"Add\r\nExisting"}
+						iconName={faUser}
+						clickHandler={() => setShowAttendantDropdown(true)}
+					/>
+					<TextAndIconButton
+						show={showOptionButtons}
+						text={"Different\r\nAttendance"}
 						iconName={faFile}
 						clickHandler={() => {
 							setDisplayAttendance(false);
@@ -282,6 +290,12 @@ export default function Attendance(): JSX.Element {
 					masterTable={false}
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
+				/>
+				<AttendantDropdown
+					show={showAttendantDropdown}
+					currentAttendance={currentListData}
+					currentTable={`${selectedGroup[0].name}_attendance`}
+					showHandler={(): void => setShowAttendantDropdown(false)}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to delete ${userToDelete.firstName} ${userToDelete.lastName} from this attendance sheet?`}
