@@ -53,6 +53,7 @@ export interface GroupProps {
   ageHandler?: Function;
   show?: Boolean;
   resetOffset?: Function;
+  createBlankListHandler?: Function;
 
 }
 
@@ -300,6 +301,7 @@ export interface NewAttendance {
   group: string;
   ageGroup: string;
   groupDisplayName: string;
+  blankList: boolean;
 }
 
 export interface ApiResponse {
