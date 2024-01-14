@@ -41,7 +41,7 @@ export default function NewGroupForm({ groupSelected, ageHandler, createBlankLis
 		);
 	});
 
-	//Used to update the state to determine if an attendance sheet should be pre-populated.
+	//Used to update the state to determine if an attendance sheet should be blank.
 	const blankListHandler = (e: React.MouseEvent<HTMLInputElement, MouseEvent>): void | undefined => {
 		if (createBlankListHandler) {
 			let selectedElement = e.target as HTMLInputElement;
