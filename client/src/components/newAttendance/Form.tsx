@@ -17,6 +17,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		group: "",
 		ageGroup: "",
 		groupDisplayName: "",
+		blankList: false,
 	});
 
 	//Using this to get all of the group names to compare against to determine if a new table needs to be created.
@@ -47,6 +48,15 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 	const titleChange = (value: string): void => {
 		setForm({ ...form, title: value });
 	};
+
+	//Update the prePopulatedList field of the form.
+	const blankListChange = (value: string): void => {
+		if (value === 'yes') {
+			setForm({...form, blankList: true});
+		} else {
+			setForm({...form, blankList: false});
+		}
+	}
 
 	/**
 	 *
@@ -183,14 +193,13 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 		});
 	};
 
-	//Insert the needed attendnts into a table.
+	//Insert the needed attendants into a table.
 	const insertNeededAttendants = (value: string): void => {
-		if (value === "All") {
-			insertAll();
-		} else if(value !== "Blank") {
-			insertSelectAttendants();
-		} else {
+		const createBlank: boolean = form.blankList;
+		if (createBlank) {
 			createNewAttendance();
+		} else {
+			value === 'All' ? insertAll() : insertSelectAttendants();
 		}
 	};
 
@@ -270,6 +279,7 @@ export default function Form({ show, formToShow, startLoading, stopLoading }: Fo
 				<NewGroupForm
 					groupSelected={setNewGroupName}
 					ageHandler={setGroupAge}
+					createBlankListHandler={blankListChange}
 				/>
 			</div>
 			<AttendanceTitle
