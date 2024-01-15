@@ -80,7 +80,6 @@ export default function NewGroupForm({ groupSelected, ageHandler, createBlankLis
 				<p>Would you like to create a blank attendance sheet?</p>
 				<div className="two_col_input_wrapper">
 					<div className="inner_input_wrapper">
-						<label htmlFor="yes">Yes</label>
 						<input
 							id="yes"
 							type="radio"
@@ -88,9 +87,9 @@ export default function NewGroupForm({ groupSelected, ageHandler, createBlankLis
 							value="yes"
 							onClick={blankListHandler}
 						/>
+            <label htmlFor="yes">Yes</label>
 					</div>
 					<div className="inner_input_wrapper">
-						<label htmlFor="no">No</label>
 						<input
 							id="no"
 							type="radio"
@@ -98,6 +97,7 @@ export default function NewGroupForm({ groupSelected, ageHandler, createBlankLis
 							value="no"
 							onClick={blankListHandler}
 						/>
+            <label htmlFor="no">No, please add the selected age group.</label>
 					</div>
 				</div>
 			</div>
