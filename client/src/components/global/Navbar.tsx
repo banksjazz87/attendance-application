@@ -6,15 +6,32 @@ import { faKey, faChartLine, faFileCirclePlus, faFile, faSearch, faPeopleGroup }
 
 export default function Navbar() {
   const [displayNavBar, setDisplayNavBar] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<string>('');
+
 
   useEffect(() => {
-      const currentPage: string = window.location.pathname;
-      if (currentPage !== '/') {
-        setDisplayNavBar(true);
-      } else {
-        setDisplayNavBar(false);
-      }
+    const currentPage: string = window.location.pathname;
+    console.log("this is the current page", currentPage);
+    if (currentPage !== '/') {
+      setDisplayNavBar(true);
+      setCurrentPage(currentPage);
+    } else {
+      setDisplayNavBar(false);
+      setCurrentPage(currentPage);
+    }
   }, []);
+
+
+  //Used to determine if a class to style the menu icon should be set.
+  const checkForActivePage = (pageName: string, displayedPage: string): boolean=> {
+    if (displayedPage === pageName) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
 
   return (
     <nav id="main_nav_wrapper" style={displayNavBar ? {display: ''}: {display: 'none'}}>
@@ -26,27 +43,27 @@ export default function Navbar() {
           </Link>
         </li>
         <li>
-          <Link to={`/dashboard`}>
+          <Link to={`/dashboard`} className={checkForActivePage('/dashboard', currentPage ) ? 'active_page_highlight' : ''} >
             <FontAwesomeIcon icon={faChartLine} />
           </Link>
         </li>
         <li>
-          <Link to={`/new-attendance`}>
+          <Link to={`/new-attendance`} className={checkForActivePage('/new-attendance', currentPage ) ? 'active_page_highlight' : ''}>
             <FontAwesomeIcon icon={faFileCirclePlus} />
           </Link>
         </li>
         <li>
-          <Link to={`/attendance`}>
+          <Link to={`/attendance`} className={checkForActivePage('/attendance', currentPage ) ? 'active_page_highlight' : ''}>
             <FontAwesomeIcon icon={faFile} />
           </Link>
         </li>
         <li>
-          <Link to={`/search`}>
+          <Link to={`/search`} className={checkForActivePage('/search', currentPage ) ? 'active_page_highlight' : ''}>
             <FontAwesomeIcon icon={faSearch} />
           </Link>
         </li>
         <li>
-          <Link to={`/people`}>
+          <Link to={`/people`} className={checkForActivePage('/people', currentPage ) ? 'active_page_highlight' : ''}>
             <FontAwesomeIcon icon={faPeopleGroup} />
           </Link>
         </li>

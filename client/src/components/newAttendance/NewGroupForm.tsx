@@ -97,7 +97,7 @@ export default function NewGroupForm({ groupSelected, ageHandler, createBlankLis
 							value="no"
 							onClick={blankListHandler}
 						/>
-            <label htmlFor="no">No, please add the selected age group.</label>
+            <label htmlFor="no">No, add the selected age group.</label>
 					</div>
 				</div>
 			</div>
