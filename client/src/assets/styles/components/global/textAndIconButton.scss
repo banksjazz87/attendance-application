@@ -1,18 +1,6 @@
 @import "../../global/library.scss";
 .add_new_member_btn {
-    margin: auto;
-    display: flex;
-    flex-direction: row;
-    column-gap: .75rem;
-    justify-content: center;
-    align-items: center;
-    align-content: bottom;
-    min-width: 250px;
-    height: 64px;
-    padding: 12px 36px;
-    @media(max-width: 767px) {
-        min-width: 200px;
-    }
+    @include new-member-btn;
     .add_new_member_btn_text {
         @include accent-bold;
         color: white;
@@ -29,4 +17,9 @@
             font-size: 18px;
         }
     }
+}
+
+.single_btn {
+    @include new-member-btn;
+    min-width: 250px;
 }

@@ -76,6 +76,22 @@ $blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-back
     }
 }
 
+@mixin new-member-btn {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    column-gap: .75rem;
+    justify-content: center;
+    align-items: center;
+    align-content: bottom;
+    min-width: 200px;
+    height: 64px;
+    padding: 12px 36px;
+    @media(max-width: 767px) {
+        min-width: 200px;
+    }
+}
+
 @mixin content-wrapper-md {
     display: flex;
     flex-direction: column;
