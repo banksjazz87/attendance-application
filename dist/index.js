@@ -538,3 +538,24 @@ app.get("/group-months/:yearDate/:groupName", (req, res) => {
         console.log("Error", err);
     });
 });
+app.get('/all-visitors/:limit/:offset', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const neededColumns = ['id', 'visitorId', 'firstName', 'lastName', 'phone', 'dateCreated'];
+    const reqLimit = parseInt(req.params.limit);
+    const reqOffset = parseInt(req.params.offset);
+    Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC')
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data,
+        });
+        console.log(data);
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: Db.getSqlError(err)
+        });
+        console.log("Error", err);
+    });
+});

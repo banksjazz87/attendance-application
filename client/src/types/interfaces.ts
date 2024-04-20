@@ -147,6 +147,22 @@ export interface APITotalRows {
   error: string;
 }
 
+export interface VisitorShortFields {
+  id: Number;
+  visitorId: Number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  dateCreated: string;
+}
+
+export interface APIVisitorInit {
+  message: string;
+  data: VisitorShortFields[];
+  error: string;
+}
+
+
 export interface DBAttendanceTitle {
   id: number;
   title: string;

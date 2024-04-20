@@ -615,3 +615,27 @@ app.get("/group-months/:yearDate/:groupName", (req: Request, res: Response): voi
 			console.log("Error", err);
 		});
 });
+
+app.get('/all-visitors/:limit/:offset', (req: Request, res: Response): void => {
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+	const neededColumns = ['id', 'visitorId', 'firstName', 'lastName', 'phone', 'dateCreated'];
+	const reqLimit = parseInt(req.params.limit);
+	const reqOffset = parseInt(req.params.offset);
+
+
+	Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC')
+		.then((data: string[]): void => {
+			res.send({
+				message: "success", 
+				data: data,
+			});
+			console.log(data);
+	})
+	.catch((err: SQLResponse): void => {
+		res.send({
+			message: "failure", 
+			error: Db.getSqlError(err)
+		});
+		console.log("Error", err);
+	});
+});
