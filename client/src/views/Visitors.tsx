@@ -17,6 +17,23 @@ export default function Vistors() {
 	const offSetIncrement: number = 10;
 
 
+    //Get the total number of rows found
+    useEffect((): void => {
+        fetch(`/row-count/Visitor_Forms`)
+            .then((data: Response): Promise<APITotalRows> => {
+                return data.json();
+            })
+            .then((final: APITotalRows): void => {
+                if (final.message === 'success') {
+                    setTotalDbRows(final.data[0].total);
+                } else {
+                    console.error(final.message);
+                }
+            })
+    }, [totalDbRows]);
+
+
+    //Only get the current offset from the table.
     useEffect((): void => {
         fetch(`all-visitors/${offSetIncrement}/${currentOffset}`)
             .then((data: Response): Promise<APIVisitorInit> => {
@@ -81,9 +98,11 @@ export default function Vistors() {
 		<div id="people_page_wrapper">
 			<Navbar />
 			<div className="header_wrapper">
-				<h1>People</h1>
+				<h1>Visitors</h1>
 			</div>
 			<div id="people_content_wrapper">
+
+                <p>{`The total count for this table is ${totalDbRows}`}</p>
 				{/* <AllPeople
 					allPeople={people}
 					deletePersonHandler={deleteUserHandler}

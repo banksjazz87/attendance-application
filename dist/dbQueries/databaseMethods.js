@@ -343,7 +343,7 @@ class DBMethods {
         });
     }
     //Used to return a limited number of rows from a table.
-    selectFewWithLimit(table, columns, limit, offset, fieldOrder, order) {
+    selectFewWithLimit(table, columns, limit, offset, fieldOrder, order, countField) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
             const stringOfColumns = columns.join(', ');

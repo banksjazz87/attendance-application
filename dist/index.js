@@ -543,7 +543,7 @@ app.get('/all-visitors/:limit/:offset', (req, res) => {
     const neededColumns = ['id', 'visitorId', 'firstName', 'lastName', 'phone', 'dateCreated'];
     const reqLimit = parseInt(req.params.limit);
     const reqOffset = parseInt(req.params.offset);
-    Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC')
+    Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC', 'id')
         .then((data) => {
         res.send({
             message: "success",
