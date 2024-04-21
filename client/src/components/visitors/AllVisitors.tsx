@@ -1,19 +1,119 @@
 import React from "react";
-import { Attendee } from "../../types/interfaces.ts";
+import { VisitorShortFields } from "../../types/interfaces.ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import SearchBar from "../../components/global/SearchBar.tsx";
+import PaginationButtons from "../global/PaginationButtons.tsx";
 
 interface AllVisitorProps {
-    allPeople: Attendee[];
-    totalRows: number;
-    updateOffsetHandler: Function;
-    offSetIncrement: number;
-    updatePartial: Function;
-    activeSearch: boolean;
+	allVisitors: VisitorShortFields[];
+	totalRows: number;
+	updateOffsetHandler: Function;
+	offSetIncrement: number;
+	updatePartial: Function;
+	activeSearch: boolean;
 }
 
-export default function AllVisitors({allPeople, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch}: AllVisitorProps) {
+export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch }: AllVisitorProps) {
+    
+	const visitorFields: JSX.Element[] = allVisitors.map((x: VisitorShortFields, y: number): JSX.Element => {
+		return (
+			<tr key={`row_${y}`}>
+				<td>{`${y + 1}.`}</td>
+				<td>{x.lastName}</td>
+				<td>{x.firstName}</td>
+				<td>{x.dateCreated}</td>
+				<td>
+					<a href={`tel:${x.phone}`}>
+						<FontAwesomeIcon icon={faPhone} />
+					</a>
+				</td>
+				<td>
+					<button type="button">View Form</button>
+				</td>
+			</tr>
+		);
+	});
+
+
+    /**
+   * 
+   * @returns JSX element
+   * @description Displays the table view while no search is active in the search bar.
+   */
+	const allVisitorFields = (): JSX.Element => {
+		return (
+			<div id="visitor_form_table_wrapper">
+                <h2>All Visitors</h2>
+                <SearchBar updatePartial={updatePartial}/>
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>Last Name</th>
+							<th>First Name</th>
+							<th>Entry Date</th>
+							<th>Phone</th>
+							<th>Form</th>
+						</tr>
+					</thead>
+					<tbody>{visitorFields}</tbody>
+				</table>
+                <PaginationButtons 
+                    totalRows={totalRows}
+                    updateOffset={updateOffsetHandler}
+                    offSetIncrement={offSetIncrement}
+                    sessionPageProperty={'visitorPage'}
+                />
+			</div>
+		);
+	};
+
+
+     /**
+   * 
+   * @returns JSX element
+   * @description displays a limited view where no person is found from the search bar.
+   */
+  const activeSearchNoVisitorFound = (): JSX.Element => {
     return (
-        <>
-            <h1>All Visitors here</h1>
-        </>
-    )
+      <div id="all_people_table_wrapper">
+        <h2>All Attendants</h2>
+        <SearchBar updatePartial={updatePartial} />
+      </div>
+    );
+  };
+
+  /**
+   * 
+   * @returns JSX Element
+   * @description just shows the search bar without a table, this is used when no results are present.
+   */
+  const searchBarNoTable = (): JSX.Element => {
+    return (
+      <div id="all_people_table_wrapper">
+        <h2>All Attendants</h2>
+        <SearchBar updatePartial={updatePartial} />
+        <PaginationButtons
+          totalRows={totalRows}
+          updateOffset={updateOffsetHandler}
+          offSetIncrement={offSetIncrement}
+          sessionPageProperty={"visitorPage"}
+        />
+      </div>
+    );
+  }
+
+
+
+  if (allVisitors.length > 0 && !activeSearch) {
+    return allVisitorFields();
+  } else if (activeSearch && allVisitors.length < 1) {
+    return activeSearchNoVisitorFound();
+  } else if (activeSearch && allVisitors.length > 0) {
+    return allVisitorFields();
+  } else {
+    return searchBarNoTable();
+  }
+	
 }

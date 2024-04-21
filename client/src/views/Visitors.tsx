@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from "react";
 import {Attendee, APITotalRows, APIPeople, VisitorShortFields, APIVisitorInit} from "../types/interfaces.ts";
-import { InitAttendee } from "../variables/initAttendee.ts";
+import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
 import AllVisitors from "../components/visitors/AllVisitors.tsx";
 
 
 export default function Vistors() {
-    const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
+    const [visitors, setVisitors] = useState<VisitorShortFields[]>([initShortVisitor]);
 	const [totalDbRows, setTotalDbRows] = useState<number>(0);
 	const [currentOffset, setCurrentOffset] = useState<number>(0);
 	const [partialName, setPartialName] = useState<string>("");
@@ -41,7 +41,7 @@ export default function Vistors() {
             })
                 .then((final: APIVisitorInit): void => {
                     if (final.message === 'success') {
-                        console.log(final);
+                        setVisitors(final.data);
                     }else {
                         alert(final.error);
                     }
@@ -101,8 +101,6 @@ export default function Vistors() {
 				<h1>Visitors</h1>
 			</div>
 			<div id="people_content_wrapper">
-
-                <p>{`The total count for this table is ${totalDbRows}`}</p>
 				{/* <AllPeople
 					allPeople={people}
 					deletePersonHandler={deleteUserHandler}
@@ -127,17 +125,17 @@ export default function Vistors() {
 					updateSuccessMessage={updateSuccessMessageText}
 				/> */}
 
-                {/* <AllVisitors 
-                    allPeople={people}
+                <AllVisitors 
+                    allVisitors={visitors}
 					totalRows={totalDbRows}
 					updateOffsetHandler={(num: number): void => {
 						setCurrentOffset(num);
 					}}
-					offSetIncrement={0}
+					offSetIncrement={offSetIncrement}
 					updatePartial={updatePartialName}
 					activeSearch={searching}
                 
-                /> */}
+                />
 			</div>
 		</div>
 	);
