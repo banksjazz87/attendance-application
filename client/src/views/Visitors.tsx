@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from "react";
-import {Attendee, APITotalRows, APIPeople, VisitorShortFields, APIVisitorInit} from "../types/interfaces.ts";
+import { APITotalRows, VisitorShortFields, APIVisitorInit} from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
 import AllVisitors from "../components/visitors/AllVisitors.tsx";
+import "../assets/styles/views/visitors.scss";
 
 
 export default function Vistors() {
@@ -13,9 +14,8 @@ export default function Vistors() {
 	const [partialName, setPartialName] = useState<string>("");
 	const [searching, setSearching] = useState<boolean>(false);
 
-  //Set the initial offset for the pagination.
+    //Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
-
 
     //Get the total number of rows found
     useEffect((): void => {
@@ -32,61 +32,32 @@ export default function Vistors() {
             })
     }, [totalDbRows]);
 
-
-    //Only get the current offset from the table.
-    useEffect((): void => {
-        fetch(`all-visitors/${offSetIncrement}/${currentOffset}`)
-            .then((data: Response): Promise<APIVisitorInit> => {
-                return data.json();
-            })
-                .then((final: APIVisitorInit): void => {
-                    if (final.message === 'success') {
-                        setVisitors(final.data);
-                    }else {
-                        alert(final.error);
-                    }
-                });
-    }, []);
-
-	// //Used to get the number of rows from the table.
-	// useEffect((): void => {
-	// 	fetch(`/all-visitors/${offSetIncrement}/${currentOffset}`)
-	// 		.then((data: Response): Promise<APITotalRows> => {
-	// 			return data.json();
-	// 		})
-	// 		.then((final: APITotalRows): void => {
-	// 			if (final.message === "success") {
-	// 				setTotalDbRows(final.data[0].total);
-	// 			}
-	// 		});
-	// }, [totalDbRows]);
-
-	// //Used to check if there is a current partial name search.
-	// useEffect((): void => {
-	// 	if (partialName.length > 0) {
-	// 		setSearching(true);
-	// 		fetch(`/people/search/Attendants/${partialName}`)
-	// 			.then((data: Response): Promise<APIPeople> => {
-	// 				return data.json();
-	// 			})
-	// 			.then((final: APIPeople): void => {
-	// 				if (final.message === "success") {
-	// 					setPeople(final.data);
-	// 				}
-	// 			});
-	// 	} else {
-	// 		setSearching(false);
-	// 		fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
-	// 			.then((data: Response): Promise<APIPeople> => {
-	// 				return data.json();
-	// 			})
-	// 			.then((final: APIPeople): void => {
-	// 				if (final.message === "success") {
-	// 					setPeople(final.data);
-	// 				}
-	// 			});
-	// 	}
-	// }, [currentOffset, partialName]);
+	//Used to check if there is a current partial name search.
+	useEffect((): void => {
+		if (partialName.length > 0) {
+			setSearching(true);
+			fetch(`/people/search/Visitor_Forms/${partialName}`)
+				.then((data: Response): Promise<APIVisitorInit> => {
+					return data.json();
+				})
+				.then((final: APIVisitorInit): void => {
+					if (final.message === "success") {
+						setVisitors(final.data);
+					}
+				});
+		} else {
+			setSearching(false);
+			fetch(`/table-return-few/Visitor_Forms/${offSetIncrement}/${currentOffset}/lastName/ASC`)
+				.then((data: Response): Promise<APIVisitorInit> => {
+					return data.json();
+				})
+				.then((final: APIVisitorInit): void => {
+					if (final.message === "success") {
+						setVisitors(final.data);
+					}
+				});
+		}
+	}, [currentOffset, partialName]);
 
 	
 	//Used to update the partialName state in the search bar.
@@ -95,36 +66,12 @@ export default function Vistors() {
 	};
 
 	return (
-		<div id="people_page_wrapper">
+		<div id="visitor_page_wrapper">
 			<Navbar />
 			<div className="header_wrapper">
 				<h1>Visitors</h1>
 			</div>
-			<div id="people_content_wrapper">
-				{/* <AllPeople
-					allPeople={people}
-					deletePersonHandler={deleteUserHandler}
-					editPersonHandler={editUserHandler}
-					totalRows={totalDbRows}
-					updateOffsetHandler={(num: number): void => {
-						setCurrentOffset(num);
-					}}
-					offSetIncrement={offSetIncrement}
-					updatePartial={updatePartialName}
-					activeSearch={searching}
-				/>
-				<EditMember
-					show={showEditUser}
-					editUser={userToEdit}
-					hideHandler={hideEditUser}
-					updateName={updateEditName}
-					updateAge={updateEditAge}
-					updateMember={updateEditMember}
-					updateActiveStatus={updateEditMemberStatus}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
-					updateSuccessMessage={updateSuccessMessageText}
-				/> */}
-
+			<div id="visitor_content_wrapper">
                 <AllVisitors 
                     allVisitors={visitors}
 					totalRows={totalDbRows}

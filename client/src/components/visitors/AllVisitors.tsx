@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPhone } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../../components/global/SearchBar.tsx";
 import PaginationButtons from "../global/PaginationButtons.tsx";
+import "../../assets/styles/components/visitors/allVisitors.scss";
 
 interface AllVisitorProps {
 	allVisitors: VisitorShortFields[];
@@ -15,11 +16,10 @@ interface AllVisitorProps {
 }
 
 export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch }: AllVisitorProps) {
-    
+
 	const visitorFields: JSX.Element[] = allVisitors.map((x: VisitorShortFields, y: number): JSX.Element => {
 		return (
 			<tr key={`row_${y}`}>
-				<td>{`${y + 1}.`}</td>
 				<td>{x.lastName}</td>
 				<td>{x.firstName}</td>
 				<td>{x.dateCreated}</td>
@@ -43,13 +43,12 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
    */
 	const allVisitorFields = (): JSX.Element => {
 		return (
-			<div id="visitor_form_table_wrapper">
+			<div id="all_visitors_table_wrapper">
                 <h2>All Visitors</h2>
                 <SearchBar updatePartial={updatePartial}/>
 				<table>
 					<thead>
 						<tr>
-							<th></th>
 							<th>Last Name</th>
 							<th>First Name</th>
 							<th>Entry Date</th>
@@ -77,7 +76,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
    */
   const activeSearchNoVisitorFound = (): JSX.Element => {
     return (
-      <div id="all_people_table_wrapper">
+      <div id="all_visitors_table_wrapper">
         <h2>All Attendants</h2>
         <SearchBar updatePartial={updatePartial} />
       </div>
@@ -91,7 +90,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
    */
   const searchBarNoTable = (): JSX.Element => {
     return (
-      <div id="all_people_table_wrapper">
+      <div id="all_visitors_table_wrapper">
         <h2>All Attendants</h2>
         <SearchBar updatePartial={updatePartial} />
         <PaginationButtons
