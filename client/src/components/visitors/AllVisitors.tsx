@@ -1,10 +1,11 @@
 import React from "react";
 import { VisitorShortFields } from "../../types/interfaces.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faPhone, faFile } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../../components/global/SearchBar.tsx";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 import "../../assets/styles/components/visitors/allVisitors.scss";
+import DateMethods from "../../functions/dateMethods.ts";
 
 interface AllVisitorProps {
 	allVisitors: VisitorShortFields[];
@@ -18,18 +19,22 @@ interface AllVisitorProps {
 export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch }: AllVisitorProps) {
 
 	const visitorFields: JSX.Element[] = allVisitors.map((x: VisitorShortFields, y: number): JSX.Element => {
+
+        const dateSubmitted = x.dateCreated ? DateMethods.formatMysqlDate(x.dateCreated) : '';
 		return (
 			<tr key={`row_${y}`}>
 				<td>{x.lastName}</td>
 				<td>{x.firstName}</td>
-				<td>{x.dateCreated}</td>
+				<td>{dateSubmitted}</td>
 				<td>
 					<a href={`tel:${x.phone}`}>
 						<FontAwesomeIcon icon={faPhone} />
 					</a>
 				</td>
 				<td>
-					<button type="button">View Form</button>
+					<button type="button">
+                        <FontAwesomeIcon icon={faFile} />
+                    </button>
 				</td>
 			</tr>
 		);

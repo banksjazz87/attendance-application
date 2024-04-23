@@ -27,6 +27,9 @@
         button {
             @include icon-button;
         }
+        a svg {
+            @include icon-button;
+        }
         .user_check,
         .user_active {
             font-size: 20px;
