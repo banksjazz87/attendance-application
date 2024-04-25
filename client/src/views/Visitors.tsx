@@ -47,7 +47,7 @@ export default function Vistors() {
 				});
 		} else {
 			setSearching(false);
-			fetch(`/table-return-few/Visitor_Forms/${offSetIncrement}/${currentOffset}/lastName/ASC`)
+			fetch(`/table-return-few/Visitor_Forms/${offSetIncrement}/${currentOffset}/dateCreated/DESC`)
 				.then((data: Response): Promise<APIVisitorInit> => {
 					return data.json();
 				})

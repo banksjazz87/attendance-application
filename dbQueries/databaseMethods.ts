@@ -254,12 +254,6 @@ export class DBMethods {
     });
   }
 
-
-
-
-
-
-
   addBulkSelectApplicants(table: string, columns: string, obj: Object[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
@@ -413,7 +407,7 @@ export class DBMethods {
 
 
    //Used to return a limited number of rows from a table.
-   selectFewWithLimit(table: string, columns: string[], limit: number, offset: number, fieldOrder: string, order: string, countField: string): Promise<string[]> {
+   selectFewWithLimit(table: string, columns: string[], limit: number, offset: number, fieldOrder: string, order: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
       const stringOfColumns = columns.join(', ');
