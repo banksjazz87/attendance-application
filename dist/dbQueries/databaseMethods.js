@@ -343,7 +343,7 @@ class DBMethods {
         });
     }
     //Used to return a limited number of rows from a table.
-    selectFewWithLimit(table, columns, limit, offset, fieldOrder, order, countField) {
+    selectFewWithLimit(table, columns, limit, offset, fieldOrder, order) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
             const stringOfColumns = columns.join(', ');
@@ -352,6 +352,15 @@ class DBMethods {
                 err ? reject(err) : resolve(results);
             });
             this.endDb();
+        });
+    }
+    selectAllById(table, columnName, id) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            const neededSql = `SELECT * FROM ${table} WHERE ${columnName} = ${id}`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
         });
     }
 }

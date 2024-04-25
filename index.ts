@@ -639,3 +639,42 @@ app.get('/all-visitors/:limit/:offset', (req: Request, res: Response): void => {
 		console.log("Error", err);
 	});
 });
+
+app.get('/all-visitor-data/:id', (req: Request, res: Response): void => {
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+	const visitorId:number = parseInt(req.params.id);
+
+	Promise.all([
+		Db.selectAllById('Visitor_Forms', 'id', visitorId), 
+		Db.selectAllById('Visitor_Children', 'parentId', visitorId), 
+		Db.selectAllById('Visitor_Interests', 'visitor_attendant_id', visitorId), 
+		Db.selectAllById('Visitor_Spouse', 'visitorSpouseId', visitorId), 
+		Db.endDb()
+	 ])
+	 	.then((data: [string[], string[], string[], string[], void]) => {
+			res.send({
+				message: "success",
+				data: {
+					form: data[0], 
+					children: data[1], 
+					interests: data[2], 
+					spouse: data[3]
+				}
+			});
+			console.log('Success!!');
+		})
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
+			res.send({
+				message: "failure", 
+				error: () => {
+					Db.getSqlError(err[0]); 
+					Db.getSqlError(err[1]); 
+					Db.getSqlError(err[2]); 
+					Db.getSqlError(err[3]); 
+					Db.getSqlError(err[4]);
+				}
+			})
+
+			console.log('Error', err);
+		});
+})

@@ -421,4 +421,15 @@ export class DBMethods {
     });
   }
 
+  selectAllById(table: string, columnName: string, id: number): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.dbConnection;
+      const neededSql = `SELECT * FROM ${table} WHERE ${columnName} = ${id}`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+  }
+
 }

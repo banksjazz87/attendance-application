@@ -543,7 +543,7 @@ app.get('/all-visitors/:limit/:offset', (req, res) => {
     const neededColumns = ['id', 'visitorId', 'firstName', 'lastName', 'phone', 'dateCreated'];
     const reqLimit = parseInt(req.params.limit);
     const reqOffset = parseInt(req.params.offset);
-    Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC', 'id')
+    Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC')
         .then((data) => {
         res.send({
             message: "success",
@@ -557,5 +557,41 @@ app.get('/all-visitors/:limit/:offset', (req, res) => {
             error: Db.getSqlError(err)
         });
         console.log("Error", err);
+    });
+});
+app.get('/all-visitor-data/:id', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const visitorId = parseInt(req.params.id);
+    Promise.all([
+        Db.selectAllById('Visitor_Forms', 'id', visitorId),
+        Db.selectAllById('Visitor_Children', 'parentId', visitorId),
+        Db.selectAllById('Visitor_Interests', 'visitor_attendant_id', visitorId),
+        Db.selectAllById('Visitor_Spouse', 'visitorSpouseId', visitorId),
+        Db.endDb()
+    ])
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: {
+                form: data[0],
+                children: data[1],
+                interests: data[2],
+                spouse: data[3]
+            }
+        });
+        console.log('Success!!');
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+                Db.getSqlError(err[4]);
+            }
+        });
+        console.log('Error', err);
     });
 });
