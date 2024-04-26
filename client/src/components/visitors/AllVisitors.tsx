@@ -14,9 +14,10 @@ interface AllVisitorProps {
 	offSetIncrement: number;
 	updatePartial: Function;
 	activeSearch: boolean;
+    visitorSelector: Function;
 }
 
-export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch }: AllVisitorProps) {
+export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch, visitorSelector }: AllVisitorProps) {
 
 	const visitorFields: JSX.Element[] = allVisitors.map((x: VisitorShortFields, y: number): JSX.Element => {
 
@@ -32,7 +33,13 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 					</a>
 				</td>
 				<td>
-					<button type="button">
+					<button 
+                        type="button"
+                        onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+                            visitorSelector(x.id)
+                        }}
+
+                    >
                         <FontAwesomeIcon icon={faFile} />
                     </button>
 				</td>

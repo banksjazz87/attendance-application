@@ -103,6 +103,56 @@ export interface APIResponse {
   error: string;
 }
 
+export interface VisitorForm {
+  visitorId: number;
+  id: number;
+  firstName: string;
+  lastName: string;
+  title: string;
+  address: string;
+  city: string;
+  state: string;
+  phone: string;
+  email: string;
+  contact_method: string;
+  prayer_requests: string;
+  dateCreated: string;
+}
+
+export interface VisitorChildren {
+  childId: number;
+  parentId: number;
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+export interface VisitorInterests {
+  visitor_attendant_id: number;
+  interest: string;
+}
+
+export interface VisitorSpouse {
+  spouseId: number;
+  visitorSpouseId: number;
+  id: number;
+  firstName: string;
+  lastName: string;
+}
+
+export interface AllVisitorData {
+  form: VisitorForm[];
+  children: VisitorChildren[];
+  interests: VisitorInterests[];
+  spouse: VisitorSpouse[];
+}
+
+export interface AllVisitorAPIData {
+  message: string;
+  data: AllVisitorData;
+  error?: string;
+}
+
 export interface YearsDataObj {
   years: number;
 }

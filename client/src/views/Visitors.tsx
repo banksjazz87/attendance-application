@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from "react";
-import { APITotalRows, VisitorShortFields, APIVisitorInit} from "../types/interfaces.ts";
+import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData,  AllVisitorAPIData} from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
 import AllVisitors from "../components/visitors/AllVisitors.tsx";
 import "../assets/styles/views/visitors.scss";
+import { initVisitorData } from '../variables/initVisitorData';
+
 
 
 export default function Vistors() {
@@ -13,6 +15,8 @@ export default function Vistors() {
 	const [currentOffset, setCurrentOffset] = useState<number>(0);
 	const [partialName, setPartialName] = useState<string>("");
 	const [searching, setSearching] = useState<boolean>(false);
+    const [selectedVisitorId, setSelectedVisitorId] = useState<number>(-1);
+    const [selectedVisitorData, setSelectedVisitorData] = useState<AllVisitorData>(initVisitorData);
 
     //Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -59,11 +63,33 @@ export default function Vistors() {
 		}
 	}, [currentOffset, partialName]);
 
+
+    useEffect((): void => {
+        if (selectedVisitorId !== -1) {
+            fetch(`/all-visitor-data/${selectedVisitorId}`)
+                .then((data: Response): Promise<AllVisitorAPIData> => {
+                    return data.json();
+                })
+                .then((final: AllVisitorAPIData): void => {
+                    if (final.message === 'success') {
+                        console.log('This worked', final);
+                    } else {
+                        console.log('This failed', final.message);
+                    }
+                })
+        }
+    })
+
 	
 	//Used to update the partialName state in the search bar.
 	const updatePartialName = (string: string): void => {
 		setPartialName(string);
 	};
+
+    //Used to get the id of the current user.
+    const updateSelectedVisitor = (id: number): void => {
+        setSelectedVisitorId(id);
+    }
 
 	return (
 		<div id="visitor_page_wrapper">
@@ -81,6 +107,7 @@ export default function Vistors() {
 					offSetIncrement={offSetIncrement}
 					updatePartial={updatePartialName}
 					activeSearch={searching}
+                    visitorSelector={updateSelectedVisitor}
                 
                 />
 			</div>
