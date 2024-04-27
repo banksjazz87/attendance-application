@@ -1,40 +1,40 @@
-import React, {useState, useEffect} from "react";
-import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData,  AllVisitorAPIData} from "../types/interfaces.ts";
+import React, { useState, useEffect } from "react";
+import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData } from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
 import AllVisitors from "../components/visitors/AllVisitors.tsx";
+import VisitorModal from "../components/visitors/VisitorModal.tsx";
 import "../assets/styles/views/visitors.scss";
-import { initVisitorData } from '../variables/initVisitorData';
-
-
+import { initVisitorData } from "../variables/initVisitorData";
 
 export default function Vistors() {
-    const [visitors, setVisitors] = useState<VisitorShortFields[]>([initShortVisitor]);
+	const [visitors, setVisitors] = useState<VisitorShortFields[]>([initShortVisitor]);
 	const [totalDbRows, setTotalDbRows] = useState<number>(0);
 	const [currentOffset, setCurrentOffset] = useState<number>(0);
 	const [partialName, setPartialName] = useState<string>("");
 	const [searching, setSearching] = useState<boolean>(false);
-    const [selectedVisitorId, setSelectedVisitorId] = useState<number>(-1);
-    const [selectedVisitorData, setSelectedVisitorData] = useState<AllVisitorData>(initVisitorData);
+	const [selectedVisitorId, setSelectedVisitorId] = useState<number>(-1);
+	const [selectedVisitorData, setSelectedVisitorData] = useState<AllVisitorData>(initVisitorData);
+    const [showFormModal, setShowFormModal] = useState<boolean>(false);
 
-    //Set the initial offset for the pagination.
+	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
 
-    //Get the total number of rows found
-    useEffect((): void => {
-        fetch(`/row-count/Visitor_Forms`)
-            .then((data: Response): Promise<APITotalRows> => {
-                return data.json();
-            })
-            .then((final: APITotalRows): void => {
-                if (final.message === 'success') {
-                    setTotalDbRows(final.data[0].total);
-                } else {
-                    console.error(final.message);
-                }
-            })
-    }, [totalDbRows]);
+	//Get the total number of rows found
+	useEffect((): void => {
+		fetch(`/row-count/Visitor_Forms`)
+			.then((data: Response): Promise<APITotalRows> => {
+				return data.json();
+			})
+			.then((final: APITotalRows): void => {
+				if (final.message === "success") {
+					setTotalDbRows(final.data[0].total);
+				} else {
+					console.error(final.error ? final.error : "An error occurred.");
+				}
+			});
+	}, [totalDbRows]);
 
 	//Used to check if there is a current partial name search.
 	useEffect((): void => {
@@ -47,6 +47,8 @@ export default function Vistors() {
 				.then((final: APIVisitorInit): void => {
 					if (final.message === "success") {
 						setVisitors(final.data);
+					} else {
+						console.error(final.error ? final.error : "An error occurred.");
 					}
 				});
 		} else {
@@ -58,38 +60,46 @@ export default function Vistors() {
 				.then((final: APIVisitorInit): void => {
 					if (final.message === "success") {
 						setVisitors(final.data);
+					} else {
+						console.error(final.error ? final.error : "an error occurred");
 					}
 				});
 		}
 	}, [currentOffset, partialName]);
 
+	//Used to get the current selected visitor id.
+	useEffect((): void => {
+		if (selectedVisitorId !== -1) {
+			fetch(`/all-visitor-data/${selectedVisitorId}`)
+				.then((data: Response): Promise<AllVisitorAPIData> => {
+					return data.json();
+				})
+				.then((final: AllVisitorAPIData): void => {
+					if (final.message === "success") {
+						setSelectedVisitorData({ ...selectedVisitorData, 
+                            form: final.data.form, 
+                            children: final.data.children, 
+                            interests: final.data.interests, 
+                            spouse: final.data.spouse 
+                        });
+                        setShowFormModal(true);
 
-    useEffect((): void => {
-        if (selectedVisitorId !== -1) {
-            fetch(`/all-visitor-data/${selectedVisitorId}`)
-                .then((data: Response): Promise<AllVisitorAPIData> => {
-                    return data.json();
-                })
-                .then((final: AllVisitorAPIData): void => {
-                    if (final.message === 'success') {
-                        console.log('This worked', final);
-                    } else {
-                        console.log('This failed', final.message);
-                    }
-                })
-        }
-    })
+					} else {
+						console.error(final.error ? "This failed " + final.error : "An error occurred.");
+					}
+				});
+		}
+	}, [selectedVisitorId]);
 
-	
 	//Used to update the partialName state in the search bar.
 	const updatePartialName = (string: string): void => {
 		setPartialName(string);
 	};
 
-    //Used to get the id of the current user.
-    const updateSelectedVisitor = (id: number): void => {
-        setSelectedVisitorId(id);
-    }
+	//Used to get the id of the current user.
+	const updateSelectedVisitor = (id: number): void => {
+		setSelectedVisitorId(id);
+	};
 
 	return (
 		<div id="visitor_page_wrapper">
@@ -98,8 +108,8 @@ export default function Vistors() {
 				<h1>Visitors</h1>
 			</div>
 			<div id="visitor_content_wrapper">
-                <AllVisitors 
-                    allVisitors={visitors}
+				<AllVisitors
+					allVisitors={visitors}
 					totalRows={totalDbRows}
 					updateOffsetHandler={(num: number): void => {
 						setCurrentOffset(num);
@@ -107,8 +117,13 @@ export default function Vistors() {
 					offSetIncrement={offSetIncrement}
 					updatePartial={updatePartialName}
 					activeSearch={searching}
-                    visitorSelector={updateSelectedVisitor}
-                
+					visitorSelector={updateSelectedVisitor}
+				/>
+
+                <VisitorModal
+                    showModal={showFormModal}
+                    hideModal={(): void => setShowFormModal(false)}
+                    formData={selectedVisitorData}
                 />
 			</div>
 		</div>

@@ -293,7 +293,7 @@ app.get("/get-attendant/:firstName/:lastName", (req: Request, res: Response): vo
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("FAILURE", err);
-			res.send({ message: "failure", data: err });
+			res.send({ message: "failure", error: err });
 		});
 });
 
@@ -353,7 +353,7 @@ app.get("/attendance/get-list/:listName", (req: Request, res: Response): void =>
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("there was an error", err);
-			res.send({ message: "failure", data: Db.getSqlError(err) });
+			res.send({ message: "failure", error: Db.getSqlError(err) });
 		});
 });
 
@@ -369,7 +369,7 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req: Request, res: 
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("there was an error", err);
-			res.send({ message: "failure", data: Db.getSqlError(err) });
+			res.send({ message: "failure", error: Db.getSqlError(err) });
 		});
 });
 
@@ -389,7 +389,7 @@ app.put("/attendance/update-table/:columnName/:presentValue", (req: Request, res
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("FAILURE", err);
-			res.send({ message: "Failure", data: Db.getSqlError(err) });
+			res.send({ message: "Failure", error: Db.getSqlError(err) });
 		});
 });
 
@@ -407,7 +407,7 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
 		})
 		.catch((err: SQLResponse): void => {
 			console.log("Errorr inserting attendant", err);
-			res.send({ message: "failure", data: Db.getSqlError(err) });
+			res.send({ message: "failure", error: Db.getSqlError(err) });
 		});
 });
 
@@ -425,7 +425,7 @@ app.post('/attendance/insert/new-attendants/:tableName', (req: Request, res: Res
 		})
 		.catch((err: SQLResponse): void => {
 			console.log('Error inserting multiple attendants', err);
-			res.send({ message: "failure", data: Db.getSqlError(err)});
+			res.send({ message: "failure", error: Db.getSqlError(err)});
 		});
 });
 
@@ -448,7 +448,7 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
-				data: Db.getSqlError(err),
+				error: Db.getSqlError(err),
 			});
 			console.log(err);
 		});
@@ -468,7 +468,7 @@ app.get("/row-count/:tableName", (req: Request, res: Response): void => {
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
-				data: Db.getSqlError(err),
+				error: Db.getSqlError(err),
 			});
 			console.log(err);
 		});
@@ -489,7 +489,7 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
-				data: Db.getSqlError(err),
+				error: Db.getSqlError(err),
 			});
 			console.log(err);
 		});
@@ -512,7 +512,7 @@ app.get("/people/search/:table/:partialName", (req: Request, res: Response): voi
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
-				data: Db.getSqlError(err),
+				error: Db.getSqlError(err),
 			});
 			console.log(err);
 		});
@@ -567,7 +567,7 @@ app.get("/group-statistics/:group/:month/:year", (req: Request, res: Response): 
 		.catch((err: SQLResponse): void => {
 			res.send({
 				message: "failure",
-				err: Db.getSqlError(err),
+				error: Db.getSqlError(err),
 			});
 			console.log(err);
 		});

@@ -257,7 +257,7 @@ app.get("/get-attendant/:firstName/:lastName", (req, res) => {
     })
         .catch((err) => {
         console.log("FAILURE", err);
-        res.send({ message: "failure", data: err });
+        res.send({ message: "failure", error: err });
     });
 });
 app.delete("/remove-person/:firstName/:lastName/:id", (req, res) => {
@@ -310,7 +310,7 @@ app.get("/attendance/get-list/:listName", (req, res) => {
     })
         .catch((err) => {
         console.log("there was an error", err);
-        res.send({ message: "failure", data: Db.getSqlError(err) });
+        res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
@@ -324,7 +324,7 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
     })
         .catch((err) => {
         console.log("there was an error", err);
-        res.send({ message: "failure", data: Db.getSqlError(err) });
+        res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
@@ -341,7 +341,7 @@ app.put("/attendance/update-table/:columnName/:presentValue", (req, res) => {
     })
         .catch((err) => {
         console.log("FAILURE", err);
-        res.send({ message: "Failure", data: Db.getSqlError(err) });
+        res.send({ message: "Failure", error: Db.getSqlError(err) });
     });
 });
 app.post("/attendance/insert/attendant", (req, res) => {
@@ -356,7 +356,7 @@ app.post("/attendance/insert/attendant", (req, res) => {
     })
         .catch((err) => {
         console.log("Errorr inserting attendant", err);
-        res.send({ message: "failure", data: Db.getSqlError(err) });
+        res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 app.post('/attendance/insert/new-attendants/:tableName', (req, res) => {
@@ -370,7 +370,7 @@ app.post('/attendance/insert/new-attendants/:tableName', (req, res) => {
     })
         .catch((err) => {
         console.log('Error inserting multiple attendants', err);
-        res.send({ message: "failure", data: Db.getSqlError(err) });
+        res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
 app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (req, res) => {
@@ -390,7 +390,7 @@ app.delete("/attendance-sheet/remove-person/:firstName/:lastName/:id/:group", (r
         .catch((err) => {
         res.send({
             message: "failure",
-            data: Db.getSqlError(err),
+            error: Db.getSqlError(err),
         });
         console.log(err);
     });
@@ -408,7 +408,7 @@ app.get("/row-count/:tableName", (req, res) => {
         .catch((err) => {
         res.send({
             message: "failure",
-            data: Db.getSqlError(err),
+            error: Db.getSqlError(err),
         });
         console.log(err);
     });
@@ -426,7 +426,7 @@ app.get("/table-return-few/:tableName/:limitNum/:offsetNum/:fieldOrder/:orderVal
         .catch((err) => {
         res.send({
             message: "failure",
-            data: Db.getSqlError(err),
+            error: Db.getSqlError(err),
         });
         console.log(err);
     });
@@ -446,7 +446,7 @@ app.get("/people/search/:table/:partialName", (req, res) => {
         .catch((err) => {
         res.send({
             message: "failure",
-            data: Db.getSqlError(err),
+            error: Db.getSqlError(err),
         });
         console.log(err);
     });
@@ -494,7 +494,7 @@ app.get("/group-statistics/:group/:month/:year", (req, res) => {
         .catch((err) => {
         res.send({
             message: "failure",
-            err: Db.getSqlError(err),
+            error: Db.getSqlError(err),
         });
         console.log(err);
     });
