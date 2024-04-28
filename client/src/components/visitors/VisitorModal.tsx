@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { AllVisitorData, VisitorChildren, VisitorInterests, VisitorSpouse } from "../../types/interfaces";
 import VisitorRow from "../visitors/VisitorRow";
+import "../../assets/styles/components/visitors/visitorModal.scss";
 
 
 interface VisitorModalProps {
@@ -35,57 +36,63 @@ export default function VisitorModal({showModal, hideModal, formData}: VisitorMo
 
 
     return (
-        <div id="visitor_modal_wrapper">
-            <button onClick={(e: React.MouseEvent<HTMLButtonElement>) => hideModal}>
-                <FontAwesomeIcon icon={faClose} />
-            </button>
-
-            <div className="visitor_modal_content">
-                <h3>Visitor Form</h3>
-                <VisitorRow 
-                    title="Name"
-                    text={`${form.title} ${form.firstName} ${form.lastName}`}
-                />
-                <div>
-                    <p>Spouse</p>
-                    <div className="horizontal_list">
-                        {displaySpouse}
+        <div 
+        className="full_height_popout"
+        style={showModal ? {display: ""}: {display: "none"}}
+        >
+            <div id="visitor_modal_wrapper">
+                <button 
+                    className='close_btn'
+                    onClick={(e: React.MouseEvent<HTMLButtonElement>) => hideModal()}>
+                    <FontAwesomeIcon icon={faClose} />
+                </button>
+                <div id="visitor_modal_content">
+                    <h3>Visitor Form</h3>
+                    <VisitorRow 
+                        title="Name"
+                        text={`${form.title} ${form.firstName} ${form.lastName}`}
+                    />
+                    <div>
+                        <p>Spouse</p>
+                        <div className="horizontal_list">
+                            {displaySpouse}
+                        </div>
                     </div>
-                </div>
-                <div>
-                    <p>Children</p>
-                    <div className="vertical_list">
-                        {displayChildren}
+                    <div>
+                        <p>Children</p>
+                        <div className="vertical_list">
+                            {displayChildren}
+                        </div>
                     </div>
-                </div>
-                <VisitorRow 
-                    title="Address"
-                    text={`${form.address} \n ${form.city}, ${form.state}`}
-                />
-                <VisitorRow 
-                    title="Phone"
-                    text={`${form.phone}`}
-                    linkURL={`tel:${form.phone}`}
-                />
-                <VisitorRow 
-                    title="Email"
-                    text={`${form.phone}`}
-                    linkURL={`mailto:${form.email}`}
-                />
-                 <VisitorRow 
-                    title="Preferred Contact"
-                    text={`${form.contact_method}`}
-                />
-                <div>
-                    <p>Interests</p>
-                    <div className="vertical_list">
-                        {displayInterests}
+                    <VisitorRow 
+                        title="Address"
+                        text={`${form.address} \n ${form.city}, ${form.state}`}
+                    />
+                    <VisitorRow 
+                        title="Phone"
+                        text={`${form.phone}`}
+                        linkURL={`tel:${form.phone}`}
+                    />
+                    <VisitorRow 
+                        title="Email"
+                        text={`${form.phone}`}
+                        linkURL={`mailto:${form.email}`}
+                    />
+                    <VisitorRow 
+                        title="Preferred Contact"
+                        text={`${form.contact_method}`}
+                    />
+                    <div>
+                        <p>Interests</p>
+                        <div className="vertical_list">
+                            {displayInterests}
+                        </div>
                     </div>
+                    <VisitorRow
+                        title="Prayer Requests"
+                        text={form.prayer_requests}
+                   />
                 </div>
-                <VisitorRow
-                    title="Prayer Requests"
-                    text={form.prayer_requests}
-                />
             </div>
         </div>
     )

@@ -1,0 +1,69 @@
+@import "../../global/library.scss";
+.full_height_popout {
+    @include full-height-popout-background;
+}
+
+#visitor_modal_wrapper {
+    @include popout-content;
+    .close_btn {
+        @include icon-close-btn;
+    }
+    #visitor_modal_content {
+        @include inner-shadow-form-wrapper;
+        .fields_wrapper {
+            @include inner-shadow-form-wrapper;
+        }
+        .input_wrapper {
+            @include shadow-form-input-pair;
+            width: 100%;
+            @media(max-width: 767px) {
+                width: 100%;
+            }
+        }
+        .header_fields_wrapper {
+            display: flex;
+            flex-direction: column;
+            row-gap: 0;
+            width: 60%;
+            @media (max-width: 767px) {
+                width: 90%;
+            }
+            h2 {
+                text-align: center;
+            }
+        }
+        .age_fields_wrapper,
+        .member_fields_wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            column-gap: 2rem;
+            width: 100%;
+            margin: auto;
+            min-width: 250px;
+            row-gap: 1rem;
+            .input_wrapper {
+                display: flex;
+                flex-direction: row;
+                width: auto;
+                min-width: unset;
+                label {
+                    margin-bottom: 0;
+                }
+                input {
+                    width: 20px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    #edit_member_form_wrapper {
+        overflow-y: scroll;
+        height: 80vh;
+        padding-top: 2rem;
+        margin-top: 10px;
+    }
+}
