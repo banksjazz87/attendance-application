@@ -10,50 +10,23 @@
     }
     #visitor_modal_content {
         @include inner-shadow-form-wrapper;
-        .fields_wrapper {
-            @include inner-shadow-form-wrapper;
-        }
-        .input_wrapper {
-            @include shadow-form-input-pair;
-            width: 100%;
-            @media(max-width: 767px) {
-                width: 100%;
-            }
-        }
-        .header_fields_wrapper {
-            display: flex;
-            flex-direction: column;
-            row-gap: 0;
-            width: 60%;
-            @media (max-width: 767px) {
-                width: 90%;
-            }
-            h2 {
+        table {
+            border: 1px solid black;
+            border-collapse: collapse;
+            th {
                 text-align: center;
             }
-        }
-        .age_fields_wrapper,
-        .member_fields_wrapper {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            column-gap: 2rem;
-            width: 100%;
-            margin: auto;
-            min-width: 250px;
-            row-gap: 1rem;
-            .input_wrapper {
+            th,
+            td {
+                border: 1px solid black;
+                border-collapse: collapse;
+            }
+            .vertical_data {
                 display: flex;
-                flex-direction: row;
-                width: auto;
-                min-width: unset;
-                label {
-                    margin-bottom: 0;
-                }
-                input {
-                    width: 20px;
-                }
+                flex-direction: column;
+            }
+            p {
+                margin: 0px;
             }
         }
     }
