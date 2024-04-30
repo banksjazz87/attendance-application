@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
-import { AllVisitorData, VisitorChildren, VisitorInterests, VisitorSpouse } from "../../types/interfaces";
+import { AllVisitorData, VisitorChildren, VisitorInterests } from "../../types/interfaces";
 import VisitorRow from "../visitors/VisitorRow";
 import "../../assets/styles/components/visitors/visitorModal.scss";
 
@@ -61,7 +61,9 @@ export default function VisitorModal({ showModal, hideModal, formData }: Visitor
 							</tr>
 							<VisitorRow
 								title="Address"
-								text={`${form.address} \n ${form.city}, ${form.state}`}
+								text={`${form.address}
+                                        ${form.city}, ${form.state}`
+                                    }
 							/>
 							<VisitorRow
 								title="Phone"
@@ -77,11 +79,15 @@ export default function VisitorModal({ showModal, hideModal, formData }: Visitor
 								title="Preferred Contact"
 								text={`${form.contact_method}`}
 							/>
-							<tr>
+							<tr className="visitor_row">
 								<td className="title">
-									<h3>Interests</h3>
+									<h3 className="title">Interests</h3>
 								</td>
-								<div className="vertical_data">{displayInterests}</div>
+								<td className="text">
+                                    <div className="vertical_data">
+                                        {displayInterests}
+                                    </div>
+                                </td>
 							</tr>
 							<VisitorRow
 								title="Prayer Requests"
@@ -90,7 +96,7 @@ export default function VisitorModal({ showModal, hideModal, formData }: Visitor
 						</tbody>
                         <tfoot>
                             <tr>
-                                <td>
+                                <td colSpan={2}>
                                     <p>{`This form was submitted on ${form.dateCreated}`}</p>
                                 </td>
                             </tr>
