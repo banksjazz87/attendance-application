@@ -15,15 +15,16 @@
         table {
             margin-top: 40px;
             border-collapse: collapse;
-            border-top: 1px solid $purple;
-            border-bottom: 1px solid $purple;
+            border-top: 1px solid $dark-blue;
+            border-bottom: 1px solid $dark-blue;
+            width: 90%;
             th {
                 text-align: center;
                 padding-top: 10px;
                 padding-bottom: 10px;
-                background-color: $purple;
+                background-color: $dark-blue;
                 color: white;
-                border: 0 1px 0 1px solid $purple;
+                border: 0 1px 0 1px solid $dark-blue;
             }
             tbody {
                 td {
@@ -40,19 +41,22 @@
                 }
                 a {
                     text-decoration: none;
-                    color: $purple;
+                    color: $dark-blue;
                     font-size: 18px;
                     &:hover {
                         cursor: pointer;
-                        color: #9d36a6;
+                        color: $dark-background;
                     }
+                }
+                .title {
+                    color: black;
                 }
             }
             tfoot {
-                border: 0 1px 0 1px solid $purple;
+                border: 0 1px 0 1px solid $dark-blue;
                 td {
                     text-align: center;
-                    background-color: $purple;
+                    background-color: $dark-blue;
                     color: white;
                     padding: 0;
                     border-spacing: 0;

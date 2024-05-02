@@ -4,6 +4,7 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { AllVisitorData, VisitorChildren, VisitorInterests } from "../../types/interfaces";
 import VisitorRow from "../visitors/VisitorRow";
 import "../../assets/styles/components/visitors/visitorModal.scss";
+import DateMethods from "../../functions/dateMethods.ts";
 
 interface VisitorModalProps {
 	showModal: boolean;
@@ -97,7 +98,7 @@ export default function VisitorModal({ showModal, hideModal, formData }: Visitor
                         <tfoot>
                             <tr>
                                 <td colSpan={2}>
-                                    <p>{`This form was submitted on ${form.dateCreated}`}</p>
+                                    <p>{form.dateCreated.length > 10 ? `This form was submitted on ${DateMethods.formatMysqlDate(form.dateCreated)}` : ''}</p>
                                 </td>
                             </tr>
                         </tfoot>
