@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import { Link } from "react-router-dom";
 import "../../assets/styles/components/global/navbar.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faKey, faChartLine, faFileCirclePlus, faFile, faSearch, faPeopleGroup } from "@fortawesome/free-solid-svg-icons";
+import { faKey, faChartLine, faFileCirclePlus, faFile, faSearch, faPeopleGroup, faUsersViewfinder } from "@fortawesome/free-solid-svg-icons";
 
 export default function Navbar() {
   const [displayNavBar, setDisplayNavBar] = useState<boolean>(false);
@@ -11,7 +11,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const currentPage: string = window.location.pathname;
-    console.log("this is the current page", currentPage);
+
     if (currentPage !== '/') {
       setDisplayNavBar(true);
       setCurrentPage(currentPage);
@@ -37,12 +37,6 @@ export default function Navbar() {
     <nav id="main_nav_wrapper" style={displayNavBar ? {display: ''}: {display: 'none'}}>
       <ul>
         <li>
-          <Link to={`/`}>
-            {" "}
-            <FontAwesomeIcon icon={faKey} />
-          </Link>
-        </li>
-        <li>
           <Link to={`/dashboard`} className={checkForActivePage('/dashboard', currentPage ) ? 'active_page_highlight' : ''} >
             <FontAwesomeIcon icon={faChartLine} />
           </Link>
@@ -65,6 +59,11 @@ export default function Navbar() {
         <li>
           <Link to={`/people`} className={checkForActivePage('/people', currentPage ) ? 'active_page_highlight' : ''}>
             <FontAwesomeIcon icon={faPeopleGroup} />
+          </Link>
+        </li>
+        <li>
+          <Link to={`/visitors`} className={checkForActivePage('/visitors', currentPage ) ? 'active_page_highlight' : ''}>
+            <FontAwesomeIcon icon={faUsersViewfinder} />
           </Link>
         </li>
       </ul>

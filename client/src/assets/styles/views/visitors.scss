@@ -1,0 +1,18 @@
+@import "../global/library.scss";
+#visitor_page_wrapper {
+    overflow-x: hidden;
+}
+
+#visitor_content_wrapper {
+    @include content-wrapper-md;
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 8rem;
+}
+
+@media (max-width: 1024px) {
+    #visitor_content_wrapper {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

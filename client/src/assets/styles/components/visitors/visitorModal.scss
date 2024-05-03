@@ -1,0 +1,82 @@
+@import "../../global/library.scss";
+.full_height_popout {
+    @include full-height-popout-background;
+}
+
+#visitor_modal_wrapper {
+    @include popout-content;
+    overflow: scroll;
+    height: 80vh;
+    .close_btn {
+        @include icon-close-btn;
+    }
+    #visitor_modal_content {
+        @include inner-shadow-form-wrapper;
+        table {
+            margin-top: 40px;
+            border-collapse: collapse;
+            border-top: 1px solid $dark-blue;
+            border-bottom: 1px solid $dark-blue;
+            width: 90%;
+            th {
+                text-align: center;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                background-color: $dark-blue;
+                color: white;
+                border: 0 1px 0 1px solid $dark-blue;
+            }
+            tbody {
+                td {
+                    border: 1px inset black;
+                    border-collapse: collapse;
+                    padding: 12px 12px;
+                }
+                .vertical_data {
+                    display: flex;
+                    flex-direction: column;
+                }
+                p {
+                    margin: 0px;
+                }
+                a {
+                    text-decoration: none;
+                    color: $dark-blue;
+                    font-size: 18px;
+                    &:hover {
+                        cursor: pointer;
+                        color: $dark-background;
+                    }
+                }
+                .title {
+                    color: black;
+                }
+            }
+            tfoot {
+                border: 0 1px 0 1px solid $dark-blue;
+                td {
+                    text-align: center;
+                    background-color: $dark-blue;
+                    color: white;
+                    padding: 0;
+                    border-spacing: 0;
+                    height: 90px;
+                    padding: 0 20px 0 20px;
+                }
+                p {
+                    color: white;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    #visitor_modal_wrapper {
+        overflow-y: scroll;
+        height: 80vh;
+        padding-top: 2rem;
+        margin-top: 10px;
+    }
+}

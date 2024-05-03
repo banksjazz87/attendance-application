@@ -4,6 +4,7 @@ $dark-orange: #c75437;
 $light-blue: #e0fbfc;
 $medium-blue: #98c1d9;
 $dark-blue: #3d5a80;
+$purple: #86198f;
 $primary-font: Overpass,
 sans-serif;
 $blue-highlight: rgba(152, 193, 217, .2);
@@ -73,6 +74,22 @@ $blue-gradient: linear-gradient(130deg, $dark-background, $dark-blue, $dark-back
     }
     &:focus-visible {
         box-shadow: 0 2px 6px rgba(238, 108, 77, .8);
+    }
+}
+
+@mixin new-member-btn {
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    column-gap: .75rem;
+    justify-content: center;
+    align-items: center;
+    align-content: bottom;
+    min-width: 200px;
+    height: 64px;
+    padding: 12px 36px;
+    @media(max-width: 767px) {
+        min-width: 200px;
     }
 }
 

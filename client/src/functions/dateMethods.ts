@@ -53,7 +53,18 @@ const DateMethods = {
 			return selectedArr.toString();
 		}
 
-	}
+	},
+
+
+	formatMysqlDate(str: string): string {
+		const arrayOfString = str.split('-');
+		const month = arrayOfString[1];
+		const year = arrayOfString[0];
+		const day = arrayOfString[2].split('T')[0];
+		const finalString = `${month}/${day}/${year}`;
+
+		return finalString;
+	},
 
 }   
 

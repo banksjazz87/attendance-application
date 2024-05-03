@@ -254,12 +254,6 @@ export class DBMethods {
     });
   }
 
-
-
-
-
-
-
   addBulkSelectApplicants(table: string, columns: string, obj: Object[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database = this.dbConnection;
@@ -408,6 +402,33 @@ export class DBMethods {
         err ? reject(err) : resolve(results);
       });
       this.endDb();
+    });
+  }
+
+
+   //Used to return a limited number of rows from a table.
+   selectFewWithLimit(table: string, columns: string[], limit: number, offset: number, fieldOrder: string, order: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.dbConnection;
+      const stringOfColumns = columns.join(', ');
+
+      const neededSql = `SELECT ${stringOfColumns} FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  selectAllById(table: string, columnName: string, id: number): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.dbConnection;
+      const neededSql = `SELECT * FROM ${table} WHERE ${columnName} = ${id}`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
     });
   }
 

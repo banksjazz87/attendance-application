@@ -8,9 +8,10 @@ interface AddNewMemberButtonProps {
 	clickHandler: Function;
 	text: string;
 	iconName: IconDefinition;
+	classes?: string;
 }
 
-export default function TextAndIconButton({ show, clickHandler, text, iconName }: AddNewMemberButtonProps): JSX.Element {
+export default function TextAndIconButton({ show, clickHandler, text, iconName, classes }: AddNewMemberButtonProps): JSX.Element {
 	/**
 	 *
 	 * @param e button click
@@ -27,7 +28,7 @@ export default function TextAndIconButton({ show, clickHandler, text, iconName }
 			style={show ? { display: "" } : { display: "none" }}
 			type="button"
 			onClick={btnClickHandler}
-			className="add_new_member_btn"
+			className={classes ? classes : "add_new_member_btn"}
 		>
 			<pre className="add_new_member_btn_text">{text}</pre>
 			<FontAwesomeIcon

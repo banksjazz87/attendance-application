@@ -141,6 +141,7 @@ export default function People() {
 					text="Add New Member"
 					iconName={faUserPlus}
 					clickHandler={() => displayAddMember()}
+					classes='single_btn add_new_member_btn'
 				/>
 				<NewMember
 					show={showAddMember}
