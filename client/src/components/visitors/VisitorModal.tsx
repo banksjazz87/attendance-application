@@ -50,7 +50,7 @@ export default function VisitorModal({ showModal, hideModal, formData }: Visitor
 							/>
 							<VisitorRow
 								title="Spouse"
-								text={`${spouse.firstName} ${spouse.lastName}`}
+								text={spouse ? `${spouse.firstName} ${spouse.lastName}` : ''}
 							/>
 							<tr>
 								<td className="title">

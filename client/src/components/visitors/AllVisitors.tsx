@@ -20,6 +20,7 @@ interface AllVisitorProps {
 export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch, visitorSelector }: AllVisitorProps) {
 	const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
 
+  //watching for a window resize, and updating the currentWindowWidth
 	useEffect((): void => {
 		window.addEventListener("resize", (ev: UIEvent): void => {
 			setCurrentWindowWidth(window.innerWidth);
@@ -30,7 +31,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 	const lgScreenHeaders: ValuesAndClass[] = [
 		{ value: "Last Name", class: "last_name_header" },
 		{ value: "First Name", class: "first_name_header" },
-		{ value: "Entry Date", class: "entry_date_header" },
+		{ value: "Submitted", class: "entry_date_header" },
 		{ value: "Phone", class: "phone_header" },
 		{ value: "Form", class: "form_header" },
 	];
@@ -38,7 +39,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 	//Headers to be displayed for mobile devices.
 	const mobileHeaders: ValuesAndClass[] = [
 		{ value: "Name", class: "first_last_name_header" },
-		{ value: "Entry Date", class: "entry_date_header" },
+		{ value: "Submitted", class: "entry_date_header" },
 		{ value: "Phone", class: "phone_header" },
 		{ value: "Form", class: "form_header" },
 	];
@@ -64,6 +65,8 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 		return returnHeaders;
 	};
 
+
+  //This is used to display on non-mobile devices.
 	const visitorFields: JSX.Element[] = allVisitors.map((x: VisitorShortFields, y: number): JSX.Element => {
 		const dateSubmitted = x.dateCreated ? DateMethods.formatMysqlDate(x.dateCreated) : "";
 		return (
@@ -90,6 +93,8 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 		);
 	});
 
+
+  //This is used as the display for the mobile devices.
 	const mobileVisitorFields: JSX.Element[] = allVisitors.map((x: VisitorShortFields, y: number): JSX.Element => {
 		const dateSubmitted = x.dateCreated ? DateMethods.formatMysqlDate(x.dateCreated) : "";
 		return (

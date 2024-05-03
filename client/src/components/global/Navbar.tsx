@@ -37,12 +37,6 @@ export default function Navbar() {
     <nav id="main_nav_wrapper" style={displayNavBar ? {display: ''}: {display: 'none'}}>
       <ul>
         <li>
-          <Link to={`/`}>
-            {" "}
-            <FontAwesomeIcon icon={faKey} />
-          </Link>
-        </li>
-        <li>
           <Link to={`/dashboard`} className={checkForActivePage('/dashboard', currentPage ) ? 'active_page_highlight' : ''} >
             <FontAwesomeIcon icon={faChartLine} />
           </Link>

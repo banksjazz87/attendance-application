@@ -98,7 +98,11 @@ export default function Vistors() {
 
 	//Used to get the id of the current user.
 	const updateSelectedVisitor = (id: number): void => {
-		setSelectedVisitorId(id);
+		if (id === selectedVisitorId) {
+			setShowFormModal(true);
+		} else {
+			setSelectedVisitorId(id);
+		}
 	};
 
 	return (
