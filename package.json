@@ -8,7 +8,7 @@
         "server": "node dist/index.js",
         "build": "cd client && npm run build && cd .. && npx tsc",
         "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-        "build:staging": "env-cmd -f .env.staging npm run build", 
+        "build:staging": "env-cmd -f .env.staging npm run build",
         "build:production": "env-cmd -f .env npm run build"
     },
     "keywords": [],
@@ -25,7 +25,7 @@
         "create-index": "^2.6.0",
         "dotenv": "^16.0.3",
         "env-cmd": "^10.1.0",
-        "express": "^4.18.2",
+        "express": "^4.21.0",
         "mysql": "^2.18.1",
         "typescript": "^5.0.4"
     },

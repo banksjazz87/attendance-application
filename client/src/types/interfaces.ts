@@ -1,3 +1,4 @@
+import { initShortVisitor } from '../variables/initShortVisitor';
 export interface Attendee {
   firstName: string;
   lastName: string;
@@ -286,7 +287,7 @@ export interface DeleteProps {
   message: string;
   url: string;
   show: boolean;
-  deleteUser: Attendee;
+  deleteUser: Attendee | VisitorShortFields;
   hideHandler: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;

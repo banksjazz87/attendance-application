@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { VisitorShortFields, ValuesAndClass } from "../../types/interfaces.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPhone, faFile } from "@fortawesome/free-solid-svg-icons";
+import { faPhone, faFile, faTrashCan } from "@fortawesome/free-solid-svg-icons";
 import SearchBar from "../../components/global/SearchBar.tsx";
 import PaginationButtons from "../global/PaginationButtons.tsx";
 import "../../assets/styles/components/visitors/allVisitors.scss";
@@ -15,9 +15,10 @@ interface AllVisitorProps {
 	updatePartial: Function;
 	activeSearch: boolean;
 	visitorSelector: Function;
+	deletePersonHandler: Function;
 }
 
-export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch, visitorSelector }: AllVisitorProps) {
+export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandler, offSetIncrement, updatePartial, activeSearch, visitorSelector, deletePersonHandler }: AllVisitorProps) {
 	const [currentWindowWidth, setCurrentWindowWidth] = useState<number>(window.innerWidth);
 
   //watching for a window resize, and updating the currentWindowWidth
@@ -34,6 +35,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 		{ value: "Submitted", class: "entry_date_header" },
 		{ value: "Phone", class: "phone_header" },
 		{ value: "Form", class: "form_header" },
+		{ value: "Delete", class: "delete_header" },
 	];
 
 	//Headers to be displayed for mobile devices.
@@ -42,6 +44,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 		{ value: "Submitted", class: "entry_date_header" },
 		{ value: "Phone", class: "phone_header" },
 		{ value: "Form", class: "form_header" },
+		{ value: "Delete", class: "delete_header" },
 	];
 
 	/**
@@ -89,6 +92,17 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 						<FontAwesomeIcon icon={faFile} />
 					</button>
 				</td>
+				<td className="align_center">
+					<button
+						type="button"
+						className="trash_can"
+						onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+							deletePersonHandler(x);
+						}}
+					>
+						<FontAwesomeIcon icon={faTrashCan} />
+					</button>
+				</td>
 			</tr>
 		);
 	});
@@ -114,6 +128,17 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 						}}
 					>
 						<FontAwesomeIcon icon={faFile} />
+					</button>
+				</td>
+				<td className="align_center">
+					<button
+						type="button"
+						className="trash_can"
+						onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+							deletePersonHandler(x);
+						}}
+					>
+						<FontAwesomeIcon icon={faTrashCan} />
 					</button>
 				</td>
 			</tr>

@@ -7,6 +7,8 @@ import AllVisitors from "../components/visitors/AllVisitors.tsx";
 import VisitorModal from "../components/visitors/VisitorModal.tsx";
 import "../assets/styles/views/visitors.scss";
 import { initVisitorData } from "../variables/initVisitorData";
+import DeleteAlert from "../components/global/DeleteAlert.tsx";
+import SuccessMessage from "../components/global/SuccessMessage.tsx";
 
 export default function Vistors() {
 	const [visitors, setVisitors] = useState<VisitorShortFields[]>([initShortVisitor]);
@@ -16,7 +18,11 @@ export default function Vistors() {
 	const [searching, setSearching] = useState<boolean>(false);
 	const [selectedVisitorId, setSelectedVisitorId] = useState<number>(-1);
 	const [selectedVisitorData, setSelectedVisitorData] = useState<AllVisitorData>(initVisitorData);
-    const [showFormModal, setShowFormModal] = useState<boolean>(false);
+	const [showFormModal, setShowFormModal] = useState<boolean>(false);
+	const [userToDelete, setUserToDelete] = useState<VisitorShortFields>(initShortVisitor);
+	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
+	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -76,14 +82,8 @@ export default function Vistors() {
 				})
 				.then((final: AllVisitorAPIData): void => {
 					if (final.message === "success") {
-						setSelectedVisitorData({ ...selectedVisitorData, 
-                            form: final.data.form, 
-                            children: final.data.children, 
-                            interests: final.data.interests, 
-                            spouse: final.data.spouse 
-                        });
-                        setShowFormModal(true);
-
+						setSelectedVisitorData({ ...selectedVisitorData, form: final.data.form, children: final.data.children, interests: final.data.interests, spouse: final.data.spouse });
+						setShowFormModal(true);
 					} else {
 						console.error(final.error ? "This failed " + final.error : "An error occurred.");
 					}
@@ -105,6 +105,17 @@ export default function Vistors() {
 		}
 	};
 
+	//Used to delete an attendant.
+	const deleteUserHandler = (obj: VisitorShortFields): void => {
+		setShowDeleteAlert(true);
+		setUserToDelete(obj);
+	};
+
+	//Used to update the success message text.
+	const updateSuccessMessageText = (str: string): void => {
+		setSuccessMessageText(str);
+	};
+
 	return (
 		<div id="visitor_page_wrapper">
 			<Navbar />
@@ -122,13 +133,30 @@ export default function Vistors() {
 					updatePartial={updatePartialName}
 					activeSearch={searching}
 					visitorSelector={updateSelectedVisitor}
+					deletePersonHandler={deleteUserHandler}
 				/>
 
-                <VisitorModal
-                    showModal={showFormModal}
-                    hideModal={(): void => setShowFormModal(false)}
-                    formData={selectedVisitorData}
-                />
+				<DeleteAlert
+					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
+					url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
+					show={showDeleteAlert}
+					deleteUser={userToDelete}
+					hideHandler={(): void => setShowDeleteAlert(false)}
+					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					updateSuccessMessage={updateSuccessMessageText}
+				/>
+
+				<SuccessMessage
+					message={successMessageText}
+					show={showSuccessMessage}
+					closeMessage={() => setShowSuccessMessage(false)}
+				/>
+
+				<VisitorModal
+					showModal={showFormModal}
+					hideModal={(): void => setShowFormModal(false)}
+					formData={selectedVisitorData}
+				/>
 			</div>
 		</div>
 	);
