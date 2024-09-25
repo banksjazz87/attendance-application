@@ -376,6 +376,30 @@ export interface ApiResponse {
   data: [] | string;
 }
 
+
+interface AttendantId {
+  id?: number;
+}
+
+interface ChildId {
+  childId?: number;
+}
+
+interface SpouseId {
+  spouseId?: number;
+}
+
+export interface ChildrenSpouseData {
+  attendantIds: AttendantId[],
+  spouseIds: SpouseId[],
+  childIds: ChildId[]
+}
+
+export interface ChildrenSpouseApiResponse {
+  message: string;
+  data: ChildrenSpouseData;
+}
+
 export interface AttendanceTotals {
   id: number,
   groupName: string;

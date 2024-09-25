@@ -33,7 +33,6 @@ app.get(paths, (req: Request, res: Response) => {
 
 app.post("/login", (req: Request, res: Response): any => {
 	if (req.body.name === process.env.TEST_USER && req.body.password === process.env.TEST_PASSWORD) {
-		
 		res.cookie("account", "Tester", {
 			maxAge: 31556952 * 1000,
 		});
@@ -62,7 +61,6 @@ app.post("/login", (req: Request, res: Response): any => {
 		});
 		res.send({ message: "valid" });
 	} else if (req.body.name === process.env.HEROKU_USER && req.body.password === process.env.HEROKU_PASSWORD) {
-		
 		res.cookie("account", "Demo");
 		res.cookie("user", process.env.JAWSDB_USERNAME, {
 			httpOnly: true,
@@ -82,11 +80,9 @@ app.post("/login", (req: Request, res: Response): any => {
 		});
 		res.cookie("loggedIn", true);
 		res.send({ message: "valid" });
-
 	} else if (req.body.name === process.env.CHAPEL_USER && req.body.password === process.env.CHAPEL_PASSWORD) {
-		
 		res.cookie("account", "Chapel", {
-			maxAge: 31556952 * 1000
+			maxAge: 31556952 * 1000,
 		});
 		res.cookie("user", process.env.CHAPEL_MYSQL_USER, {
 			maxAge: 31556952 * 1000,
@@ -112,7 +108,6 @@ app.post("/login", (req: Request, res: Response): any => {
 			maxAge: 31556952 * 1000,
 		});
 		res.send({ message: "valid" });
-
 	} else {
 		res.send({ message: "invalid" });
 	}
@@ -181,7 +176,6 @@ app.post("/new-attendance/create", (req: Request, res: Response): void => {
 			Db.endDb();
 		});
 });
-
 
 app.post("/new-attendance/create/master/table", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
@@ -411,21 +405,20 @@ app.post("/attendance/insert/attendant", (req: Request, res: Response): void => 
 		});
 });
 
-
-app.post('/attendance/insert/new-attendants/:tableName', (req: Request, res: Response): void => {
+app.post("/attendance/insert/new-attendants/:tableName", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
 	const neededTable: string = req.params.tableName;
 	const allColumns: string = `id, firstName, lastName, age, memberType`;
-	
+
 	Db.addBulkSelectApplicants(neededTable, allColumns, req.body.neededFields)
 		.then((data: string[]): void => {
-			console.log('success', data);
-			res.send({ message: "success", data: data})
+			console.log("success", data);
+			res.send({ message: "success", data: data });
 		})
 		.catch((err: SQLResponse): void => {
-			console.log('Error inserting multiple attendants', err);
-			res.send({ message: "failure", error: Db.getSqlError(err)});
+			console.log("Error inserting multiple attendants", err);
+			res.send({ message: "failure", error: Db.getSqlError(err) });
 		});
 });
 
@@ -616,65 +609,108 @@ app.get("/group-months/:yearDate/:groupName", (req: Request, res: Response): voi
 		});
 });
 
-app.get('/all-visitors/:limit/:offset', (req: Request, res: Response): void => {
+app.get("/all-visitors/:limit/:offset", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-	const neededColumns = ['id', 'visitorId', 'firstName', 'lastName', 'phone', 'dateCreated'];
+	const neededColumns = ["id", "visitorId", "firstName", "lastName", "phone", "dateCreated"];
 	const reqLimit = parseInt(req.params.limit);
 	const reqOffset = parseInt(req.params.offset);
 
-
-	Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC')
+	Db.selectFewWithLimit("Visitor_Forms", neededColumns, reqLimit, reqOffset, "dateCreated", "DESC")
 		.then((data: string[]): void => {
 			res.send({
-				message: "success", 
+				message: "success",
 				data: data,
 			});
 			console.log(data);
-	})
-	.catch((err: SQLResponse): void => {
-		res.send({
-			message: "failure", 
-			error: Db.getSqlError(err)
+		})
+		.catch((err: SQLResponse): void => {
+			res.send({
+				message: "failure",
+				error: Db.getSqlError(err),
+			});
+			console.log("Error", err);
 		});
-		console.log("Error", err);
-	});
 });
 
-app.get('/all-visitor-data/:id', (req: Request, res: Response): void => {
+app.get("/all-visitor-data/:id", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-	const visitorId:number = parseInt(req.params.id);
+	const visitorId: number = parseInt(req.params.id);
 
 	Promise.all([
-		Db.selectAllById('Visitor_Forms', 'id', visitorId), 
-		Db.selectAllById('Visitor_Children', 'parentId', visitorId), 
-		Db.selectAllById('Visitor_Interests', 'visitor_attendant_id', visitorId), 
-		Db.selectAllById('Visitor_Spouse', 'visitorSpouseId', visitorId), 
-		Db.endDb()
-	 ])
-	 	.then((data: [string[], string[], string[], string[], void]) => {
+		Db.selectAllById("Visitor_Forms", "id", visitorId),
+		Db.selectAllById("Visitor_Children", "parentId", visitorId),
+		Db.selectAllById("Visitor_Interests", "visitor_attendant_id", visitorId),
+		Db.selectAllById("Visitor_Spouse", "visitorSpouseId", visitorId),
+		Db.endDb(),
+	])
+		.then((data: [string[], string[], string[], string[], void]) => {
 			res.send({
 				message: "success",
 				data: {
-					form: data[0], 
-					children: data[1], 
-					interests: data[2], 
-					spouse: data[3]
-				}
+					form: data[0],
+					children: data[1],
+					interests: data[2],
+					spouse: data[3],
+				},
 			});
-			console.log('Success!!');
+			console.log("Success!!");
 		})
 		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
 			res.send({
-				message: "failure", 
+				message: "failure",
 				error: () => {
-					Db.getSqlError(err[0]); 
-					Db.getSqlError(err[1]); 
-					Db.getSqlError(err[2]); 
-					Db.getSqlError(err[3]); 
+					Db.getSqlError(err[0]);
+					Db.getSqlError(err[1]);
+					Db.getSqlError(err[2]);
+					Db.getSqlError(err[3]);
 					Db.getSqlError(err[4]);
-				}
-			})
+				},
+			});
 
-			console.log('Error', err);
+			console.log("Error", err);
 		});
-})
+});
+
+
+app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void => {
+
+	const parentId = req.params.parentId;
+	const childSpouseAttendantID: string[] = [
+		`SELECT id FROM Visitor_Children WHERE parentId = ${parentId}`,
+		`SELECT id FROM Visitor_Spouse WHERE visitorSpouseId = ${parentId}`
+	];
+
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+	Promise.all([
+		Db.dataUnion(childSpouseAttendantID),
+		Db.getBySelectColumnsNoEnd(["spouseId"], "Visitor_Spouse", "visitorSpouseId", parentId),
+		Db.getBySelectColumnsNoEnd(["childId"], "Visitor_Children", "parentId", parentId),
+		Db.endDb()
+	])
+
+		.then((data: [string[], string[], string[], void]): void => {
+			res.send({
+				message: "success",
+				data: {
+					attendentIds: data[0],
+					spouseIds: data[1],
+					childIds: data[2],
+				},
+			});
+			console.log("Success here ", data);
+		})
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
+			console.log("ERRROR ", err);
+			res.send({
+				message: "failure",
+				error: () => {
+					Db.getSqlError(err[0]);
+					Db.getSqlError(err[1]);
+					Db.getSqlError(err[2]);
+					Db.getSqlError(err[3]);
+				},
+			});
+		});
+
+});

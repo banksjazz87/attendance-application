@@ -432,4 +432,35 @@ export class DBMethods {
     });
   }
 
+
+  dataUnion(sql: string[]): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database = this.dbConnection;
+      let neededSql = '';
+
+      for (let i = 0; i < sql.length; i++) {
+        if (i < sql.length - 1) {
+          neededSql += `${sql[i]} UNION `;
+        } else {
+          neededSql += `${sql[i]};`;
+        }
+      }
+      
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+  }
+
+  getBySelectColumnsNoEnd(neededColumns: string[], table: string, searchColumn: string, searchValue: string | number): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const database = this.dbConnection;
+      const stringOfNeededColumns = neededColumns.toString();
+      const neededSql = `SELECT ${stringOfNeededColumns} FROM ${table} WHERE ${searchColumn} = "${searchValue}"`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+  }
 }

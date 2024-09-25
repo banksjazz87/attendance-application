@@ -363,5 +363,33 @@ class DBMethods {
             });
         });
     }
+    dataUnion(sql) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let neededSql = '';
+            for (let i = 0; i < sql.length; i++) {
+                if (i < sql.length - 1) {
+                    neededSql += `${sql[i]} UNION `;
+                }
+                else {
+                    neededSql += `${sql[i]};`;
+                }
+            }
+            console.log('SQL HERE ', neededSql);
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
+    getBySelectColumnsNoEnd(neededColumns, table, searchColumn, searchValue) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            const stringOfNeededColumns = neededColumns.toString();
+            const neededSql = `SELECT ${stringOfNeededColumns} FROM ${table} WHERE ${searchColumn} = "${searchValue}"`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
 }
 exports.DBMethods = DBMethods;

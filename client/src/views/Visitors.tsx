@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData } from "../types/interfaces.ts";
+import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse } from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
@@ -91,6 +91,25 @@ export default function Vistors() {
 		}
 	}, [selectedVisitorId]);
 
+	useEffect((): void => {
+		const userId = userToDelete.id;
+
+		if (userId !== -1) {
+			fetch(`/children-spouse-ids/${userToDelete.id}`)
+				.then((data: Response): Promise<ChildrenSpouseApiResponse> => {
+					return data.json()
+				})
+				.then((final: ChildrenSpouseApiResponse): void => {
+					if (final.message === 'success') {
+						console.log(final.data);
+					} else {
+						console.log('an error occurred ', final);
+					}
+				})
+		}
+	}, [userToDelete]);
+
+
 	//Used to update the partialName state in the search bar.
 	const updatePartialName = (string: string): void => {
 		setPartialName(string);
@@ -138,7 +157,7 @@ export default function Vistors() {
 
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
+					url={`/children-spouse-ids/:parentId"/${userToDelete.id}`}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}
