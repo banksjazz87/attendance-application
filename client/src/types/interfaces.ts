@@ -199,8 +199,8 @@ export interface APITotalRows {
 }
 
 export interface VisitorShortFields {
-  id: Number;
-  visitorId: Number;
+  id: number;
+  visitorId: number;
   firstName: string;
   lastName: string;
   phone: string;

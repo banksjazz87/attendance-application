@@ -693,7 +693,7 @@ app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void =>
 			res.send({
 				message: "success",
 				data: {
-					attendentIds: data[0],
+					attendantIds: data[0],
 					spouseIds: data[1],
 					childIds: data[2],
 				},

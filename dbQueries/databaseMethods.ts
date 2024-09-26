@@ -39,7 +39,7 @@ export class DBMethods {
   }
 
   connect(): any {
-    const database = this.dbConnection;
+    const database: any = this.dbConnection;
     database.connect((err: any): void => {
       if (err) {
         console.log("err", err);
@@ -51,7 +51,7 @@ export class DBMethods {
   }
 
   endDb() {
-    const database = this.dbConnection;
+    const database: any = this.dbConnection;
     database.end((err: any): void => {
       err ? console.log("error, disconnecting") : console.log("disconnected");
     });
@@ -79,7 +79,7 @@ export class DBMethods {
 
   insert(table: string, columns: string, values: string[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
 
       database.query(sql, [values], (err: string[], results: string[]) => {
@@ -91,7 +91,7 @@ export class DBMethods {
 
   insertNoEnd(table: string, columns: string, values: string[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `INSERT INTO ${table} (${columns}) VALUES (?);`;
 
       database.query(sql, [values], (err: string[], results: string[]) => {
@@ -102,7 +102,7 @@ export class DBMethods {
 
   searchByValue(table: string, column: string, value: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `SELECT * FROM ${table} WHERE ${column} = "${value}";`;
 
       database.query(sql, (err: string[], results: string[]) => {
@@ -114,7 +114,7 @@ export class DBMethods {
 
   getTable(table: string, order: string, column: string): Promise<string[]> {
     return new Promise<string[]> ((resolve, reject)=> {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = "";
 
       if (column === 'lastName') {
@@ -132,7 +132,7 @@ export class DBMethods {
 
   getTableByColumn(table: string, order: string, targetColumn: string, orderColumn: string): Promise<string[]> {
     return new Promise<string[]> ((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn} FROM ${table} ORDER BY ${orderColumn} ${order};`;
 
       database.query(sql, (err: string[], results: string[]): void => {
@@ -144,7 +144,7 @@ export class DBMethods {
 
   createGroupTable(tableName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `CREATE TABLE ${tableName} (id int NOT NUll AUTO_INCREMENT, title varchar(50) DEFAULT NULL, displayTitle varchar(50) DEFAULT NULL, dateCreated datetime DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (id));`;
 
       database.query(sql, (err: string[], results: string[]): void => {
@@ -163,7 +163,7 @@ export class DBMethods {
   //This will be used to create a new attendance table.
   createNewAttendance(tableName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `CREATE TABLE ${tableName} (id smallint NOT NULL AUTO_INCREMENT, firstName varchar(40) DEFAULT NULL,
         lastName varchar(40) DEFAULT NULL, age varchar(30), memberType varchar(30), PRIMARY KEY (id));`;
 
@@ -177,7 +177,7 @@ export class DBMethods {
   //This will be used to add a new attendance column to the group master attendance.
   addNewColumnToMasterNoEnd(tableName: string, columnName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let sql = `ALTER TABLE ${tableName} ADD ${columnName} tinyInt(1) NOT NULL DEFAULT 0;`;
 
       database.query(sql, (err: string[], results: string[]) => {
@@ -190,7 +190,7 @@ export class DBMethods {
   //This will be used to insert all of the people of a certain age group into an attendance table.
   insertAgeGroup(tableName: string, group: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       const neededSql = (): string => {
         if (group === "all") {
           return `INSERT INTO ${tableName} (id, firstName, lastName, age, memberType) SELECT * FROM People;`;
@@ -208,8 +208,8 @@ export class DBMethods {
 
   removePerson(tableName: string, firstName: string, lastName: string, id: number): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `DELETE FROM ${tableName} WHERE firstName = "${firstName}" AND lastName = "${lastName}" AND id = ${id};`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `DELETE FROM ${tableName} WHERE firstName = "${firstName}" AND lastName = "${lastName}" AND id = ${id};`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -220,8 +220,8 @@ export class DBMethods {
 
   getPerson(tableName: string, first: string, last: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT * FROM ${tableName} WHERE firstName = "${first}" AND lastName = "${last}";`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT * FROM ${tableName} WHERE firstName = "${first}" AND lastName = "${last}";`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -232,8 +232,8 @@ export class DBMethods {
 
   updatePerson(tableName: string, obj: DBAttendee): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", active = ${obj.active},  memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `UPDATE ${tableName} SET firstName = "${obj.firstName}", lastName = "${obj.lastName}", age = "${obj.age}", active = ${obj.active},  memberType = "${obj.memberType}" WHERE id = ${obj.id};`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -244,8 +244,8 @@ export class DBMethods {
 
   addAllApplicants(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT * FROM Attendants;`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -256,7 +256,7 @@ export class DBMethods {
 
   addBulkSelectApplicants(table: string, columns: string, obj: Object[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       const mysqlMultipleString = this.prepBulkAddString(obj);
 
       const sql = `INSERT INTO ${table} (${columns}) VALUES ${mysqlMultipleString};`;
@@ -271,8 +271,8 @@ export class DBMethods {
 
   addAllActiveApplicants(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT id, firstName, lastName, age, memberType FROM Attendants WHERE active = 1;`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT id, firstName, lastName, age, memberType FROM Attendants WHERE active = 1;`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -283,8 +283,8 @@ export class DBMethods {
 
   addSelectApplicants(table: string, neededAge: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT id, firstName, lastName, age, memberType FROM Attendants WHERE age = "${neededAge}" AND active = 1;`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `INSERT INTO ${table} (id, firstName, lastName, age, memberType) SELECT id, firstName, lastName, age, memberType FROM Attendants WHERE age = "${neededAge}" AND active = 1;`;
 
       database.query(neededSql, (err: string[], results: string[]) => {
         err ? reject(err) : resolve(results);
@@ -295,8 +295,8 @@ export class DBMethods {
 
   updateAttendance(table: string, columnName: string, attendeeId: number, attendeeLastName: string, status: number): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `UPDATE ${table} SET ${columnName} = ${status} WHERE id = ${attendeeId} AND lastName = "${attendeeLastName}";`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `UPDATE ${table} SET ${columnName} = ${status} WHERE id = ${attendeeId} AND lastName = "${attendeeLastName}";`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -308,8 +308,8 @@ export class DBMethods {
   //Used to return the number of rows in a table.
   numberOfRows(table: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT COUNT(*) AS total FROM ${table};`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT COUNT(*) AS total FROM ${table};`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -321,8 +321,8 @@ export class DBMethods {
   //Used to return a limited number of rows from a table.
   limitNumberOfRowsReturned(table: string, limit: number, offset: number, fieldOrder: string, order: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT * FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT * FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -334,8 +334,8 @@ export class DBMethods {
   //Used to return a partial match of rows from a table.
   searchForPartialName(table: string, partialName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT * FROM ${table} WHERE firstName LIKE "%${partialName}%" OR lastName LIKE "%${partialName}%"`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT * FROM ${table} WHERE firstName LIKE "%${partialName}%" OR lastName LIKE "%${partialName}%"`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -346,9 +346,9 @@ export class DBMethods {
 
   updateTotalTable(currentTable: string, group: string, children: number, youth: number, adults: number, members: number, visitors: number): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       const total = children + youth + adults;
-      const neededSql = `UPDATE Attendance_Totals SET totalChildren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors}, totalCount = ${total} WHERE groupName = "${group}" AND title = "${currentTable}";`;
+      const neededSql: string = `UPDATE Attendance_Totals SET totalChildren = ${children}, totalYouth = ${youth}, totalAdults = ${adults}, totalMembers = ${members}, totalVisitors = ${visitors}, totalCount = ${total} WHERE groupName = "${group}" AND title = "${currentTable}";`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -359,8 +359,8 @@ export class DBMethods {
 
   getMonthStatistics(groupName: string, monthName: string, yearDate: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}" ORDER BY dateCreated ASC;`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}" ORDER BY dateCreated ASC;`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -371,8 +371,8 @@ export class DBMethods {
 
   getDistinctStatisticYears(groupName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT DISTINCT YEAR(dateCreated) AS years FROM Attendance_Totals WHERE groupName = "${groupName}" ORDER BY years DESC;`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT DISTINCT YEAR(dateCreated) AS years FROM Attendance_Totals WHERE groupName = "${groupName}" ORDER BY years DESC;`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -383,8 +383,8 @@ export class DBMethods {
 
   getDistinctStatisticMonths(groupName: string, yearDate: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT DISTINCT MONTHNAME(dateCreated) AS months FROM Attendance_Totals WHERE groupName = "${groupName}" AND YEAR(dateCreated) = ${yearDate} ORDER BY months DESC;`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT DISTINCT MONTHNAME(dateCreated) AS months FROM Attendance_Totals WHERE groupName = "${groupName}" AND YEAR(dateCreated) = ${yearDate} ORDER BY months DESC;`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -395,8 +395,8 @@ export class DBMethods {
 
   getAttendanceByGroupName(groupName: string, column: string, order: "asc" | "desc"): Promise <string[]> {
     return new Promise<string[]>((resolve, reject): void => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT * FROM all_attendance WHERE parentGroupValue = "${groupName}" ORDER BY ${column} ${order};`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT * FROM all_attendance WHERE parentGroupValue = "${groupName}" ORDER BY ${column} ${order};`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -409,10 +409,10 @@ export class DBMethods {
    //Used to return a limited number of rows from a table.
    selectFewWithLimit(table: string, columns: string[], limit: number, offset: number, fieldOrder: string, order: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       const stringOfColumns = columns.join(', ');
 
-      const neededSql = `SELECT ${stringOfColumns} FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
+      const neededSql: string = `SELECT ${stringOfColumns} FROM ${table} ORDER BY ${fieldOrder} ${order} LIMIT ${limit} OFFSET ${offset}`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -423,8 +423,8 @@ export class DBMethods {
 
   selectAllById(table: string, columnName: string, id: number): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
-      const neededSql = `SELECT * FROM ${table} WHERE ${columnName} = ${id}`;
+      const database: any = this.dbConnection;
+      const neededSql: string = `SELECT * FROM ${table} WHERE ${columnName} = ${id}`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -435,7 +435,7 @@ export class DBMethods {
 
   dataUnion(sql: string[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
-      const database = this.dbConnection;
+      const database: any = this.dbConnection;
       let neededSql = '';
 
       for (let i = 0; i < sql.length; i++) {
@@ -445,7 +445,7 @@ export class DBMethods {
           neededSql += `${sql[i]};`;
         }
       }
-      
+
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
       });
@@ -454,9 +454,9 @@ export class DBMethods {
 
   getBySelectColumnsNoEnd(neededColumns: string[], table: string, searchColumn: string, searchValue: string | number): Promise<string[]> {
     return new Promise((resolve, reject) => {
-      const database = this.dbConnection;
-      const stringOfNeededColumns = neededColumns.toString();
-      const neededSql = `SELECT ${stringOfNeededColumns} FROM ${table} WHERE ${searchColumn} = "${searchValue}"`;
+      const database: any = this.dbConnection;
+      const stringOfNeededColumns: string = neededColumns.toString();
+      const neededSql: string = `SELECT ${stringOfNeededColumns} FROM ${table} WHERE ${searchColumn} = "${searchValue}"`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);

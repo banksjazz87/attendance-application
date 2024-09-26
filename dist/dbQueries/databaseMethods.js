@@ -375,7 +375,6 @@ class DBMethods {
                     neededSql += `${sql[i]};`;
                 }
             }
-            console.log('SQL HERE ', neededSql);
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse } from "../types/interfaces.ts";
+import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse, ChildrenSpouseData} from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
@@ -23,6 +23,11 @@ export default function Vistors() {
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
+	const [deleteFamilyData, setDeleteFamilyData] = useState<ChildrenSpouseData>({
+		attendantIds: [{ id: -1 }],
+		childIds: [{ childId: -1 }],
+		spouseIds: [{ spouseId: -1 }]
+	});
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -92,7 +97,7 @@ export default function Vistors() {
 	}, [selectedVisitorId]);
 
 	useEffect((): void => {
-		const userId = userToDelete.id;
+		const userId: number = userToDelete.id;
 
 		if (userId !== -1) {
 			fetch(`/children-spouse-ids/${userToDelete.id}`)
@@ -101,7 +106,16 @@ export default function Vistors() {
 				})
 				.then((final: ChildrenSpouseApiResponse): void => {
 					if (final.message === 'success') {
-						console.log(final.data);
+
+						const familyData: ChildrenSpouseData  = final.data;
+						setDeleteFamilyData({
+							...deleteFamilyData,
+							attendantIds: familyData.attendantIds,
+							childIds: familyData.childIds,
+							spouseIds: familyData.spouseIds,
+						});
+
+						console.log(deleteFamilyData);
 					} else {
 						console.log('an error occurred ', final);
 					}
