@@ -421,6 +421,8 @@ export class DBMethods {
     });
   }
 
+
+  //Select items by an id
   selectAllById(table: string, columnName: string, id: number): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database: any = this.dbConnection;
@@ -433,10 +435,16 @@ export class DBMethods {
   }
 
 
+  /**
+   * 
+   * @param sql array of strings
+   * @returns Promise array of strings
+   * @description used to create a UNION statement using the passed in sql statements.
+   */
   dataUnion(sql: string[]): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {
       const database: any = this.dbConnection;
-      let neededSql = '';
+      let neededSql: string = '';
 
       for (let i = 0; i < sql.length; i++) {
         if (i < sql.length - 1) {
@@ -452,6 +460,8 @@ export class DBMethods {
     });
   }
 
+
+  //Select different columns to get data back from.
   getBySelectColumnsNoEnd(neededColumns: string[], table: string, searchColumn: string, searchValue: string | number): Promise<string[]> {
     return new Promise((resolve, reject) => {
       const database: any = this.dbConnection;
@@ -463,4 +473,26 @@ export class DBMethods {
       });
     });
   }
+
+
+  //Remove by Id no end statement.
+  removeByIdNoEnd(tableName: string, idColumn: string, id: number[]): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const database: any = this.dbConnection;
+      let neededSql: string = `DELETE FROM ${tableName} WHERE `;
+
+      for (let i = 0; i < id.length; i++) {
+        if (i < id.length - 1) {
+          neededSql += `${idColumn} = ${id[i]} OR `;
+        } else {
+          neededSql += `${idColumn} = ${id[i]};`;
+        }
+      }
+
+      database.query(neededSql, (err: string[], results: string[]) => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+  }
+
 }

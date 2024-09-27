@@ -671,23 +671,13 @@ app.get("/all-visitor-data/:id", (req: Request, res: Response): void => {
 		});
 });
 
-
 app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void => {
-
 	const parentId = req.params.parentId;
-	const childSpouseAttendantID: string[] = [
-		`SELECT id FROM Visitor_Children WHERE parentId = ${parentId}`,
-		`SELECT id FROM Visitor_Spouse WHERE visitorSpouseId = ${parentId}`
-	];
+	const childSpouseAttendantID: string[] = [`SELECT id FROM Visitor_Children WHERE parentId = ${parentId}`, `SELECT id FROM Visitor_Spouse WHERE visitorSpouseId = ${parentId}`];
 
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-	Promise.all([
-		Db.dataUnion(childSpouseAttendantID),
-		Db.getBySelectColumnsNoEnd(["spouseId"], "Visitor_Spouse", "visitorSpouseId", parentId),
-		Db.getBySelectColumnsNoEnd(["childId"], "Visitor_Children", "parentId", parentId),
-		Db.endDb()
-	])
+	Promise.all([Db.dataUnion(childSpouseAttendantID), Db.getBySelectColumnsNoEnd(["spouseId"], "Visitor_Spouse", "visitorSpouseId", parentId), Db.getBySelectColumnsNoEnd(["childId"], "Visitor_Children", "parentId", parentId), Db.endDb()])
 
 		.then((data: [string[], string[], string[], void]): void => {
 			res.send({
@@ -712,5 +702,15 @@ app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void =>
 				},
 			});
 		});
+});
 
+app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+	const childrenIds = req.body.
+
+		// Promise.all([removeByIdNoEnd()])
+
+		res.send({
+			message: 'deleting visitor data'
+		});
 });
