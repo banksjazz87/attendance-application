@@ -291,6 +291,7 @@ export interface DeleteProps {
   hideHandler: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
+  deleteBody: Object
 }
 
 export interface DeleteResponse {
@@ -377,16 +378,16 @@ export interface ApiResponse {
 }
 
 
-interface AttendantId {
-  id?: number;
+export interface AttendantId {
+  id: number;
 }
 
-interface ChildId {
-  childId?: number;
+export interface ChildId {
+  childId: number;
 }
 
-interface SpouseId {
-  spouseId?: number;
+export interface SpouseId {
+  spouseId: number;
 }
 
 export interface ChildrenSpouseData {

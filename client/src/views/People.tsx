@@ -171,6 +171,7 @@ export default function People() {
 					hideHandler={hideDeleteHandler}
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					deleteBody={{}}
 				/>
 				<EditMember
 					show={showEditUser}

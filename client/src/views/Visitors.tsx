@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse, ChildrenSpouseData} from "../types/interfaces.ts";
+import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse, ChildrenSpouseData, AttendantId, ChildId, SpouseId} from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";
@@ -96,13 +96,15 @@ export default function Vistors() {
 		}
 	}, [selectedVisitorId]);
 
+
+	//Update the family data when the user to delete has been updated.
 	useEffect((): void => {
 		const userId: number = userToDelete.id;
 
 		if (userId !== -1) {
 			fetch(`/children-spouse-ids/${userToDelete.id}`)
 				.then((data: Response): Promise<ChildrenSpouseApiResponse> => {
-					return data.json()
+					return data.json();
 				})
 				.then((final: ChildrenSpouseApiResponse): void => {
 					if (final.message === 'success') {
@@ -114,8 +116,6 @@ export default function Vistors() {
 							childIds: familyData.childIds,
 							spouseIds: familyData.spouseIds,
 						});
-
-						console.log(deleteFamilyData);
 					} else {
 						console.log('an error occurred ', final);
 					}
@@ -149,6 +149,16 @@ export default function Vistors() {
 		setSuccessMessageText(str);
 	};
 
+
+	//Used to extract the family ids
+	const getIdValues = (obj: Object[], key: string): string[] => {
+		const values = obj.map((x: Object) => {
+			let id = x[key as keyof Object].toString();
+			return id;
+		});
+		return values;
+	}
+
 	return (
 		<div id="visitor_page_wrapper">
 			<Navbar />
@@ -171,12 +181,18 @@ export default function Vistors() {
 
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={`/children-spouse-ids/:parentId"/${userToDelete.id}`}
+					url={`/remove-all-visitor-data/`}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					deleteBody={{
+						userID: [userToDelete.id],
+						familyIds: getIdValues(deleteFamilyData.attendantIds, "id"),
+						childIds: getIdValues(deleteFamilyData.childIds, 'childId'),
+						spouseIds: getIdValues(deleteFamilyData.spouseIds, 'spouseId')
+					}}
 				/>
 
 				<SuccessMessage

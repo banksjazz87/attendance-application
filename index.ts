@@ -706,11 +706,8 @@ app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void =>
 
 app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-	const childrenIds = req.body.
 
 		// Promise.all([removeByIdNoEnd()])
 
-		res.send({
-			message: 'deleting visitor data'
-		});
+	console.log(req.body);
 });
