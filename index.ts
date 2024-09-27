@@ -707,7 +707,41 @@ app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void =>
 app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
-		// Promise.all([removeByIdNoEnd()])
+	const childIds: string[] = req.body.childIds;
+	const spouseIds: string[] = req.body.spouseIds;
+	const familyIds: string[] = req.body.familyIds;
+	const userId: string[] = req.body.userId;
+	const allFamilyIds: string[] = familyIds.concat(userId);
 
-	console.log(req.body);
+	Promise.all([
+		Db.removeByIdNoEnd("Visitor_Children", "id", childIds),
+		Db.removeByIdNoEnd("Visitor_Spouse", "id", spouseIds),
+		Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+		Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+		Db.removeByIdNoEnd("attendants", "id", allFamilyIds),
+		Db.endDb(),
+	])
+		.then((data: [string[], string[], string[], string[], string[], void]): void => {
+			res.send({
+				message: "success",
+				data: data,
+			});
+
+			console.log("SUCCESS ", data);
+		})
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
+			res.send({
+				message: "failure",
+				error: (): void => {
+					Db.getSqlError(err[0]);
+					Db.getSqlError(err[1]);
+					Db.getSqlError(err[2]);
+					Db.getSqlError(err[3]);
+					Db.getSqlError(err[4]);
+					Db.getSqlError(err[5]);
+					Db.getSqlError(err[6]);
+				},
+			});
+			console.log("ERROR ", err);
+		});
 });

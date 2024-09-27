@@ -626,6 +626,39 @@ app.get("/children-spouse-ids/:parentId", (req, res) => {
 });
 app.delete('/remove-all-visitor-data/', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    // Promise.all([removeByIdNoEnd()])
-    console.log(req.body);
+    const childIds = req.body.childIds;
+    const spouseIds = req.body.spouseIds;
+    const familyIds = req.body.familyIds;
+    const userId = req.body.userId;
+    const allFamilyIds = familyIds.concat(userId);
+    Promise.all([
+        Db.removeByIdNoEnd("Visitor_Children", "id", childIds),
+        Db.removeByIdNoEnd("Visitor_Spouse", "id", spouseIds),
+        Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+        Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+        Db.removeByIdNoEnd("attendants", "id", allFamilyIds),
+        Db.endDb(),
+    ])
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data,
+        });
+        console.log("SUCCESS ", data);
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+                Db.getSqlError(err[4]);
+                Db.getSqlError(err[5]);
+                Db.getSqlError(err[6]);
+            },
+        });
+        console.log("ERROR ", err);
+    });
 });

@@ -188,7 +188,7 @@ export default function Vistors() {
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{
-						userID: [userToDelete.id],
+						userId: [userToDelete.id],
 						familyIds: getIdValues(deleteFamilyData.attendantIds, "id"),
 						childIds: getIdValues(deleteFamilyData.childIds, 'childId'),
 						spouseIds: getIdValues(deleteFamilyData.spouseIds, 'spouseId')

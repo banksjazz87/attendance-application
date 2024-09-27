@@ -476,7 +476,7 @@ export class DBMethods {
 
 
   //Remove by Id no end statement.
-  removeByIdNoEnd(tableName: string, idColumn: string, id: number[]): Promise<string[]> {
+  removeByIdNoEnd(tableName: string, idColumn: string, id: string[]): Promise<string[]> {
     return new Promise((resolve, reject) => {
       const database: any = this.dbConnection;
       let neededSql: string = `DELETE FROM ${tableName} WHERE `;
