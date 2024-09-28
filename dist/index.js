@@ -632,19 +632,29 @@ app.delete('/remove-all-visitor-data/', (req, res) => {
     const userId = req.body.userId;
     const allFamilyIds = familyIds.concat(userId);
     Promise.all([
-        Db.removeByIdNoEnd("Visitor_Children", "id", childIds),
-        Db.removeByIdNoEnd("Visitor_Spouse", "id", spouseIds),
+        Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+        Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
         Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
         Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
-        Db.removeByIdNoEnd("attendants", "id", allFamilyIds),
-        Db.endDb(),
     ])
         .then((data) => {
-        res.send({
-            message: "success",
-            data: data,
+        Promise.all([Db.removeByIdNoEnd("attendants", "id", allFamilyIds), Db.endDb()])
+            .then((final) => {
+            res.send({
+                message: "success",
+                data: final,
+            });
+            console.log("SUCCESS ", data);
+        })
+            .catch((finalErr) => {
+            res.send({
+                message: "failure",
+                error: () => {
+                    Db.getSqlError(finalErr[0]), Db.getSqlError(finalErr[1]);
+                },
+            });
+            console.log("ERROR DELETING ALL ", finalErr);
         });
-        console.log("SUCCESS ", data);
     })
         .catch((err) => {
         res.send({
@@ -655,8 +665,6 @@ app.delete('/remove-all-visitor-data/', (req, res) => {
                 Db.getSqlError(err[2]);
                 Db.getSqlError(err[3]);
                 Db.getSqlError(err[4]);
-                Db.getSqlError(err[5]);
-                Db.getSqlError(err[6]);
             },
         });
         console.log("ERROR ", err);

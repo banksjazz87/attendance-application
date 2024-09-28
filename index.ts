@@ -714,22 +714,32 @@ app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
 	const allFamilyIds: string[] = familyIds.concat(userId);
 
 	Promise.all([
-		Db.removeByIdNoEnd("Visitor_Children", "id", childIds),
-		Db.removeByIdNoEnd("Visitor_Spouse", "id", spouseIds),
+		Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+		Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
 		Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
 		Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
-		Db.removeByIdNoEnd("attendants", "id", allFamilyIds),
-		Db.endDb(),
 	])
-		.then((data: [string[], string[], string[], string[], string[], void]): void => {
-			res.send({
-				message: "success",
-				data: data,
-			});
+		.then((data: [string[], string[], string[], string[]]): void => {
+			Promise.all([Db.removeByIdNoEnd("attendants", "id", allFamilyIds), Db.endDb()])
+				.then((final: [string[], void]): void => {
+					res.send({
+						message: "success",
+						data: final,
+					});
+					console.log("SUCCESS ", data);
+				})
 
-			console.log("SUCCESS ", data);
+				.catch((finalErr: [SQLResponse, SQLResponse]): void => {
+					res.send({
+						message: "failure",
+						error: (): void => {
+							Db.getSqlError(finalErr[0]), Db.getSqlError(finalErr[1]);
+						},
+					});
+					console.log("ERROR DELETING ALL ", finalErr);
+				});
 		})
-		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
 			res.send({
 				message: "failure",
 				error: (): void => {
@@ -738,8 +748,6 @@ app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
 					Db.getSqlError(err[2]);
 					Db.getSqlError(err[3]);
 					Db.getSqlError(err[4]);
-					Db.getSqlError(err[5]);
-					Db.getSqlError(err[6]);
 				},
 			});
 			console.log("ERROR ", err);
