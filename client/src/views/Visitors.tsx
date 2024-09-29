@@ -9,6 +9,8 @@ import "../assets/styles/views/visitors.scss";
 import { initVisitorData } from "../variables/initVisitorData";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import SuccessMessage from "../components/global/SuccessMessage.tsx";
+import FormDeleteModal from "../components/visitors/FormDeleteModal.tsx";
+
 
 export default function Vistors(): JSX.Element {
 	const [visitors, setVisitors] = useState<VisitorShortFields[]>([initShortVisitor]);
@@ -28,6 +30,8 @@ export default function Vistors(): JSX.Element {
 		childIds: [{ childId: -1 }],
 		spouseIds: [{ spouseId: -1 }]
 	});
+	const [showFormDeleteModal, setShowFormDeleteModal] = useState<boolean>(false);
+	const [deleteAllFields, setDeleteAllFields] = useState<boolean>(false);
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -140,7 +144,8 @@ export default function Vistors(): JSX.Element {
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: VisitorShortFields): void => {
-		setShowDeleteAlert(true);
+		// setShowDeleteAlert(true);
+		setShowFormDeleteModal(true);
 		setUserToDelete(obj);
 	};
 
@@ -179,26 +184,41 @@ export default function Vistors(): JSX.Element {
 					deletePersonHandler={deleteUserHandler}
 				/>
 
+				<FormDeleteModal
+					show={showFormDeleteModal}
+					hideHandler={() => setShowFormDeleteModal(false)}
+					deleteAllHandler={() => {
+						setDeleteAllFields(true);
+						setShowDeleteAlert(true);
+						setShowFormDeleteModal(false);
+					}}
+					deleteFormOnlyHandler={() => {
+						setDeleteAllFields(false);
+						setShowDeleteAlert(true);
+						setShowFormDeleteModal(false);
+					}}
+				/>
+
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={`/remove-all-visitor-data/`}
+					url={deleteAllFields ? `/remove-all-visitor-data/` : '/remove-visitor-form-data/'}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{
 						userId: [userToDelete.id],
 						familyIds: getIdValues(deleteFamilyData.attendantIds, "id"),
-						childIds: getIdValues(deleteFamilyData.childIds, 'childId'),
-						spouseIds: getIdValues(deleteFamilyData.spouseIds, 'spouseId')
+						childIds: getIdValues(deleteFamilyData.childIds, "childId"),
+						spouseIds: getIdValues(deleteFamilyData.spouseIds, "spouseId"),
 					}}
 				/>
 
 				<SuccessMessage
 					message={successMessageText}
 					show={showSuccessMessage}
-					closeMessage={() => setShowSuccessMessage(false)}
+					closeMessage={(): void => setShowSuccessMessage(false)}
 				/>
 
 				<VisitorModal
