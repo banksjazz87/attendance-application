@@ -10,7 +10,7 @@ import { initVisitorData } from "../variables/initVisitorData";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import SuccessMessage from "../components/global/SuccessMessage.tsx";
 
-export default function Vistors() {
+export default function Vistors(): JSX.Element {
 	const [visitors, setVisitors] = useState<VisitorShortFields[]>([initShortVisitor]);
 	const [totalDbRows, setTotalDbRows] = useState<number>(0);
 	const [currentOffset, setCurrentOffset] = useState<number>(0);
