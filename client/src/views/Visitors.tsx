@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse, ChildrenSpouseData, AttendantId, ChildId, SpouseId} from "../types/interfaces.ts";
+import { APITotalRows, VisitorShortFields, APIVisitorInit, AllVisitorData, AllVisitorAPIData, ChildrenSpouseApiResponse, ChildrenSpouseData} from "../types/interfaces.ts";
 import { initShortVisitor } from "../variables/initShortVisitor.ts";
 import Navbar from "../components/global/Navbar.tsx";
 import "../assets/styles/views/people.scss";

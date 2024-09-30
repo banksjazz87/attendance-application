@@ -1,4 +1,4 @@
-import { initShortVisitor } from '../variables/initShortVisitor';
+
 export interface Attendee {
   firstName: string;
   lastName: string;

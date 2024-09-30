@@ -33,7 +33,7 @@ export default function FormDeleteModal({ show, hideHandler, deleteAllHandler, d
 					Would you like to delete all records associated with {userName}, or just the form data?
 					<br />
 					<span style={{ fontWeight: 500, fontSize: "16px", marginTop: "10px"}}>
-						*<span style={{ fontWeight: 600 }} >Delete All</span>, <em>will delete the following items: form data, visitor data, visitor's children data, visitor's spouse data, and remove all family members from the attendance sheet.</em>
+						*<span style={{ fontWeight: 600 }} >Delete All</span> <em>will delete the following items: form data, visitor data, visitor's children data, visitor's spouse data, and remove all family members from the attendance sheet.</em>
 					</span>
 				</p>
 				<div className="button_wrapper">

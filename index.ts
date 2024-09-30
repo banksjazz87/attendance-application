@@ -790,3 +790,74 @@ app.delete("/remove-visitor-form-data/", (req: Request, res: Response): void => 
 			console.log("ERROR ", err);
 		});
 });
+
+app.get('/get-visitor-by-id/:id', (req: Request, res: Response): void => {
+	const Db: DBMethods = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+	const userId: string = req.params.id;
+
+	Promise.all([
+		Db.getBySelectColumnsNoEnd(['id'], 'Visitor_Forms', 'id', userId),
+		Db.endDb()
+	])
+		.then((data: [string[], void]): void => {
+			res.send({
+				message: 'success',
+				data: data[0]
+			});
+			console.log('Success ', data);
+		})
+		.catch((err: [SQLResponse, void]): void => {
+			res.send({
+				message: 'failure',
+				error: Db.getSqlError(err[0])
+			});
+			console.log('Failure getting data ', err);
+		});
+});
+
+//Delete visitor form data and deletes the visitors from all attendance views.
+app.delete("/remove-visitor-from-attendant-table/:id", (req: Request, res: Response): void => {
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+	const userId: string[] = [req.params.id];
+	
+
+	Promise.all([
+		Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+		Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
+		Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+		Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+	])
+		.then((data: [string[], string[], string[], string[]]): void => {
+			Promise.all([Db.removeByIdNoEnd("attendants", "id", userId), Db.endDb()])
+				.then((final: [string[], void]): void => {
+					res.send({
+						message: "success",
+						data: final,
+					});
+					console.log("SUCCESS removing all visitor data ");
+				})
+
+				.catch((finalErr: [SQLResponse, SQLResponse]): void => {
+					res.send({
+						message: "failure",
+						error: (): void => {
+							Db.getSqlError(finalErr[0]), Db.getSqlError(finalErr[1]);
+						},
+					});
+					console.log("ERROR DELETING ALL ", finalErr);
+				});
+		})
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
+			res.send({
+				message: "failure",
+				error: (): void => {
+					Db.getSqlError(err[0]);
+					Db.getSqlError(err[1]);
+					Db.getSqlError(err[2]);
+					Db.getSqlError(err[3]);
+					Db.getSqlError(err[4]);
+				},
+			});
+			console.log("ERROR ", err);
+		});
+});
