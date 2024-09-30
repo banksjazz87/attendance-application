@@ -197,6 +197,7 @@ export default function Vistors(): JSX.Element {
 						setShowDeleteAlert(true);
 						setShowFormDeleteModal(false);
 					}}
+					userName={`${userToDelete.firstName} ${userToDelete.lastName}`}
 				/>
 
 				<DeleteAlert

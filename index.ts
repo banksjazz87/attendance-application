@@ -704,7 +704,8 @@ app.get("/children-spouse-ids/:parentId", (req: Request, res: Response): void =>
 		});
 });
 
-app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
+//Delete visitor form data and deletes the visitors from all attendance views.
+app.delete("/remove-all-visitor-data/", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 
 	const childIds: string[] = req.body.childIds;
@@ -726,7 +727,7 @@ app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
 						message: "success",
 						data: final,
 					});
-					console.log("SUCCESS ", data);
+					console.log("SUCCESS removing all visitor data ");
 				})
 
 				.catch((finalErr: [SQLResponse, SQLResponse]): void => {
@@ -740,6 +741,42 @@ app.delete('/remove-all-visitor-data/', (req: Request, res: Response): void => {
 				});
 		})
 		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse]): void => {
+			res.send({
+				message: "failure",
+				error: (): void => {
+					Db.getSqlError(err[0]);
+					Db.getSqlError(err[1]);
+					Db.getSqlError(err[2]);
+					Db.getSqlError(err[3]);
+					Db.getSqlError(err[4]);
+				},
+			});
+			console.log("ERROR ", err);
+		});
+});
+
+//Just used to remove the visitor form data, doesn't delete the attendant from the attendants table.
+app.delete("/remove-visitor-form-data/", (req: Request, res: Response): void => {
+	const Db: DBMethods = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+
+	const userId: string[] = req.body.userId;
+
+	Promise.all([
+		Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+		Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
+		Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+		Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+		Db.endDb(),
+	])
+		.then((data: [string[], string[], string[], string[], void]): void => {
+			res.send({
+				message: "success",
+				data: data,
+			});
+			console.log("SUCCESS removing just the visitor form data");
+		})
+
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse, SQLResponse, SQLResponse, void]): void => {
 			res.send({
 				message: "failure",
 				error: (): void => {

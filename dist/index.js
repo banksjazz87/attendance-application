@@ -624,7 +624,8 @@ app.get("/children-spouse-ids/:parentId", (req, res) => {
         });
     });
 });
-app.delete('/remove-all-visitor-data/', (req, res) => {
+//Delete visitor form data and deletes the visitors from all attendance views.
+app.delete("/remove-all-visitor-data/", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const childIds = req.body.childIds;
     const spouseIds = req.body.spouseIds;
@@ -644,7 +645,7 @@ app.delete('/remove-all-visitor-data/', (req, res) => {
                 message: "success",
                 data: final,
             });
-            console.log("SUCCESS ", data);
+            console.log("SUCCESS removing all visitor data ");
         })
             .catch((finalErr) => {
             res.send({
@@ -655,6 +656,38 @@ app.delete('/remove-all-visitor-data/', (req, res) => {
             });
             console.log("ERROR DELETING ALL ", finalErr);
         });
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+                Db.getSqlError(err[4]);
+            },
+        });
+        console.log("ERROR ", err);
+    });
+});
+//Just used to remove the visitor form data, doesn't delete the attendant from the attendants table.
+app.delete("/remove-visitor-form-data/", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const userId = req.body.userId;
+    Promise.all([
+        Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+        Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
+        Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+        Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+        Db.endDb(),
+    ])
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data,
+        });
+        console.log("SUCCESS removing just the visitor form data");
     })
         .catch((err) => {
         res.send({

@@ -8,9 +8,10 @@ type FormDeleteModalProps = {
 	hideHandler: Function;
 	deleteAllHandler: Function;
 	deleteFormOnlyHandler: Function;
+	userName: string;
 };
 
-export default function FormDeleteModal({ show, hideHandler, deleteAllHandler, deleteFormOnlyHandler }: FormDeleteModalProps): JSX.Element {
+export default function FormDeleteModal({ show, hideHandler, deleteAllHandler, deleteFormOnlyHandler, userName }: FormDeleteModalProps): JSX.Element {
 
 	const hideAlert = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => hideHandler();
 	const deleteAll = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => deleteAllHandler();
@@ -29,10 +30,10 @@ export default function FormDeleteModal({ show, hideHandler, deleteAllHandler, d
 					<FontAwesomeIcon icon={faClose} />
 				</button>
 				<p className="delete_message">
-					Would you like to delete all form data, or just the form?
+					Would you like to delete all records associated with {userName}, or just the form data?
 					<br />
-					<span style={{ fontWeight: 600, fontSize: "16px", marginTop: "10px"}}>
-						<em>*Deleting all form data, will delete the following items: form data, visitor data, visitor's children data, visitor's spouse data.</em>
+					<span style={{ fontWeight: 500, fontSize: "16px", marginTop: "10px"}}>
+						*<span style={{ fontWeight: 600 }} >Delete All</span>, <em>will delete the following items: form data, visitor data, visitor's children data, visitor's spouse data, and remove all family members from the attendance sheet.</em>
 					</span>
 				</p>
 				<div className="button_wrapper">
