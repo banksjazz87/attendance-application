@@ -5,7 +5,7 @@ import "../../assets/styles/components/global/deleteAlert.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage, deleteBody }: DeleteProps) {
+export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage, deleteBody, updateLoadingStatus }: DeleteProps) {
 
   /**
    * 
@@ -16,9 +16,10 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
   const deleteConfirmation = (obj: DeleteResponse): void => {
           triggerSuccessMessage();
           updateSuccessMessage(obj.message);
-          setTimeout((): void => {
+    setTimeout((): void => {
+            updateLoadingStatus();
             window.location.reload();
-          }, 3500);
+          }, 2000);
   }
 
 
@@ -30,9 +31,14 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
    */
   const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
     if (deleteUser) {
+      updateLoadingStatus();
+
       deleteData(url, deleteBody).then((data: DeleteResponse): void => {
         if (data.message === "failure") {
-          alert(data.error);
+          updateLoadingStatus();
+          setTimeout(() => {
+            alert(data.error);
+          }, 200)
         } else {
          deleteConfirmation(data);
         }

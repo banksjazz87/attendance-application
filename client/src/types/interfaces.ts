@@ -292,6 +292,7 @@ export interface DeleteProps {
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
   deleteBody: Object
+  updateLoadingStatus: Function;
 }
 
 export interface DeleteResponse {
@@ -460,6 +461,7 @@ export interface EditMemberProps {
   updateActiveStatus: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
+  updateLoadingStatus: Function;
 }
 
 export interface AttendanceDropDownProps {

@@ -10,6 +10,7 @@ import { initVisitorData } from "../variables/initVisitorData";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import FormDeleteModal from "../components/visitors/FormDeleteModal.tsx";
+import LoadingBar from "../components/global/LoadingBar.tsx";
 
 
 export default function Vistors(): JSX.Element {
@@ -32,6 +33,7 @@ export default function Vistors(): JSX.Element {
 	});
 	const [showFormDeleteModal, setShowFormDeleteModal] = useState<boolean>(false);
 	const [deleteAllFields, setDeleteAllFields] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -202,7 +204,7 @@ export default function Vistors(): JSX.Element {
 
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={deleteAllFields ? `/remove-all-visitor-data/` : '/remove-visitor-form-data/'}
+					url={deleteAllFields ? `/remove-all-visitor-data/` : "/remove-visitor-form-data/"}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={(): void => setShowDeleteAlert(false)}
@@ -214,6 +216,7 @@ export default function Vistors(): JSX.Element {
 						childIds: getIdValues(deleteFamilyData.childIds, "childId"),
 						spouseIds: getIdValues(deleteFamilyData.spouseIds, "spouseId"),
 					}}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
 				/>
 
 				<SuccessMessage
@@ -227,6 +230,8 @@ export default function Vistors(): JSX.Element {
 					hideModal={(): void => setShowFormModal(false)}
 					formData={selectedVisitorData}
 				/>
+
+				<LoadingBar show={isLoading} />
 			</div>
 		</div>
 	);

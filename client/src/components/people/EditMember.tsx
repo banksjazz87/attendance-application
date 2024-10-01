@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 
-export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, updateActiveStatus, triggerSuccessMessage, updateSuccessMessage }: EditMemberProps): JSX.Element {
+export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, updateActiveStatus, triggerSuccessMessage, updateSuccessMessage, updateLoadingStatus }: EditMemberProps): JSX.Element {
 
 
   //Used to update the age of the attendant.
@@ -31,6 +31,7 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
   const reloadWindow = (): void => {
     setTimeout((): void  => {
       hideHandler();
+      updateLoadingStatus();
       window.location.reload();
     }, 3500);
   }
@@ -40,6 +41,7 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
   const editConfirmation = (): void => {
     updateSuccessMessage(`${editUser.firstName} ${editUser.lastName} has been updated.`);
     triggerSuccessMessage();
+    updateLoadingStatus();
     reloadWindow();
   }
 
@@ -51,6 +53,7 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
       if (data.message === "Success") {
         editConfirmation();
       } else {
+        updateLoadingStatus();
         alert(data.error);
       }
     });

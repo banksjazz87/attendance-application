@@ -10,6 +10,7 @@ import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import LoadingBar from "../components/global/LoadingBar.tsx";
 
 export default function People() {
 	const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
@@ -25,6 +26,7 @@ export default function People() {
 	const [searching, setSearching] = useState<boolean>(false);
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
@@ -195,9 +197,10 @@ export default function People() {
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={hideDeleteHandler}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{}}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
 				/>
 				<EditMember
 					show={showEditUser}
@@ -207,14 +210,17 @@ export default function People() {
 					updateAge={updateEditAge}
 					updateMember={updateEditMember}
 					updateActiveStatus={updateEditMemberStatus}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
 				/>
 				<SuccessMessage
 					message={successMessageText}
 					show={showSuccessMessage}
-					closeMessage={() => setShowSuccessMessage(false)}
+					closeMessage={(): void => setShowSuccessMessage(false)}
 				/>
+
+				<LoadingBar show={isLoading} />
 			</div>
 		</div>
 	);

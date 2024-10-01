@@ -12,14 +12,14 @@ export default function SuccessMessage({message, show, closeMessage}: SuccessMes
     //If the message is set to show it will close the message after a certain amount of time.
     useEffect((): void => {
         if (show) {
-            let i = 0;
+            let i: number = 0;
             let id: NodeJS.Timer = setInterval((): void => {
                 i++;
-                if (i === 10) {
+                if (i === 1000) {
                     clearInterval(id);
                     closeMessage();
                 }
-            }, 100);
+            }, 1200);
         } else {
             closeMessage();
         }
