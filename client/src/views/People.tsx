@@ -27,7 +27,7 @@ export default function People() {
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
-	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.id}`;
+	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -81,13 +81,11 @@ export default function People() {
 					return data.json();
 				})
 				.then((final: APIResponse): void => {
-					if (final.message === "success") {
+					if (final.message !== "failure") {
 						if (final.data.length > 0) {
 							setDeleteUserIsVisitor(true);
-							console.log("This user is a visitor ", final.data);
 						} else {
 							setDeleteUserIsVisitor(false);
-							console.log("This user is not a visitor ", final.data);
 						}
 					} else {
 						console.log("The following error occurred ", final.error);

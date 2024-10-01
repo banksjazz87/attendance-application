@@ -726,9 +726,10 @@ app.get('/get-visitor-by-id/:id', (req, res) => {
     });
 });
 //Delete visitor form data and deletes the visitors from all attendance views.
-app.delete("/remove-visitor-from-attendant-table/:id", (req, res) => {
+app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const userId = [req.params.id];
+    const userName = `${req.params.firstName} ${req.params.lastName}`;
     Promise.all([
         Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
         Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
@@ -739,7 +740,7 @@ app.delete("/remove-visitor-from-attendant-table/:id", (req, res) => {
         Promise.all([Db.removeByIdNoEnd("attendants", "id", userId), Db.endDb()])
             .then((final) => {
             res.send({
-                message: "success",
+                message: `Success, ${userName} has been deleted.`,
                 data: final,
             });
             console.log("SUCCESS removing all visitor data ");
