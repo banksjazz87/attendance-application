@@ -721,7 +721,7 @@ app.delete("/remove-all-visitor-data/", (req: Request, res: Response): void => {
 		Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
 	])
 		.then((data: [string[], string[], string[], string[]]): void => {
-			Promise.all([Db.removeByIdNoEnd("attendants", "id", allFamilyIds), Db.endDb()])
+			Promise.all([Db.removeByIdNoEnd("Attendants", "id", allFamilyIds), Db.endDb()])
 				.then((final: [string[], void]): void => {
 					res.send({
 						message: "success",
@@ -829,7 +829,7 @@ app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req
 		Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
 	])
 		.then((data: [string[], string[], string[], string[]]): void => {
-			Promise.all([Db.removeByIdNoEnd("attendants", "id", userId), Db.endDb()])
+			Promise.all([Db.removeByIdNoEnd("Attendants", "id", userId), Db.endDb()])
 				.then((final: [string[], void]): void => {
 					res.send({
 						message: `Success, ${userName} has been deleted.`,

@@ -33,7 +33,6 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 		{ value: "Last Name", class: "last_name_header" },
 		{ value: "First Name", class: "first_name_header" },
 		{ value: "Submitted", class: "entry_date_header" },
-		{ value: "Phone", class: "phone_header" },
 		{ value: "Form", class: "form_header" },
 		{ value: "Delete", class: "delete_header" },
 	];
@@ -42,7 +41,6 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 	const mobileHeaders: ValuesAndClass[] = [
 		{ value: "Name", class: "first_last_name_header" },
 		{ value: "Submitted", class: "entry_date_header" },
-		{ value: "Phone", class: "phone_header" },
 		{ value: "Form", class: "form_header" },
 		{ value: "Delete", class: "delete_header" },
 	];
@@ -78,11 +76,6 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 				<td>{x.firstName}</td>
 				<td>{dateSubmitted}</td>
 				<td>
-					<a href={`tel:${x.phone}`}>
-						<FontAwesomeIcon icon={faPhone} />
-					</a>
-				</td>
-				<td>
 					<button
 						type="button"
 						onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -115,11 +108,6 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 			<tr key={`row_${y}`}>
 				<td>{`${x.lastName}, ${x.firstName}`}</td>
 				<td>{dateSubmitted}</td>
-				<td>
-					<a href={`tel:${x.phone}`}>
-						<FontAwesomeIcon icon={faPhone} />
-					</a>
-				</td>
 				<td>
 					<button
 						type="button"
@@ -179,7 +167,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 	const activeSearchNoVisitorFound = (): JSX.Element => {
 		return (
 			<div id="all_visitors_table_wrapper">
-				<h2>All Attendants</h2>
+				<h2>All Visitors</h2>
 				<SearchBar updatePartial={updatePartial} />
 			</div>
 		);
@@ -193,7 +181,7 @@ export default function AllVisitors({ allVisitors, totalRows, updateOffsetHandle
 	const searchBarNoTable = (): JSX.Element => {
 		return (
 			<div id="all_visitors_table_wrapper">
-				<h2>All Attendants</h2>
+				<h2>All Visitors</h2>
 				<SearchBar updatePartial={updatePartial} />
 				<PaginationButtons
 					totalRows={totalRows}
