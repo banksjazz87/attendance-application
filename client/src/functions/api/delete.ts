@@ -6,7 +6,7 @@
  */
 
 
-async function deleteData(url: string): Promise<any> {
+async function deleteData(url: string, data: object = {}): Promise<any> {
     const response: any = await fetch(url, {
       method: "DELETE",
       mode: "cors",
@@ -17,6 +17,7 @@ async function deleteData(url: string): Promise<any> {
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
+      body: JSON.stringify(data),
     });
   
     return response.json();

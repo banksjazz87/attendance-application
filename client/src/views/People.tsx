@@ -4,7 +4,7 @@ import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import NewMember from "../components/people/NewMember.tsx";
 import { InitAttendee } from "../variables/initAttendee.ts";
 import AllPeople from "../components/people/AllPeople.tsx";
-import { Attendee, APIPeople, APITotalRows } from "../types/interfaces.ts";
+import { Attendee, APIPeople, APITotalRows, APIResponse } from "../types/interfaces.ts";
 import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
@@ -14,6 +14,7 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 export default function People() {
 	const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
 	const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
+	const [deleteUserIsVisitor, setDeleteUserIsVisitor] = useState<boolean>(false);
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 	const [showEditUser, setShowEditUser] = useState<boolean>(false);
 	const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
@@ -25,7 +26,10 @@ export default function People() {
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 
-  //Set the initial offset for the pagination.
+	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
+	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
+
+	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
 
 	//Used to get the number of rows from the table.
@@ -67,6 +71,28 @@ export default function People() {
 				});
 		}
 	}, [currentOffset, partialName]);
+
+	useEffect((): void => {
+		if (userToDelete.id && userToDelete.id !== 0) {
+			const stringOfId: string = userToDelete.id.toString();
+
+			fetch(`/get-visitor-by-id/${stringOfId}`)
+				.then((data: Response): Promise<APIResponse> => {
+					return data.json();
+				})
+				.then((final: APIResponse): void => {
+					if (final.message !== "failure") {
+						if (final.data.length > 0) {
+							setDeleteUserIsVisitor(true);
+						} else {
+							setDeleteUserIsVisitor(false);
+						}
+					} else {
+						console.log("The following error occurred ", final.error);
+					}
+				});
+		}
+	}, [userToDelete]);
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: Attendee): void => {
@@ -141,7 +167,7 @@ export default function People() {
 					text="Add New Member"
 					iconName={faUserPlus}
 					clickHandler={() => displayAddMember()}
-					classes='single_btn add_new_member_btn'
+					classes="single_btn add_new_member_btn"
 				/>
 				<NewMember
 					show={showAddMember}
@@ -165,12 +191,13 @@ export default function People() {
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`}
+					url={deleteUserIsVisitor ? removeVisitorURL : removePersonURL}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={hideDeleteHandler}
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					deleteBody={{}}
 				/>
 				<EditMember
 					show={showEditUser}

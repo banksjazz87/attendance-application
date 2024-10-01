@@ -79,7 +79,7 @@ app.post("/login", (req, res) => {
     }
     else if (req.body.name === process.env.CHAPEL_USER && req.body.password === process.env.CHAPEL_PASSWORD) {
         res.cookie("account", "Chapel", {
-            maxAge: 31556952 * 1000
+            maxAge: 31556952 * 1000,
         });
         res.cookie("user", process.env.CHAPEL_MYSQL_USER, {
             maxAge: 31556952 * 1000,
@@ -359,17 +359,17 @@ app.post("/attendance/insert/attendant", (req, res) => {
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
-app.post('/attendance/insert/new-attendants/:tableName', (req, res) => {
+app.post("/attendance/insert/new-attendants/:tableName", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const neededTable = req.params.tableName;
     const allColumns = `id, firstName, lastName, age, memberType`;
     Db.addBulkSelectApplicants(neededTable, allColumns, req.body.neededFields)
         .then((data) => {
-        console.log('success', data);
+        console.log("success", data);
         res.send({ message: "success", data: data });
     })
         .catch((err) => {
-        console.log('Error inserting multiple attendants', err);
+        console.log("Error inserting multiple attendants", err);
         res.send({ message: "failure", error: Db.getSqlError(err) });
     });
 });
@@ -538,12 +538,12 @@ app.get("/group-months/:yearDate/:groupName", (req, res) => {
         console.log("Error", err);
     });
 });
-app.get('/all-visitors/:limit/:offset', (req, res) => {
+app.get("/all-visitors/:limit/:offset", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-    const neededColumns = ['id', 'visitorId', 'firstName', 'lastName', 'phone', 'dateCreated'];
+    const neededColumns = ["id", "visitorId", "firstName", "lastName", "phone", "dateCreated"];
     const reqLimit = parseInt(req.params.limit);
     const reqOffset = parseInt(req.params.offset);
-    Db.selectFewWithLimit('Visitor_Forms', neededColumns, reqLimit, reqOffset, 'dateCreated', 'DESC')
+    Db.selectFewWithLimit("Visitor_Forms", neededColumns, reqLimit, reqOffset, "dateCreated", "DESC")
         .then((data) => {
         res.send({
             message: "success",
@@ -554,20 +554,20 @@ app.get('/all-visitors/:limit/:offset', (req, res) => {
         .catch((err) => {
         res.send({
             message: "failure",
-            error: Db.getSqlError(err)
+            error: Db.getSqlError(err),
         });
         console.log("Error", err);
     });
 });
-app.get('/all-visitor-data/:id', (req, res) => {
+app.get("/all-visitor-data/:id", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const visitorId = parseInt(req.params.id);
     Promise.all([
-        Db.selectAllById('Visitor_Forms', 'id', visitorId),
-        Db.selectAllById('Visitor_Children', 'parentId', visitorId),
-        Db.selectAllById('Visitor_Interests', 'visitor_attendant_id', visitorId),
-        Db.selectAllById('Visitor_Spouse', 'visitorSpouseId', visitorId),
-        Db.endDb()
+        Db.selectAllById("Visitor_Forms", "id", visitorId),
+        Db.selectAllById("Visitor_Children", "parentId", visitorId),
+        Db.selectAllById("Visitor_Interests", "visitor_attendant_id", visitorId),
+        Db.selectAllById("Visitor_Spouse", "visitorSpouseId", visitorId),
+        Db.endDb(),
     ])
         .then((data) => {
         res.send({
@@ -576,10 +576,10 @@ app.get('/all-visitor-data/:id', (req, res) => {
                 form: data[0],
                 children: data[1],
                 interests: data[2],
-                spouse: data[3]
-            }
+                spouse: data[3],
+            },
         });
-        console.log('Success!!');
+        console.log("Success!!");
     })
         .catch((err) => {
         res.send({
@@ -590,8 +590,182 @@ app.get('/all-visitor-data/:id', (req, res) => {
                 Db.getSqlError(err[2]);
                 Db.getSqlError(err[3]);
                 Db.getSqlError(err[4]);
-            }
+            },
         });
-        console.log('Error', err);
+        console.log("Error", err);
+    });
+});
+app.get("/children-spouse-ids/:parentId", (req, res) => {
+    const parentId = req.params.parentId;
+    const childSpouseAttendantID = [`SELECT id FROM Visitor_Children WHERE parentId = ${parentId}`, `SELECT id FROM Visitor_Spouse WHERE visitorSpouseId = ${parentId}`];
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    Promise.all([Db.dataUnion(childSpouseAttendantID), Db.getBySelectColumnsNoEnd(["spouseId"], "Visitor_Spouse", "visitorSpouseId", parentId), Db.getBySelectColumnsNoEnd(["childId"], "Visitor_Children", "parentId", parentId), Db.endDb()])
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: {
+                attendantIds: data[0],
+                spouseIds: data[1],
+                childIds: data[2],
+            },
+        });
+        console.log("Success here ", data);
+    })
+        .catch((err) => {
+        console.log("ERRROR ", err);
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+            },
+        });
+    });
+});
+//Delete visitor form data and deletes the visitors from all attendance views.
+app.delete("/remove-all-visitor-data/", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const childIds = req.body.childIds;
+    const spouseIds = req.body.spouseIds;
+    const familyIds = req.body.familyIds;
+    const userId = req.body.userId;
+    const allFamilyIds = familyIds.concat(userId);
+    Promise.all([
+        Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+        Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
+        Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+        Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+    ])
+        .then((data) => {
+        Promise.all([Db.removeByIdNoEnd("attendants", "id", allFamilyIds), Db.endDb()])
+            .then((final) => {
+            res.send({
+                message: "success",
+                data: final,
+            });
+            console.log("SUCCESS removing all visitor data ");
+        })
+            .catch((finalErr) => {
+            res.send({
+                message: "failure",
+                error: () => {
+                    Db.getSqlError(finalErr[0]), Db.getSqlError(finalErr[1]);
+                },
+            });
+            console.log("ERROR DELETING ALL ", finalErr);
+        });
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+                Db.getSqlError(err[4]);
+            },
+        });
+        console.log("ERROR ", err);
+    });
+});
+//Just used to remove the visitor form data, doesn't delete the attendant from the attendants table.
+app.delete("/remove-visitor-form-data/", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const userId = req.body.userId;
+    Promise.all([
+        Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+        Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
+        Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+        Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+        Db.endDb(),
+    ])
+        .then((data) => {
+        res.send({
+            message: "success",
+            data: data,
+        });
+        console.log("SUCCESS removing just the visitor form data");
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+                Db.getSqlError(err[4]);
+            },
+        });
+        console.log("ERROR ", err);
+    });
+});
+app.get('/get-visitor-by-id/:id', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const userId = req.params.id;
+    Promise.all([
+        Db.getBySelectColumnsNoEnd(['id'], 'Visitor_Forms', 'id', userId),
+        Db.endDb()
+    ])
+        .then((data) => {
+        res.send({
+            message: 'success',
+            data: data[0]
+        });
+        console.log('Success ', data);
+    })
+        .catch((err) => {
+        res.send({
+            message: 'failure',
+            error: Db.getSqlError(err[0])
+        });
+        console.log('Failure getting data ', err);
+    });
+});
+//Delete visitor form data and deletes the visitors from all attendance views.
+app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const userId = [req.params.id];
+    const userName = `${req.params.firstName} ${req.params.lastName}`;
+    Promise.all([
+        Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
+        Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
+        Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+        Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
+    ])
+        .then((data) => {
+        Promise.all([Db.removeByIdNoEnd("attendants", "id", userId), Db.endDb()])
+            .then((final) => {
+            res.send({
+                message: `Success, ${userName} has been deleted.`,
+                data: final,
+            });
+            console.log("SUCCESS removing all visitor data ");
+        })
+            .catch((finalErr) => {
+            res.send({
+                message: "failure",
+                error: () => {
+                    Db.getSqlError(finalErr[0]), Db.getSqlError(finalErr[1]);
+                },
+            });
+            console.log("ERROR DELETING ALL ", finalErr);
+        });
+    })
+        .catch((err) => {
+        res.send({
+            message: "failure",
+            error: () => {
+                Db.getSqlError(err[0]);
+                Db.getSqlError(err[1]);
+                Db.getSqlError(err[2]);
+                Db.getSqlError(err[3]);
+                Db.getSqlError(err[4]);
+            },
+        });
+        console.log("ERROR ", err);
     });
 });

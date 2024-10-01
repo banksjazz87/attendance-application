@@ -354,10 +354,63 @@ class DBMethods {
             this.endDb();
         });
     }
+    //Select items by an id
     selectAllById(table, columnName, id) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
             const neededSql = `SELECT * FROM ${table} WHERE ${columnName} = ${id}`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
+    /**
+     *
+     * @param sql array of strings
+     * @returns Promise array of strings
+     * @description used to create a UNION statement using the passed in sql statements.
+     */
+    dataUnion(sql) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let neededSql = '';
+            for (let i = 0; i < sql.length; i++) {
+                if (i < sql.length - 1) {
+                    neededSql += `${sql[i]} UNION `;
+                }
+                else {
+                    neededSql += `${sql[i]};`;
+                }
+            }
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
+    //Select different columns to get data back from.
+    getBySelectColumnsNoEnd(neededColumns, table, searchColumn, searchValue) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            const stringOfNeededColumns = neededColumns.toString();
+            const neededSql = `SELECT ${stringOfNeededColumns} FROM ${table} WHERE ${searchColumn} = "${searchValue}"`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+        });
+    }
+    //Remove by Id no end statement.
+    removeByIdNoEnd(tableName, idColumn, id) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let neededSql = `DELETE FROM ${tableName} WHERE `;
+            for (let i = 0; i < id.length; i++) {
+                if (i < id.length - 1) {
+                    neededSql += `${idColumn} = ${id[i]} OR `;
+                }
+                else {
+                    neededSql += `${idColumn} = ${id[i]};`;
+                }
+            }
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });

@@ -1,3 +1,4 @@
+
 export interface Attendee {
   firstName: string;
   lastName: string;
@@ -198,8 +199,8 @@ export interface APITotalRows {
 }
 
 export interface VisitorShortFields {
-  id: Number;
-  visitorId: Number;
+  id: number;
+  visitorId: number;
   firstName: string;
   lastName: string;
   phone: string;
@@ -286,10 +287,11 @@ export interface DeleteProps {
   message: string;
   url: string;
   show: boolean;
-  deleteUser: Attendee;
+  deleteUser: Attendee | VisitorShortFields;
   hideHandler: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
+  deleteBody: Object
 }
 
 export interface DeleteResponse {
@@ -373,6 +375,30 @@ export interface NewAttendance {
 export interface ApiResponse {
   message: string;
   data: [] | string;
+}
+
+
+export interface AttendantId {
+  id: number;
+}
+
+export interface ChildId {
+  childId: number;
+}
+
+export interface SpouseId {
+  spouseId: number;
+}
+
+export interface ChildrenSpouseData {
+  attendantIds: AttendantId[],
+  spouseIds: SpouseId[],
+  childIds: ChildId[]
+}
+
+export interface ChildrenSpouseApiResponse {
+  message: string;
+  data: ChildrenSpouseData;
 }
 
 export interface AttendanceTotals {

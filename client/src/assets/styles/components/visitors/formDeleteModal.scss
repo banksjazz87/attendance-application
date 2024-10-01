@@ -1,0 +1,38 @@
+@import "../../global/library.scss";
+.form_delete_alert_wrapper {
+    @include full-height-popout-background;
+    .delete_alert {
+        @include popout-content;
+        margin-top: 20%;
+    }
+    .delete_message {
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: center;
+        padding-top: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .button_wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        column-gap: 1rem;
+    }
+    .close_btn {
+        @include icon-close-btn;
+    }
+}
+
+@media (max-width: 1024px) {
+    .form_delete_alert_wrapper {
+        .delete_alert {
+            width: 90%;
+            margin-right: auto;
+            margin-left: auto;
+            text-align: center;
+            padding-top: 4rem;
+        }
+    }
+}
