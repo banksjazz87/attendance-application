@@ -288,14 +288,16 @@ export default function Attendance(): JSX.Element {
 					show={showAddNewMember}
 					showHandler={showNewMemberHandler}
 					masterTable={false}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
+					updateLoadingStatus={(): void => setSearching(!searching)}
 				/>
 				<AttendantDropdown
 					show={showAttendantDropdown}
 					currentAttendance={currentListData}
 					currentTable={`${selectedGroup[0].name}_attendance`}
 					showHandler={(): void => setShowAttendantDropdown(false)}
+					updateLoadingStatus={(): void => setSearching(!searching)}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to delete ${userToDelete.firstName} ${userToDelete.lastName} from this attendance sheet?`}
@@ -305,6 +307,8 @@ export default function Attendance(): JSX.Element {
 					hideHandler={(): void => setShowDeleteAlert(false)}
 					triggerSuccessMessage={() => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
+					deleteBody={{}}
+					updateLoadingStatus={(): void => setSearching(!searching)}
 				/>
 				<LoadingBar show={searching} />
 				<SuccessMessage

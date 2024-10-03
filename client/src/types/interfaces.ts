@@ -326,6 +326,7 @@ export interface NewMemberProps {
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
   currentAttendanceColumn?: string;
+  updateLoadingStatus: Function;
 
 }
 

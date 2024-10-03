@@ -8,7 +8,7 @@ import "../../assets/styles/components/people/newMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn, updateLoadingStatus }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -127,14 +127,18 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
    * @description make a post request to add a new member.
    */
   const postNewAttendant = (obj: UpdateAttendant): void => {
+    updateLoadingStatus();
+
     postData("/attendance/insert/attendant", obj).then((data: APIResponse): void => {
       if (data.message === "success") {
         setTimeout(() => {
           (document.getElementById("new_member_form") as HTMLFormElement).reset();
-          window.location.reload();
-        }, 3300);
+          updateLoadingStatus();
+          window.location.reload(); 
+        }, 1500);
        
       } else {
+        updateLoadingStatus();
         alert(`${data.data}`);
       }
     });

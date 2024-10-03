@@ -8,26 +8,26 @@ import "../../assets/styles/components/global/attendantDropdown.scss";
 
 interface AttendantDropdownProps {
 	show: boolean;
-    currentAttendance: Attendee[];
-    currentTable: string;
-    showHandler: Function;
+	currentAttendance: Attendee[];
+	currentTable: string;
+	showHandler: Function;
+	updateLoadingStatus: Function;
 }
-export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler }: AttendantDropdownProps) {
+export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler }: AttendantDropdownProps): JSX.Element {
 	const initAttendee: Attendee = {
 		firstName: "",
 		lastName: "",
 		age: "",
 		memberType: "",
-        active: 0,
+		active: 0,
 		id: -1,
 	};
 	const [attendants, setAttendants] = useState<Attendee[]>([initAttendee]);
 	const [selectedAttendants, setSelectedAttendants] = useState<Attendee[]>([initAttendee]);
-    const [showSuccess, setShowSuccess] = useState<boolean>(false);
-    const [successText, setSuccessText] = useState<string>('');
+	const [showSuccess, setShowSuccess] = useState<boolean>(false);
+	const [successText, setSuccessText] = useState<string>("");
 
-    
-    //Get all of the available attendants, and set the attendants array.
+	//Get all of the available attendants, and set the attendants array.
 	useEffect(() => {
 		fetch("/all-attendants")
 			.then((data: Response): Promise<APIPeople> => {
@@ -42,14 +42,13 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 			});
 	}, []);
 
-
-    /**
-     * 
-     * @param selectedAttendants Attendee[]
-     * @param currentAttendant Attendee
-     * @returns boolean
-     * @description check to see if the selected attendant already exists in an array, returns true if there's a match and false if there's no match.
-     */
+	/**
+	 *
+	 * @param selectedAttendants Attendee[]
+	 * @param currentAttendant Attendee
+	 * @returns boolean
+	 * @description check to see if the selected attendant already exists in an array, returns true if there's a match and false if there's no match.
+	 */
 	const checkForMatch = (selectedAttendants: Attendee[], currentAttendant: Attendee): boolean => {
 		let match = false;
 		for (let i = 0; i < selectedAttendants.length; i++) {
@@ -60,13 +59,12 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		return match;
 	};
 
-
-    /**
-     * 
-     * @param e React.ChangeEvent<HTMLSelectElement>
-     * @returns void 
-     * @description this is the change handler that is fired when an option is selected from the dropdown.  First checks to see if the attendant alread exists in either the main array from the Attendance view, or if it already exists in the current list.
-     */
+	/**
+	 *
+	 * @param e React.ChangeEvent<HTMLSelectElement>
+	 * @returns void
+	 * @description this is the change handler that is fired when an option is selected from the dropdown.  First checks to see if the attendant alread exists in either the main array from the Attendance view, or if it already exists in the current list.
+	 */
 	const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>): void => {
 		const copyOfCurrent: Attendee[] = selectedAttendants.slice();
 		const currentUser: Attendee = attendants[parseInt(e.target.value as string)];
@@ -82,8 +80,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		}
 	};
 
-
-    //Used to display the attendant options.
+	//Used to display the attendant options.
 	const attendantOptions: JSX.Element[] = attendants.map((x: Attendee, y: number): JSX.Element => {
 		return (
 			<option
@@ -93,32 +90,44 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		);
 	});
 
+	/**
+	 *
+	 * @param e React.MouseEvent<HTMLButtonElement>
+	 * @returns void
+	 * @description removes the selected attendant from the current list.
+	 */
+	const removeMember = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+		const currentItem: HTMLElement = e.target as HTMLElement;
+		const dataId: HTMLElement = currentItem.closest(".list_data") as HTMLElement;
+		const idValue: string | null = dataId.getAttribute("data-reactId");
+		let indexOfId = -1;
 
-    /**
-     * 
-     * @param e React.MouseEvent<HTMLButtonElement>
-     * @returns void
-     * @description removes the selected attendant from the current list.
-     */
-    const removeClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-        const currentItem = e.target as HTMLElement;
-        const dataId = currentItem.closest('.list_data') as HTMLElement;
-        const idValue = dataId.getAttribute('data-reactId');
-        let indexOfId = -1;
+		for (let i = 0; i < selectedAttendants.length; i++) {
+			if (selectedAttendants[i].id === parseInt(idValue as string)) {
+				indexOfId = i;
+			}
+		}
 
-        for (let i = 0; i < selectedAttendants.length; i++) {
-            if (selectedAttendants[i].id === parseInt(idValue as string)) {
-                indexOfId = i;
-            }
-        }
+		const copyOfAllAdded = selectedAttendants.slice();
+		copyOfAllAdded.splice(indexOfId, 1);
+		setSelectedAttendants(copyOfAllAdded);
+	};
 
-        const copyOfAllAdded = selectedAttendants.slice();
-        copyOfAllAdded.splice(indexOfId, 1);
-        setSelectedAttendants(copyOfAllAdded);
-    };
+	//Reset the member array to the default value
+	const resetMemberArray = (): void => {
+		setSelectedAttendants([initAttendee]);
+	};
 
+	//Function that fires off when removing an existing member.
+	const removeClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+		if (selectedAttendants.length === 1) {
+			resetMemberArray();
+		} else {
+			removeMember(e);
+		}
+	};
 
-    //Used to display the options for the select dropdown.
+	//Used to display the options for the select dropdown.
 	const showOptions: Function = (): JSX.Element => {
 		if (attendants[0].firstName.length > 1) {
 			return (
@@ -139,114 +148,111 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		}
 	};
 
-
-    //Used to display any selected applicant, as a list item.
+	//Used to display any selected applicant, as a list item.
 	const displaySelected: JSX.Element[] = selectedAttendants.map((x: Attendee, y: number): JSX.Element => {
 		return (
-            <div className="list_data" data-reactId={x.id}>
-                 <li key="selected_y">{`${y + 1}. ${x.lastName}, ${x.firstName}`}</li>
-                 <button
-						type="button"
-						className="trash_btn"
-						onClick={removeClickHandler}
-					>
-						<FontAwesomeIcon
-							className="trash_can"
-							icon={faTrashCan}
-						/>
-					</button>
-            </div>
-        ) 
+			<div
+				className="list_data"
+				data-reactId={x.id}
+			>
+				<li key="selected_y">{`${y + 1}. ${x.lastName}, ${x.firstName}`}</li>
+				<button
+					type="button"
+					className="trash_btn"
+					onClick={removeClickHandler}
+				>
+					<FontAwesomeIcon
+						className="trash_can"
+						icon={faTrashCan}
+					/>
+				</button>
+			</div>
+		);
 	});
 
-
-    //Used to close the popup message, based on success or failure.
-    const closeMessageHandler = (text: string): void => {
-        if (text.includes('Success')) {
-            setShowSuccess(false);
-            setTimeout(() => {
-                window.location.reload();
-        }, 1500);   
-        } else {
-            setShowSuccess(false);
-        }
-    };
-
-
-    /**
-     * 
-     * @param e React.FormEvent<HTMLFormElement>
-     * @returns void
-     * @description used for the final submit, adds all of the selected attendants to the list.
-     */
-	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
-		e.preventDefault();
-        
-        //Create an array of the fields that we need for the database.
-        const neededFields = selectedAttendants.map((x: Attendee, y: number): Object => {
-            let currentObj = {
-                id: x.id,
-                firstName: x.firstName,
-                lastName: x.lastName,
-                age: x.age,
-                memberType: x.memberType,
-            };
-
-            return currentObj;
-        });
-
-        //Put the array of needed fields in an object.
-        const data = {neededFields};
-
-
-        //Make a post request to insert the new attendants.
-		postData(`/attendance/insert/new-attendants/${currentTable}`, data)
-            .then((data: APIResponse): void => {
-                if (data.message === 'success') {
-                    setSuccessText('Success!  All attendants have been added.')
-                    setShowSuccess(true);
-                } else {
-                    setSuccessText(`Failure! The following error occurred: ${data.data}`)
-                }
-            });
+	//Used to close the popup message, based on success or failure.
+	const closeMessageHandler = (text: string): void => {
+		if (text.includes("Success")) {
+			setShowSuccess(false);
+			setTimeout(() => {
+				window.location.reload();
+			}, 1500);
+		} else {
+			setShowSuccess(false);
+		}
 	};
 
+	/**
+	 *
+	 * @param e React.FormEvent<HTMLFormElement>
+	 * @returns void
+	 * @description used for the final submit, adds all of the selected attendants to the list.
+	 */
+	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
+		e.preventDefault();
+
+		//Create an array of the fields that we need for the database.
+		const neededFields = selectedAttendants.map((x: Attendee, y: number): Object => {
+			let currentObj = {
+				id: x.id,
+				firstName: x.firstName,
+				lastName: x.lastName,
+				age: x.age,
+				memberType: x.memberType,
+			};
+
+			return currentObj;
+		});
+
+		//Put the array of needed fields in an object.
+		const data = { neededFields };
+
+		//Make a post request to insert the new attendants.
+		postData(`/attendance/insert/new-attendants/${currentTable}`, data).then((data: APIResponse): void => {
+			if (data.message === "success") {
+				setSuccessText("Success!  All attendants have been added.");
+				setShowSuccess(true);
+			} else {
+				setSuccessText(`Failure! The following error occurred: ${data.data}`);
+			}
+		});
+	};
 
 	return (
-        <div className="full_height_popout" style={show ? { display: "" } : { display: "none" }}>
 		<div
-			id="attendant_dropdown_wrapper"
+			className="full_height_popout"
+			style={show ? { display: "" } : { display: "none" }}
 		>
-            <button
-                className="close_btn"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>): void => showHandler()}
-            >
-                <FontAwesomeIcon icon={faClose}/>
-            </button>
-			<div id="attendant_dropdown_box_wrapper">
-                <h2>Add Existing Members</h2>
-				<form 
-                    method="get"
-                    onSubmit={submitHandler}
-                >
-					{showOptions()}
-					<input
-						type="submit"
-						value="Submit"
-					></input>
-				</form>
-				<div id="display_attendants_wrapper">
-                    <h3>Members set to be added:</h3>
-					<ul>{selectedAttendants[0].firstName.length > 0 && selectedAttendants.length > 0 ? displaySelected : ""}</ul>
+			<div id="attendant_dropdown_wrapper">
+				<button
+					className="close_btn"
+					onClick={(e: React.MouseEvent<HTMLButtonElement>): void => showHandler()}
+				>
+					<FontAwesomeIcon icon={faClose} />
+				</button>
+				<div id="attendant_dropdown_box_wrapper">
+					<h2>Add Existing Members</h2>
+					<form
+						method="get"
+						onSubmit={submitHandler}
+					>
+						{showOptions()}
+						<input
+							type="submit"
+							value="Submit"
+						></input>
+					</form>
+					<div id="display_attendants_wrapper">
+						<h3>Members set to be added:</h3>
+						<ul>{selectedAttendants[0].firstName.length > 0 && selectedAttendants.length > 0 ? displaySelected : ""}</ul>
+					</div>
+					<SuccessMessage
+						message={successText}
+						show={showSuccess}
+						closeMessage={() => closeMessageHandler(successText)}
+					/>
 				</div>
-            <SuccessMessage 
-                message={successText}
-                show={showSuccess}
-                closeMessage={() => closeMessageHandler(successText)}
-
-            />
 			</div>
 		</div>
-        </div>
 	);
-};
+}

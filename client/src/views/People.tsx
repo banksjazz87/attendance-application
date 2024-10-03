@@ -178,6 +178,7 @@ export default function People() {
 					masterTable={true}
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
 				/>
 				<AllPeople
 					allPeople={people}
