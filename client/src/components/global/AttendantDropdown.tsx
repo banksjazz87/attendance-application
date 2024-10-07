@@ -172,12 +172,14 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 
 	//Used to close the popup message, based on success or failure.
 	const closeMessageHandler = (text: string): void => {
-		if (text.includes("Success")) {
+		if (text.includes("success")) {
+			console.log('This is a success message');
 			setShowSuccess(false);
-			setTimeout(() => {
+			setTimeout((): void => {
 				window.location.reload();
-			}, 1500);
+			}, 500);
 		} else {
+			console.log('no success found');
 			setShowSuccess(false);
 		}
 	};
@@ -249,7 +251,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 					<SuccessMessage
 						message={successText}
 						show={showSuccess}
-						closeMessage={() => closeMessageHandler(successText)}
+						closeMessage={(): void => closeMessageHandler(successText)}
 					/>
 				</div>
 			</div>

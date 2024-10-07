@@ -15,11 +15,11 @@ export default function SuccessMessage({message, show, closeMessage}: SuccessMes
             let i: number = 0;
             let id: NodeJS.Timer = setInterval((): void => {
                 i++;
-                if (i === 1000) {
+                if (i === 2) {
                     clearInterval(id);
                     closeMessage();
                 }
-            }, 1200);
+            }, 1000);
         } else {
             closeMessage();
         }
