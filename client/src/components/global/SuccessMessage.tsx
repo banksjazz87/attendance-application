@@ -28,7 +28,7 @@ export default function SuccessMessage({message, show, closeMessage}: SuccessMes
     return (
         <div 
             className="alert_message_wrapper"
-            style={show ? {opacity: '1', zIndex: "12"} : {opacity: '0', zIndex: "0"}}>
+            style={show ? {opacity: '1', zIndex: "12"} : {display: '0', zIndex: "0"}}>
             <p className="alert_message_text">{message}</p>
         </div>
     )

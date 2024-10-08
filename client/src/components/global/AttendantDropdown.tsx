@@ -175,9 +175,9 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		if (text.includes("success")) {
 			console.log('This is a success message');
 			setShowSuccess(false);
-			setTimeout((): void => {
-				window.location.reload();
-			}, 500);
+			// setTimeout((): void => {
+			// 	window.location.reload();
+			// }, 500);
 		} else {
 			console.log('no success found');
 			setShowSuccess(false);
@@ -214,6 +214,9 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 			if (data.message === "success") {
 				setSuccessText("Success!  All attendants have been added.");
 				setShowSuccess(true);
+				setTimeout((): void => {
+					window.location.reload();
+				}, 2500);
 			} else {
 				setSuccessText(`Failure! The following error occurred: ${data.data}`);
 			}
