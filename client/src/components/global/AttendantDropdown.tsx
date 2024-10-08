@@ -12,8 +12,9 @@ interface AttendantDropdownProps {
 	currentTable: string;
 	showHandler: Function;
 	updateLoadingStatus: Function;
+	updateData: Function;
 }
-export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler }: AttendantDropdownProps): JSX.Element {
+export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler, updateLoadingStatus, updateData }: AttendantDropdownProps): JSX.Element {
 	const initAttendee: Attendee = {
 		firstName: "",
 		lastName: "",
@@ -175,14 +176,22 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		if (text.includes("success")) {
 			console.log('This is a success message');
 			setShowSuccess(false);
-			// setTimeout((): void => {
-			// 	window.location.reload();
-			// }, 500);
 		} else {
 			console.log('no success found');
 			setShowSuccess(false);
 		}
 	};
+
+	//This function fires if attendants have been added successfully.
+	const successHandler = (): void => {
+		setSuccessText("Success!  All attendants have been added.");
+		updateData();
+		setShowSuccess(true);
+		setTimeout(() => {
+			updateLoadingStatus();
+			showHandler();
+		}, 1500);
+	}
 
 	/**
 	 *
@@ -207,18 +216,16 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		});
 
 		//Put the array of needed fields in an object.
-		const data = { neededFields };
+		const data: Object = { neededFields };
 
 		//Make a post request to insert the new attendants.
 		postData(`/attendance/insert/new-attendants/${currentTable}`, data).then((data: APIResponse): void => {
+			updateLoadingStatus();
 			if (data.message === "success") {
-				setSuccessText("Success!  All attendants have been added.");
-				setShowSuccess(true);
-				setTimeout((): void => {
-					window.location.reload();
-				}, 2500);
+				successHandler();
 			} else {
 				setSuccessText(`Failure! The following error occurred: ${data.data}`);
+				updateLoadingStatus();
 			}
 		});
 	};

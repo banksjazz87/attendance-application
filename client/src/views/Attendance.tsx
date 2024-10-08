@@ -32,6 +32,7 @@ export default function Attendance(): JSX.Element {
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = useState<string>("");
 	const [showAttendantDropdown, setShowAttendantDropdown] = useState<boolean>(false);
+	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
 
 	//Used to pull in the the main attendance that's needed.
 	const getMainAttendance = async (title: string): Promise<void> => {
@@ -109,6 +110,19 @@ export default function Attendance(): JSX.Element {
 			setShowOptionButtons(false);
 		}
 	}, [displayAttendance]);
+
+
+	//Check to see if any of the data has been updated, if so get the table.
+	useEffect((): void => {
+		if (dataUpdated) {
+			const tableName: string = `${selectedGroup[0].name}_attendance`;
+			getMainAttendance(tableName);
+			setUpdatedData(false);
+			setSearching(false);
+		}
+	}, [dataUpdated]);
+
+
 
 	const showAttendanceHandler = (): void => {
 		setDisplayAttendance(true);
@@ -298,6 +312,7 @@ export default function Attendance(): JSX.Element {
 					currentTable={`${selectedGroup[0].name}_attendance`}
 					showHandler={(): void => setShowAttendantDropdown(false)}
 					updateLoadingStatus={(): void => setSearching(!searching)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to delete ${userToDelete.firstName} ${userToDelete.lastName} from this attendance sheet?`}
