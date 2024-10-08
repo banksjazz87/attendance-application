@@ -116,9 +116,9 @@ export default function Attendance(): JSX.Element {
 	useEffect((): void => {
 		if (dataUpdated) {
 			const tableName: string = `${selectedGroup[0].name}_attendance`;
-			getMainAttendance(tableName);
-			setUpdatedData(false);
-			setSearching(false);
+			getMainAttendance(tableName).then(data => {
+				setUpdatedData(false);
+			});
 		}
 	}, [dataUpdated]);
 

@@ -187,8 +187,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		setSuccessText("Success!  All attendants have been added.");
 		updateData();
 		setShowSuccess(true);
-		setTimeout(() => {
-			updateLoadingStatus();
+		setTimeout((): void => {
 			showHandler();
 		}, 1500);
 	}
@@ -201,6 +200,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 	 */
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
+		updateLoadingStatus();
 
 		//Create an array of the fields that we need for the database.
 		const neededFields = selectedAttendants.map((x: Attendee, y: number): Object => {
@@ -220,7 +220,6 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 
 		//Make a post request to insert the new attendants.
 		postData(`/attendance/insert/new-attendants/${currentTable}`, data).then((data: APIResponse): void => {
-			updateLoadingStatus();
 			if (data.message === "success") {
 				successHandler();
 			} else {
