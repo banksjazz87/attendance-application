@@ -13,8 +13,10 @@ interface AttendantDropdownProps {
 	showHandler: Function;
 	updateLoadingStatus: Function;
 	updateData: Function;
+	setSuccessText: Function;
+	showSuccessMessage: Function;
 }
-export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler, updateLoadingStatus, updateData }: AttendantDropdownProps): JSX.Element {
+export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler, updateLoadingStatus, updateData, setSuccessText, showSuccessMessage }: AttendantDropdownProps): JSX.Element {
 	const initAttendee: Attendee = {
 		firstName: "",
 		lastName: "",
@@ -25,8 +27,6 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 	};
 	const [attendants, setAttendants] = useState<Attendee[]>([initAttendee]);
 	const [selectedAttendants, setSelectedAttendants] = useState<Attendee[]>([initAttendee]);
-	const [showSuccess, setShowSuccess] = useState<boolean>(false);
-	const [successText, setSuccessText] = useState<string>("");
 
 	//Get all of the available attendants, and set the attendants array.
 	useEffect(() => {
@@ -171,22 +171,12 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		);
 	});
 
-	//Used to close the popup message, based on success or failure.
-	const closeMessageHandler = (text: string): void => {
-		if (text.includes("success")) {
-			console.log('This is a success message');
-			setShowSuccess(false);
-		} else {
-			console.log('no success found');
-			setShowSuccess(false);
-		}
-	};
 
 	//This function fires if attendants have been added successfully.
 	const successHandler = (): void => {
 		setSuccessText("Success!  All attendants have been added.");
 		updateData();
-		setShowSuccess(true);
+		showSuccessMessage();
 		setTimeout((): void => {
 			showHandler();
 		}, 1500);
@@ -257,11 +247,6 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 						<h3>Members set to be added:</h3>
 						<ul>{selectedAttendants[0].firstName.length > 0 && selectedAttendants.length > 0 ? displaySelected : ""}</ul>
 					</div>
-					<SuccessMessage
-						message={successText}
-						show={showSuccess}
-						closeMessage={(): void => closeMessageHandler(successText)}
-					/>
 				</div>
 			</div>
 		</div>
