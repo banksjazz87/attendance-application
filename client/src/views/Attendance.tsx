@@ -158,11 +158,7 @@ export default function Attendance(): JSX.Element {
 		setDisplayAttendance(true);
 	};
 
-	//Displays the option to add a new member.
-	const showNewMemberHandler = (): void => {
-		showAddNewMember ? setShowAddNewMember(false) : setShowAddNewMember(true);
-	};
-
+	
 	/**
 	 *
 	 * @param value string
@@ -300,7 +296,7 @@ export default function Attendance(): JSX.Element {
 					currentTable={`${selectedGroup[0].name}_attendance`}
 					currentAttendanceColumn={selectedAttendance.title}
 					show={showAddNewMember}
-					showHandler={showNewMemberHandler}
+					showHandler={((): void => setShowAddNewMember(!showAddNewMember))}
 					masterTable={false}
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
