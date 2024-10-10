@@ -3,7 +3,6 @@ import { Attendee, APIPeople, APIResponse } from "../../types/interfaces.ts";
 import postData from "../../functions/api/post.ts";
 import { faTrashCan, faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import SuccessMessage from "../../components/global/SuccessMessage.tsx";
 import "../../assets/styles/components/global/attendantDropdown.scss";
 
 interface AttendantDropdownProps {

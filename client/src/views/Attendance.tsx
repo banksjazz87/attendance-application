@@ -301,6 +301,7 @@ export default function Attendance(): JSX.Element {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
 					updateLoadingStatus={(): void => setSearching(!searching)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<AttendantDropdown
 					show={showAttendantDropdown}

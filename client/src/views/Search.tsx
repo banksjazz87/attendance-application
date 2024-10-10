@@ -6,7 +6,7 @@ import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet } from "../types/interfaces.ts";
 import "../assets/styles/views/search.scss";
 
-export default function Search() {
+export default function Search(): JSX.Element {
 	const initGroup = {
 		name: "",
 		age_group: "",
@@ -131,7 +131,7 @@ export default function Search() {
 		<div>
 			<Navbar />
 			<div className="header_wrapper">
-				<h1>Search</h1>
+				<h1>Past Attendance</h1>
 			</div>
 			<div id="search_content_wrapper">
 				<form
