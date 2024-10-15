@@ -200,12 +200,12 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
       alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
-
         if (!masterTable) {
           triggerSuccessMessage();
           updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added.`);
           getAttendantDataAndSetIt(data);
         } else {
+          updateLoadingStatus();
           triggerSuccessMessage();
           updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`);
         }

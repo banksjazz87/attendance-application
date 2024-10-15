@@ -198,12 +198,12 @@ export default function People() {
 					show={true}
 					text="Add New Member"
 					iconName={faUserPlus}
-					clickHandler={() => displayAddMember()}
+					clickHandler={(): void => displayAddMember()}
 					classes="single_btn add_new_member_btn"
 				/>
 				<NewMember
 					show={showAddMember}
-					showHandler={displayAddMember}
+					showHandler={(): void => setShowAddMember(false)}
 					currentTable={"Attendants"}
 					masterTable={true}
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
