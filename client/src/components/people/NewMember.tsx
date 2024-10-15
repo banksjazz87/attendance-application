@@ -187,7 +187,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     }
   };
 
-
+ 
   /**
    * 
    * @param e Form submit event
@@ -206,6 +206,8 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
           getAttendantDataAndSetIt(data);
         } else {
           updateLoadingStatus();
+          updateData();
+          showHandler();
           triggerSuccessMessage();
           updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`);
         }

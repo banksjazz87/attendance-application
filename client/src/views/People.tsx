@@ -99,6 +99,9 @@ export default function People() {
 			setSearching(false);
 			getPeopleData(offSetIncrement, currentOffset).then((data: void) => {
 				setUpdatedData(false);
+				setTimeout((): void => {
+					setIsLoading(false);
+				}, 200);
 			});
 		}
 	}, [dataUpdated, offSetIncrement, currentOffset])
