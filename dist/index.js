@@ -22,7 +22,7 @@ app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 app.use(express_1.default.static(path_1.default.join(__dirname, "../client/build")));
-const paths = ["/dashboard", "/new-attendance", "/attendance", "/search", "/people", "/visitors"];
+const paths = ["/dashboard", "/new-attendance", "/attendance", "/search-past-attendance", "/people", "/visitors"];
 app.get(paths, (req, res) => {
     res.sendFile(path_1.default.join(__dirname, "../client/build", "index.html"));
 });

@@ -8,7 +8,7 @@ import "../../assets/styles/components/people/newMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn, updateLoadingStatus, updateData }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
@@ -127,14 +127,16 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
    * @description make a post request to add a new member.
    */
   const postNewAttendant = (obj: UpdateAttendant): void => {
+    updateLoadingStatus();
+
     postData("/attendance/insert/attendant", obj).then((data: APIResponse): void => {
       if (data.message === "success") {
-        setTimeout(() => {
-          (document.getElementById("new_member_form") as HTMLFormElement).reset();
-          window.location.reload();
-        }, 3300);
-       
+        (document.getElementById("new_member_form") as HTMLFormElement).reset();
+        updateLoadingStatus();
+        updateData();
+        showHandler();
       } else {
+        updateLoadingStatus();
         alert(`${data.data}`);
       }
     });
@@ -185,7 +187,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
     }
   };
 
-
+ 
   /**
    * 
    * @param e Form submit event
@@ -198,12 +200,14 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
       alert(`${newAttendant.firstName} ${newAttendant.lastName} is already in the database`);
     } else {
       postData("/new-attendant", newAttendant).then((data: APIResponse) => {
-
         if (!masterTable) {
           triggerSuccessMessage();
           updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added.`);
           getAttendantDataAndSetIt(data);
         } else {
+          updateLoadingStatus();
+          updateData();
+          showHandler();
           triggerSuccessMessage();
           updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`);
         }

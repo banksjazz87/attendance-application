@@ -10,6 +10,7 @@ import EditMember from "../components/people/EditMember.tsx";
 import "../assets/styles/views/people.scss";
 import TextAndIconButton from "../components/global/TextAndIconButton.tsx";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import LoadingBar from "../components/global/LoadingBar.tsx";
 
 export default function People() {
 	const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
@@ -25,6 +26,8 @@ export default function People() {
 	const [searching, setSearching] = useState<boolean>(false);
 	const [showSuccessMessage, setShowSuccessMessage] = useState<boolean>(false);
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
@@ -45,6 +48,31 @@ export default function People() {
 			});
 	}, [totalDbRows]);
 
+
+	/**
+	 * 
+	 * @param offSet number, pass in the state for offSetIncrement within the useEffect
+	 * @param currentOffset number, pass in the state for the currentOffset with the useEffect
+	 * @returns Promise<void>
+	 * @description used to get the people data
+	 */
+	const getPeopleData = async (offSet: number, currentOffset: number): Promise<void> => {
+		const tableData: Response = await fetch(`/table-return-few/Attendants/${offSet}/${currentOffset}/lastName/ASC`);
+		const tableJSON: APIPeople = await tableData.json();
+		
+		try {
+			if (tableJSON.message === "success") {
+				setPeople(tableJSON.data);
+				setSearching(false);
+			} else {
+				setSearching(false);
+				alert('/table-return-few error ' + tableJSON.error);
+			}
+		} catch(e) {
+			console.warn("Error with the /table-return-few", e);
+		}
+	}
+
 	//Used to check if there is a current partial name search.
 	useEffect((): void => {
 		if (partialName.length > 0) {
@@ -60,17 +88,23 @@ export default function People() {
 				});
 		} else {
 			setSearching(false);
-			fetch(`/table-return-few/Attendants/${offSetIncrement}/${currentOffset}/lastName/ASC`)
-				.then((data: Response): Promise<APIPeople> => {
-					return data.json();
-				})
-				.then((final: APIPeople): void => {
-					if (final.message === "success") {
-						setPeople(final.data);
-					}
-				});
+			getPeopleData(offSetIncrement, currentOffset);
 		}
 	}, [currentOffset, partialName]);
+
+
+	//Using this to refresh the content after updating a person.
+	useEffect((): void => {
+		if (dataUpdated) {
+			setSearching(false);
+			getPeopleData(offSetIncrement, currentOffset).then((data: void) => {
+				setUpdatedData(false);
+				setTimeout((): void => {
+					setIsLoading(false);
+				}, 200);
+			});
+		}
+	}, [dataUpdated, offSetIncrement, currentOffset])
 
 	useEffect((): void => {
 		if (userToDelete.id && userToDelete.id !== 0) {
@@ -93,6 +127,7 @@ export default function People() {
 				});
 		}
 	}, [userToDelete]);
+
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: Attendee): void => {
@@ -166,16 +201,18 @@ export default function People() {
 					show={true}
 					text="Add New Member"
 					iconName={faUserPlus}
-					clickHandler={() => displayAddMember()}
+					clickHandler={(): void => displayAddMember()}
 					classes="single_btn add_new_member_btn"
 				/>
 				<NewMember
 					show={showAddMember}
-					showHandler={displayAddMember}
+					showHandler={(): void => setShowAddMember(false)}
 					currentTable={"Attendants"}
 					masterTable={true}
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<AllPeople
 					allPeople={people}
@@ -195,9 +232,11 @@ export default function People() {
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={hideDeleteHandler}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{}}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<EditMember
 					show={showEditUser}
@@ -207,14 +246,18 @@ export default function People() {
 					updateAge={updateEditAge}
 					updateMember={updateEditMember}
 					updateActiveStatus={updateEditMemberStatus}
-					triggerSuccessMessage={() => setShowSuccessMessage(true)}
+					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<SuccessMessage
 					message={successMessageText}
 					show={showSuccessMessage}
-					closeMessage={() => setShowSuccessMessage(false)}
+					closeMessage={(): void => setShowSuccessMessage(false)}
 				/>
+
+				<LoadingBar show={isLoading} />
 			</div>
 		</div>
 	);

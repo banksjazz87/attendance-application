@@ -28,7 +28,7 @@ export default function AllRoutes(): JSX.Element {
           element={<Attendance />}
         />
         <Route
-          path="/search"
+          path="/search-past-attendance"
           element={<Search />}
         />
         <Route

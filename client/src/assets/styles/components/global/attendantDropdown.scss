@@ -8,6 +8,7 @@
     @include popout-content;
     .close_btn {
         @include icon-close-btn;
+        z-index: 5;
     }
     #attendant_dropdown_box_wrapper {
         height: 80vh;
