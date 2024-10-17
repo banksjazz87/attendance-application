@@ -248,6 +248,7 @@ export default function People() {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<SuccessMessage
 					message={successMessageText}

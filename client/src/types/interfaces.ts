@@ -464,6 +464,7 @@ export interface EditMemberProps {
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
   updateLoadingStatus: Function;
+  updateData: Function;
 }
 
 export interface AttendanceDropDownProps {
