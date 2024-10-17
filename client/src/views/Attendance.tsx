@@ -323,6 +323,7 @@ export default function Attendance(): JSX.Element {
 					updateSuccessMessage={setNewSuccessMessage}
 					deleteBody={{}}
 					updateLoadingStatus={(): void => setSearching(!searching)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<LoadingBar show={searching} />
 				<SuccessMessage

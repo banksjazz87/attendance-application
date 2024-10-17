@@ -293,6 +293,7 @@ export interface DeleteProps {
   updateSuccessMessage: Function;
   deleteBody: Object
   updateLoadingStatus: Function;
+  updateData: Function;
 }
 
 export interface DeleteResponse {

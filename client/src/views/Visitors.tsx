@@ -34,6 +34,7 @@ export default function Vistors(): JSX.Element {
 	const [showFormDeleteModal, setShowFormDeleteModal] = useState<boolean>(false);
 	const [deleteAllFields, setDeleteAllFields] = useState<boolean>(false);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -53,6 +54,22 @@ export default function Vistors(): JSX.Element {
 			});
 	}, [totalDbRows]);
 
+
+	const getVisitorTable = async (increment: number, offset: number): Promise<void> => {
+		const table: Response = await fetch(`/table-return-few/Visitor_Forms/${increment}/${offset}/dateCreated/DESC`);
+		const tableJSON: APIVisitorInit = await table.json();
+
+		try {
+			if (tableJSON.message === 'success') {
+				setVisitors(tableJSON.data);
+			} else {
+				console.error(tableJSON.error ? tableJSON.error : "An error occurred.");
+			}
+		} catch (e) {
+			console.error('Error occurred with the /table-return-few/ endpoint ', e);
+		}
+	}
+
 	//Used to check if there is a current partial name search.
 	useEffect((): void => {
 		if (partialName.length > 0) {
@@ -70,19 +87,32 @@ export default function Vistors(): JSX.Element {
 				});
 		} else {
 			setSearching(false);
-			fetch(`/table-return-few/Visitor_Forms/${offSetIncrement}/${currentOffset}/dateCreated/DESC`)
-				.then((data: Response): Promise<APIVisitorInit> => {
-					return data.json();
-				})
-				.then((final: APIVisitorInit): void => {
-					if (final.message === "success") {
-						setVisitors(final.data);
-					} else {
-						console.error(final.error ? final.error : "an error occurred");
-					}
-				});
+			// fetch(`/table-return-few/Visitor_Forms/${offSetIncrement}/${currentOffset}/dateCreated/DESC`)
+			// 	.then((data: Response): Promise<APIVisitorInit> => {
+			// 		return data.json();
+			// 	})
+			// 	.then((final: APIVisitorInit): void => {
+			// 		if (final.message === "success") {
+			// 			setVisitors(final.data);
+			// 		} else {
+			// 			console.error(final.error ? final.error : "an error occurred");
+			// 		}
+			// 	});
+
+			getVisitorTable(offSetIncrement, currentOffset);
 		}
 	}, [currentOffset, partialName]);
+
+
+	//Update the visitor table after a user has been deleted.
+	useEffect((): void => {
+		if (dataUpdated) {
+			getVisitorTable(offSetIncrement, currentOffset)
+				.then(data => {
+					setUpdatedData(false);
+				});
+		}
+	}, [dataUpdated]);
 
 	//Used to get the current selected visitor id.
 	useEffect((): void => {
@@ -217,6 +247,7 @@ export default function Vistors(): JSX.Element {
 						spouseIds: getIdValues(deleteFamilyData.spouseIds, "spouseId"),
 					}}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateData={(): void => setUpdatedData(true) }
 				/>
 
 				<SuccessMessage

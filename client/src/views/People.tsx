@@ -236,6 +236,7 @@ export default function People() {
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{}}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateData={(): void => setUpdatedData(true)}
 				/>
 				<EditMember
 					show={showEditUser}

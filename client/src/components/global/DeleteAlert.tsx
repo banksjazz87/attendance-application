@@ -5,86 +5,82 @@ import "../../assets/styles/components/global/deleteAlert.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage, deleteBody, updateLoadingStatus }: DeleteProps) {
+export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage, deleteBody, updateLoadingStatus, updateData }: DeleteProps) {
+	/**
+	 *
+	 * @param obj takes on an object of type of DeleteResponse
+	 * @returns void
+	 * @description triggers a succes message, updates the contents of the message and reloads the page.
+	 */
+	const deleteConfirmation = (obj: DeleteResponse): void => {
+		triggerSuccessMessage();
+		updateSuccessMessage(obj.message);
+		updateLoadingStatus();
+		updateData();
+		hideHandler();
+	};
 
-  /**
-   * 
-   * @param obj takes on an object of type of DeleteResponse
-   * @returns void
-   * @description triggers a succes message, updates the contents of the message and reloads the page.
-   */
-  const deleteConfirmation = (obj: DeleteResponse): void => {
-          triggerSuccessMessage();
-          updateSuccessMessage(obj.message);
-    setTimeout((): void => {
-            updateLoadingStatus();
-            window.location.reload();
-          }, 2000);
-  }
+	/**
+	 *
+	 * @param event Pointer event on a button
+	 * @returns void
+	 * @description deletes the data from database and then displays a confirmation or an alert.
+	 */
+	const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
+		if (deleteUser) {
+			updateLoadingStatus();
 
+			deleteData(url, deleteBody).then((data: DeleteResponse): void => {
+				if (data.message === "failure") {
+					updateLoadingStatus();
+					setTimeout(() => {
+						alert(data.error);
+					}, 200);
+				} else {
+					deleteConfirmation(data);
+				}
+			});
+		}
+	};
 
-  /**
-   * 
-   * @param event Pointer event on a button
-   * @returns void
-   * @description deletes the data from database and then displays a confirmation or an alert.
-   */
-  const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
-    if (deleteUser) {
-      updateLoadingStatus();
+	/**
+	 *
+	 * @param e Pointer event
+	 * @returns void
+	 * @description hides the alert.
+	 */
+	const hideAlert = (e: React.PointerEvent<HTMLButtonElement>): void => {
+		hideHandler();
+	};
 
-      deleteData(url, deleteBody).then((data: DeleteResponse): void => {
-        if (data.message === "failure") {
-          updateLoadingStatus();
-          setTimeout(() => {
-            alert(data.error);
-          }, 200)
-        } else {
-         deleteConfirmation(data);
-        }
-      });
-    }
-  };
-
-
-  /**
-   * 
-   * @param e Pointer event 
-   * @returns void
-   * @description hides the alert.
-   */
-  const hideAlert = (e: React.PointerEvent<HTMLButtonElement>): void => {
-    hideHandler();
-  };
-
-  return (
-    <div
-      className="delete_alert_wrapper"
-      style={show ? { display: "" } : { display: "none" }}
-    >
-      <div className="delete_alert">
-        <button
-          className="close_btn"
-          onClick={hideAlert}
-        >
-          <FontAwesomeIcon icon={faClose} />
-        </button>
-        <p className="delete_message">{message}</p>
-        <div className="button_wrapper">
-          <button
-            type="button"
-            onClick={deletePerson}
-          >
-            Yes
-          </button>
-          <button
-            type="button"
-            onClick={hideAlert}
-          >
-            No
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div
+			className="delete_alert_wrapper"
+			style={show ? { display: "" } : { display: "none" }}
+		>
+			<div className="delete_alert">
+				<button
+					className="close_btn"
+					onClick={hideAlert}
+				>
+					<FontAwesomeIcon icon={faClose} />
+				</button>
+				<p className="delete_message">{message}</p>
+				<div className="button_wrapper">
+					<button
+						type="button"
+						onClick={deletePerson}
+					>
+						Yes
+					</button>
+					<button
+						type="button"
+						onClick={hideAlert}
+					>
+						No
+					</button>
+				</div>
+			</div>
+		</div>
+	);
 }
