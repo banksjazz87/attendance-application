@@ -106,24 +106,59 @@ export default function People() {
 		}
 	}, [dataUpdated, offSetIncrement, currentOffset])
 
+
+	const getVisitorData = async (table: string, id: string): Promise<boolean | undefined> => {
+		const data: Response = await fetch(`/get-visitor-by-id/${table}/${id}`);
+		const final: APIResponse = await data.json();
+
+		try {
+			if (final.message !== "failure") {
+				if (final.data.length > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (e: any) {
+			console.log("An error occurred: ", e);
+		}
+	};
+
+
 	useEffect((): void => {
 		if (userToDelete.id && userToDelete.id !== 0) {
 			const stringOfId: string = userToDelete.id.toString();
 
-			fetch(`/get-visitor-by-id/${stringOfId}`)
-				.then((data: Response): Promise<APIResponse> => {
-					return data.json();
-				})
-				.then((final: APIResponse): void => {
-					if (final.message !== "failure") {
-						if (final.data.length > 0) {
-							setDeleteUserIsVisitor(true);
-						} else {
-							setDeleteUserIsVisitor(false);
-						}
+			// fetch(`/get-visitor-by-id/${stringOfId}`)
+			// 	.then((data: Response): Promise<APIResponse> => {
+			// 		return data.json();
+			// 	})
+			// 	.then((final: APIResponse): void => {
+			// 		if (final.message !== "failure") {
+			// 			if (final.data.length > 0) {
+			// 				setDeleteUserIsVisitor(true);
+			// 			} else {
+			// 				setDeleteUserIsVisitor(false);
+			// 			}
+			// 		} else {
+			// 			console.log("The following error occurred ", final.error);
+			// 		}
+			// 	});
+			
+
+			Promise.all([
+				getVisitorData("Visitor_Children", stringOfId),
+				getVisitorData("Visitor_Children", stringOfId),
+				getVisitorData("Visitor_Forms", stringOfId)
+			])
+				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
+					if (data.indexOf(true) > -1) {
+						setDeleteUserIsVisitor(true);
 					} else {
-						console.log("The following error occurred ", final.error);
+						setDeleteUserIsVisitor(false);
 					}
+				}).catch((err: APIResponse): void => {
+					console.warn('An error occurrred ', err.error);
 				});
 		}
 	}, [userToDelete]);

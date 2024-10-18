@@ -791,12 +791,13 @@ app.delete("/remove-visitor-form-data/", (req: Request, res: Response): void => 
 		});
 });
 
-app.get('/get-visitor-by-id/:id', (req: Request, res: Response): void => {
+app.get('/get-visitor-by-id/:table/:id', (req: Request, res: Response): void => {
 	const Db: DBMethods = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const userId: string = req.params.id;
+	const table: string = req.params.table;
 
 	Promise.all([
-		Db.getBySelectColumnsNoEnd(['id'], 'Visitor_Forms', 'id', userId),
+		Db.getBySelectColumnsNoEnd(['id'], table, 'id', userId),
 		Db.endDb()
 	])
 		.then((data: [string[], void]): void => {
