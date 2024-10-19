@@ -489,10 +489,71 @@ export class DBMethods {
         }
       }
 
-      database.query(neededSql, (err: string[], results: string[]) => {
+      database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
       });
     });
   }
+
+  /**
+   * 
+   * @param tableName string name of the table to be updated
+   * @param columns string[] array of strings with the columns that are to be updated.
+   * @param values string[] array of values that are to be updated.
+   * @param id number the id for the user that is to be updated.
+   * @returns Promise<string[]> 
+   * @description used to update a table.
+   */
+  updateTableNoEnd(tableName: string, columns: string[], values: string[], id: number): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const database: any = this.dbConnection;
+      
+      let updateStatement: string = '';
+      for (let i = 0; i < columns.length; i++) {
+        if (i === columns.length - 1) {
+          updateStatement += `${columns[i]} = "${values[i]}`;
+        } else {
+          updateStatement += `${columns[i]} = "${values[i]}", `;
+        }
+      }
+      
+      let neededSql = `UPDATE ${tableName} SET ${updateStatement} WHERE id = ${id}`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+  }
+
+
+  /**
+   * 
+   * @param tableName string the table name
+   * @param columns string[] the columns that you would like to have set to null
+   * @param id number the id of the user that you would like to update
+   * @returns Promise<string[]>
+   * @description updates the target columns to null.
+   */
+  setToNullNoEnd(tableName: string, columns: string[], id: number): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const database: any = this.dbConnection;
+      let updateStatement: string = '';
+      for (let i = 0; i < columns.length; i++) {
+        if (i === columns.length - 1) {
+          updateStatement += `${columns[i]} = NULL`;
+        } else {
+          updateStatement += `${columns[i]} = NULL, `;
+        }
+      }
+      
+      let neededSql = `UPDATE ${tableName} SET ${updateStatement} WHERE id = ${id}`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+    });
+
+  }
+ 
 
 }
