@@ -28,6 +28,7 @@ export default function People() {
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
+	const [isMasterVisitor, setIsMasterVisitor] = useState<boolean>(false);
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
@@ -48,9 +49,8 @@ export default function People() {
 			});
 	}, [totalDbRows]);
 
-
 	/**
-	 * 
+	 *
 	 * @param offSet number, pass in the state for offSetIncrement within the useEffect
 	 * @param currentOffset number, pass in the state for the currentOffset with the useEffect
 	 * @returns Promise<void>
@@ -59,19 +59,19 @@ export default function People() {
 	const getPeopleData = async (offSet: number, currentOffset: number): Promise<void> => {
 		const tableData: Response = await fetch(`/table-return-few/Attendants/${offSet}/${currentOffset}/lastName/ASC`);
 		const tableJSON: APIPeople = await tableData.json();
-		
+
 		try {
 			if (tableJSON.message === "success") {
 				setPeople(tableJSON.data);
 				setSearching(false);
 			} else {
 				setSearching(false);
-				alert('/table-return-few error ' + tableJSON.error);
+				alert("/table-return-few error " + tableJSON.error);
 			}
-		} catch(e) {
+		} catch (e) {
 			console.warn("Error with the /table-return-few", e);
 		}
-	}
+	};
 
 	//Used to check if there is a current partial name search.
 	useEffect((): void => {
@@ -92,7 +92,6 @@ export default function People() {
 		}
 	}, [currentOffset, partialName]);
 
-
 	//Using this to refresh the content after updating a person.
 	useEffect((): void => {
 		if (dataUpdated) {
@@ -104,8 +103,7 @@ export default function People() {
 				}, 200);
 			});
 		}
-	}, [dataUpdated, offSetIncrement, currentOffset])
-
+	}, [dataUpdated, offSetIncrement, currentOffset]);
 
 	const isVisitor = async (table: string, id: string): Promise<boolean | undefined> => {
 		const data: Response = await fetch(`/get-visitor-by-id/${table}/${id}`);
@@ -124,27 +122,9 @@ export default function People() {
 		}
 	};
 
-
 	useEffect((): void => {
 		if (userToDelete.id && userToDelete.id !== 0) {
 			const stringOfId: string = userToDelete.id.toString();
-
-			// fetch(`/get-visitor-by-id/${stringOfId}`)
-			// 	.then((data: Response): Promise<APIResponse> => {
-			// 		return data.json();
-			// 	})
-			// 	.then((final: APIResponse): void => {
-			// 		if (final.message !== "failure") {
-			// 			if (final.data.length > 0) {
-			// 				setDeleteUserIsVisitor(true);
-			// 			} else {
-			// 				setDeleteUserIsVisitor(false);
-			// 			}
-			// 		} else {
-			// 			console.log("The following error occurred ", final.error);
-			// 		}
-			// 	});
-			
 
 			Promise.all([
 				isVisitor("Visitor_Children", stringOfId),
@@ -152,17 +132,23 @@ export default function People() {
 				isVisitor("Visitor_Forms", stringOfId)
 			])
 				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
-					if (data.indexOf(true) > -1) {
+					const trueIndex: number = data.indexOf(true);
+					if (trueIndex > -1 && trueIndex === 2) {
 						setDeleteUserIsVisitor(true);
+						setIsMasterVisitor(true);
+					} else if (trueIndex > -1) {
+						setDeleteUserIsVisitor(true);
+						setIsMasterVisitor(false);
 					} else {
 						setDeleteUserIsVisitor(false);
+						setIsMasterVisitor(false);
 					}
-				}).catch((err: APIResponse): void => {
-					console.warn('An error occurrred ', err.error);
+				})
+				.catch((err: APIResponse): void => {
+					console.warn("An error occurrred ", err.error);
 				});
 		}
 	}, [userToDelete]);
-
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: Attendee): void => {

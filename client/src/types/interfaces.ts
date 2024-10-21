@@ -5,6 +5,7 @@ export interface Attendee {
   age: string;
   memberType: string;
   active: number;
+  visitorInActive: number;
   present?: number;
   id?: number;
   table?: string;

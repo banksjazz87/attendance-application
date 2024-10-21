@@ -23,6 +23,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		memberType: "",
 		active: 0,
 		id: -1,
+		visitorInActive: 0
 	};
 	const [attendants, setAttendants] = useState<Attendee[]>([initAttendee]);
 	const [selectedAttendants, setSelectedAttendants] = useState<Attendee[]>([initAttendee]);

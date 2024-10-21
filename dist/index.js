@@ -770,3 +770,13 @@ app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req
         console.log("ERROR ", err);
     });
 });
+app.delete('/remove-visitor-from-attendance-keep-form-data/:id', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const userId = parseInt(req.params.id);
+    Promise.all([
+        Db.setToNullNoEnd("Visitor_Children", ["id"], userId),
+        Db.setToNullNoEnd("Visitor_Spouse", ["id"], userId),
+        Db.setToNullNoEnd("Visitor_Interests", ["id"], userId),
+        Db.setToNullNoEnd("Visitor_Forms", ["id"], userId)
+    ]);
+});
