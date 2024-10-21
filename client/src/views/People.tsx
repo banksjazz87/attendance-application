@@ -107,7 +107,7 @@ export default function People() {
 	}, [dataUpdated, offSetIncrement, currentOffset])
 
 
-	const getVisitorData = async (table: string, id: string): Promise<boolean | undefined> => {
+	const isVisitor = async (table: string, id: string): Promise<boolean | undefined> => {
 		const data: Response = await fetch(`/get-visitor-by-id/${table}/${id}`);
 		const final: APIResponse = await data.json();
 
@@ -147,9 +147,9 @@ export default function People() {
 			
 
 			Promise.all([
-				getVisitorData("Visitor_Children", stringOfId),
-				getVisitorData("Visitor_Children", stringOfId),
-				getVisitorData("Visitor_Forms", stringOfId)
+				isVisitor("Visitor_Children", stringOfId),
+				isVisitor("Visitor_Spouse", stringOfId),
+				isVisitor("Visitor_Forms", stringOfId)
 			])
 				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
 					if (data.indexOf(true) > -1) {
