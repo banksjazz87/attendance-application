@@ -11,11 +11,11 @@ interface AttendantDropdownProps {
 	currentTable: string;
 	showHandler: Function;
 	updateLoadingStatus: Function;
-	updateData: Function;
+	updateTheData: Function;
 	setSuccessText: Function;
 	showSuccessMessage: Function;
 }
-export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler, updateLoadingStatus, updateData, setSuccessText, showSuccessMessage }: AttendantDropdownProps): JSX.Element {
+export default function AttendantDropdown({ show, currentAttendance, currentTable, showHandler, updateLoadingStatus, updateTheData, setSuccessText, showSuccessMessage }: AttendantDropdownProps): JSX.Element {
 	const initAttendee: Attendee = {
 		firstName: "",
 		lastName: "",
@@ -175,7 +175,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 	//This function fires if attendants have been added successfully.
 	const successHandler = (): void => {
 		setSuccessText("Success!  All attendants have been added.");
-		updateData();
+		updateTheData();
 		showSuccessMessage();
 		setTimeout((): void => {
 			showHandler();

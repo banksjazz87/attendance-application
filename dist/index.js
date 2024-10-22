@@ -735,7 +735,6 @@ app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req
         Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
         Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
         Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
-        Db.removeByIdNoEnd("Visitor_Forms", "id", userId),
     ])
         .then((data) => {
         Promise.all([Db.removeByIdNoEnd("Attendants", "id", userId), Db.endDb()])

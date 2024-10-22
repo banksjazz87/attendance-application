@@ -28,10 +28,12 @@ export default function People() {
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
-	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`)
+	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`);
+	const [isMasterVisitor, setIsMasterVisitor] = useState<boolean>(false);
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
+	const updateMasterVisitorURL: string = `/update-attendant/`;
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -125,6 +127,7 @@ export default function People() {
 	useEffect((): void => {
 		if (userToDelete.id && userToDelete.id !== 0) {
 			const stringOfId: string = userToDelete.id.toString();
+			setIsMasterVisitor(false);
 
 			Promise.all([
 				isVisitor("Visitor_Children", stringOfId),
@@ -134,16 +137,11 @@ export default function People() {
 				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
 					const trueIndex: number = data.indexOf(true);
 					if (trueIndex > -1 && trueIndex === 2) {
-						// setDeleteUserIsVisitor(true);
-						// setIsMasterVisitor(true);
-
+						console.log('cat');
+						setIsMasterVisitor(true);
 						//This URL should point to an endpoint that updates the people table
-						setDeleteUserURL('NEW URL GOES HERE')
+						setDeleteUserURL(updateMasterVisitorURL);
 					} else if (trueIndex > -1) {
-
-						// setDeleteUserIsVisitor(true);
-						// setIsMasterVisitor(false);
-
 						//This will first update all of the tables associated with the visitor form, by setting the primary key (id) to null.
 						setDeleteUserURL(removeVisitorURL);
 					} else {
@@ -155,6 +153,18 @@ export default function People() {
 				});
 		}
 	}, [userToDelete]);
+
+
+	//Update the user to delete if the current member set to be deleted is a master visitor.
+	// useEffect((): void => {
+	// 	if (isMasterVisitor) {
+	// 		setUserToDelete({
+	// 			...userToDelete,
+	// 			visitorInActive: 1,
+	// 			active: 0
+	// 		});
+	// 	}
+	// }, [isMasterVisitor]);
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: Attendee): void => {
@@ -239,7 +249,7 @@ export default function People() {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 				/>
 				<AllPeople
 					allPeople={people}
@@ -263,7 +273,8 @@ export default function People() {
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{}}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
+					isMasterVisitor={isMasterVisitor}
 				/>
 				<EditMember
 					show={showEditUser}
@@ -276,7 +287,7 @@ export default function People() {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 				/>
 				<SuccessMessage
 					message={successMessageText}
