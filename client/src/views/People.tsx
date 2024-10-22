@@ -13,9 +13,9 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 
 export default function People() {
+
 	const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
 	const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
-	const [deleteUserIsVisitor, setDeleteUserIsVisitor] = useState<boolean>(false);
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 	const [showEditUser, setShowEditUser] = useState<boolean>(false);
 	const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
@@ -28,7 +28,7 @@ export default function People() {
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
-	const [isMasterVisitor, setIsMasterVisitor] = useState<boolean>(false);
+	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`)
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
@@ -134,14 +134,20 @@ export default function People() {
 				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
 					const trueIndex: number = data.indexOf(true);
 					if (trueIndex > -1 && trueIndex === 2) {
-						setDeleteUserIsVisitor(true);
-						setIsMasterVisitor(true);
+						// setDeleteUserIsVisitor(true);
+						// setIsMasterVisitor(true);
+
+						//This URL should point to an endpoint that updates the people table
+						setDeleteUserURL('NEW URL GOES HERE')
 					} else if (trueIndex > -1) {
-						setDeleteUserIsVisitor(true);
-						setIsMasterVisitor(false);
+
+						// setDeleteUserIsVisitor(true);
+						// setIsMasterVisitor(false);
+
+						//This will first update all of the tables associated with the visitor form, by setting the primary key (id) to null.
+						setDeleteUserURL(removeVisitorURL);
 					} else {
-						setDeleteUserIsVisitor(false);
-						setIsMasterVisitor(false);
+						setDeleteUserURL(removePersonURL);
 					}
 				})
 				.catch((err: APIResponse): void => {
@@ -249,7 +255,7 @@ export default function People() {
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={deleteUserIsVisitor ? removeVisitorURL : removePersonURL}
+					url={deleteUserURL}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={hideDeleteHandler}
