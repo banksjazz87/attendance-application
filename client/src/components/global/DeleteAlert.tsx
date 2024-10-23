@@ -31,8 +31,8 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
 		if (deleteUser) {
       updateLoadingStatus();
       
+      //Checking this primarily for the People view, we are going to update a master visitor instead of deleting them completely.
       if (isMasterVisitor && isMasterVisitor === true) {
-        
         putData(url, deleteUser).then((data: DeleteResponse): void => {
           if (data.message === 'failure') {
             updateLoadingStatus();
@@ -43,8 +43,8 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
             deleteConfirmation(data);
           }
         });
-      } else {
 
+      } else {
         deleteData(url, deleteBody).then((data: DeleteResponse): void => {
 					if (data.message === "failure") {
 						updateLoadingStatus();
