@@ -791,6 +791,8 @@ app.delete("/remove-visitor-form-data/", (req: Request, res: Response): void => 
 		});
 });
 
+
+//Used to retrieve visitor data by supplying the table name and the id.
 app.get("/get-visitor-by-id/:table/:id", (req: Request, res: Response): void => {
 	const Db: DBMethods = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const userId: string = req.params.id;
@@ -814,6 +816,7 @@ app.get("/get-visitor-by-id/:table/:id", (req: Request, res: Response): void => 
 });
 
 
+//Delete non-master visitor from the attendance (People) view.
 app.delete("/remove-non-master-visitor-from-attendance/:id/:firstName/:lastName", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const userId: number = parseInt(req.params.id);
@@ -858,6 +861,8 @@ app.delete("/remove-non-master-visitor-from-attendance/:id/:firstName/:lastName"
 		});
 });
 
+
+//Update the status of a master visitor, we don't want to completely delete them, as our form data will no longer persist.
 app.put('/set-master-visitor-to-inactive/', (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const idNumber = parseInt(req.body.id);

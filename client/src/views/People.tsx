@@ -125,6 +125,7 @@ export default function People() {
 		}
 	};
 
+	//Check to see if the selected user to delete is a visitor, and if so, which kind.  We will update the delete URL once we establish what kind of Attendant they are.
 	useEffect((): void => {
 		if (userToDelete.id && userToDelete.id !== 0) {
 			const stringOfId: string = userToDelete.id.toString();
@@ -137,12 +138,18 @@ export default function People() {
 			])
 				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
 					const trueIndex: number = data.indexOf(true);
+					
 					if (trueIndex > -1 && trueIndex === 2) {
+						//This is the master user, we're just going to update they're status, so that the form data persists.
 						setIsMasterVisitor(true);
 						setDeleteUserURL(updateMasterVisitorURL);
+
 					} else if (trueIndex > -1) {
+						//Non master visitor
 						setDeleteUserURL(removeVisitorURL);
+						
 					} else {
+						//Normal attendant, that has no visitor form data.
 						setDeleteUserURL(removePersonURL);
 					}
 				})
