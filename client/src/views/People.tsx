@@ -28,12 +28,12 @@ export default function People() {
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
-	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`);
+	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`);
 	const [isMasterVisitor, setIsMasterVisitor] = useState<boolean>(false);
 
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
-	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
-	const updateMasterVisitorURL: string = `/update-attendant/`;
+	const removeVisitorURL: string = `/remove-non-master-visitor-from-attendance/${userToDelete.id}/${userToDelete.firstName}/${userToDelete.lastName}`;
+	const updateMasterVisitorURL: string = `/set-master-visitor-to-inactive/`;
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;

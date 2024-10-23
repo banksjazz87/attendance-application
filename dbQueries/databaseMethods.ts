@@ -511,7 +511,7 @@ export class DBMethods {
       let updateStatement: string = '';
       for (let i = 0; i < columns.length; i++) {
         if (i === columns.length - 1) {
-          updateStatement += `${columns[i]} = "${values[i]}`;
+          updateStatement += `${columns[i]} = "${values[i]}"`;
         } else {
           updateStatement += `${columns[i]} = "${values[i]}", `;
         }

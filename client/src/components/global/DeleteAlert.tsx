@@ -1,5 +1,5 @@
 import React from "react";
-import { DeleteProps, DeleteResponse, Attendee } from "../../types/interfaces.ts";
+import { DeleteProps, DeleteResponse } from "../../types/interfaces.ts";
 import deleteData from "../../functions/api/delete.ts";
 import putData from "../../functions/api/put.ts";
 import "../../assets/styles/components/global/deleteAlert.scss";
@@ -32,14 +32,8 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
       updateLoadingStatus();
       
       if (isMasterVisitor && isMasterVisitor === true) {
-
-        const copyOfData = {
-            ...deleteBody, 
-            visitorInactive: 1,
-            active: 0
-        };
         
-        putData(url, copyOfData).then((data: DeleteResponse): void => {
+        putData(url, deleteUser).then((data: DeleteResponse): void => {
           if (data.message === 'failure') {
             updateLoadingStatus();
             setTimeout(() => {
