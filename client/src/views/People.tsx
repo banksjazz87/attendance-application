@@ -137,12 +137,10 @@ export default function People() {
 				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
 					const trueIndex: number = data.indexOf(true);
 					if (trueIndex > -1 && trueIndex === 2) {
-						console.log('cat');
 						setIsMasterVisitor(true);
 						//This URL should point to an endpoint that updates the people table
 						setDeleteUserURL(updateMasterVisitorURL);
 					} else if (trueIndex > -1) {
-						//This will first update all of the tables associated with the visitor form, by setting the primary key (id) to null.
 						setDeleteUserURL(removeVisitorURL);
 					} else {
 						setDeleteUserURL(removePersonURL);
@@ -153,18 +151,6 @@ export default function People() {
 				});
 		}
 	}, [userToDelete]);
-
-
-	//Update the user to delete if the current member set to be deleted is a master visitor.
-	// useEffect((): void => {
-	// 	if (isMasterVisitor) {
-	// 		setUserToDelete({
-	// 			...userToDelete,
-	// 			visitorInActive: 1,
-	// 			active: 0
-	// 		});
-	// 	}
-	// }, [isMasterVisitor]);
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: Attendee): void => {

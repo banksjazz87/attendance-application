@@ -32,7 +32,14 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
       updateLoadingStatus();
       
       if (isMasterVisitor && isMasterVisitor === true) {
-        putData(url, deleteBody).then((data: DeleteResponse): void => {
+
+        const copyOfData = {
+            ...deleteBody, 
+            visitorInactive: 1,
+            active: 0
+        };
+        
+        putData(url, copyOfData).then((data: DeleteResponse): void => {
           if (data.message === 'failure') {
             updateLoadingStatus();
             setTimeout(() => {

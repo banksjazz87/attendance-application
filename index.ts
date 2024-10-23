@@ -791,28 +791,25 @@ app.delete("/remove-visitor-form-data/", (req: Request, res: Response): void => 
 		});
 });
 
-app.get('/get-visitor-by-id/:table/:id', (req: Request, res: Response): void => {
+app.get("/get-visitor-by-id/:table/:id", (req: Request, res: Response): void => {
 	const Db: DBMethods = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const userId: string = req.params.id;
 	const table: string = req.params.table;
 
-	Promise.all([
-		Db.getBySelectColumnsNoEnd(['id'], table, 'id', userId),
-		Db.endDb()
-	])
+	Promise.all([Db.getBySelectColumnsNoEnd(["id"], table, "id", userId), Db.endDb()])
 		.then((data: [string[], void]): void => {
 			res.send({
-				message: 'success',
-				data: data[0]
+				message: "success",
+				data: data[0],
 			});
-			console.log('Success ', data);
+			console.log("Success ", data);
 		})
 		.catch((err: [SQLResponse, void]): void => {
 			res.send({
-				message: 'failure',
-				error: Db.getSqlError(err[0])
+				message: "failure",
+				error: Db.getSqlError(err[0]),
 			});
-			console.log('Failure getting data ', err);
+			console.log("Failure getting data ", err);
 		});
 });
 
@@ -821,12 +818,11 @@ app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req
 	const Db: DBMethods = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const userId: string[] = [req.params.id];
 	const userName: string = `${req.params.firstName} ${req.params.lastName}`;
-	
 
 	Promise.all([
 		Db.removeByIdNoEnd("Visitor_Children", "parentId", userId),
 		Db.removeByIdNoEnd("Visitor_Spouse", "visitorSpouseId", userId),
-		Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId),
+		Db.removeByIdNoEnd("Visitor_Interests", "visitor_attendant_id", userId)
 	])
 		.then((data: [string[], string[], string[]]): void => {
 			Promise.all([Db.removeByIdNoEnd("Attendants", "id", userId), Db.endDb()])
@@ -863,16 +859,46 @@ app.delete("/remove-visitor-from-attendant-table/:firstName/:lastName/:id", (req
 		});
 });
 
-app.delete('/remove-visitor-from-attendance-keep-form-data/:id', (req: Request, res: Response): void => {
+app.delete("/remove-visitor-from-attendance-keep-form-data/:id/:firstName/:lastName", (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const userId: number = parseInt(req.params.id);
-	
+	const userName = `${req.params.firstName} ${req.params.lastName}`;
+
 	Promise.all([
 		Db.setToNullNoEnd("Visitor_Children", ["id"], userId),
-		Db.setToNullNoEnd("Visitor_Spouse", ["id"], userId),
-		Db.setToNullNoEnd("Visitor_Interests", ["id"], userId),
-		Db.setToNullNoEnd("Visitor_Forms", ["id"], userId)
-	]);
+		Db.setToNullNoEnd("Visitor_Spouse", ["id"], userId)
+	])
+		.then((data: [string[], string[]]): void => {
+			Promise.all([
+				Db.removeByIdNoEnd("Attendants", "id", [req.params.id]),
+				Db.endDb()
+			])
+				.then((final: [string[], void]): void => {
+					res.send({
+						message: `Success, ${userName} has been deleted from the database.`,
+						data: final,
+					});
 
+					console.log("Success ", final);
+				})
+				.catch((err: [SQLResponse, void]): void => {
+					res.send({
+						message: "failure",
+						err: Db.getSqlError(err[0]),
+					});
 
-})
+					console.log('Error ', err);
+				});
+		})
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
+			res.send({
+				message: "Failure",
+				err: (): void => {
+					Db.getSqlError(err[0]),
+					Db.getSqlError(err[1]),
+					Db.getSqlError(err[2]);
+				},
+			});
+			console.log('Error ', err);
+		});
+});
