@@ -31,6 +31,7 @@ export default function People() {
 	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`);
 	const [isMasterVisitor, setIsMasterVisitor] = useState<boolean>(false);
 
+	//Urls that will be used to delete the user, we're using different urls based on if they're visitors or not and also if they're master visitors.
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
 	const removeVisitorURL: string = `/remove-non-master-visitor-from-attendance/${userToDelete.id}/${userToDelete.firstName}/${userToDelete.lastName}`;
 	const updateMasterVisitorURL: string = `/set-master-visitor-to-inactive/`;
@@ -138,7 +139,6 @@ export default function People() {
 					const trueIndex: number = data.indexOf(true);
 					if (trueIndex > -1 && trueIndex === 2) {
 						setIsMasterVisitor(true);
-						//This URL should point to an endpoint that updates the people table
 						setDeleteUserURL(updateMasterVisitorURL);
 					} else if (trueIndex > -1) {
 						setDeleteUserURL(removeVisitorURL);
