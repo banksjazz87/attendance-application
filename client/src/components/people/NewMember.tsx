@@ -8,13 +8,14 @@ import "../../assets/styles/components/people/newMember.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn, updateLoadingStatus, updateData }: NewMemberProps): JSX.Element {
+export default function NewMember({ currentTable, show, showHandler, masterTable, triggerSuccessMessage, updateSuccessMessage, currentAttendanceColumn, updateLoadingStatus, updateTheData }: NewMemberProps): JSX.Element {
   const initAttendants: Attendee = {
     firstName: "",
     lastName: "",
     age: "",
     memberType: "",
-    active: 1
+    active: 1, 
+    visitorInActive: 0
   };
 
   const [allAttendants, setAllAttendants] = useState<Attendee[]>([initAttendants]);
@@ -133,7 +134,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
       if (data.message === "success") {
         (document.getElementById("new_member_form") as HTMLFormElement).reset();
         updateLoadingStatus();
-        updateData();
+        updateTheData();
         showHandler();
       } else {
         updateLoadingStatus();
@@ -206,7 +207,7 @@ export default function NewMember({ currentTable, show, showHandler, masterTable
           getAttendantDataAndSetIt(data);
         } else {
           updateLoadingStatus();
-          updateData();
+          updateTheData();
           showHandler();
           triggerSuccessMessage();
           updateSuccessMessage(`${newAttendant.firstName} ${newAttendant.lastName} has been added to the master table.`);

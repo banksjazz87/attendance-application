@@ -1,11 +1,12 @@
 import React from "react";
 import { DeleteProps, DeleteResponse } from "../../types/interfaces.ts";
 import deleteData from "../../functions/api/delete.ts";
+import putData from "../../functions/api/put.ts";
 import "../../assets/styles/components/global/deleteAlert.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
-export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage, deleteBody, updateLoadingStatus, updateData }: DeleteProps) {
+export default function DeleteAlert({ message, hideHandler, url, show, deleteUser, triggerSuccessMessage, updateSuccessMessage, deleteBody, updateLoadingStatus, updateTheData, isMasterVisitor }: DeleteProps) {
 	/**
 	 *
 	 * @param obj takes on an object of type of DeleteResponse
@@ -16,7 +17,7 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
 		triggerSuccessMessage();
 		updateSuccessMessage(obj.message);
 		updateLoadingStatus();
-		updateData();
+		updateTheData();
 		hideHandler();
 	};
 
@@ -28,18 +29,33 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
 	 */
 	const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
 		if (deleteUser) {
-			updateLoadingStatus();
+      updateLoadingStatus();
+      
+      //Checking this primarily for the People view, we are going to update a master visitor instead of deleting them completely.
+      if (isMasterVisitor && isMasterVisitor === true) {
+        putData(url, deleteUser).then((data: DeleteResponse): void => {
+          if (data.message === 'failure') {
+            updateLoadingStatus();
+            setTimeout(() => {
+              alert(data.error);
+            }, 200);
+          } else {
+            deleteConfirmation(data);
+          }
+        });
 
-			deleteData(url, deleteBody).then((data: DeleteResponse): void => {
-				if (data.message === "failure") {
-					updateLoadingStatus();
-					setTimeout(() => {
-						alert(data.error);
-					}, 200);
-				} else {
-					deleteConfirmation(data);
-				}
-			});
+      } else {
+        deleteData(url, deleteBody).then((data: DeleteResponse): void => {
+					if (data.message === "failure") {
+						updateLoadingStatus();
+						setTimeout(() => {
+              alert(data.error);
+						}, 200);
+					} else {
+						deleteConfirmation(data);
+					}
+				});
+      }
 		}
 	};
 

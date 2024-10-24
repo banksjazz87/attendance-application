@@ -301,7 +301,7 @@ export default function Attendance(): JSX.Element {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={setNewSuccessMessage}
 					updateLoadingStatus={(): void => setSearching(!searching)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 				/>
 				<AttendantDropdown
 					show={showAttendantDropdown}
@@ -309,7 +309,7 @@ export default function Attendance(): JSX.Element {
 					currentTable={`${selectedGroup[0].name}_attendance`}
 					showHandler={(): void => setShowAttendantDropdown(false)}
 					updateLoadingStatus={(): void => setSearching(!searching)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 					setSuccessText={(text: string): void => setSuccessMessage(text)}
 					showSuccessMessage={(): void => setShowSuccessMessage(true)}
 				/>
@@ -323,7 +323,7 @@ export default function Attendance(): JSX.Element {
 					updateSuccessMessage={setNewSuccessMessage}
 					deleteBody={{}}
 					updateLoadingStatus={(): void => setSearching(!searching)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 				/>
 				<LoadingBar show={searching} />
 				<SuccessMessage

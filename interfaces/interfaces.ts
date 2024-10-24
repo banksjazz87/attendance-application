@@ -9,5 +9,6 @@ export interface DBAttendee {
   age: string;
   memberType: string;
   active: number;
+  visitorInActive: number;
   id: number;
 }

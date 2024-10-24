@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 
 
-export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, updateActiveStatus, triggerSuccessMessage, updateSuccessMessage, updateLoadingStatus, updateData }: EditMemberProps): JSX.Element {
+export default function EditMember({ show, editUser, hideHandler, updateName, updateAge, updateMember, updateActiveStatus, triggerSuccessMessage, updateSuccessMessage, updateLoadingStatus, updateTheData }: EditMemberProps): JSX.Element {
 
 
   //Used to update the age of the attendant.
@@ -34,7 +34,7 @@ export default function EditMember({ show, editUser, hideHandler, updateName, up
     triggerSuccessMessage();
     updateLoadingStatus();
     hideHandler();
-    updateData();
+    updateTheData();
   }
 
 

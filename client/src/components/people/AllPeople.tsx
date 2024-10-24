@@ -72,46 +72,54 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
    */
   const returnAllPeopleLgScreen = (arr: Attendee[]) => {
     const returnRows = arr.map((x: Attendee, y: number): JSX.Element => {
-      return (
-        <tr key={`row_${y}`}>
-          <td>{x.lastName}</td>
-          <td>{x.firstName}</td>
-          <td>{x.age}</td>
-          <td className="align_center">
-            <FontAwesomeIcon
-              className="user_check"
-              icon={x.memberType === "member" ? faUserCheck : faUserMinus}
-            />
-          </td>
-          <td className="align_center">
-            <FontAwesomeIcon
-              className="user_active"
-              icon={x.active === 0 ? faMinus : faCheck}
-            />
-          </td>
-          <td className="align_center">
-            <button
-              type="button"
-              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-                editPersonHandler(arr[y]);
-              }}
-            >
-              <FontAwesomeIcon icon={faPencil} />
-            </button>
-          </td>
-          <td className="align_center">
-            <button
-              type="button"
-              className="trash_can"
-              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-                deletePersonHandler(arr[y]);
-              }}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </button>
-          </td>
-        </tr>
-      );
+
+      if (x.visitorInActive === 0) {
+        return (
+					<tr key={`row_${y}`}>
+						<td>{x.lastName}</td>
+						<td>{x.firstName}</td>
+						<td>{x.age}</td>
+						<td className="align_center">
+							<FontAwesomeIcon
+								className="user_check"
+								icon={x.memberType === "member" ? faUserCheck : faUserMinus}
+							/>
+						</td>
+						<td className="align_center">
+							<FontAwesomeIcon
+								className="user_active"
+								icon={x.active === 0 ? faMinus : faCheck}
+							/>
+						</td>
+						<td className="align_center">
+							<button
+								type="button"
+								onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+									editPersonHandler(arr[y]);
+								}}
+							>
+								<FontAwesomeIcon icon={faPencil} />
+							</button>
+						</td>
+						<td className="align_center">
+							<button
+								type="button"
+								className="trash_can"
+								onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+									deletePersonHandler(arr[y]);
+								}}
+							>
+								<FontAwesomeIcon icon={faTrashCan} />
+							</button>
+						</td>
+					</tr>
+				);
+      } else {
+        return (
+          <div></div>
+        );
+      }
+      
     });
 
     return returnRows;
@@ -126,39 +134,47 @@ export default function AllPeople({ allPeople, deletePersonHandler, editPersonHa
    */
   const returnAllPeopleMobile = (arr: Attendee[]) => {
     const returnRows = arr.map((x: Attendee, y: number): JSX.Element => {
-      return (
-        <tr key={`row_${y}`}>
-          <td>{`${x.lastName}, ${x.firstName}`}</td>
-          <td>{x.age}</td>
-          <td className="align_center">
-            <FontAwesomeIcon
-              className="user_check"
-              icon={x.memberType === "member" ? faUserCheck : faUserMinus}
-            />
-          </td>
-          <td className="align_center">
-            <button
-              type="button"
-              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-                editPersonHandler(arr[y]);
-              }}
-            >
-              <FontAwesomeIcon icon={faPencil} />
-            </button>
-          </td>
-          <td className="align_center">
-            <button
-              type="button"
-              className="trash_can"
-              onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
-                deletePersonHandler(arr[y]);
-              }}
-            >
-              <FontAwesomeIcon icon={faTrashCan} />
-            </button>
-          </td>
-        </tr>
-      );
+
+      if (x.visitorInActive === 0) {
+        return (
+					<tr key={`row_${y}`}>
+						<td>{`${x.lastName}, ${x.firstName}`}</td>
+						<td>{x.age}</td>
+						<td className="align_center">
+							<FontAwesomeIcon
+								className="user_check"
+								icon={x.memberType === "member" ? faUserCheck : faUserMinus}
+							/>
+						</td>
+						<td className="align_center">
+							<button
+								type="button"
+								onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+									editPersonHandler(arr[y]);
+								}}
+							>
+								<FontAwesomeIcon icon={faPencil} />
+							</button>
+						</td>
+						<td className="align_center">
+							<button
+								type="button"
+								className="trash_can"
+								onClick={(e: React.PointerEvent<HTMLButtonElement>): void => {
+									deletePersonHandler(arr[y]);
+								}}
+							>
+								<FontAwesomeIcon icon={faTrashCan} />
+							</button>
+						</td>
+					</tr>
+				);
+      } else {
+        return (
+          <div></div>
+        );
+      }
+      
     });
 
     return returnRows;

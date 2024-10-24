@@ -13,9 +13,9 @@ import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 
 export default function People() {
+
 	const [people, setPeople] = useState<Attendee[]>([InitAttendee]);
 	const [userToDelete, setUserToDelete] = useState<Attendee>(InitAttendee);
-	const [deleteUserIsVisitor, setDeleteUserIsVisitor] = useState<boolean>(false);
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
 	const [showEditUser, setShowEditUser] = useState<boolean>(false);
 	const [userToEdit, setUserToEdit] = useState<Attendee>(InitAttendee);
@@ -28,9 +28,13 @@ export default function People() {
 	const [successMessageText, setSuccessMessageText] = useState<string>("TESTING");
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [dataUpdated, setUpdatedData] = useState<boolean>(false);
+	const [deleteUserURL, setDeleteUserURL] = useState<string>(`/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`);
+	const [isMasterVisitor, setIsMasterVisitor] = useState<boolean>(false);
 
+	//Urls that will be used to delete the user, we're using different urls based on if they're visitors or not and also if they're master visitors.
 	const removePersonURL: string = `/remove-person/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
-	const removeVisitorURL: string = `/remove-visitor-from-attendant-table/${userToDelete.firstName}/${userToDelete.lastName}/${userToDelete.id}`;
+	const removeVisitorURL: string = `/remove-non-master-visitor-from-attendance/${userToDelete.id}/${userToDelete.firstName}/${userToDelete.lastName}`;
+	const updateMasterVisitorURL: string = `/set-master-visitor-to-inactive/`;
 
 	//Set the initial offset for the pagination.
 	const offSetIncrement: number = 10;
@@ -48,9 +52,8 @@ export default function People() {
 			});
 	}, [totalDbRows]);
 
-
 	/**
-	 * 
+	 *
 	 * @param offSet number, pass in the state for offSetIncrement within the useEffect
 	 * @param currentOffset number, pass in the state for the currentOffset with the useEffect
 	 * @returns Promise<void>
@@ -59,19 +62,19 @@ export default function People() {
 	const getPeopleData = async (offSet: number, currentOffset: number): Promise<void> => {
 		const tableData: Response = await fetch(`/table-return-few/Attendants/${offSet}/${currentOffset}/lastName/ASC`);
 		const tableJSON: APIPeople = await tableData.json();
-		
+
 		try {
 			if (tableJSON.message === "success") {
 				setPeople(tableJSON.data);
 				setSearching(false);
 			} else {
 				setSearching(false);
-				alert('/table-return-few error ' + tableJSON.error);
+				alert("/table-return-few error " + tableJSON.error);
 			}
-		} catch(e) {
+		} catch (e) {
 			console.warn("Error with the /table-return-few", e);
 		}
-	}
+	};
 
 	//Used to check if there is a current partial name search.
 	useEffect((): void => {
@@ -92,7 +95,6 @@ export default function People() {
 		}
 	}, [currentOffset, partialName]);
 
-
 	//Using this to refresh the content after updating a person.
 	useEffect((): void => {
 		if (dataUpdated) {
@@ -104,30 +106,58 @@ export default function People() {
 				}, 200);
 			});
 		}
-	}, [dataUpdated, offSetIncrement, currentOffset])
+	}, [dataUpdated, offSetIncrement, currentOffset]);
 
+	const isVisitor = async (table: string, id: string): Promise<boolean | undefined> => {
+		const data: Response = await fetch(`/get-visitor-by-id/${table}/${id}`);
+		const final: APIResponse = await data.json();
+
+		try {
+			if (final.message !== "failure") {
+				if (final.data.length > 0) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} catch (e: any) {
+			console.log("An error occurred: ", e);
+		}
+	};
+
+	//Check to see if the selected user to delete is a visitor, and if so, which kind.  We will update the delete URL once we establish what kind of Attendant they are.
 	useEffect((): void => {
 		if (userToDelete.id && userToDelete.id !== 0) {
 			const stringOfId: string = userToDelete.id.toString();
+			setIsMasterVisitor(false);
 
-			fetch(`/get-visitor-by-id/${stringOfId}`)
-				.then((data: Response): Promise<APIResponse> => {
-					return data.json();
-				})
-				.then((final: APIResponse): void => {
-					if (final.message !== "failure") {
-						if (final.data.length > 0) {
-							setDeleteUserIsVisitor(true);
-						} else {
-							setDeleteUserIsVisitor(false);
-						}
+			Promise.all([
+				isVisitor("Visitor_Children", stringOfId),
+				isVisitor("Visitor_Spouse", stringOfId),
+				isVisitor("Visitor_Forms", stringOfId)
+			])
+				.then((data: [boolean | undefined, boolean | undefined, boolean | undefined]): void => {
+					const trueIndex: number = data.indexOf(true);
+					
+					if (trueIndex > -1 && trueIndex === 2) {
+						//This is the master user, we're just going to update they're status, so that the form data persists.
+						setIsMasterVisitor(true);
+						setDeleteUserURL(updateMasterVisitorURL);
+
+					} else if (trueIndex > -1) {
+						//Non master visitor
+						setDeleteUserURL(removeVisitorURL);
+						
 					} else {
-						console.log("The following error occurred ", final.error);
+						//Normal attendant, that has no visitor form data.
+						setDeleteUserURL(removePersonURL);
 					}
+				})
+				.catch((err: APIResponse): void => {
+					console.warn("An error occurrred ", err.error);
 				});
 		}
 	}, [userToDelete]);
-
 
 	//Used to delete an attendant.
 	const deleteUserHandler = (obj: Attendee): void => {
@@ -212,7 +242,7 @@ export default function People() {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 				/>
 				<AllPeople
 					allPeople={people}
@@ -228,7 +258,7 @@ export default function People() {
 				/>
 				<DeleteAlert
 					message={`Are sure that you would like to remove ${userToDelete.firstName} ${userToDelete.lastName} from the database?`}
-					url={deleteUserIsVisitor ? removeVisitorURL : removePersonURL}
+					url={deleteUserURL}
 					show={showDeleteAlert}
 					deleteUser={userToDelete}
 					hideHandler={hideDeleteHandler}
@@ -236,7 +266,8 @@ export default function People() {
 					updateSuccessMessage={updateSuccessMessageText}
 					deleteBody={{}}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
+					isMasterVisitor={isMasterVisitor}
 				/>
 				<EditMember
 					show={showEditUser}
@@ -249,7 +280,7 @@ export default function People() {
 					triggerSuccessMessage={(): void => setShowSuccessMessage(true)}
 					updateSuccessMessage={updateSuccessMessageText}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true)}
+					updateTheData={(): void => setUpdatedData(true)}
 				/>
 				<SuccessMessage
 					message={successMessageText}

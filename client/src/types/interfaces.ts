@@ -5,6 +5,7 @@ export interface Attendee {
   age: string;
   memberType: string;
   active: number;
+  visitorInActive: number;
   present?: number;
   id?: number;
   table?: string;
@@ -293,7 +294,8 @@ export interface DeleteProps {
   updateSuccessMessage: Function;
   deleteBody: Object
   updateLoadingStatus: Function;
-  updateData: Function;
+  updateTheData: Function;
+  isMasterVisitor?: boolean;
 }
 
 export interface DeleteResponse {
@@ -328,7 +330,7 @@ export interface NewMemberProps {
   updateSuccessMessage: Function;
   currentAttendanceColumn?: string;
   updateLoadingStatus: Function;
-  updateData: Function;
+  updateTheData: Function;
 
 }
 
@@ -465,7 +467,7 @@ export interface EditMemberProps {
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
   updateLoadingStatus: Function;
-  updateData: Function;
+  updateTheData: Function;
 }
 
 export interface AttendanceDropDownProps {

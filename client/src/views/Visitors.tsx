@@ -244,7 +244,7 @@ export default function Vistors(): JSX.Element {
 						spouseIds: getIdValues(deleteFamilyData.spouseIds, "spouseId"),
 					}}
 					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
-					updateData={(): void => setUpdatedData(true) }
+					updateTheData={(): void => setUpdatedData(true) }
 				/>
 
 				<SuccessMessage
