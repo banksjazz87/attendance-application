@@ -49,7 +49,7 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
 					if (data.message === "failure") {
 						updateLoadingStatus();
 						setTimeout(() => {
-							alert(data.error);
+							alert(data.error)
 						}, 200);
 					} else {
 						deleteConfirmation(data);
