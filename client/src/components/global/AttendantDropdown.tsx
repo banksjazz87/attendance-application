@@ -130,7 +130,7 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 
 	//Used to display the options for the select dropdown.
 	const showOptions: Function = (): JSX.Element => {
-		if (attendants[0].firstName.length > 1) {
+		if (attendants.length > 0) {
 			return (
 				<select
 					id="existing_attendant_dropdown"
