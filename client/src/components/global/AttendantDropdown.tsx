@@ -119,6 +119,12 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		setSelectedAttendants([initAttendee]);
 	};
 
+	//Used to reset the form
+	const resetMultiAddForm =  (): void => {
+		const multiAddForm: HTMLFormElement = document.getElementById('multi-add-select-form') as HTMLFormElement;
+		multiAddForm.reset();
+	}
+
 	//Function that fires off when removing an existing member.
 	const removeClickHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
 		if (selectedAttendants.length === 1) {
@@ -177,6 +183,9 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 		setSuccessText("Success!  All attendants have been added.");
 		updateTheData();
 		showSuccessMessage();
+		resetMemberArray();
+		resetMultiAddForm();
+
 		setTimeout((): void => {
 			showHandler();
 		}, 1500);
@@ -227,13 +236,17 @@ export default function AttendantDropdown({ show, currentAttendance, currentTabl
 			<div id="attendant_dropdown_wrapper">
 				<button
 					className="close_btn"
-					onClick={(e: React.MouseEvent<HTMLButtonElement>): void => showHandler()}
+					onClick={(e: React.MouseEvent<HTMLButtonElement>): void => {
+						showHandler();
+						resetMultiAddForm();
+					}}
 				>
 					<FontAwesomeIcon icon={faClose} />
 				</button>
 				<div id="attendant_dropdown_box_wrapper">
 					<h2>Add Existing Members</h2>
 					<form
+						id="multi-add-select-form"
 						method="get"
 						onSubmit={submitHandler}
 					>
