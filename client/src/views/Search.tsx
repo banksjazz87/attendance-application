@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
 import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
-import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet } from "../types/interfaces.ts";
+import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet, PrintListStruct } from "../types/interfaces.ts";
 import "../assets/styles/views/search.scss";
+
 
 export default function Search(): JSX.Element {
 	const initGroup = {
@@ -20,11 +21,47 @@ export default function Search(): JSX.Element {
 		dateCreated: "",
 	};
 
+	const initPrintList: PrintListStruct = {
+		id: -1,
+		title: "",
+		displayTitle: "",
+		dateCreated: "",
+		groupName: '', 
+		groupDisplayName: '',
+	}
+
 	const [groupTable, setGroupTable] = useState<Group>(initGroup);
 	const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
 	const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(false);
 	const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
 	const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
+
+	const [printList, setPrintList] = useState<PrintListStruct[]>([initPrintList]);
+	const [printCount, setPrintCount] = useState<number>(0);
+
+
+
+	useEffect((): void => {
+		if (printList.length === 1 && printList[0].id === -1) {
+			const copyOfPrint: PrintListStruct[] = printList.slice();
+			const firstPrint = copyOfPrint[0];
+			firstPrint.groupName = groupTable.name;
+			firstPrint.groupDisplayName = groupTable.displayName;
+
+			setPrintList(copyOfPrint);
+
+		} else {
+			const copyOfPrint: PrintListStruct[] = printList.slice();
+			let newGroup: PrintListStruct[] = [initPrintList];
+			newGroup[0].groupName = groupTable.name;
+			newGroup[0].groupDisplayName = groupTable.displayName;
+
+			setPrintList(copyOfPrint.concat(newGroup));
+		}
+
+	}, [groupTable]);
+
+
 
 
 	/**

@@ -384,6 +384,9 @@ export interface ApiResponse {
 }
 
 
+
+
+
 export interface AttendantId {
   id: number;
 }
@@ -481,6 +484,15 @@ export interface DisplayAttendanceProps {
 	sheetData: Attendee[];
 	sheetTitle: string;
 	presentColumn: string;
+}
+
+export interface PrintListStruct {
+	id: number;
+	title: string;
+	displayTitle: string;
+	dateCreated: string;
+	groupName: string;
+	groupDisplayName: string;
 }
 
 
