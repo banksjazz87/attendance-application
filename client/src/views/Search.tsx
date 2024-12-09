@@ -144,6 +144,7 @@ export default function Search(): JSX.Element {
 						type="submit"
 						value="Submit"
 					/>
+
 					<AttendanceDropDown
 						attendanceSheets={attendanceTables}
 						show={showAttendanceDropDown}
