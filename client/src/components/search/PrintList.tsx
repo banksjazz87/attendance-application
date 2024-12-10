@@ -2,22 +2,20 @@ import React from "react";
 import { PrintListStruct } from "../../types/interfaces";
 
 interface PrintListProps {
-	printList: PrintListStruct[];
+	printListData: PrintListStruct[];
 }
 
-export default function PrintList({ printList }: PrintListProps): JSX.Element {
+export default function PrintList({ printListData }: PrintListProps): JSX.Element {
+	
+	const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Print", "Delete"];
 
-	const generateTableHeaders = (): JSX.Element => {
-        const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Print", "Delete"];
-        
-		const headers = tableHeaders.map((x: string, y: number) => {
-			return <th key={`print_list_table_header_${y}`}></th>;
-		});
+	const headers = tableHeaders.map((x: string, y: number) => {
+        return <th key={`print_list_table_header_${y}`}>{x}</th>;
+    });
 
-		return <tr>{headers}</tr>;
-	};
+       
 
-	const generateList: JSX.Element[] = printList.map((x: PrintListStruct, y: number): JSX.Element => {
+	const generateList: JSX.Element[] = printListData.map((x: PrintListStruct, y: number): JSX.Element => {
 		return (
 			<tr key={`printList_item_${y}`}>
 				<td>
@@ -42,13 +40,19 @@ export default function PrintList({ printList }: PrintListProps): JSX.Element {
 		);
 	});
 
-	return (
-		<div>
-			<p>Print List</p>
-			<tbody>
-				{generateTableHeaders()}
-				{generateList}
-			</tbody>
-		</div>
-	);
+	if (printListData.length > 0) {
+		return (
+			<div>
+				<p>Print List</p>
+				<tbody>
+                    <tr>{headers}</tr>
+					{generateList}
+				</tbody>
+			</div>
+		);
+    } else {
+        return (
+            <div></div>
+        );
+    }
 }

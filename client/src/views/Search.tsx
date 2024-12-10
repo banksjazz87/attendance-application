@@ -3,6 +3,7 @@ import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
 import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
+import PrintList from "../components/search/PrintList.tsx";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet, PrintListStruct } from "../types/interfaces.ts";
 import "../assets/styles/views/search.scss";
 
@@ -36,30 +37,64 @@ export default function Search(): JSX.Element {
 	const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
 	const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
 
-	const [printList, setPrintList] = useState<PrintListStruct[]>([initPrintList]);
+	const [printListData, setPrintListData] = useState<PrintListStruct[]>([initPrintList]);
 	const [printCount, setPrintCount] = useState<number>(0);
 
 
 
 	useEffect((): void => {
-		if (printList.length === 1 && printList[0].id === -1) {
-			const copyOfPrint: PrintListStruct[] = printList.slice();
+		if (printListData.length === 1 && printListData[0].id === -1) {
+			const copyOfPrint: PrintListStruct[] = printListData.slice();
 			const firstPrint = copyOfPrint[0];
 			firstPrint.groupName = groupTable.name;
 			firstPrint.groupDisplayName = groupTable.displayName;
 
-			setPrintList(copyOfPrint);
+			setPrintListData(copyOfPrint);
 
 		} else {
-			const copyOfPrint: PrintListStruct[] = printList.slice();
+			const copyOfPrint: PrintListStruct[] = printListData.slice();
 			let newGroup: PrintListStruct[] = [initPrintList];
 			newGroup[0].groupName = groupTable.name;
 			newGroup[0].groupDisplayName = groupTable.displayName;
 
-			setPrintList(copyOfPrint.concat(newGroup));
+			setPrintListData(copyOfPrint.concat(newGroup));
 		}
 
 	}, [groupTable]);
+
+	
+	useEffect((): void => {
+		const lastItem: number = printListData.length - 1;
+		const currentList: PrintListStruct[] = printListData.slice();
+
+		if (printListData[lastItem].title === "") {
+			currentList[lastItem] = {
+				id: selectedTable.id,
+				title: selectedTable.title,
+				displayTitle: selectedTable.displayTitle,
+				dateCreated: selectedTable.dateCreated,
+				groupName: currentList[lastItem].groupName,
+				groupDisplayName: currentList[lastItem].groupDisplayName,
+			};
+
+			setPrintListData(currentList);
+			setPrintCount((c) => printCount + c);
+
+		} else {
+			const newEntry: PrintListStruct = {
+				id: selectedTable.id,
+				title: selectedTable.title,
+				displayTitle: selectedTable.displayTitle,
+				dateCreated: selectedTable.dateCreated,
+				groupName: currentList[lastItem].groupName,
+				groupDisplayName: currentList[lastItem].groupDisplayName,
+			};
+
+			const updatedArray = currentList.concat(newEntry);
+			setPrintListData(updatedArray);
+			setPrintCount((c) => printCount + c);
+		}
+	}, [selectedTable]);
 
 
 
@@ -189,6 +224,10 @@ export default function Search(): JSX.Element {
 						allTitles={attendanceTables}
 					/>
 				</form>
+
+				<PrintList 
+					printListData={printListData}
+				/>
 
 				<DisplayAttendance
 					sheetData={selectedAttendance}
