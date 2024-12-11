@@ -135,7 +135,7 @@ export default function Dashboard() {
 		<div>
 			<Navbar />
 			<div className="header_wrapper">
-				<h1>Statitics Dashboard</h1>
+				<h1>Statistics</h1>
 			</div>
 			<div id="all_data_form_wrapper">
 				<AllDataForm
