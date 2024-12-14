@@ -3,15 +3,22 @@ import { PrintListStruct } from "../../types/interfaces";
 
 interface PrintListProps {
 	printListData: PrintListStruct[];
+	currentPrintCount: number;
+	viewHandler: Function;
+	removeHandler: Function;
 }
 
-export default function PrintList({ printListData }: PrintListProps): JSX.Element {
+export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler }: PrintListProps): JSX.Element {
 	
-	const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Print", "Delete"];
+	const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Delete"];
 
 	const headers = tableHeaders.map((x: string, y: number) => {
         return <th key={`print_list_table_header_${y}`}>{x}</th>;
-    });
+	});
+
+	const viewClickHandler = (listData: PrintListStruct): void => {
+		viewHandler(listData);
+	}
 
        
 
@@ -28,26 +35,24 @@ export default function PrintList({ printListData }: PrintListProps): JSX.Elemen
 					<p>{x.displayTitle}</p>
 				</td>
 				<td>
-					<button type="button">View</button>
+					<button type="button" onClick={() => viewClickHandler(x)}>View</button>
 				</td>
 				<td>
-					<button type="button">Print</button>
-				</td>
-				<td>
-					<button type="button">Remove</button>
+					<button type="button" onClick={(): void => removeHandler(y)}>Remove</button>
 				</td>
 			</tr>
 		);
 	});
 
-	if (printListData.length > 0) {
+	if (printListData.length > 0 && printListData[0].displayTitle.length > 0) {
 		return (
 			<div>
 				<p>Print List</p>
 				<tbody>
-                    <tr>{headers}</tr>
+					<tr>{headers}</tr>
 					{generateList}
 				</tbody>
+				<button type="button">{`Print all ${currentPrintCount}`}</button>
 			</div>
 		);
     } else {

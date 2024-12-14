@@ -43,6 +43,7 @@ export default function Search(): JSX.Element {
 
 
 	useEffect((): void => {
+		//Setting the first print list item
 		if (printListData.length === 1 && printListData[0].id === -1) {
 			const copyOfPrint: PrintListStruct[] = printListData.slice();
 			const firstPrint = copyOfPrint[0];
@@ -78,7 +79,6 @@ export default function Search(): JSX.Element {
 			};
 
 			setPrintListData(currentList);
-			setPrintCount((c) => printCount + c);
 
 		} else {
 			const newEntry: PrintListStruct = {
@@ -92,9 +92,13 @@ export default function Search(): JSX.Element {
 
 			const updatedArray = currentList.concat(newEntry);
 			setPrintListData(updatedArray);
-			setPrintCount((c) => printCount + c);
 		}
-	}, [selectedTable]);
+	}, [selectedAttendance]);
+
+
+	useEffect(() => {
+		setPrintCount(printListData.length);
+	}, [printListData]);
 
 
 
@@ -182,6 +186,44 @@ export default function Search(): JSX.Element {
 	};
 
 
+	//This will be used to update the selected attendance that's viewed at the bototm of the page.
+	const updatedSelectedListFromPrintList = (list: PrintListStruct) => {
+		const groupTableName = `${list.groupName}_attendance`;
+
+		fetch(`/attendance/get-list-by-name/${groupTableName}/${list.title}`)
+			.then((data: Response): Promise<APIAttendanceSheet> => {
+				return data.json();
+			})
+			.then((final: APIAttendanceSheet): void => {
+				if (final.message === 'success') {
+					setSelectedAttendance(final.data);
+					setSelectedTable({
+						...selectedTable,
+						id: list.id,
+						title: list.title,
+						displayTitle: list.displayTitle,
+						dateCreated: list.dateCreated,
+					});
+				} else {
+					alert(final.error);
+				}
+			});
+	}
+
+
+	const removeOneFromPrintList = (index: number): void => {
+
+		if (printCount === 1) {
+			setPrintListData([initPrintList]);
+
+		} else {
+			const currentList = printListData.slice();
+			currentList.splice(index, 1);
+			setPrintListData(currentList);
+		}
+	}
+
+
 	//Returns all of the attendance titles found for the selected group name.
 	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
 		e.preventDefault();
@@ -225,8 +267,11 @@ export default function Search(): JSX.Element {
 					/>
 				</form>
 
-				<PrintList 
+				<PrintList
 					printListData={printListData}
+					currentPrintCount={printCount}
+					viewHandler={updatedSelectedListFromPrintList}
+					removeHandler={removeOneFromPrintList}
 				/>
 
 				<DisplayAttendance
