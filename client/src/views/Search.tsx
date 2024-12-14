@@ -40,6 +40,10 @@ export default function Search(): JSX.Element {
 	const [printListData, setPrintListData] = useState<PrintListStruct[]>([initPrintList]);
 	const [printCount, setPrintCount] = useState<number>(0);
 
+	
+	const [attendanceToShow, setAttendanceToShow] = useState<DBAttendanceTitle>(initTable);
+	const [attendanceData, setAttendanceData] = useState<Attendee[]>([]);
+
 
 
 	useEffect((): void => {
@@ -211,6 +215,12 @@ export default function Search(): JSX.Element {
 	}
 
 
+	/**
+	 * 
+	 * @param index the index number of the item that needs to be removed.
+	 * @returns void
+	 * @description used to remove an item from the print list.
+	 */
 	const removeOneFromPrintList = (index: number): void => {
 
 		if (printCount === 1) {
