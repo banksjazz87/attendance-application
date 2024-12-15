@@ -105,34 +105,6 @@ export default function Search(): JSX.Element {
 	}, [printListData]);
 
 
-	//Update the attendance data if a change has occurred on the attendance to show.
-	useEffect((): void => {
-		if (attendanceToShow.id !== -1) {
-			const groupTableName = `${attendanceToShow.groupName}_attendance`;
-			fetch(`/attendance/get-list-by-name/${groupTableName}/${attendanceToShow.title}`)
-				.then((data: Response): Promise<APIAttendanceSheet> => {
-					return data.json();
-				})
-				.then((final: APIAttendanceSheet): void => {
-					if (final.message === "success") {
-						setAttendanceData(final.data);
-
-						//Scroll to the new table
-						setTimeout((): void => {
-							const newTable = document.getElementById("display_attendance_wrapper");
-							newTable?.scrollIntoView({ behavior: "smooth" });
-						}, 200);
-
-					} else {
-						alert(final.error);
-					}
-				});
-		}
-	}, [attendanceToShow]);
-
-
-
-
 	/**
 	 * 
 	 * @param arr array of type of Group
@@ -222,6 +194,13 @@ export default function Search(): JSX.Element {
 		}
 	}
 
+
+	/**
+	 * 
+	 * @param obj <PrintListStruct>
+	 * @description pulls the needed attendance data, that needs to be shown, and scrolls into view of the attendance.
+	 * @returns void
+	 */
 	const attendanceToShowUpdater = (obj: PrintListStruct): void => {
 		setAttendanceToShow({
 			...attendanceToShow,
@@ -232,6 +211,25 @@ export default function Search(): JSX.Element {
 			groupName: obj.groupName,
 			groupDisplayName: obj.groupDisplayName
 		});
+
+		const groupTableName = `${obj.groupName}_attendance`;
+		fetch(`/attendance/get-list-by-name/${groupTableName}/${obj.title}`)
+			.then((data: Response): Promise<APIAttendanceSheet> => {
+				return data.json();
+			})
+			.then((final: APIAttendanceSheet): void => {
+				if (final.message === "success") {
+					setAttendanceData(final.data);
+
+					//Scroll to the new table
+					setTimeout((): void => {
+						const newTable = document.getElementById("display_attendance_wrapper");
+						newTable?.scrollIntoView({ behavior: "smooth" });
+					}, 200);
+				} else {
+					alert(final.error);
+				}
+			});
 	}
 
 
