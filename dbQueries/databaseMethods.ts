@@ -130,10 +130,10 @@ export class DBMethods {
     });
   }
 
-  getTableByColumn(table: string, order: string, targetColumn: string, orderColumn: string): Promise<string[]> {
+  getTableByColumn(table: string, order: string, targetColumn: string[], orderColumn: string): Promise<string[]> {
     return new Promise<string[]> ((resolve, reject) => {
       const database: any = this.dbConnection;
-      let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn} FROM ${table} ORDER BY ${orderColumn} ${order};`;
+      let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn.join(', ')} FROM ${table} ORDER BY ${orderColumn} ${order};`;
 
       database.query(sql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
@@ -141,6 +141,7 @@ export class DBMethods {
       this.endDb();
     });
   }
+
 
   createGroupTable(tableName: string): Promise<string[]> {
     return new Promise<string[]>((resolve, reject) => {

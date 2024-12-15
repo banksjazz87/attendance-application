@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
 import { SQLResponse } from "./interfaces/interfaces";
 import { TotalSentSum } from "./client/src/types/interfaces";
+import { ExportClass } from "./lib/ExportClass";
 
 dotenv.config();
 
@@ -356,7 +357,7 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req: Request, res: 
 	const tableName = Db.createTableName(req.params.tableName);
 	const columnName = Db.createTableName(req.params.colName);
 
-	Db.getTableByColumn(tableName, "ASC", columnName, "lastName")
+	Db.getTableByColumn(tableName, "ASC", [columnName], "lastName")
 		.then((data: string[]): void => {
 			console.log(data);
 			res.send({ message: "success", data: data });
@@ -886,3 +887,15 @@ app.put('/set-master-visitor-to-inactive/', (req: Request, res: Response): void 
 			console.log('Error ', err);
 		});
 });
+
+
+//Export attendance to CSV
+// app.put('/export-attendance/', (req: Request, res: Response): void => {
+// 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+// 	const CSV = new ExportClass(req.body, '/temp/export.csv');
+
+
+// 	Db.getTableByColumnName()
+
+
+// })

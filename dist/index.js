@@ -317,7 +317,7 @@ app.get("/attendance/get-list-by-name/:tableName/:colName", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const tableName = Db.createTableName(req.params.tableName);
     const columnName = Db.createTableName(req.params.colName);
-    Db.getTableByColumn(tableName, "ASC", columnName, "lastName")
+    Db.getTableByColumn(tableName, "ASC", [columnName], "lastName")
         .then((data) => {
         console.log(data);
         res.send({ message: "success", data: data });
@@ -788,3 +788,9 @@ app.put('/set-master-visitor-to-inactive/', (req, res) => {
         console.log('Error ', err);
     });
 });
+//Export attendance to CSV
+// app.put('/export-attendance/', (req: Request, res: Response): void => {
+// 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+// 	const CSV = new ExportClass(req.body, '/temp/export.csv');
+// 	Db.getTableByColumnName()
+// })

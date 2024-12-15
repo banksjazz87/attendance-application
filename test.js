@@ -56,4 +56,29 @@ function formatMysqlDate(string) {
     return finalString;
 }
 
-console.log(formatMysqlDate('2024-04-16T12:14:56.000Z'));
+// console.log(formatMysqlDate('2024-04-16T12:14:56.000Z'));
+
+
+
+const testData = [
+    { name: 'bill', id: 1, lastName: "Adams" },
+    { name: 'Ben', id: 1, lastName: "Adams" },
+    { name: 'Adam', id: 1, lastName: "Adams" },
+    { name: 'Henry', id: 1, lastName: "Adams" }
+];
+
+
+function createCSV(obj) {
+    const arrayOfData = obj.map((x) => {
+        let csv = '';
+        for (const value of Object.values(x)) {
+            csv += `"${value}",`;
+        }
+        return csv + '\r\n';
+    });
+
+    const csvString = arrayOfData.join('');
+    return csvString;
+}
+
+console.log(createCSV(testData));
