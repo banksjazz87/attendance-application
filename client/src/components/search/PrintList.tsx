@@ -9,18 +9,16 @@ interface PrintListProps {
 }
 
 export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler }: PrintListProps): JSX.Element {
-	
 	const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Delete"];
 
 	const headers = tableHeaders.map((x: string, y: number) => {
-        return <th key={`print_list_table_header_${y}`}>{x}</th>;
+		return <th key={`print_list_table_header_${y}`}>{x}</th>;
 	});
 
 	const viewClickHandler = (listData: PrintListStruct): void => {
 		viewHandler(listData);
-	}
+	};
 
-       
 
 	const generateList: JSX.Element[] = printListData.map((x: PrintListStruct, y: number): JSX.Element => {
 		return (
@@ -35,10 +33,20 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					<p>{x.displayTitle}</p>
 				</td>
 				<td>
-					<button type="button" onClick={() => viewClickHandler(x)}>View</button>
+					<button
+						type="button"
+						onClick={() => viewClickHandler(x)}
+					>
+						View
+					</button>
 				</td>
 				<td>
-					<button type="button" onClick={(): void => removeHandler(y)}>Remove</button>
+					<button
+						type="button"
+						onClick={(): void => removeHandler(y)}
+					>
+						Remove
+					</button>
 				</td>
 			</tr>
 		);
@@ -55,9 +63,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				<button type="button">{`Print all ${currentPrintCount}`}</button>
 			</div>
 		);
-    } else {
-        return (
-            <div></div>
-        );
-    }
+	} else {
+		return <div></div>;
+	}
 }

@@ -35,13 +35,12 @@ export default function Search(): JSX.Element {
 	const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
 	const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(false);
 	const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
-	const [selectedAttendance, setSelectedAttendance] = useState<Attendee[]>([]);
 
 	const [printListData, setPrintListData] = useState<PrintListStruct[]>([initPrintList]);
 	const [printCount, setPrintCount] = useState<number>(0);
 
-	
-	const [attendanceToShow, setAttendanceToShow] = useState<DBAttendanceTitle>(initTable);
+
+	const [attendanceToShow, setAttendanceToShow] = useState<PrintListStruct>(initPrintList);
 	const [attendanceData, setAttendanceData] = useState<Attendee[]>([]);
 
 
@@ -97,12 +96,39 @@ export default function Search(): JSX.Element {
 			const updatedArray = currentList.concat(newEntry);
 			setPrintListData(updatedArray);
 		}
-	}, [selectedAttendance]);
+	}, [selectedTable]);
 
 
+	//Update the print count any time the print list changes.
 	useEffect(() => {
 		setPrintCount(printListData.length);
 	}, [printListData]);
+
+
+	//Update the attendance data if a change has occurred on the attendance to show.
+	useEffect((): void => {
+		if (attendanceToShow.id !== -1) {
+			const groupTableName = `${attendanceToShow.groupName}_attendance`;
+			fetch(`/attendance/get-list-by-name/${groupTableName}/${attendanceToShow.title}`)
+				.then((data: Response): Promise<APIAttendanceSheet> => {
+					return data.json();
+				})
+				.then((final: APIAttendanceSheet): void => {
+					if (final.message === "success") {
+						setAttendanceData(final.data);
+
+						//Scroll to the new table
+						setTimeout((): void => {
+							const newTable = document.getElementById("display_attendance_wrapper");
+							newTable?.scrollIntoView({ behavior: "smooth" });
+						}, 200);
+
+					} else {
+						alert(final.error);
+					}
+				});
+		}
+	}, [attendanceToShow]);
 
 
 
@@ -172,47 +198,10 @@ export default function Search(): JSX.Element {
 	};
 
 
-	//Gets the attendance information from the selected group and updates the selected table and sets the selected attendance.
+	//Updates the selected attendance, this happens after an option is selected from the "Select Attendance" field.
 	const attDropDownChangeHandler = (arr: DBAttendanceTitle[], value: string): void => {
-		const groupTableName = `${groupTable.name}_attendance`;
-		fetch(`/attendance/get-list-by-name/${groupTableName}/${value}`)
-			.then((data: Response): Promise<APIAttendanceSheet> => {
-				return data.json();
-			})
-			.then((final: APIAttendanceSheet): void => {
-				if (final.message === "success") {
-					updateSelectedTable(arr, value);
-					setSelectedAttendance(final.data);
-				} else {
-					alert(final.error);
-				}
-			});
+		updateSelectedTable(arr, value);		
 	};
-
-
-	//This will be used to update the selected attendance that's viewed at the bototm of the page.
-	const updatedSelectedListFromPrintList = (list: PrintListStruct) => {
-		const groupTableName = `${list.groupName}_attendance`;
-
-		fetch(`/attendance/get-list-by-name/${groupTableName}/${list.title}`)
-			.then((data: Response): Promise<APIAttendanceSheet> => {
-				return data.json();
-			})
-			.then((final: APIAttendanceSheet): void => {
-				if (final.message === 'success') {
-					setSelectedAttendance(final.data);
-					setSelectedTable({
-						...selectedTable,
-						id: list.id,
-						title: list.title,
-						displayTitle: list.displayTitle,
-						dateCreated: list.dateCreated,
-					});
-				} else {
-					alert(final.error);
-				}
-			});
-	}
 
 
 	/**
@@ -231,6 +220,18 @@ export default function Search(): JSX.Element {
 			currentList.splice(index, 1);
 			setPrintListData(currentList);
 		}
+	}
+
+	const attendanceToShowUpdater = (obj: PrintListStruct): void => {
+		setAttendanceToShow({
+			...attendanceToShow,
+			id: obj.id,
+			title: obj.title,
+			displayTitle: obj.displayTitle,
+			dateCreated: obj.dateCreated,
+			groupName: obj.groupName,
+			groupDisplayName: obj.groupDisplayName
+		});
 	}
 
 
@@ -280,14 +281,14 @@ export default function Search(): JSX.Element {
 				<PrintList
 					printListData={printListData}
 					currentPrintCount={printCount}
-					viewHandler={updatedSelectedListFromPrintList}
+					viewHandler={attendanceToShowUpdater}
 					removeHandler={removeOneFromPrintList}
 				/>
 
 				<DisplayAttendance
-					sheetData={selectedAttendance}
-					sheetTitle={selectedTable.displayTitle}
-					presentColumn={selectedTable.title}
+					sheetData={attendanceData}
+					sheetTitle={attendanceToShow.displayTitle}
+					presentColumn={attendanceToShow.title}
 				/>
 			</div>
 		</div>
