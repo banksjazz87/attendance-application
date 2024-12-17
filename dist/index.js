@@ -10,6 +10,7 @@ const cors_1 = __importDefault(require("cors"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const databaseMethods_1 = require("./dbQueries/databaseMethods");
+const ExportClass_1 = require("./lib/ExportClass");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 //All middleware functions will go here.
@@ -789,8 +790,22 @@ app.put('/set-master-visitor-to-inactive/', (req, res) => {
     });
 });
 //Export attendance to CSV
-// app.put('/export-attendance/', (req: Request, res: Response): void => {
-// 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-// 	const CSV = new ExportClass(req.body, '/temp/export.csv');
-// 	Db.getTableByColumnName()
-// })
+app.post('/export-attendance/', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const columns = req.body.columns;
+    const CSV = new ExportClass_1.ExportClass(columns, '/temp/export.csv');
+    Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
+        .then((data) => {
+        res.send({
+            message: `Success`,
+            data: data
+        });
+        console.log('Success ', data);
+    })
+        .catch((err) => {
+        res.send({
+            message: 'failure',
+            error: Db.getSqlError(err)
+        });
+    });
+});

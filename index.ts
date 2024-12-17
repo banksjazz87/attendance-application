@@ -890,12 +890,24 @@ app.put('/set-master-visitor-to-inactive/', (req: Request, res: Response): void 
 
 
 //Export attendance to CSV
-// app.put('/export-attendance/', (req: Request, res: Response): void => {
-// 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
-// 	const CSV = new ExportClass(req.body, '/temp/export.csv');
+app.post('/export-attendance/', (req: Request, res: Response): void => {
+	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+	const columns = req.body.columns;
+	const CSV = new ExportClass(columns, '/temp/export.csv');
 
-
-// 	Db.getTableByColumnName()
-
-
-// })
+	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
+		.then((data: string[]): void => {
+			res.send({
+				message: `Success`,
+				data: data
+			});
+			console.log('Success ', data);
+		})
+	
+		.catch((err: SQLResponse): void => {
+			res.send({
+				message: 'failure',
+				error: Db.getSqlError(err)
+			});
+		});
+});

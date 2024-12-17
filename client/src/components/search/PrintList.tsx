@@ -1,5 +1,6 @@
 import React from "react";
-import { PrintListStruct } from "../../types/interfaces";
+import { PrintListStruct, APIResponse } from "../../types/interfaces";
+import postData from "../../functions/api/post.ts";
 
 interface PrintListProps {
 	printListData: PrintListStruct[];
@@ -18,6 +19,26 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 	const viewClickHandler = (listData: PrintListStruct): void => {
 		viewHandler(listData);
 	};
+
+	const requestCSV = (): void => {
+		const requestedAttendanceTables = printListData.map((x: PrintListStruct): string => {
+			return x.title;
+		});
+
+		let data = {
+			columns: requestedAttendanceTables,
+			table: printListData[0].groupName
+		};
+
+		postData('/export-attendance/', data)
+			.then((data: APIResponse): void => {
+				console.log(data);
+			})
+			.catch((error: APIResponse): void => {
+				console.log('Error ', error.error)
+			});
+	}
+	
 
 
 	const generateList: JSX.Element[] = printListData.map((x: PrintListStruct, y: number): JSX.Element => {
@@ -60,7 +81,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					<tr>{headers}</tr>
 					{generateList}
 				</tbody>
-				<button type="button">{`Print all ${currentPrintCount}`}</button>
+				<button type="button" onClick={() => requestCSV()}>{`Print all ${currentPrintCount}`}</button>
 			</div>
 		);
 	} else {
