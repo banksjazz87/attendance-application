@@ -7,6 +7,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
+const fs_1 = __importDefault(require("fs"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const databaseMethods_1 = require("./dbQueries/databaseMethods");
@@ -793,14 +794,24 @@ app.put('/set-master-visitor-to-inactive/', (req, res) => {
 app.post('/export-attendance/', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const columns = req.body.columns;
-    const CSV = new ExportClass_1.ExportClass(columns, '/temp/export.csv');
+    const CSV = new ExportClass_1.ExportClass(columns, req.body.table);
     Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
         .then((data) => {
+        const csvPath = path_1.default.join(__dirname, '../temp/export.csv');
+        fs_1.default.writeFile(csvPath, CSV.getFullDoc(), (err) => {
+            if (err) {
+                console.log('Error writing the file ', err);
+                return;
+            }
+            else {
+                console.log('File has been written successfully');
+            }
+        });
         res.send({
             message: `Success`,
             data: data
         });
-        console.log('Success ', data);
+        // console.log('Success ', data);
     })
         .catch((err) => {
         res.send({

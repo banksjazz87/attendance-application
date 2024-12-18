@@ -5,14 +5,14 @@
 
 export class ExportClass {
     data: object[];
-    outPutFile: string;
+    table: string;
 
-    constructor(data: object[], outPutFile: string) {
+    constructor(data: object[], table: string) {
         this.data = data;
-        this.outPutFile = outPutFile;
+        this.table = table;
     }
 
-    createCSV(): string {
+    getBody(): string {
         const arrayOfData: string[] = this.data.map((x: Object, y: number): string => {
             let csv: string = '';
             for (const value of Object.values(x)) {
@@ -22,8 +22,21 @@ export class ExportClass {
         });
 
         //Create a string of the data
-        const csvString = arrayOfData.join(' ');
+        const csvString: string = arrayOfData.join(' ');
         return csvString;
     }
     
+    getHeaders(): string{
+        const headersArrray: string[] = Object.keys(this.data);
+        const headersText: string[] = headersArrray.map((x: string, y: number): string => {
+            return `"${x}",\r\n`;
+        });
+
+        const headersString: string = headersText.join(' ');
+        return headersString;
+    }
+
+    getFullDoc(): string {
+        return `${this.table} \r\n ${this.getHeaders()} ${this.getBody()}`
+    }
 }

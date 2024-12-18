@@ -27,7 +27,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 
 		let data = {
 			columns: requestedAttendanceTables,
-			table: printListData[0].groupName
+			table: `${printListData[0].groupName}_attendance`
 		};
 
 		postData('/export-attendance/', data)

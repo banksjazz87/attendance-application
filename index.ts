@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import express, { Express, Request, Response } from "express";
 import path from "path";
 import cors from "cors";
+import fs from "fs";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { DBMethods } from "./dbQueries/databaseMethods";
@@ -893,15 +894,28 @@ app.put('/set-master-visitor-to-inactive/', (req: Request, res: Response): void 
 app.post('/export-attendance/', (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const columns = req.body.columns;
-	const CSV = new ExportClass(columns, '/temp/export.csv');
+	const CSV = new ExportClass(columns, req.body.table);
 
 	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
 		.then((data: string[]): void => {
+
+			const csvPath = path.join(__dirname, '../temp/export.csv');
+
+			
+			fs.writeFile(csvPath, CSV.getFullDoc(), (err) => {
+				if (err) {
+					console.log('Error writing the file ', err);
+					return;
+				} else {
+					console.log('File has been written successfully');
+				}
+			});
+
 			res.send({
 				message: `Success`,
 				data: data
 			});
-			console.log('Success ', data);
+			// console.log('Success ', data);
 		})
 	
 		.catch((err: SQLResponse): void => {
