@@ -27,9 +27,9 @@ export class ExportClass {
     }
     
     getHeaders(): string{
-        const headersArrray: string[] = Object.keys(this.data);
+        const headersArrray: string[] = Object.keys(this.data[0]);
         const headersText: string[] = headersArrray.map((x: string, y: number): string => {
-            return `"${x}",\r\n`;
+            return `"${x}", `;
         });
 
         const headersString: string = headersText.join(' ');
@@ -37,6 +37,6 @@ export class ExportClass {
     }
 
     getFullDoc(): string {
-        return `${this.table} \r\n ${this.getHeaders()} ${this.getBody()}`
+        return `${this.table} \r\n ${this.getHeaders()} \r\n ${this.getBody()}`
     }
 }

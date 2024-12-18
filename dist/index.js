@@ -794,9 +794,9 @@ app.put('/set-master-visitor-to-inactive/', (req, res) => {
 app.post('/export-attendance/', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const columns = req.body.columns;
-    const CSV = new ExportClass_1.ExportClass(columns, req.body.table);
     Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
         .then((data) => {
+        const CSV = new ExportClass_1.ExportClass(data, req.body.table);
         const csvPath = path_1.default.join(__dirname, '../temp/export.csv');
         fs_1.default.writeFile(csvPath, CSV.getFullDoc(), (err) => {
             if (err) {

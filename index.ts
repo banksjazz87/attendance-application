@@ -894,11 +894,11 @@ app.put('/set-master-visitor-to-inactive/', (req: Request, res: Response): void 
 app.post('/export-attendance/', (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const columns = req.body.columns;
-	const CSV = new ExportClass(columns, req.body.table);
 
 	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
-		.then((data: string[]): void => {
+		.then((data: Object[]): void => {
 
+			const CSV = new ExportClass(data, req.body.table);
 			const csvPath = path.join(__dirname, '../temp/export.csv');
 
 			
