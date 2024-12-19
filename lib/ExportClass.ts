@@ -32,7 +32,7 @@ export class ExportClass {
     getHeaders(): string{
         const headersArrray: string[] = Object.keys(this.data[0]);
         const headersText: string[] = headersArrray.map((x: string, y: number): string => {
-            return `${x}, `;
+            return `${x},`;
         });
 
         const headersString: string = headersText.join(' ');
