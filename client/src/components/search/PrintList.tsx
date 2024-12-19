@@ -91,8 +91,9 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				>{`Print all ${currentPrintCount}`}</button>
 				<a
 					id="export_csv_data_button"
-					href="/attendance-csv/"
+					href={`/attendance-csv/${printListData[0].groupName}-Attendance`}
 					target="_blank"
+					rel="noreferrer"
 				>
 					Export Data
 				</a>

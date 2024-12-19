@@ -813,7 +813,12 @@ app.post('/export-attendance/', (req, res) => {
     });
 });
 //Get the current attendance export.
-app.get('/attendance-csv/', (req, res) => {
+app.get('/attendance-csv/:attendanceTitle', (req, res) => {
     const csvPath = path_1.default.join(__dirname, "../temp/export.csv");
+    const fileName = req.params.attendanceTitle.replace(/[_]/g, "-");
+    res.set({
+        'content-type': 'text/csv',
+        'Content-Disposition': `attachment; filename=${fileName}.csv`,
+    });
     res.sendFile(csvPath);
 });
