@@ -32,7 +32,10 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 
 		postData('/export-attendance/', data)
 			.then((data: APIResponse): void => {
-				console.log(data);
+				if (data.message === 'Success') {
+					const downloadButton: HTMLElement | null = document.getElementById("export_csv_data_button");
+					downloadButton?.click();
+				}
 			})
 			.catch((error: APIResponse): void => {
 				console.log('Error ', error.error)
@@ -68,6 +71,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					>
 						Remove
 					</button>
+					<a href="/attendance-csv" target="_blank"> Export Data</a>
 				</td>
 			</tr>
 		);
@@ -81,7 +85,17 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					<tr>{headers}</tr>
 					{generateList}
 				</tbody>
-				<button type="button" onClick={() => requestCSV()}>{`Print all ${currentPrintCount}`}</button>
+				<button
+					type="button"
+					onClick={() => requestCSV()}
+				>{`Print all ${currentPrintCount}`}</button>
+				<a
+					id="export_csv_data_button"
+					href="/attendance-csv/"
+					target="_blank"
+				>
+					Export Data
+				</a>
 			</div>
 		);
 	} else {

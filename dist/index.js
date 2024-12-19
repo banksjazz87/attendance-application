@@ -7,7 +7,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
-const fs_1 = __importDefault(require("fs"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const databaseMethods_1 = require("./dbQueries/databaseMethods");
@@ -796,27 +795,25 @@ app.post('/export-attendance/', (req, res) => {
     const columns = req.body.columns;
     Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
         .then((data) => {
-        const CSV = new ExportClass_1.ExportClass(data, req.body.table);
         const csvPath = path_1.default.join(__dirname, '../temp/export.csv');
-        fs_1.default.writeFile(csvPath, CSV.getFullDoc(), (err) => {
-            if (err) {
-                console.log('Error writing the file ', err);
-                return;
-            }
-            else {
-                console.log('File has been written successfully');
-            }
-        });
+        const CSV = new ExportClass_1.ExportClass(data, req.body.table, csvPath);
+        CSV.writeFile();
         res.send({
             message: `Success`,
-            data: data
+            data: data,
         });
-        // console.log('Success ', data);
+        console.log('Success ', data);
     })
         .catch((err) => {
         res.send({
             message: 'failure',
             error: Db.getSqlError(err)
         });
+        console.log('Error ');
     });
+});
+//Get the current attendance export.
+app.get('/attendance-csv/', (req, res) => {
+    const csvPath = path_1.default.join(__dirname, "../temp/export.csv");
+    res.sendFile(csvPath);
 });

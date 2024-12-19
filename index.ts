@@ -897,25 +897,14 @@ app.post('/export-attendance/', (req: Request, res: Response): void => {
 
 	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
 		.then((data: Object[]): void => {
-
-			const CSV = new ExportClass(data, req.body.table);
 			const csvPath = path.join(__dirname, '../temp/export.csv');
-
-			
-			fs.writeFile(csvPath, CSV.getFullDoc(), (err) => {
-				if (err) {
-					console.log('Error writing the file ', err);
-					return;
-				} else {
-					console.log('File has been written successfully');
-				}
-			});
-
+			const CSV = new ExportClass(data, req.body.table, csvPath);	
+			CSV.writeFile();
 			res.send({
 				message: `Success`,
-				data: data
+				data: data,
 			});
-			// console.log('Success ', data);
+			console.log('Success ', data);
 		})
 	
 		.catch((err: SQLResponse): void => {
@@ -923,5 +912,12 @@ app.post('/export-attendance/', (req: Request, res: Response): void => {
 				message: 'failure',
 				error: Db.getSqlError(err)
 			});
+			console.log('Error ', )
 		});
+});
+
+//Get the current attendance export.
+app.get('/attendance-csv/', (req: Request, res: Response): void => {
+	const csvPath = path.join(__dirname, "../temp/export.csv");
+	res.sendFile(csvPath);
 });
