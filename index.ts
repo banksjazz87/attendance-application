@@ -895,16 +895,32 @@ app.post('/export-attendance/', (req: Request, res: Response): void => {
 	const Db = new DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
 	const columns = req.body.columns;
 
-	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
+	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName', true)
 		.then((data: Object[]): void => {
 			const csvPath = path.join(__dirname, '../temp/export.csv');
 			const CSV = new ExportClass(data, req.body.table, csvPath);	
 			CSV.writeFile();
-			res.send({
-				message: `Success`,
-				data: data,
-			});
-			console.log('Success ', data);
+			
+
+			Db.getStatisticsByAttendanceName(req.body.columns, req.body.group)
+				.then((finalData: Object[]): void => {
+					const statsCSVPath = path.join(__dirname, '../temp/attendance-count.csv');
+					const StatsCSV = new ExportClass(finalData, `${req.body.table}-Stats`, statsCSVPath);
+					StatsCSV.writeFile();
+
+					res.send({
+						message: 'Success',
+						data: finalData
+
+					});
+				})
+				.catch((err: SQLResponse): void => {
+					res.send({
+						message: 'failure',
+						error: Db.getSqlError(err),
+					});
+					console.log('Error ', err);
+				});
 		})
 	
 		.catch((err: SQLResponse): void => {
@@ -912,7 +928,7 @@ app.post('/export-attendance/', (req: Request, res: Response): void => {
 				message: 'failure',
 				error: Db.getSqlError(err)
 			});
-			console.log('Error ', )
+			console.log('Error ', err);
 		});
 });
 

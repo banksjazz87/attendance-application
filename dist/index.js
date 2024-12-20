@@ -793,23 +793,35 @@ app.put('/set-master-visitor-to-inactive/', (req, res) => {
 app.post('/export-attendance/', (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const columns = req.body.columns;
-    Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName')
+    Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName', true)
         .then((data) => {
         const csvPath = path_1.default.join(__dirname, '../temp/export.csv');
         const CSV = new ExportClass_1.ExportClass(data, req.body.table, csvPath);
         CSV.writeFile();
-        res.send({
-            message: `Success`,
-            data: data,
+        Db.getStatisticsByAttendanceName(req.body.columns, req.body.group)
+            .then((finalData) => {
+            const statsCSVPath = path_1.default.join(__dirname, '../temp/attendance-count.csv');
+            const StatsCSV = new ExportClass_1.ExportClass(finalData, `${req.body.table}-Stats`, statsCSVPath);
+            StatsCSV.writeFile();
+            res.send({
+                message: 'Success',
+                data: finalData
+            });
+        })
+            .catch((err) => {
+            res.send({
+                message: 'failure',
+                error: Db.getSqlError(err),
+            });
+            console.log('Error ', err);
         });
-        console.log('Success ', data);
     })
         .catch((err) => {
         res.send({
             message: 'failure',
             error: Db.getSqlError(err)
         });
-        console.log('Error ');
+        console.log('Error ', err);
     });
 });
 //Get the current attendance export.

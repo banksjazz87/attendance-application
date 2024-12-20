@@ -130,7 +130,7 @@ export class DBMethods {
     });
   }
 
-  getTableByColumn(table: string, order: string, targetColumn: string[], orderColumn: string): Promise<string[]> {
+  getTableByColumn(table: string, order: string, targetColumn: string[], orderColumn: string, noEnd: boolean = false): Promise<string[]> {
     return new Promise<string[]> ((resolve, reject) => {
       const database: any = this.dbConnection;
       let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn.join(', ')} FROM ${table} ORDER BY ${orderColumn} ${order};`;
@@ -138,7 +138,10 @@ export class DBMethods {
       database.query(sql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);
       });
-      this.endDb();
+
+      if (!noEnd) {
+        this.endDb();
+      }
     });
   }
 
@@ -362,6 +365,29 @@ export class DBMethods {
     return new Promise<string[]>((resolve, reject) => {
       const database: any = this.dbConnection;
       const neededSql: string = `SELECT * FROM Attendance_Totals WHERE MONTHNAME(dateCreated) = "${monthName}" AND YEAR(dateCreated) = "${yearDate}" AND groupName = "${groupName}" ORDER BY dateCreated ASC;`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+      this.endDb();
+    });
+  }
+
+  getStatisticsByAttendanceName(attendanceTitles: string[], groupName: string): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      const database: any = this.dbConnection;
+      let orStatement = '';
+      
+      for (let i: number = 0; i < attendanceTitles.length; i++) {
+        const currentTitle: string = attendanceTitles[i];
+        if (i === attendanceTitles.length - 1) {
+          orStatement += `title = "${currentTitle}" AND groupName = "${groupName}"`;
+        } else {
+          orStatement += `title = "${currentTitle}" AND groupName = "${groupName}" OR `;
+        }
+      }
+
+      const neededSql: string = `SELECT * FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);

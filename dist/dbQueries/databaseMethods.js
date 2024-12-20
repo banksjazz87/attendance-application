@@ -111,14 +111,16 @@ class DBMethods {
             this.endDb();
         });
     }
-    getTableByColumn(table, order, targetColumn, orderColumn) {
+    getTableByColumn(table, order, targetColumn, orderColumn, noEnd = false) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
             let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn.join(', ')} FROM ${table} ORDER BY ${orderColumn} ${order};`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
-            this.endDb();
+            if (!noEnd) {
+                this.endDb();
+            }
         });
     }
     createGroupTable(tableName) {
@@ -310,6 +312,26 @@ class DBMethods {
                 err ? reject(err) : resolve(results);
             });
             this.endDb();
+        });
+    }
+    getStatisticsByAttendanceName(attendanceTitles, groupName) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let orStatement = '';
+            for (let i = 0; i < attendanceTitles.length; i++) {
+                const currentTitle = attendanceTitles[i];
+                if (i === attendanceTitles.length - 1) {
+                    orStatement += `title = "${currentTitle}" AND groupName = "${groupName}"`;
+                }
+                else {
+                    orStatement += `title = "${currentTitle}" AND groupName = "${groupName}" OR `;
+                }
+            }
+            const neededSql = `SELECT * FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
+            console.log(neededSql);
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
         });
     }
     getDistinctStatisticYears(groupName) {
