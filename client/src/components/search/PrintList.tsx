@@ -10,16 +10,18 @@ interface PrintListProps {
 }
 
 export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler }: PrintListProps): JSX.Element {
+	//Create our table headers
 	const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Delete"];
-
 	const headers = tableHeaders.map((x: string, y: number) => {
 		return <th key={`print_list_table_header_${y}`}>{x}</th>;
 	});
 
+	//Used to display the selected item
 	const viewClickHandler = (listData: PrintListStruct): void => {
 		viewHandler(listData);
 	};
 
+	//This is called to create new CSV files that we can then download
 	const requestCSV = (): void => {
 		const requestedAttendanceTables = printListData.map((x: PrintListStruct): string => {
 			return x.title;
@@ -27,23 +29,24 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 
 		let data = {
 			columns: requestedAttendanceTables,
-			table: `${printListData[0].groupName}_attendance`, 
-			group: `${printListData[0].groupName}`
+			table: `${printListData[0].groupName}_attendance`,
+			group: `${printListData[0].groupName}`,
 		};
 
-		postData('/export-attendance/', data)
+		postData("/export-attendance/", data)
 			.then((data: APIResponse): void => {
-				if (data.message === 'Success') {
-					const downloadButton: HTMLElement | null = document.getElementById("export_csv_data_button");
-					downloadButton?.click();
+				if (data.message === "Success") {
+					const downloadAttendanceButton: HTMLElement | null = document.getElementById("export_csv_data_button");
+					const downloadAttendanceStatsButton: HTMLElement | null = document.getElementById("export_csv_statistics_button");
+
+					downloadAttendanceButton?.click();
+					downloadAttendanceStatsButton?.click();
 				}
 			})
 			.catch((error: APIResponse): void => {
-				console.log('Error ', error.error)
+				console.log("Error ", error.error);
 			});
-	}
-	
-
+	};
 
 	const generateList: JSX.Element[] = printListData.map((x: PrintListStruct, y: number): JSX.Element => {
 		return (
@@ -72,7 +75,6 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					>
 						Remove
 					</button>
-					<a href="/attendance-csv" target="_blank"> Export Data</a>
 				</td>
 			</tr>
 		);
@@ -93,10 +95,15 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				<a
 					id="export_csv_data_button"
 					href={`/attendance-csv/${printListData[0].groupName}-Attendance`}
-					target="_blank"
-					rel="noreferrer"
 				>
-					Export Data
+					Export Attendance
+				</a>
+
+				<a
+					id="export_csv_statistics_button"
+					href={`/attendance-stats-csv/${printListData[0].groupName}-Attendance`}
+				>
+					Export Attendance Stats
 				</a>
 			</div>
 		);

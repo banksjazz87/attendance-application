@@ -795,12 +795,12 @@ app.post('/export-attendance/', (req, res) => {
     const columns = req.body.columns;
     Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName', true)
         .then((data) => {
-        const csvPath = path_1.default.join(__dirname, '../temp/export.csv');
+        const csvPath = path_1.default.join(__dirname, '../temp/attendance-export.csv');
         const CSV = new ExportClass_1.ExportClass(data, req.body.table, csvPath);
         CSV.writeFile();
         Db.getStatisticsByAttendanceName(req.body.columns, req.body.group)
             .then((finalData) => {
-            const statsCSVPath = path_1.default.join(__dirname, '../temp/attendance-count.csv');
+            const statsCSVPath = path_1.default.join(__dirname, '../temp/attendance-statistics-export.csv');
             const StatsCSV = new ExportClass_1.ExportClass(finalData, `${req.body.table}-Stats`, statsCSVPath);
             StatsCSV.writeFile();
             res.send({
@@ -826,11 +826,21 @@ app.post('/export-attendance/', (req, res) => {
 });
 //Get the current attendance export.
 app.get('/attendance-csv/:attendanceTitle', (req, res) => {
-    const csvPath = path_1.default.join(__dirname, "../temp/export.csv");
+    const csvPath = path_1.default.join(__dirname, "../temp/attendance-export.csv");
     const fileName = req.params.attendanceTitle.replace(/[_]/g, "-");
     res.set({
         'content-type': 'text/csv',
         'Content-Disposition': `attachment; filename=${fileName}.csv`,
+    });
+    res.sendFile(csvPath);
+});
+//Get the current attendance export.
+app.get('/attendance-stats-csv/:attendanceTitle', (req, res) => {
+    const csvPath = path_1.default.join(__dirname, "../temp/attendance-statistics-export.csv");
+    const fileName = req.params.attendanceTitle.replace(/[_]/g, "-");
+    res.set({
+        'content-type': 'text/csv',
+        'Content-Disposition': `attachment; filename=${fileName}-statistics.csv`,
     });
     res.sendFile(csvPath);
 });

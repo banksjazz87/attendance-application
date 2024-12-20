@@ -327,11 +327,11 @@ class DBMethods {
                     orStatement += `title = "${currentTitle}" AND groupName = "${groupName}" OR `;
                 }
             }
-            const neededSql = `SELECT * FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
-            console.log(neededSql);
+            const neededSql = `SELECT id, displayTitle as Date, totalChildren AS Children, totalYouth AS Youth, totalAdults AS Adults, totalMembers AS Members, totalVisitors AS Visitors, totalCount AS Total FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
+            this.endDb();
         });
     }
     getDistinctStatisticYears(groupName) {

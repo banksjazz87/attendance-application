@@ -387,7 +387,7 @@ export class DBMethods {
         }
       }
 
-      const neededSql: string = `SELECT * FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
+      const neededSql: string = `SELECT id, displayTitle as Date, totalChildren AS Children, totalYouth AS Youth, totalAdults AS Adults, totalMembers AS Members, totalVisitors AS Visitors, totalCount AS Total FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);

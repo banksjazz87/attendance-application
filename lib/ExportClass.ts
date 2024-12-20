@@ -21,11 +21,12 @@ export class ExportClass {
             for (const value of Object.values(x)) {
                 csv += `"${value}",`;
             }
-            return csv + '\r\n';
+
+            return csv.substring(0, csv.length -1) + '\r\n';
         });
 
         //Create a string of the data
-        const csvString: string = arrayOfData.join(' ');
+        const csvString: string = arrayOfData.join('');
         return csvString;
     }
     
@@ -35,8 +36,8 @@ export class ExportClass {
             return `${x},`;
         });
 
-        const headersString: string = headersText.join(' ');
-        return headersString;
+        const headersString: string = headersText.join('');
+        return headersString.substring(0, headersString.length -1);
     }
 
     getFullDoc(): string {

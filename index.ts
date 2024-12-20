@@ -14,6 +14,8 @@ dotenv.config();
 
 const app: Express = express();
 
+const zip = require('express-zip');
+
 //All middleware functions will go here.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
@@ -897,14 +899,13 @@ app.post('/export-attendance/', (req: Request, res: Response): void => {
 
 	Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName', true)
 		.then((data: Object[]): void => {
-			const csvPath = path.join(__dirname, '../temp/export.csv');
+			const csvPath = path.join(__dirname, '../temp/attendance-export.csv');
 			const CSV = new ExportClass(data, req.body.table, csvPath);	
 			CSV.writeFile();
-			
 
 			Db.getStatisticsByAttendanceName(req.body.columns, req.body.group)
 				.then((finalData: Object[]): void => {
-					const statsCSVPath = path.join(__dirname, '../temp/attendance-count.csv');
+					const statsCSVPath = path.join(__dirname, '../temp/attendance-statistics-export.csv');
 					const StatsCSV = new ExportClass(finalData, `${req.body.table}-Stats`, statsCSVPath);
 					StatsCSV.writeFile();
 
@@ -934,11 +935,33 @@ app.post('/export-attendance/', (req: Request, res: Response): void => {
 
 //Get the current attendance export.
 app.get('/attendance-csv/:attendanceTitle', (req: Request, res: Response): void => {
-	const csvPath = path.join(__dirname, "../temp/export.csv");
+	const attendanceCSVPath: string = path.join(__dirname, "../temp/attendance-export.csv");
+	const statsCSVPath: string = path.join(__dirname, "../temp/attendance-statistics-export.csv");
+	
+	const files: string[] = [attendanceCSVPath, statsCSVPath];
+	const archiveName: string = req.params.attendanceTitle.replace(/[_]/g, '-');
+
+	
+	res.set({
+		'content-type': 'application/zip',
+		'Content-Disposition': `attachment; filename=${archiveName}.csv`,
+	});
+
+	res.zip(files, `${archiveName}.csv`, (err: string) => {
+		err ? console.log('error sending the files ', err) : console.log('Files sent successfully');
+	})
+
+});
+
+//Get the current attendance export.
+app.get('/attendance-stats-csv/:attendanceTitle', (req: Request, res: Response): void => {
+	const csvPath = path.join(__dirname, "../temp/attendance-statistics-export.csv");
 	const fileName = req.params.attendanceTitle.replace(/[_]/g, "-");
 	res.set({
 		'content-type': 'text/csv',
-		'Content-Disposition': `attachment; filename=${fileName}.csv`,
+		'Content-Disposition': `attachment; filename=${fileName}-statistics.csv`,
 	});
 	res.sendFile(csvPath);
 });
+
+
