@@ -37,10 +37,8 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 			.then((data: APIResponse): void => {
 				if (data.message === "Success") {
 					const downloadAttendanceButton: HTMLElement | null = document.getElementById("export_csv_data_button");
-					const downloadAttendanceStatsButton: HTMLElement | null = document.getElementById("export_csv_statistics_button");
 
 					downloadAttendanceButton?.click();
-					downloadAttendanceStatsButton?.click();
 				}
 			})
 			.catch((error: APIResponse): void => {
@@ -97,13 +95,6 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					href={`/attendance-csv/${printListData[0].groupName}-Attendance`}
 				>
 					Export Attendance
-				</a>
-
-				<a
-					id="export_csv_statistics_button"
-					href={`/attendance-stats-csv/${printListData[0].groupName}-Attendance`}
-				>
-					Export Attendance Stats
 				</a>
 			</div>
 		);

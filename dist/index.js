@@ -7,6 +7,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const path_1 = __importDefault(require("path"));
 const cors_1 = __importDefault(require("cors"));
+const adm_zip_1 = __importDefault(require("adm-zip"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const databaseMethods_1 = require("./dbQueries/databaseMethods");
@@ -730,15 +731,9 @@ app.delete("/remove-non-master-visitor-from-attendance/:id/:firstName/:lastName"
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const userId = parseInt(req.params.id);
     const userName = `${req.params.firstName} ${req.params.lastName}`;
-    Promise.all([
-        Db.setToNullNoEnd("Visitor_Children", ["id"], userId),
-        Db.setToNullNoEnd("Visitor_Spouse", ["id"], userId)
-    ])
+    Promise.all([Db.setToNullNoEnd("Visitor_Children", ["id"], userId), Db.setToNullNoEnd("Visitor_Spouse", ["id"], userId)])
         .then((data) => {
-        Promise.all([
-            Db.removeByIdNoEnd("Attendants", "id", [req.params.id]),
-            Db.endDb()
-        ])
+        Promise.all([Db.removeByIdNoEnd("Attendants", "id", [req.params.id]), Db.endDb()])
             .then((final) => {
             res.send({
                 message: `Success, ${userName} has been deleted from the database.`,
@@ -751,96 +746,102 @@ app.delete("/remove-non-master-visitor-from-attendance/:id/:firstName/:lastName"
                 message: "failure",
                 err: Db.getSqlError(err[0]),
             });
-            console.log('Error ', err);
+            console.log("Error ", err);
         });
     })
         .catch((err) => {
         res.send({
             message: "Failure",
             err: () => {
-                Db.getSqlError(err[0]),
-                    Db.getSqlError(err[1]),
-                    Db.getSqlError(err[2]);
+                Db.getSqlError(err[0]), Db.getSqlError(err[1]), Db.getSqlError(err[2]);
             },
         });
-        console.log('Error ', err);
+        console.log("Error ", err);
     });
 });
 //Update the status of a master visitor, we don't want to completely delete them, as our form data will no longer persist.
-app.put('/set-master-visitor-to-inactive/', (req, res) => {
+app.put("/set-master-visitor-to-inactive/", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const idNumber = parseInt(req.body.id);
-    Promise.all([
-        Db.updateTableNoEnd('Attendants', ['active', 'visitorInActive'], ["0", "1"], idNumber),
-        Db.endDb()
-    ])
+    Promise.all([Db.updateTableNoEnd("Attendants", ["active", "visitorInActive"], ["0", "1"], idNumber), Db.endDb()])
         .then((data) => {
         res.send({
             message: `Success, ${req.body.firstName} ${req.body.lastName} has been deleted`,
             data: data,
         });
-        console.log('Success ', data);
+        console.log("Success ", data);
     })
         .catch((err) => {
         res.send({
             message: "failure",
-            data: err
+            data: err,
         });
-        console.log('Error ', err);
+        console.log("Error ", err);
     });
 });
 //Export attendance to CSV
-app.post('/export-attendance/', (req, res) => {
+app.post("/export-attendance/", (req, res) => {
     const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
     const columns = req.body.columns;
-    Db.getTableByColumn(req.body.table, 'ASC', columns, 'lastName', true)
+    Db.getTableByColumn(req.body.table, "ASC", columns, "lastName", true)
         .then((data) => {
-        const csvPath = path_1.default.join(__dirname, '../temp/attendance-export.csv');
+        const csvPath = path_1.default.join(__dirname, "../temp/attendance-export.csv");
         const CSV = new ExportClass_1.ExportClass(data, req.body.table, csvPath);
         CSV.writeFile();
         Db.getStatisticsByAttendanceName(req.body.columns, req.body.group)
             .then((finalData) => {
-            const statsCSVPath = path_1.default.join(__dirname, '../temp/attendance-statistics-export.csv');
+            const statsCSVPath = path_1.default.join(__dirname, "../temp/attendance-statistics-export.csv");
             const StatsCSV = new ExportClass_1.ExportClass(finalData, `${req.body.table}-Stats`, statsCSVPath);
             StatsCSV.writeFile();
             res.send({
-                message: 'Success',
-                data: finalData
+                message: "Success",
+                data: finalData,
             });
         })
             .catch((err) => {
             res.send({
-                message: 'failure',
+                message: "failure",
                 error: Db.getSqlError(err),
             });
-            console.log('Error ', err);
+            console.log("Error ", err);
         });
     })
         .catch((err) => {
         res.send({
-            message: 'failure',
-            error: Db.getSqlError(err)
+            message: "failure",
+            error: Db.getSqlError(err),
         });
-        console.log('Error ', err);
+        console.log("Error ", err);
     });
 });
 //Get the current attendance export.
-app.get('/attendance-csv/:attendanceTitle', (req, res) => {
-    const csvPath = path_1.default.join(__dirname, "../temp/attendance-export.csv");
-    const fileName = req.params.attendanceTitle.replace(/[_]/g, "-");
+app.get("/attendance-csv/:attendanceTitle", (req, res) => {
+    //Define our needed CSVs
+    const attendanceCSVPath = path_1.default.join(__dirname, "../temp/attendance-export.csv");
+    const statsCSVPath = path_1.default.join(__dirname, "../temp/attendance-statistics-export.csv");
+    //Create an archive name
+    const archiveName = req.params.attendanceTitle.replace(/[_]/g, "-");
+    //Create a zip
+    const zip = new adm_zip_1.default();
+    zip.addLocalFile(attendanceCSVPath);
+    zip.addLocalFile(statsCSVPath);
+    //Get everything as a buffer
+    const zipData = zip.toBuffer();
+    //Set our headers
     res.set({
-        'content-type': 'text/csv',
-        'Content-Disposition': `attachment; filename=${fileName}.csv`,
+        "content-type": "application/zip",
+        "Content-Disposition": `attachment; filename=${archiveName}.zip`,
     });
-    res.sendFile(csvPath);
+    //Send it
+    res.send(zipData);
 });
 //Get the current attendance export.
-app.get('/attendance-stats-csv/:attendanceTitle', (req, res) => {
+app.get("/attendance-stats-csv/:attendanceTitle", (req, res) => {
     const csvPath = path_1.default.join(__dirname, "../temp/attendance-statistics-export.csv");
     const fileName = req.params.attendanceTitle.replace(/[_]/g, "-");
     res.set({
-        'content-type': 'text/csv',
-        'Content-Disposition': `attachment; filename=${fileName}-statistics.csv`,
+        "content-type": "text/csv",
+        "Content-Disposition": `attachment; filename=${fileName}-statistics.csv`,
     });
     res.sendFile(csvPath);
 });
