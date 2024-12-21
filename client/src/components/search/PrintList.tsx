@@ -1,6 +1,9 @@
 import React from "react";
 import { PrintListStruct, APIResponse } from "../../types/interfaces";
 import postData from "../../functions/api/post.ts";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashCan, faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
+import "../../assets/styles/components/search/printList.scss";
 
 interface PrintListProps {
 	printListData: PrintListStruct[];
@@ -61,17 +64,19 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				<td>
 					<button
 						type="button"
+						className="icon_button align_center"
 						onClick={() => viewClickHandler(x)}
 					>
-						View
+						<FontAwesomeIcon icon={faEye} />
 					</button>
 				</td>
-				<td>
+				<td className="align_center">
 					<button
+						className="trash_can icon_button align_center"
 						type="button"
 						onClick={(): void => removeHandler(y)}
 					>
-						Remove
+						<FontAwesomeIcon icon={faTrashCan} />
 					</button>
 				</td>
 			</tr>
@@ -80,22 +85,33 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 
 	if (printListData.length > 0 && printListData[0].displayTitle.length > 0) {
 		return (
-			<div>
-				<p>Print List</p>
-				<tbody>
-					<tr>{headers}</tr>
-					{generateList}
-				</tbody>
-				<button
-					type="button"
-					onClick={() => requestCSV()}
-				>{`Print all ${currentPrintCount}`}</button>
-				<a
-					id="export_csv_data_button"
-					href={`/attendance-csv/${printListData[0].groupName}-Attendance`}
-				>
-					Export Attendance
-				</a>
+			<div id="print_list_wrapper">
+			
+					<p>Print List</p>
+					<table>
+						<thead>
+							<tr>{headers}</tr>
+						</thead>
+						<tbody>
+							{generateList}
+						</tbody>
+					</table>
+					<button
+						style={{ display: "none" }}
+						type="button"
+						onClick={() => requestCSV()}
+					>
+						{`Print all ${currentPrintCount}`}
+					</button>
+
+					<a
+						id="export_csv_data_button"
+						href={`/attendance-csv/${printListData[0].groupName}-Attendance`}
+					>
+						Download
+						<FontAwesomeIcon icon={faDownload} />
+					</a>
+				
 			</div>
 		);
 	} else {

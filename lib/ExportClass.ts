@@ -28,7 +28,7 @@ export class ExportClass {
                 csv += `${value},`;
             }
             //Return everything but the trailing comma
-            return csv.substring(0, csv.length - 1).trim() + '\n';
+            return csv.substring(0, csv.length - 1).trim() + '\r\n';
         });
 
         //Create a string of the data
@@ -61,7 +61,7 @@ export class ExportClass {
      * @description return the full CSV doc
      */
     getFullDoc(): string {
-        return `${this.table} \n ${this.getHeaders()} \n ${this.getBody()}`
+        return `${this.table} \r\n ${this.getHeaders()} \r\n ${this.getBody()}`
     }
 
 
