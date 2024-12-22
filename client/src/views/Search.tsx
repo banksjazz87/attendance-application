@@ -257,32 +257,33 @@ export default function Search(): JSX.Element {
 				<h1>Past Attendance</h1>
 			</div>
 			<div id="search_content_wrapper">
-				<form
-					method="GET"
-					action="/group-lists/attendance/"
-					onSubmit={submitHandler}
-				>
-					<GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
-					<input
-						type="submit"
-						value="Submit"
+				<div id="form_download_wrapper">
+					<form
+						method="GET"
+						action="/group-lists/attendance/"
+						onSubmit={submitHandler}
+					>
+						<GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
+						<input
+							type="submit"
+							value="Submit"
+						/>
+
+						<AttendanceDropDown
+							attendanceSheets={attendanceTables}
+							show={showAttendanceDropDown}
+							changeHandler={attDropDownChangeHandler}
+							allTitles={attendanceTables}
+						/>
+					</form>
+
+					<PrintList
+						printListData={printListData}
+						currentPrintCount={printCount}
+						viewHandler={attendanceToShowUpdater}
+						removeHandler={removeOneFromPrintList}
 					/>
-
-					<AttendanceDropDown
-						attendanceSheets={attendanceTables}
-						show={showAttendanceDropDown}
-						changeHandler={attDropDownChangeHandler}
-						allTitles={attendanceTables}
-					/>
-				</form>
-
-				<PrintList
-					printListData={printListData}
-					currentPrintCount={printCount}
-					viewHandler={attendanceToShowUpdater}
-					removeHandler={removeOneFromPrintList}
-				/>
-
+				</div>
 				<DisplayAttendance
 					sheetData={attendanceData}
 					sheetTitle={attendanceToShow.displayTitle}

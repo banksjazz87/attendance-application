@@ -86,16 +86,14 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 	if (printListData.length > 0 && printListData[0].displayTitle.length > 0) {
 		return (
 			<div id="print_list_wrapper">
-			
-					<p>Print List</p>
-					<table>
-						<thead>
-							<tr>{headers}</tr>
-						</thead>
-						<tbody>
-							{generateList}
-						</tbody>
-					</table>
+				<h3>Download List</h3>
+				<table>
+					<thead>
+						<tr>{headers}</tr>
+					</thead>
+					<tbody>{generateList}</tbody>
+				</table>
+				<div id="print_list_wrapper_footer">
 					<button
 						style={{ display: "none" }}
 						type="button"
@@ -111,7 +109,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 						Download
 						<FontAwesomeIcon icon={faDownload} />
 					</a>
-				
+				</div>
 			</div>
 		);
 	} else {
