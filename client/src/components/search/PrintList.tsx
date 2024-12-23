@@ -14,7 +14,7 @@ interface PrintListProps {
 
 export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler }: PrintListProps): JSX.Element {
 	//Create our table headers
-	const tableHeaders: string[] = ["", "Group", "Attendance", "View", "Delete"];
+	const tableHeaders: string[] = ["Attendance", "View", "Delete"];
 	const headers = tableHeaders.map((x: string, y: number) => {
 		return <th key={`print_list_table_header_${y}`}>{x}</th>;
 	});
@@ -53,18 +53,12 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 		return (
 			<tr key={`printList_item_${y}`}>
 				<td>
-					<p>{y + 1}</p>
-				</td>
-				<td>
-					<p>{x.groupDisplayName}</p>
-				</td>
-				<td>
 					<p>{x.displayTitle}</p>
 				</td>
-				<td>
+				<td className="align_center">
 					<button
 						type="button"
-						className="icon_button align_center"
+						className="icon_button"
 						onClick={() => viewClickHandler(x)}
 					>
 						<FontAwesomeIcon icon={faEye} />
@@ -72,7 +66,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				</td>
 				<td className="align_center">
 					<button
-						className="trash_can icon_button align_center"
+						className="trash_can icon_button"
 						type="button"
 						onClick={(): void => removeHandler(y)}
 					>
@@ -86,7 +80,6 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 	if (printListData.length > 0 && printListData[0].displayTitle.length > 0) {
 		return (
 			<div id="print_list_wrapper">
-				<h3>Download List</h3>
 				<table>
 					<thead>
 						<tr>{headers}</tr>

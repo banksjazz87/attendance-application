@@ -99,6 +99,22 @@ export default function Search(): JSX.Element {
 	}, [selectedTable]);
 
 
+	useEffect(() => {
+		fetch(`/group-lists/attendance/${groupTable.name}`)
+			.then((data: Response): Promise<APIAttendanceTitles> => {
+				return data.json();
+			})
+			.then((final: APIAttendanceTitles): void => {
+				if (final.message === "success") {
+					setAttendanceTables(final.data);
+					setShowAttendanceDropDown(true);
+				} else {
+					alert(final.error);
+				}
+			});
+	}, [groupTable]);
+
+
 	//Update the print count any time the print list changes.
 	useEffect(() => {
 		setPrintCount(printListData.length);
@@ -233,22 +249,6 @@ export default function Search(): JSX.Element {
 	}
 
 
-	//Returns all of the attendance titles found for the selected group name.
-	const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
-		e.preventDefault();
-		fetch(`/group-lists/attendance/${groupTable.name}`)
-			.then((data: Response): Promise<APIAttendanceTitles> => {
-				return data.json();
-			})
-			.then((final: APIAttendanceTitles): void => {
-				if (final.message === "success") {
-					setAttendanceTables(final.data);
-					setShowAttendanceDropDown(true);
-				} else {
-					alert(final.error);
-				}
-			});
-	};
 
 	return (
 		<div>
@@ -258,16 +258,9 @@ export default function Search(): JSX.Element {
 			</div>
 			<div id="search_content_wrapper">
 				<div id="form_download_wrapper">
-					<form
-						method="GET"
-						action="/group-lists/attendance/"
-						onSubmit={submitHandler}
-					>
+					<h2>Export List</h2>
+					<form>
 						<GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
-						<input
-							type="submit"
-							value="Submit"
-						/>
 
 						<AttendanceDropDown
 							attendanceSheets={attendanceTables}
