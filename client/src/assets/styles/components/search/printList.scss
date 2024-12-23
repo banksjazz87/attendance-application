@@ -1,10 +1,10 @@
 @import "../../global/library.scss";
 #print_list_wrapper {
     @include main-table-wrapper;
-    margin-bottom: 4rem;
+    margin-bottom: 0px;
     padding-bottom: 2rem;
     min-width: 250px;
-    margin-top: 2rem;
+    margin-top: 0px;
     box-shadow: unset;
     p {
         margin-top: 0;
@@ -21,13 +21,22 @@
             margin-bottom: 4px;
         }
     }
+    #table_wrapper {
+        border-radius: 16px;
+        box-shadow: 0 8px 16px #0000004d;
+        width: 450px;
+        h3 {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+    }
     table {
         @include full-width-table;
         max-height: 250px;
         overflow-y: scroll;
-        width: 450px;
-        box-shadow: 0 8px 16px #0000004d;
+        width: 100%;
         border-bottom: unset;
+        border-radius: 16px;
         th {
             @include table-headers;
             text-align: left;
@@ -64,6 +73,17 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-top: 30px;
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    #print_list_wrapper {
+        #table_wrapper {
+            max-width: 90%;
+        }
+        #print_list_wrapper_footer {
+            max-width: 90%;
+        }
     }
 }

@@ -13,8 +13,10 @@ interface PrintListProps {
 }
 
 export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler }: PrintListProps): JSX.Element {
-	//Create our table headers
+	//Define our table headers
 	const tableHeaders: string[] = ["Attendance", "View", "Delete"];
+
+	//Create our table headers
 	const headers = tableHeaders.map((x: string, y: number) => {
 		return <th key={`print_list_table_header_${y}`}>{x}</th>;
 	});
@@ -80,12 +82,15 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 	if (printListData.length > 0 && printListData[0].displayTitle.length > 0) {
 		return (
 			<div id="print_list_wrapper">
-				<table>
-					<thead>
-						<tr>{headers}</tr>
-					</thead>
-					<tbody>{generateList}</tbody>
-				</table>
+				<div id="table_wrapper">
+					<h3>Documents set to export</h3>
+					<table>
+						<thead>
+							<tr>{headers}</tr>
+						</thead>
+						<tbody>{generateList}</tbody>
+					</table>
+				</div>
 				<div id="print_list_wrapper_footer">
 					<button
 						style={{ display: "none" }}

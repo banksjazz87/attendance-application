@@ -44,7 +44,7 @@ export default function Search(): JSX.Element {
 	const [attendanceData, setAttendanceData] = useState<Attendee[]>([]);
 
 
-
+	//Update the print list data after a new group has been selected.
 	useEffect((): void => {
 		//Setting the first print list item
 		if (printListData.length === 1 && printListData[0].id === -1) {
@@ -67,6 +67,7 @@ export default function Search(): JSX.Element {
 	}, [groupTable]);
 
 	
+	//Used to update the printListData, after a new attendance has been selected.
 	useEffect((): void => {
 		const lastItem: number = printListData.length - 1;
 		const currentList: PrintListStruct[] = printListData.slice();
@@ -99,6 +100,7 @@ export default function Search(): JSX.Element {
 	}, [selectedTable]);
 
 
+	//Get attendance options based on the group that has been selected.
 	useEffect(() => {
 		fetch(`/group-lists/attendance/${groupTable.name}`)
 			.then((data: Response): Promise<APIAttendanceTitles> => {
@@ -119,7 +121,7 @@ export default function Search(): JSX.Element {
 	useEffect(() => {
 		setPrintCount(printListData.length);
 	}, [printListData]);
-
+	
 
 	/**
 	 * 
@@ -140,23 +142,50 @@ export default function Search(): JSX.Element {
 
 
 	/**
+	 * @param void
+	 * @return void
+	 * @description Used to reset all of the state values, this will be used to reset everything if a new selection is selected from the group dropdown.
+	 */
+	const resetAllState = (): void => {
+		setGroupTable(initGroup);
+		setAttendanceTables([]);
+		setShowAttendanceDropDown(false);
+		setSelectedTable(initTable);
+		setPrintListData([initPrintList]);
+		setPrintCount(0);
+		setAttendanceToShow(initPrintList);
+		setAttendanceData([]);
+	};
+
+	/**
 	 * 
 	 * @param arr array of type of Group
 	 * @param value string
 	 * @returns void
-	 * @description Gets the index of the selected group and updates the state of the group table.
+	 * @description Gets the index of the selected group and updates the state of the group table, if a group has already been selected, all state will be set back to the init values.
 	 */
 	const dropDownChangeHandler = (arr: Group[], value: string): void => {
 		let index = returnIndexOfSelected(arr, value);
 		if (index > -1) {
-			setGroupTable({
-				...groupTable,
-				name: arr[index]["name"],
-				age_group: arr[index]["age_group"],
-				displayName: value,
-			});
-			setShowAttendanceDropDown(false);	
-		} 
+
+			if (groupTable.name === '') {
+				setGroupTable({
+					...groupTable,
+					name: arr[index]["name"],
+					age_group: arr[index]["age_group"],
+					displayName: value,
+				});
+				setShowAttendanceDropDown(false);
+			} else {
+				resetAllState();
+				setGroupTable({
+					...groupTable,
+					name: arr[index]["name"],
+					age_group: arr[index]["age_group"],
+					displayName: value,
+				});
+			}
+		}
 	};
 
 
