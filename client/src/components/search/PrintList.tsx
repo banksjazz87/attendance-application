@@ -2,7 +2,7 @@ import React from "react";
 import { PrintListStruct, APIResponse } from "../../types/interfaces";
 import postData from "../../functions/api/post.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faDownload, faFile } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/components/search/printList.scss";
 
 interface PrintListProps {
@@ -63,7 +63,7 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 						className="icon_button"
 						onClick={() => viewClickHandler(x)}
 					>
-						<FontAwesomeIcon icon={faEye} />
+						<FontAwesomeIcon icon={faFile} />
 					</button>
 				</td>
 				<td className="align_center">

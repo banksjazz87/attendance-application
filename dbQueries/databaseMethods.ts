@@ -581,6 +581,63 @@ export class DBMethods {
     });
 
   }
+
+
+  /**
+   * 
+   * @param tableName string
+   * @param columnName string
+   * @param endConnection boolean
+   * @returns Promise<string[]>
+   * @description used to drop an attendance column from a group attendance table.
+   */
+  deleteAttendance(tableName: string, columnName: string, endConnection: boolean = true): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const database: any = this.dbConnection;
+
+      const neededSql = `UPDATE ${tableName} DROP COLUMN ${columnName};`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+
+      if (endConnection) {
+        this.endDb();
+      }
+    });
+  }
+
+
+
+  /**
+   * 
+   * @param tableName string
+   * @param updateObject Object - key value pairs of the columns and values that we're looking for.
+   * @param endConnection boolean
+   * @returns Promise<string[]>
+   * @description A generic statement that can be used to remove items from a table where the values in target columns match.  The columns and values passed need to line up one to one to work.
+   */
+  deleteFromTableWhere(tableName: string, updateObject: Object, endConnection: boolean = true): Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      const database: any = this.dbConnection;
+
+      let whereSql = '';
+      for (const [key, value] of Object.entries(updateObject)) {
+        whereSql += `${key} = "${value}" AND `;
+      }
+
+      let finalWhere = whereSql.substring(0, whereSql.length - 5);
+      const neededSql = `DELETE FROM ${tableName} WHERE ${finalWhere};`;
+
+      database.query(neededSql, (err: string[], results: string[]): void => {
+        err ? reject(err) : resolve(results);
+      });
+
+      if (endConnection) {
+        this.endDb();
+      }
+    });
+  }
  
 
 }
