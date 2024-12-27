@@ -2,7 +2,7 @@ import React from "react";
 import { PrintListStruct, APIResponse } from "../../types/interfaces";
 import postData from "../../functions/api/post.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan, faDownload, faFile } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faDownload, faFile, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/components/search/printList.scss";
 
 interface PrintListProps {
@@ -10,11 +10,12 @@ interface PrintListProps {
 	currentPrintCount: number;
 	viewHandler: Function;
 	removeHandler: Function;
+	deleteHandler: Function;
 }
 
-export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler }: PrintListProps): JSX.Element {
+export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler, deleteHandler }: PrintListProps): JSX.Element {
 	//Define our table headers
-	const tableHeaders: string[] = ["Attendance", "View", "Delete"];
+	const tableHeaders: string[] = ["Attendance", "View", "Remove", "Delete"];
 
 	//Create our table headers
 	const headers = tableHeaders.map((x: string, y: number) => {
@@ -68,9 +69,18 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				</td>
 				<td className="align_center">
 					<button
-						className="trash_can icon_button"
+						className="icon_button"
 						type="button"
 						onClick={(): void => removeHandler(y)}
+					>
+						<FontAwesomeIcon icon={faFileCircleXmark} />
+					</button>
+				</td>
+				<td className="align_center">
+					<button
+						className="trash_can icon_button"
+						type="button"
+						onClick={(): void => deleteHandler(x)}
 					>
 						<FontAwesomeIcon icon={faTrashCan} />
 					</button>

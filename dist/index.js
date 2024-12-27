@@ -845,3 +845,32 @@ app.get("/attendance-stats-csv/:attendanceTitle", (req, res) => {
     });
     res.sendFile(csvPath);
 });
+//Used to delete an attendance from the Attendance_Totals table as well as the group attendance total.
+app.delete('/delete-attendance/:groupName/:columnName', (req, res) => {
+    const Db = new databaseMethods_1.DBMethods(req.cookies.host, req.cookies.user, req.cookies.database, req.cookies.password);
+    const groupName = req.params.groupName;
+    const attendanceTableName = `${req.params.groupName}_attendance`;
+    const attendanceName = req.params.columnName;
+    const deleteObj = {
+        groupName: groupName,
+        title: attendanceName
+    };
+    Promise.all([
+        Db.deleteAttendance(attendanceTableName, attendanceName, false),
+        Db.deleteFromTableWhere('Attendance_Totals', deleteObj)
+    ])
+        .then((data) => {
+        res.send({
+            message: 'Success',
+            data: data
+        });
+        console.log('Success in deleting attendance ', data);
+    })
+        .catch((err) => {
+        res.send({
+            message: 'failure',
+            error: err,
+        });
+        console.log('Error in deleting the attendance ', err);
+    });
+});

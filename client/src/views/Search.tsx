@@ -3,6 +3,9 @@ import Navbar from "../components/global/Navbar.tsx";
 import GroupDropDown from "../components/global/GroupDropDown.tsx";
 import AttendanceDropDown from "../components/search/AttendanceDropdown.tsx";
 import DisplayAttendance from "../components/search/DisplayAttendance.tsx";
+import DeleteAlert from "../components/global/DeleteAlert.tsx";
+import SuccessMessage from "../components/global/SuccessMessage.tsx";
+import LoadingBar from "../components/global/LoadingBar.tsx";
 import PrintList from "../components/search/PrintList.tsx";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet, PrintListStruct } from "../types/interfaces.ts";
 import "../assets/styles/views/search.scss";
@@ -42,6 +45,15 @@ export default function Search(): JSX.Element {
 
 	const [attendanceToShow, setAttendanceToShow] = useState<PrintListStruct>(initPrintList);
 	const [attendanceData, setAttendanceData] = useState<Attendee[]>([]);
+
+	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
+
+	const [tableToDelete, setTableToDelete] = useState<PrintListStruct>(initPrintList);
+
+	const [showSuccess, setShowSuccess] = useState<boolean>(false);
+	const [successMessage, setSuccessMessage] = useState<string>('');
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [updatedData, setUpdatedData] = useState<boolean>(false);
 
 
 	//Update the print list data after a new group has been selected.
@@ -118,10 +130,20 @@ export default function Search(): JSX.Element {
 
 
 	//Update the print count any time the print list changes.
-	useEffect(() => {
+	useEffect((): void => {
 		setPrintCount(printListData.length);
 	}, [printListData]);
-	
+
+
+
+
+	///CAB HERRRRREEEEEEEEE
+	useEffect((): void => {
+		if (updatedData) {
+			let currentPrintList = printListData.slice();
+		}
+	})
+
 
 	/**
 	 * 
@@ -277,6 +299,24 @@ export default function Search(): JSX.Element {
 			});
 	}
 
+	const hideDeleteAlert = (): void => {
+		setShowDeleteAlert(false);
+	}
+
+
+	//Used to update the tableToDelete Object
+	const setDeleteListHandler = (selectedObj: PrintListStruct): void => {
+		setTableToDelete({
+			...tableToDelete,
+			id: selectedObj.id,
+			title: selectedObj.title,
+			displayTitle: selectedObj.displayTitle,
+			dateCreated: selectedObj.dateCreated,
+			groupName: selectedObj.groupName,
+			groupDisplayName: selectedObj.groupDisplayName
+		});
+	}
+
 
 
 	return (
@@ -304,12 +344,35 @@ export default function Search(): JSX.Element {
 						currentPrintCount={printCount}
 						viewHandler={attendanceToShowUpdater}
 						removeHandler={removeOneFromPrintList}
+						deleteHandler={setDeleteListHandler}
 					/>
 				</div>
 				<DisplayAttendance
 					sheetData={attendanceData}
 					sheetTitle={attendanceToShow.displayTitle}
 					presentColumn={attendanceToShow.title}
+				/>
+
+				<DeleteAlert
+					message="Are you sure that you would like to permanently delete this attendance?"
+					hideHandler={(): void => setShowDeleteAlert(false)}
+					url={`/delete-attendance/${tableToDelete.groupName}/${tableToDelete.title}`}
+					show={showDeleteAlert}
+					triggerSuccessMessage={(): void => setShowSuccess(true) }
+					updateSuccessMessage={(): void => setSuccessMessage(`${tableToDelete.displayTitle} has been deleted.`)}
+					deleteBody={tableToDelete}
+					updateLoadingStatus={(): void => setIsLoading(false)}
+					updateTheData={(): boolean => true}
+				/>
+
+				<SuccessMessage
+					message={successMessage}
+					show={showSuccess}
+					closeMessage={(): void => setShowSuccess(false)}
+				/>
+
+				<LoadingBar 
+						show={isLoading}
 				/>
 			</div>
 		</div>

@@ -288,7 +288,7 @@ export interface DeleteProps {
   message: string;
   url: string;
   show: boolean;
-  deleteUser: Attendee | VisitorShortFields;
+  deleteUser?: Attendee | VisitorShortFields;
   hideHandler: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;

@@ -21,41 +21,52 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
 		hideHandler();
 	};
 
+
+	/**
+	 * @returns void
+	 * @description a general delete request.
+	 */
+	const generalDeleteMethod = (): void => {
+		deleteData(url, deleteBody).then((data: DeleteResponse): void => {
+			if (data.message === "failure") {
+				updateLoadingStatus();
+				setTimeout((): void => {
+					alert(data.error);
+				}, 200);
+			} else {
+				deleteConfirmation(data);
+			}
+		});
+	};
+
 	/**
 	 *
 	 * @param event Pointer event on a button
 	 * @returns void
 	 * @description deletes the data from database and then displays a confirmation or an alert.
 	 */
-	const deletePerson = (event: React.PointerEvent<HTMLButtonElement>): void => {
+	const deleteHandler = (event: React.PointerEvent<HTMLButtonElement>): void => {
 		if (deleteUser) {
-      updateLoadingStatus();
-      
-      //Checking this primarily for the People view, we are going to update a master visitor instead of deleting them completely.
-      if (isMasterVisitor && isMasterVisitor === true) {
-        putData(url, deleteUser).then((data: DeleteResponse): void => {
-          if (data.message === 'failure') {
-            updateLoadingStatus();
-            setTimeout(() => {
-              alert(data.error);
-            }, 200);
-          } else {
-            deleteConfirmation(data);
-          }
-        });
+			updateLoadingStatus();
 
-      } else {
-        deleteData(url, deleteBody).then((data: DeleteResponse): void => {
+			//Checking this primarily for the People view, we are going to update a master visitor instead of deleting them completely.
+			if (isMasterVisitor && isMasterVisitor === true) {
+				putData(url, deleteUser).then((data: DeleteResponse): void => {
 					if (data.message === "failure") {
 						updateLoadingStatus();
 						setTimeout(() => {
-              alert(data.error);
+							alert(data.error);
 						}, 200);
 					} else {
 						deleteConfirmation(data);
 					}
 				});
-      }
+			} else {
+				generalDeleteMethod();
+			}
+		} else {
+			updateLoadingStatus();
+			generalDeleteMethod();
 		}
 	};
 
@@ -85,7 +96,7 @@ export default function DeleteAlert({ message, hideHandler, url, show, deleteUse
 				<div className="button_wrapper">
 					<button
 						type="button"
-						onClick={deletePerson}
+						onClick={deleteHandler}
 					>
 						Yes
 					</button>
