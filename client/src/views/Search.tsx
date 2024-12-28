@@ -42,18 +42,17 @@ export default function Search(): JSX.Element {
 	const [printListData, setPrintListData] = useState<PrintListStruct[]>([initPrintList]);
 	const [printCount, setPrintCount] = useState<number>(0);
 
-
 	const [attendanceToShow, setAttendanceToShow] = useState<PrintListStruct>(initPrintList);
 	const [attendanceData, setAttendanceData] = useState<Attendee[]>([]);
 
 	const [showDeleteAlert, setShowDeleteAlert] = useState<boolean>(false);
-
 	const [tableToDelete, setTableToDelete] = useState<PrintListStruct>(initPrintList);
 
 	const [showSuccess, setShowSuccess] = useState<boolean>(false);
 	const [successMessage, setSuccessMessage] = useState<string>('');
+
 	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [updatedData, setUpdatedData] = useState<boolean>(false);
+	const [isDataUpdated, setIsDataUpdated] = useState<boolean>(false);
 
 
 	//Update the print list data after a new group has been selected.
@@ -112,9 +111,9 @@ export default function Search(): JSX.Element {
 	}, [selectedTable]);
 
 
-	//Get attendance options based on the group that has been selected.
-	useEffect(() => {
-		fetch(`/group-lists/attendance/${groupTable.name}`)
+
+	const getAttendanceLists = (currentGroup: Group): void => {
+		fetch(`/group-lists/attendance/${currentGroup.name}`)
 			.then((data: Response): Promise<APIAttendanceTitles> => {
 				return data.json();
 			})
@@ -122,10 +121,17 @@ export default function Search(): JSX.Element {
 				if (final.message === "success") {
 					setAttendanceTables(final.data);
 					setShowAttendanceDropDown(true);
+					setIsLoading(false);
 				} else {
+					setIsLoading(false);
 					alert(final.error);
 				}
 			});
+	}
+
+	//Get attendance options based on the group that has been selected.
+	useEffect(() => {
+		getAttendanceLists(groupTable);
 	}, [groupTable]);
 
 
@@ -134,13 +140,20 @@ export default function Search(): JSX.Element {
 		setPrintCount(printListData.length);
 	}, [printListData]);
 
-
-
-
 	///CAB HERRRRREEEEEEEEE
 	useEffect((): void => {
-		if (updatedData) {
-			let currentPrintList = printListData.slice();
+		if (isDataUpdated) {
+			let currentPrintList: PrintListStruct[] = printListData.slice();
+			let targetIndex: number = -1;
+
+			//Get the index of the item that needs to be removed
+			for (let i: number = 0; i < currentPrintList.length; i++) {
+				if (currentPrintList[i].id === tableToDelete.id) {
+					targetIndex = i;
+				}
+			}
+			removeOneFromPrintList(targetIndex);
+			getAttendanceLists(groupTable);
 		}
 	})
 
@@ -153,8 +166,8 @@ export default function Search(): JSX.Element {
 	 * @description returns the index of the selected group.
 	 */
 	const returnIndexOfSelected = (arr: Group[], value: string): number => {
-		let index = -1;
-		for (let i = 0; i < arr.length; i++) {
+		let index: number = -1;
+		for (let i: number = 0; i < arr.length; i++) {
 			if (arr[i].displayName === value) {
 				index = i;
 			}
@@ -315,6 +328,8 @@ export default function Search(): JSX.Element {
 			groupName: selectedObj.groupName,
 			groupDisplayName: selectedObj.groupDisplayName
 		});
+
+		setShowDeleteAlert(true);
 	}
 
 
@@ -361,8 +376,8 @@ export default function Search(): JSX.Element {
 					triggerSuccessMessage={(): void => setShowSuccess(true) }
 					updateSuccessMessage={(): void => setSuccessMessage(`${tableToDelete.displayTitle} has been deleted.`)}
 					deleteBody={tableToDelete}
-					updateLoadingStatus={(): void => setIsLoading(false)}
-					updateTheData={(): boolean => true}
+					updateLoadingStatus={(): void => setIsLoading(!isLoading)}
+					updateTheData={(): void => setIsDataUpdated(true)}
 				/>
 
 				<SuccessMessage
@@ -372,7 +387,7 @@ export default function Search(): JSX.Element {
 				/>
 
 				<LoadingBar 
-						show={isLoading}
+					show={isLoading}
 				/>
 			</div>
 		</div>

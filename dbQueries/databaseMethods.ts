@@ -595,7 +595,7 @@ export class DBMethods {
     return new Promise((resolve, reject) => {
       const database: any = this.dbConnection;
 
-      const neededSql = `UPDATE ${tableName} DROP COLUMN ${columnName};`;
+      const neededSql = `ALTER TABLE ${tableName} DROP COLUMN ${columnName};`;
 
       database.query(neededSql, (err: string[], results: string[]): void => {
         err ? reject(err) : resolve(results);

@@ -502,7 +502,7 @@ class DBMethods {
     deleteAttendance(tableName, columnName, endConnection = true) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
-            const neededSql = `UPDATE ${tableName} DROP COLUMN ${columnName};`;
+            const neededSql = `ALTER TABLE ${tableName} DROP COLUMN ${columnName};`;
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
