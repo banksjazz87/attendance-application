@@ -154,8 +154,9 @@ export default function Search(): JSX.Element {
 			}
 			removeOneFromPrintList(targetIndex);
 			getAttendanceLists(groupTable);
+			setIsDataUpdated(false);
 		}
-	})
+	}, [isDataUpdated]);
 
 
 	/**

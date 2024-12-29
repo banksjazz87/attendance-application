@@ -855,7 +855,11 @@ app.delete("/delete-attendance/:groupName/:columnName", (req, res) => {
         groupName: groupName,
         title: attendanceName,
     };
-    Promise.all([Db.deleteAttendance(attendanceTableName, attendanceName, false), Db.deleteFromTableWhere("Attendance_Totals", deleteObj)])
+    const allAttendanceDelete = {
+        parentGroup: groupName,
+        title: attendanceName,
+    };
+    Promise.all([Db.deleteAttendance(attendanceTableName, attendanceName, false), Db.deleteFromTableWhere("Attendance_Totals", deleteObj), Db.deleteFromTableWhere("all_attendance", allAttendanceDelete)])
         .then((data) => {
         res.send({
             message: "success",

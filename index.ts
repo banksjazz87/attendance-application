@@ -966,15 +966,21 @@ app.delete("/delete-attendance/:groupName/:columnName", (req: Request, res: Resp
 		title: attendanceName,
 	};
 
-	Promise.all([Db.deleteAttendance(attendanceTableName, attendanceName, false), Db.deleteFromTableWhere("Attendance_Totals", deleteObj)])
-		.then((data: [string[], string[]]): void => {
+	const allAttendanceDelete: Object = {
+		parentGroup: groupName,
+		title: attendanceName,
+	};
+
+	
+	Promise.all([Db.deleteAttendance(attendanceTableName, attendanceName, false), Db.deleteFromTableWhere("Attendance_Totals", deleteObj, false), Db.deleteFromTableWhere("all_attendance", allAttendanceDelete)])
+		.then((data: [string[], string[], string[]]): void => {
 			res.send({
 				message: "success",
 				data: data,
 			});
 			console.log("Success in deleting attendance ", data);
 		})
-		.catch((err: [SQLResponse, SQLResponse]): void => {
+		.catch((err: [SQLResponse, SQLResponse, SQLResponse]): void => {
 			res.send({
 				message: "failure",
 				error: (): string => {
