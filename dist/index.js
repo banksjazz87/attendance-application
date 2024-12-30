@@ -859,7 +859,7 @@ app.delete("/delete-attendance/:groupName/:columnName", (req, res) => {
         parentGroup: groupName,
         title: attendanceName,
     };
-    Promise.all([Db.deleteAttendance(attendanceTableName, attendanceName, false), Db.deleteFromTableWhere("Attendance_Totals", deleteObj), Db.deleteFromTableWhere("all_attendance", allAttendanceDelete)])
+    Promise.all([Db.deleteAttendance(attendanceTableName, attendanceName, false), Db.deleteFromTableWhere("Attendance_Totals", deleteObj, false), Db.deleteFromTableWhere("all_attendance", allAttendanceDelete)])
         .then((data) => {
         res.send({
             message: "success",

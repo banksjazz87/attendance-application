@@ -103,19 +103,18 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				</div>
 				<div id="print_list_wrapper_footer">
 					<button
-						style={{ display: "none" }}
 						type="button"
-						onClick={() => requestCSV()}
+						onClick={(): void => requestCSV()}
 					>
-						{`Print all ${currentPrintCount}`}
+						Download
+						<FontAwesomeIcon icon={faDownload} />
 					</button>
 
 					<a
 						id="export_csv_data_button"
 						href={`/attendance-csv/${printListData[0].groupName}-Attendance`}
+						style={{display: 'none'}}
 					>
-						Download
-						<FontAwesomeIcon icon={faDownload} />
 					</a>
 				</div>
 			</div>

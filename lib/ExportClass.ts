@@ -61,7 +61,7 @@ export class ExportClass {
      * @description return the full CSV doc
      */
     getFullDoc(): string {
-        return `${this.table} \r\n ${this.getHeaders()} \r\n ${this.getBody()}`
+        return `${this.getHeaders()} \r\n ${this.getBody()}`
     }
 
 

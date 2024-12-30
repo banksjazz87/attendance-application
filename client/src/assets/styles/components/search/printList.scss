@@ -10,7 +10,7 @@
         margin-top: 0;
         margin-bottom: 0;
     }
-    a {
+    button {
         @include blue-btn;
         text-decoration: none;
         display: flex;
@@ -64,6 +64,7 @@
         button,
         a svg {
             @include icon-button;
+            margin: auto;
         }
         .trash_can {
             @include trash-icon;
