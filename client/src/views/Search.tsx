@@ -7,6 +7,7 @@ import DeleteAlert from "../components/global/DeleteAlert.tsx";
 import SuccessMessage from "../components/global/SuccessMessage.tsx";
 import LoadingBar from "../components/global/LoadingBar.tsx";
 import PrintList from "../components/search/PrintList.tsx";
+import { resetInputValue } from "../functions/DOMUpdaters.ts";
 import { Group, APIAttendanceTitles, DBAttendanceTitle, Attendee, APIAttendanceSheet, PrintListStruct } from "../types/interfaces.ts";
 import "../assets/styles/views/search.scss";
 
@@ -38,6 +39,7 @@ export default function Search(): JSX.Element {
 	const [attendanceTables, setAttendanceTables] = useState<DBAttendanceTitle[]>([]);
 	const [showAttendanceDropDown, setShowAttendanceDropDown] = useState<boolean>(false);
 	const [selectedTable, setSelectedTable] = useState<DBAttendanceTitle>(initTable);
+	const [newAttendanceSelected, setNewAttendanceSelected] = useState<boolean>(false);
 
 	const [printListData, setPrintListData] = useState<PrintListStruct[]>([initPrintList]);
 	const [printCount, setPrintCount] = useState<number>(0);
@@ -80,38 +82,66 @@ export default function Search(): JSX.Element {
 	
 	//Used to update the printListData, after a new attendance has been selected.
 	useEffect((): void => {
-		const lastItem: number = printListData.length - 1;
-		const currentList: PrintListStruct[] = printListData.slice();
+		if (newAttendanceSelected) {
+			setNewAttendanceSelected(false);
 
-		if (printListData[lastItem].title === "") {
-			currentList[lastItem] = {
-				id: selectedTable.id,
-				title: selectedTable.title,
-				displayTitle: selectedTable.displayTitle,
-				dateCreated: selectedTable.dateCreated,
-				groupName: currentList[lastItem].groupName,
-				groupDisplayName: currentList[lastItem].groupDisplayName,
-			};
+			//Check if the item already exists in the export table
+			let printListHasIndexOfSelected = false;
+			for (let i = 0; i < printListData.length; i++) {
+				if (printListData[i].title === selectedTable.title) {
+					printListHasIndexOfSelected = true;
+				}
+			}
+			//The ideal conditions are met
+			if (selectedTable.title.length > 0 && !printListHasIndexOfSelected) {
+				const lastItem: number = printListData.length - 1;
+				const currentList: PrintListStruct[] = printListData.slice();
 
-			setPrintListData(currentList);
+				if (printListData[lastItem].title === "") {
+					currentList[lastItem] = {
+						id: selectedTable.id,
+						title: selectedTable.title,
+						displayTitle: selectedTable.displayTitle,
+						dateCreated: selectedTable.dateCreated,
+						groupName: currentList[lastItem].groupName,
+						groupDisplayName: currentList[lastItem].groupDisplayName,
+					};
 
-		} else {
-			const newEntry: PrintListStruct = {
-				id: selectedTable.id,
-				title: selectedTable.title,
-				displayTitle: selectedTable.displayTitle,
-				dateCreated: selectedTable.dateCreated,
-				groupName: currentList[lastItem].groupName,
-				groupDisplayName: currentList[lastItem].groupDisplayName,
-			};
+					setPrintListData(currentList);
+				} else {
+					const newEntry: PrintListStruct = {
+						id: selectedTable.id,
+						title: selectedTable.title,
+						displayTitle: selectedTable.displayTitle,
+						dateCreated: selectedTable.dateCreated,
+						groupName: currentList[lastItem].groupName,
+						groupDisplayName: currentList[lastItem].groupDisplayName,
+					};
 
-			const updatedArray = currentList.concat(newEntry);
-			setPrintListData(updatedArray);
+					const updatedArray = currentList.concat(newEntry);
+					setPrintListData(updatedArray);
+				}
+
+			//The item already exists in the export list
+			} else if (printListHasIndexOfSelected && selectedTable.title.length > 0) {
+				alert("This item is already included in the export list.");
+				resetInputValue("table_selection");
+			//An empty option has been selected.
+			} else {
+				alert("Please select a valid option");
+				resetInputValue("table_selection");
+			}
 		}
-	}, [selectedTable]);
+	}, [selectedTable, newAttendanceSelected]);
 
 
 
+	/**
+	 * 
+	 * @param currentGroup Object of the type Group
+	 * @returns void
+	 * @description get all of the attendances associated with the selected group.
+	 */
 	const getAttendanceLists = (currentGroup: Group): void => {
 		fetch(`/group-lists/attendance/${currentGroup.name}`)
 			.then((data: Response): Promise<APIAttendanceTitles> => {
@@ -255,7 +285,8 @@ export default function Search(): JSX.Element {
 
 	//Updates the selected attendance, this happens after an option is selected from the "Select Attendance" field.
 	const attDropDownChangeHandler = (arr: DBAttendanceTitle[], value: string): void => {
-		updateSelectedTable(arr, value);		
+		updateSelectedTable(arr, value);
+		setNewAttendanceSelected(true);
 	};
 
 

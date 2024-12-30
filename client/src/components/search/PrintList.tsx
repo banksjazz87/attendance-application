@@ -1,6 +1,7 @@
 import React from "react";
 import { PrintListStruct, APIResponse, PrintListProps } from "../../types/interfaces";
 import postData from "../../functions/api/post.ts";
+import { resetInputValue } from "../../functions/DOMUpdaters.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faDownload, faFile, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/components/search/printList.scss";
@@ -43,20 +44,6 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				console.log("Error ", error.error);
 			});
 	};
-
-
-	/**
-	 * 
-	 * @param id string expecting the ID of the element that we are going to reset the value.
-	 * @returns void
-	 * @description used to reset the value to a input field
-	 */
-	const resetInputValue = (id: string): void =>  {
-		const targetElement: HTMLElement| null = document.getElementById(id);
-		if (targetElement) {
-			(targetElement as HTMLInputElement).value = '';
-		}
-	}
 
 	const generateList: JSX.Element[] = printListData.map((x: PrintListStruct, y: number): JSX.Element => {
 		return (
