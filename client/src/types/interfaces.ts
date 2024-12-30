@@ -288,7 +288,7 @@ export interface DeleteProps {
   message: string;
   url: string;
   show: boolean;
-  deleteUser: Attendee | VisitorShortFields;
+  deleteUser?: Attendee | VisitorShortFields;
   hideHandler: Function;
   triggerSuccessMessage: Function;
   updateSuccessMessage: Function;
@@ -382,6 +382,9 @@ export interface ApiResponse {
   message: string;
   data: [] | string;
 }
+
+
+
 
 
 export interface AttendantId {
@@ -481,6 +484,23 @@ export interface DisplayAttendanceProps {
 	sheetData: Attendee[];
 	sheetTitle: string;
 	presentColumn: string;
+}
+
+export interface PrintListStruct {
+	id: number;
+	title: string;
+	displayTitle: string;
+	dateCreated: string;
+	groupName: string;
+	groupDisplayName: string;
+}
+
+export interface PrintListProps {
+	printListData: PrintListStruct[];
+	currentPrintCount: number;
+	viewHandler: Function;
+	removeHandler: Function;
+	deleteHandler: Function;
 }
 
 

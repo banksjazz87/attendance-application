@@ -1,0 +1,93 @@
+@import "../../global/library.scss";
+#print_list_wrapper {
+    @include main-table-wrapper;
+    margin-bottom: 0px;
+    padding-bottom: 2rem;
+    min-width: 250px;
+    margin-top: 0px;
+    box-shadow: unset;
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+    button {
+        @include blue-btn;
+        text-decoration: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        column-gap: 10px;
+        svg {
+            margin-bottom: 4px;
+        }
+    }
+    #table_wrapper {
+        border-radius: 16px;
+        box-shadow: 0 8px 16px #0000004d;
+        width: 450px;
+        h3 {
+            color: black;
+            padding-left: 10px;
+            padding-right: 10px;
+            margin-bottom: 10px;
+        }
+    }
+    table {
+        @include full-width-table;
+        max-height: 250px;
+        overflow-y: scroll;
+        width: 100%;
+        border-bottom: unset;
+        border-radius: 16px;
+        th {
+            @include table-headers;
+            text-align: left;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        th:last-of-type {
+            text-align: center;
+        }
+        th:nth-of-type(2),
+        th:nth-of-type(3) {
+            text-align: center;
+        }
+        tr:nth-of-type(2n) {
+            background-color: $blue-highlight;
+        }
+        td {
+            @include table-center-data;
+            text-align: left;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+        button,
+        a svg {
+            @include icon-button;
+            margin: auto;
+        }
+        .trash_can {
+            @include trash-icon;
+        }
+        .align_center {
+            text-align: center;
+        }
+    }
+    #print_list_wrapper_footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    #print_list_wrapper {
+        #table_wrapper {
+            max-width: 90%;
+        }
+        #print_list_wrapper_footer {
+            max-width: 90%;
+        }
+    }
+}

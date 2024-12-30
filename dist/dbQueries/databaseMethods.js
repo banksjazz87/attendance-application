@@ -111,14 +111,16 @@ class DBMethods {
             this.endDb();
         });
     }
-    getTableByColumn(table, order, targetColumn, orderColumn) {
+    getTableByColumn(table, order, targetColumn, orderColumn, noEnd = false) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
-            let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn} FROM ${table} ORDER BY ${orderColumn} ${order};`;
+            let sql = `SELECT id, firstName, lastName, age, memberType, ${targetColumn.join(', ')} FROM ${table} ORDER BY ${orderColumn} ${order};`;
             database.query(sql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
-            this.endDb();
+            if (!noEnd) {
+                this.endDb();
+            }
         });
     }
     createGroupTable(tableName) {
@@ -312,6 +314,26 @@ class DBMethods {
             this.endDb();
         });
     }
+    getStatisticsByAttendanceName(attendanceTitles, groupName) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let orStatement = '';
+            for (let i = 0; i < attendanceTitles.length; i++) {
+                const currentTitle = attendanceTitles[i];
+                if (i === attendanceTitles.length - 1) {
+                    orStatement += `title = "${currentTitle}" AND groupName = "${groupName}"`;
+                }
+                else {
+                    orStatement += `title = "${currentTitle}" AND groupName = "${groupName}" OR `;
+                }
+            }
+            const neededSql = `SELECT id, displayTitle as Date, totalChildren AS Children, totalYouth AS Youth, totalAdults AS Adults, totalMembers AS Members, totalVisitors AS Visitors, totalCount AS Total FROM Attendance_Totals WHERE ${orStatement} ORDER BY dateCreated ASC;`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            this.endDb();
+        });
+    }
     getDistinctStatisticYears(groupName) {
         return new Promise((resolve, reject) => {
             const database = this.dbConnection;
@@ -467,6 +489,51 @@ class DBMethods {
             database.query(neededSql, (err, results) => {
                 err ? reject(err) : resolve(results);
             });
+        });
+    }
+    /**
+     *
+     * @param tableName string
+     * @param columnName string
+     * @param endConnection boolean
+     * @returns Promise<string[]>
+     * @description used to drop an attendance column from a group attendance table.
+     */
+    deleteAttendance(tableName, columnName, endConnection = true) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            const neededSql = `ALTER TABLE ${tableName} DROP COLUMN ${columnName};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            if (endConnection) {
+                this.endDb();
+            }
+        });
+    }
+    /**
+     *
+     * @param tableName string
+     * @param updateObject Object - key value pairs of the columns and values that we're looking for.
+     * @param endConnection boolean
+     * @returns Promise<string[]>
+     * @description A generic statement that can be used to remove items from a table where the values in target columns match.  The columns and values passed need to line up one to one to work.
+     */
+    deleteFromTableWhere(tableName, updateObject, endConnection = true) {
+        return new Promise((resolve, reject) => {
+            const database = this.dbConnection;
+            let whereSql = '';
+            for (const [key, value] of Object.entries(updateObject)) {
+                whereSql += `${key} = "${value}" AND `;
+            }
+            let finalWhere = whereSql.substring(0, whereSql.length - 5);
+            const neededSql = `DELETE FROM ${tableName} WHERE ${finalWhere};`;
+            database.query(neededSql, (err, results) => {
+                err ? reject(err) : resolve(results);
+            });
+            if (endConnection) {
+                this.endDb();
+            }
         });
     }
 }
