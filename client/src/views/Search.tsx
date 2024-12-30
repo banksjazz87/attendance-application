@@ -142,7 +142,7 @@ export default function Search(): JSX.Element {
 		setPrintCount(printListData.length);
 	}, [printListData]);
 
-	///CAB HERRRRREEEEEEEEE
+	//Use to check if the data has been updated, this is fired after deleting an attendance.
 	useEffect((): void => {
 		if (isDataUpdated) {
 			let currentPrintList: PrintListStruct[] = printListData.slice();
@@ -315,10 +315,6 @@ export default function Search(): JSX.Element {
 			});
 	}
 
-	const hideDeleteAlert = (): void => {
-		setShowDeleteAlert(false);
-	}
-
 
 	//Used to update the tableToDelete Object
 	const setDeleteListHandler = (selectedObj: PrintListStruct): void => {
@@ -331,7 +327,6 @@ export default function Search(): JSX.Element {
 			groupName: selectedObj.groupName,
 			groupDisplayName: selectedObj.groupDisplayName
 		});
-
 		setShowDeleteAlert(true);
 	}
 

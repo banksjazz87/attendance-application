@@ -1,17 +1,10 @@
 import React from "react";
-import { PrintListStruct, APIResponse } from "../../types/interfaces";
+import { PrintListStruct, APIResponse, PrintListProps } from "../../types/interfaces";
 import postData from "../../functions/api/post.ts";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashCan, faDownload, faFile, faFileCircleXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/styles/components/search/printList.scss";
 
-interface PrintListProps {
-	printListData: PrintListStruct[];
-	currentPrintCount: number;
-	viewHandler: Function;
-	removeHandler: Function;
-	deleteHandler: Function;
-}
 
 export default function PrintList({ printListData, currentPrintCount, viewHandler, removeHandler, deleteHandler }: PrintListProps): JSX.Element {
 	//Define our table headers

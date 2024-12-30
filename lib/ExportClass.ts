@@ -75,6 +75,4 @@ export class ExportClass {
             err ? console.log('An error occurred while creating the CSV ', err) : console.log(`${this.outputFile} has been created successfully.`);
         })
     }
-
-
 }

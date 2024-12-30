@@ -495,6 +495,14 @@ export interface PrintListStruct {
 	groupDisplayName: string;
 }
 
+export interface PrintListProps {
+	printListData: PrintListStruct[];
+	currentPrintCount: number;
+	viewHandler: Function;
+	removeHandler: Function;
+	deleteHandler: Function;
+}
+
 
 
 
