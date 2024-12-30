@@ -131,7 +131,9 @@ export default function Search(): JSX.Element {
 
 	//Get attendance options based on the group that has been selected.
 	useEffect(() => {
-		getAttendanceLists(groupTable);
+		if (groupTable.name.length > 0) {
+			getAttendanceLists(groupTable);
+		}
 	}, [groupTable]);
 
 

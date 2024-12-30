@@ -43,7 +43,6 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 			.then((data: APIResponse): void => {
 				if (data.message === "Success") {
 					const downloadAttendanceButton: HTMLElement | null = document.getElementById("export_csv_data_button");
-
 					downloadAttendanceButton?.click();
 				}
 			})
@@ -51,6 +50,20 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 				console.log("Error ", error.error);
 			});
 	};
+
+
+	/**
+	 * 
+	 * @param id string expecting the ID of the element that we are going to reset the value.
+	 * @returns void
+	 * @description used to reset the value to a input field
+	 */
+	const resetInputValue = (id: string): void =>  {
+		const targetElement: HTMLElement| null = document.getElementById(id);
+		if (targetElement) {
+			(targetElement as HTMLInputElement).value = '';
+		}
+	}
 
 	const generateList: JSX.Element[] = printListData.map((x: PrintListStruct, y: number): JSX.Element => {
 		return (
@@ -71,7 +84,11 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					<button
 						className="icon_button"
 						type="button"
-						onClick={(): void => removeHandler(y)}
+						onClick={(): void => {
+							removeHandler(y);
+							resetInputValue('table_selection');
+						}
+						}
 					>
 						<FontAwesomeIcon icon={faFileCircleXmark} />
 					</button>
@@ -80,7 +97,11 @@ export default function PrintList({ printListData, currentPrintCount, viewHandle
 					<button
 						className="trash_can icon_button"
 						type="button"
-						onClick={(): void => deleteHandler(x)}
+						onClick={(): void => {
+							deleteHandler(x);
+							resetInputValue("table_selection");
+						}
+						}
 					>
 						<FontAwesomeIcon icon={faTrashCan} />
 					</button>
