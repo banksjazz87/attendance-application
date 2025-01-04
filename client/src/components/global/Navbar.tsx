@@ -45,6 +45,9 @@ export default function Navbar() {
 						className={checkForActivePage("/dashboard", currentPage) ? "active_page_highlight" : ""}
 					>
 						<FontAwesomeIcon icon={faChartLine} />
+						<p>
+							Stats
+						</p>
 					</Link>
 				</li>
 				<li>
@@ -53,6 +56,9 @@ export default function Navbar() {
 						className={checkForActivePage("/new-attendance", currentPage) ? "active_page_highlight" : ""}
 					>
 						<FontAwesomeIcon icon={faFileCirclePlus} />
+						<p>
+						  New
+						</p>
 					</Link>
 				</li>
 				<li>
@@ -61,6 +67,9 @@ export default function Navbar() {
 						className={checkForActivePage("/attendance", currentPage) ? "active_page_highlight" : ""}
 					>
 						<FontAwesomeIcon icon={faFile} />
+						<p>
+							Current
+						</p>
 					</Link>
 				</li>
 				<li>
@@ -69,6 +78,9 @@ export default function Navbar() {
 						className={checkForActivePage("/search-past-attendance", currentPage) ? "active_page_highlight" : ""}
 					>
 						<FontAwesomeIcon icon={faHistory} />
+						<p>
+							Past
+						</p>
 					</Link>
 				</li>
 				<li>
@@ -77,6 +89,9 @@ export default function Navbar() {
 						className={checkForActivePage("/people", currentPage) ? "active_page_highlight" : ""}
 					>
 						<FontAwesomeIcon icon={faPeopleGroup} />
+						<p>
+						  People
+						</p>
 					</Link>
 				</li>
 				<li>
@@ -84,7 +99,10 @@ export default function Navbar() {
 						to={`/visitors`}
 						className={checkForActivePage("/visitors", currentPage) ? "active_page_highlight" : ""}
 					>
-						<FontAwesomeIcon icon={faUsersViewfinder} />
+					  <FontAwesomeIcon icon={faUsersViewfinder} />
+					  <p>
+						  Visitors
+					  </p>
 					</Link>
 				</li>
 			</ul>
