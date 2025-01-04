@@ -106,8 +106,9 @@ export default function Search(): JSX.Element {
 						groupName: currentList[lastItem].groupName,
 						groupDisplayName: currentList[lastItem].groupDisplayName,
 					};
-
+					
 					setPrintListData(currentList);
+
 				} else {
 					const newEntry: PrintListStruct = {
 						id: selectedTable.id,

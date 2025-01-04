@@ -18,12 +18,34 @@
             a {
                 color: white;
                 font-size: 20px;
-                 :hover {
+                text-decoration: none;
+                display: flex;
+                flex-direction: column;
+                row-gap: 10px;
+                justify-content: center;
+                align-items: center;
+                &:hover,
+                &:hover p {
                     color: $orange;
                 }
             }
-            .active_page_highlight {
+            .active_page_highlight,
+            .active_page_highlight p {
                 color: $orange;
+            }
+            p {
+                text-decoration-style: none;
+                font-size: 12px;
+                font-weight: 500;
+                color: white;
+                text-transform: uppercase;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                line-height: 1em;
+                &:hover a,
+                &:hover {
+                    color: $orange;
+                }
             }
         }
     }
@@ -43,9 +65,11 @@
         align-items: center;
         padding-top: 0;
         ul {
-            display: flex;
-            flex-direction: row;
-            column-gap: 2.5rem;
+            // display: flex;
+            // flex-direction: row;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+            column-gap: 20px;
             padding-bottom: 2rem;
             justify-content: center;
             padding-top: 6px;
