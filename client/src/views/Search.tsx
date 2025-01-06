@@ -372,7 +372,7 @@ export default function Search(): JSX.Element {
 			</div>
 			<div id="search_content_wrapper">
 				<div id="form_download_wrapper">
-					<h2>Export List</h2>
+					<h2>Create Export List</h2>
 					<form>
 						<GroupDropDown attendanceGroupSelected={dropDownChangeHandler} />
 
