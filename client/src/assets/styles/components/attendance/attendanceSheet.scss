@@ -1,5 +1,18 @@
 @import "../../global/library.scss";
 .attendance_table_wrapper {
+    h3 {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+    h2 {
+        margin-bottom: 0px;
+    }
+    p {
+        margin-top: 0px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        text-transform: uppercase;
+    }
     @include main-table-wrapper;
     border-radius: 16px;
     padding-bottom: 2rem;
