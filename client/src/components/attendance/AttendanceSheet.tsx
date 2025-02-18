@@ -40,6 +40,8 @@ export default function AttendanceSheet({
 		totalVisitors: 0,
 	});
 
+	const [totalPresent, setTotalPresent] = useState<number>(0);
+
 	//The below is for production
 	useEffect((): void => {
 		setMemberData(attendanceData);
@@ -95,6 +97,7 @@ export default function AttendanceSheet({
 		}
 
 		setSumOfPresent({ ...sumOfPresent, totalChildren: child, totalYouth: youth, totalAdults: adult, totalMembers: member, totalVisitors: visitor });
+		setTotalPresent(child + youth + adult);
 	}, [memberData]);
 
 	const displaySuccessMessage = (str: string): void => {
@@ -303,6 +306,9 @@ export default function AttendanceSheet({
 			>
 				<h2>{parentTitle}</h2>
 				<h3>{title}</h3>
+				<p>
+					<strong>{totalPresent > 0 ? `Current Count: ${totalPresent}` : ""}</strong>{" "}
+				</p>
 				<div className="btn_group">
 					<SearchBar updatePartial={updatePartial} />
 					<SaveButton
@@ -332,12 +338,15 @@ export default function AttendanceSheet({
 			>
 				<h2>{parentTitle}</h2>
 				<h3>{title}</h3>
+				<p>
+					<strong>{totalPresent > 0 ? `Current Count: ${totalPresent}` : ""}</strong>{" "}
+				</p>
 				<div className="btn_group">
 					<SearchBar updatePartial={updatePartial} />
 				</div>
 				<p>No results found.</p>
 			</div>
-		)
+		);
 	}
 
 	//If the attendance is 0, return a shell of what's needed, if not zero return the main content.
