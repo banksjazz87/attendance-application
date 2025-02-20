@@ -97,8 +97,20 @@ export default function AttendanceSheet({
 		}
 
 		setSumOfPresent({ ...sumOfPresent, totalChildren: child, totalYouth: youth, totalAdults: adult, totalMembers: member, totalVisitors: visitor });
-		setTotalPresent(child + youth + adult);
 	}, [memberData]);
+
+
+	//Used to update the number of the total present, this result is displayed in the attendance table.
+	useEffect((): void => {
+		const {
+			totalChildren,
+			totalYouth,
+			totalAdults
+		} = sumOfPresent;
+
+		const total = totalChildren + totalYouth + totalAdults;
+		setTotalPresent(total);
+	}, [sumOfPresent]);
 
 	const displaySuccessMessage = (str: string): void => {
 		updateSuccessMessage(str);

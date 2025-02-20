@@ -12,7 +12,7 @@ export default function LoadingBar({ show }: LoadingBarProps): JSX.Element {
         if (!show) {
             setTimeout((): void => {
                 setIsLoading(false);
-            }, 1500);
+            }, 500);
         } else {
             setIsLoading(true);
         }
