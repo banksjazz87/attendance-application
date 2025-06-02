@@ -73,7 +73,7 @@ export default function VisitorModal({ showModal, hideModal, formData }: Visitor
 							/>
 							<VisitorRow
 								title="Email"
-								text={`${form.phone}`}
+								text={`${form.email}`}
 								linkURL={`mailto:${form.email}`}
 							/>
 							<VisitorRow
